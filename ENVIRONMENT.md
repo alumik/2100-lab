@@ -34,20 +34,17 @@
 1. 再次打开 Ubuntu ，现在应该已经是以 root 身份登陆系统了。
 
 2. 下面将系统软件源切换为清华大学软件源。
-
-    - 删除原有软件源：
+    + 删除原有软件源：
 
         ```
         rm /etc/apt/sources.list
         ```
-
-    - 添加新软件源：
+    + 添加新软件源：
 
         ```
         nano /etc/apt/sources.list
         ```
-
-    - 在打开的文本编辑器里键入该链接中的内容：
+    + 在打开的文本编辑器里键入该链接中的内容：
 
         ```
         deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic main restricted universe multiverse
@@ -55,7 +52,6 @@
         deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse
         deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-security main restricted universe multiverse
         ```
-
         编辑完成后，使用 Ctrl+O 保存，回车确定，再使用 Ctrl+X 退出。
 
 3. 接下来更新系统。注意此步需要较长时间。如果中间出现选择项就选第一项。可以忽略里面的警告。
