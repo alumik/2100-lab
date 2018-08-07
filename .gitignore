@@ -1,1 +1,9 @@
+# JetBrains project settings
 .idea
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Node modules
+node_modules/
+package-lock.json

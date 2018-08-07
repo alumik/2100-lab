@@ -71,13 +71,13 @@
 1. 安装 Apache2 。
 
     ```
-    apt-get install apache2
+    apt install apache2
     ```
 
 2. 安装 MySQL 。注意 Windows 中如果已经安装了 MySQL 需要先停止 MySQL 服务。
 
     ```
-    apt-get install mysql-server mysql-client
+    apt install mysql-server mysql-client
     ```
 
 ## 4 安装 Node.js 以及 vue-cli
@@ -86,12 +86,6 @@
 
     ```
     curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-    ```
-
-    之后
-
-    ```
-    apt update
     ```
 
 2. 安装 Node.js 和 npm 。
@@ -162,13 +156,20 @@
     pyenv global 3.7.0
     ```
 
-7. 更新 pip (venv 中)。
+7. 配置 venv 。
+
+    ```
+    python -m venv ~/venv
+    source ~/venv/bin/activate
+    ```
+
+8. 更新 pip (venv 中)。
 
     ```
     python -m pip install --upgrade pip
     ```
 
-8. 更新 setuptools (venv 中)。
+9. 更新 setuptools (venv 中)。
 
     ```
     python -m pip install --upgrade setuptools
