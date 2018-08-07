@@ -34,20 +34,19 @@
 1. 再次打开 Ubuntu ，现在应该已经是以 root 身份登陆系统了。
 
 2. 下面将系统软件源切换为清华大学软件源。
-
-    - 删除原有软件源：
+    + 删除原有软件源：
 
         ```
         rm /etc/apt/sources.list
         ```
 
-    - 添加新软件源：
+    + 添加新软件源：
 
         ```
         nano /etc/apt/sources.list
         ```
 
-    - 在打开的文本编辑器里键入该链接中的内容：
+    + 在打开的文本编辑器里键入该链接中的内容：
 
         ```
         deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic main restricted universe multiverse
