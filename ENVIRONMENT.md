@@ -189,8 +189,23 @@
     pip install django
     ```
 
-3. 安装 mysqlclient 。
+3. 安装 mysqlclient  (venv 中)。
 
     ```
     pip install mysqlclient
     ```
+
+## 7 链接工程文件夹
+
+1. 从项目仓库克隆项目文件夹到你想要的位置。这里以 D:/example 为例。
+
+    ```
+    git clone https://se.jisuanke.com/2100-lab/Group1.git
+    ```
+2. 链接项目文件夹到 WSL 的 /root/project 目录，路径根据你上面设定的路径变化。
+
+    ```
+    ln -s /mnt/d/example ~/project
+    ```
+
+3. 这样，D:/example 中的文件就被映射到了 ~/project 中。
