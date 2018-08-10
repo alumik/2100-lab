@@ -37,9 +37,12 @@ python -m venv ~/venv
 source ~/venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install --upgrade setuptools
-# 安装 Django 和 mysqlclient
+# 安装其他文件
 apt install libmysqlclient-dev
-pip install django
-pip install mysqlclient
+apt install pylint
 # 链接文件夹
 ln -s /mnt/d/Group1 ~/project
+cd ~/project/backend
+pip install -r requirements.txt
+cd ~/project/frontend
+npm install
