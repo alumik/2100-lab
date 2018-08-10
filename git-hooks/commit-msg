@@ -1,0 +1,15 @@
+#!/bin/bash
+
+msg=$(cat $1)
+red='\033[41m'
+nc='\033[0m'
+
+if [[ ${msg:0:1} =~ [a-z] ]]; then
+  printf "${red}WRONG COMMIT MSG:${nc} First letter must be in uppercase!\n"
+  exit 1
+fi
+
+if ! grep -i '\(Merge\|Hotfix\|#[[:digit:]]\+\)' $1 &>/dev/null; then
+  printf "${red}WRONG COMMIT MSG:${nc} Reference an issue please!\n"
+  exit 2
+fi

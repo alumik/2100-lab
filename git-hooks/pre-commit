@@ -1,0 +1,78 @@
+#!/bin/bash
+
+ESLINT="$(git rev-parse --show-toplevel)/frontend/node_modules/.bin/eslint"
+
+if [[ ! -x "$ESLINT" ]]; then
+  printf "\t\033[41mPlease install ESlint\033[0m\n"
+  exit 1
+fi
+
+STYLELINT="$(git rev-parse --show-toplevel)/frontend/node_modules/.bin/stylelint"
+
+if [[ ! -x "$STYLELINT" ]]; then
+  printf "\t\033[41mPlease install Stylelint\033[0m\n"
+  exit 1
+fi
+
+PASS=true
+
+printf "\nValidating Python:\n"
+
+git-pylint-commit-hook
+
+if [[ "$?" != 0 ]]; then
+  PASS=false
+fi
+
+printf "\nPython validation completed!\n"
+
+printf "\nValidating JavaScript:\n"
+
+STAGED_FILES_JS=$(git diff --cached --name-only --diff-filter=ACM | grep ".jsx\{0,1\}$")
+
+if [[ "$STAGED_FILES_JS" != "" ]]; then
+  for FILE in ${STAGED_FILES_JS}
+  do
+    "$ESLINT" "$FILE"
+
+    if [[ "$?" == 0 ]]; then
+      printf "\t\033[32mESlint Passed: $FILE\033[0m\n"
+    else
+      printf "\t\033[41mESlint Failed: $FILE\033[0m\n"
+      PASS=false
+    fi
+done
+
+fi
+
+printf "\nJavaScript validation completed!\n"
+
+printf "\nValidating Stylesheet:\n"
+
+STAGED_FILES_CSS=$(git diff --cached --name-only --diff-filter=ACM | grep ".css$")
+
+if [[ "$STAGED_FILES_CSS" != "" ]]; then
+  for FILE in ${STAGED_FILES_CSS}
+do
+  "$STYLELINT" "$FILE"
+
+  if [[ "$?" == 0 ]]; then
+    printf "\t\033[32mStylelint Passed: $FILE\033[0m\n"
+  else
+    printf "\t\033[41mStylelint Failed: $FILE\033[0m\n"
+    PASS=false
+  fi
+done
+
+fi
+
+printf "\nStylesheet validation completed!\n"
+
+if ! ${PASS}; then
+  printf "\033[41mLINT CHECK FAILED:\033[0m Your commit contains files that should pass lint check but do not. Please fix those errors and try again.\n"
+  exit 1
+else
+  printf "\033[42mLINT CHECK PASSED\033[0m\n"
+fi
+
+exit $?
