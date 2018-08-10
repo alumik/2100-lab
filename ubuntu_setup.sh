@@ -42,7 +42,10 @@ apt install libmysqlclient-dev
 apt install pylint
 # 链接文件夹
 ln -s /mnt/d/Group1 ~/project
+# 安装前后端依赖
 cd ~/project/backend
 pip install -r requirements.txt
 cd ~/project/frontend
 npm install
+# 安装 git-hooks
+cp ~/project/git-hook/* ~/project/.git/hooks/
