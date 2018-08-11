@@ -18,7 +18,7 @@ PASS=true
 
 printf "\nValidating Python:\n"
 
-git-pylint-commit-hook
+git-pylint-commit-hook --pylintrc "$(git rev-parse --show-toplevel)/backend/.pylintrc"
 
 if [[ "$?" != 0 ]]; then
   PASS=false
