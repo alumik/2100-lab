@@ -558,4 +558,4 @@ known-third-party=enchant
 overgeneral-exceptions=Exception
 
 [pre-commit-hook]
-limit=8.0
+limit=7.0
