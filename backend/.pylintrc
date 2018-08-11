@@ -558,4 +558,5 @@ known-third-party=enchant
 overgeneral-exceptions=Exception
 
 [pre-commit-hook]
+params=--load-plugins=pylint_django
 limit=7.0
