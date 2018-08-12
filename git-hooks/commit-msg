@@ -9,7 +9,8 @@ if [[ ${msg:0:1} =~ [a-z] ]]; then
   exit 1
 fi
 
-if ! grep -i '\(Merge\|Hotfix\|#[[:digit:]]\+\)' $1 &>/dev/null; then
+# Must reference an issue
+if ! grep -i '\(Merge\|Hotfix\|\. Ref #[[:digit:]]\+\)' $1 &>/dev/null; then
   printf "${red}WRONG COMMIT MSG:${nc} Reference an issue please!\n"
   exit 2
 fi
