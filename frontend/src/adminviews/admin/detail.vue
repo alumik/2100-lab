@@ -87,6 +87,26 @@ export default {
 </script>
 
 <style scoped>
+  .father {
+    min-width: 800px;
+  }
+
+  .row {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .head-td {
+    width: 20%;
+  }
+
+  .content-td {
+    width: 80%;
+  }
+
+  .sentence {
+    margin-left: -10%;
+  }
 
   .button_group {
     display: flex;
