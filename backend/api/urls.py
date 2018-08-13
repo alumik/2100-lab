@@ -1,7 +1,9 @@
 # pylint: disable=C0103
 
-from django.urls import include, path
+from django.urls import path, include
+
+app_name = 'api'
 
 urlpatterns = [
-    path('rest-auth/', include('rest_auth.urls')),
+    path('core/', include('core.urls', namespace='core')),
 ]
