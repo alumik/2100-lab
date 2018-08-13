@@ -16,6 +16,11 @@ export default new Router({
       component: () => import('@/userviews/components/navbar')
     },
     {
+      path: '/personal',
+      name: 'PersonalCenter',
+      component: () => import('@/userviews/personal/personalCenter')
+    },
+    {
       path: '/admin/message',
       name: 'MessageManagement',
       component: () => import('@/adminviews/message/management')

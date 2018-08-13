@@ -1,34 +1,64 @@
 <template>
-  <b-navbar
-    toggleable="md"
-    type="dark"
-    variant="info"
-    class="navbar">
+  <div>
+    <b-navbar
+      toggleable="md"
+      type="dark"
+      variant="info"
+      class="navbar">
+      <b-navbar-toggle target="nav_collapse"/>
 
-    <b-navbar-toggle target="nav_collapse"/>
+      <b-navbar-brand
+        href="#"
+        disabled>2100实验室 管理后台
+      </b-navbar-brand>
 
-    <b-navbar-brand
-      href="#"
-      disabled>2100实验室 管理后台
-    </b-navbar-brand>
+      <b-collapse
+        id="nav_collapse"
+        is-nav>
+        <b-navbar-nav class="ml-auto">
 
-    <b-collapse
-      id="nav_collapse"
-      is-nav>
-      <b-navbar-nav class="ml-auto">
+          <b-nav-text>管理员一</b-nav-text>
 
-        <b-nav-text>管理员一</b-nav-text>
+          <b-nav-item
+            href="#"
+            right>
+            注销
+          </b-nav-item>
+        </b-navbar-nav>
 
-        <b-nav-item
-          href="#"
-          right>
-          注销
-        </b-nav-item>
-      </b-navbar-nav>
-
-    </b-collapse>
-  </b-navbar>
-
+      </b-collapse>
+    </b-navbar>
+    <b-card no-body>
+      <b-tabs
+        pills
+        card
+        vertical>
+        <b-tab
+          title="课程管理"
+          active>
+          Tab Contents 1
+        </b-tab>
+        <b-tab title="留言管理">
+          Tab Contents 2
+        </b-tab>
+        <b-tab title="用户管理">
+          Tab Contents 2
+        </b-tab>
+        <b-tab title="订单管理">
+          Tab Contents 2
+        </b-tab>
+        <b-tab title="管理员管理">
+          Tab Contents 2
+        </b-tab>
+        <b-tab title="数据分析">
+          Tab Contents 2
+        </b-tab>
+        <b-tab title="日志查询">
+          Tab Contents 2
+        </b-tab>
+      </b-tabs>
+    </b-card>
+  </div>
 </template>
 
 <script>

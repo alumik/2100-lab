@@ -10,7 +10,8 @@
 
     <b-navbar-brand
       href="#"
-      disabled>2100实验室</b-navbar-brand>
+      disabled>2100实验室
+    </b-navbar-brand>
 
     <b-collapse
       id="nav_collapse"
