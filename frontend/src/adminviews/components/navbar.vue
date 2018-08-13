@@ -38,7 +38,9 @@
           title="课程管理"
           active>
           <li
-            :is="AdminPage"/>
+            :is="AdminPage"
+            @add_new_admin="add_new_admin"
+          />
         </b-tab>
         <b-tab title="留言管理">
           Tab Contents 2
@@ -72,7 +74,11 @@ export default {
     return {
       AdminPage: 'AdminManagement'
     }
+  },
+  methods: {
+    add_new_admin () {
+      this.AdminPage = 'Admin'
+    }
   }
-
 }
 </script>
