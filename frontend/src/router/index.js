@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Homepage from '@/userviews/homepage/index'
 
 Vue.use(Router)
 
@@ -17,8 +18,8 @@ export default new Router({
     },
     {
       path: '/',
-      name: 'UserNavBar',
-      component: () => import('@/userviews/components/navbar')
+      name: 'Homepage',
+      component: Homepage
     },
     {
       path: '/personal',
