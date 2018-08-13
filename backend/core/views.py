@@ -2,13 +2,16 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from random import randint
+import json
 import re
 
 
 def get_verification_code(request):
-    phone_number = request.POST.get('phone_number')
-    match = re.search(r'^d{11}$', phone_number)
+    received_json_data = json.loads(request.body.decode('utf-8'))
+    phone_number = received_json_data['phone_number']
+    match = re.search(r'^\d{11}$', phone_number)
     if match:
         verification_code = str(randint(0, 999999)).zfill(6)
         request.session['verification_code'] = verification_code
@@ -18,19 +21,22 @@ def get_verification_code(request):
 
 
 def authenticate(request):
-    phone_number = request.POST.get('phone_number')
-    verification_code = request.POST.get('verification_code')
-
-    user = settings.AUTH_USER_MODEL.objects.get(phone_number=phone_number)
-    new_user = False
+    received_json_data = json.loads(request.body.decode('utf-8'))
+    phone_number = received_json_data['phone_number']
+    verification_code = received_json_data['verification_code']
 
     if verification_code == request.session['verification_code']:
-        if not user:
-            user = settings.AUTH_USER_MODEL.objects.create_user(phone_number=phone_number)
+        try:
+            user = get_user_model().objects.get(phone_number=phone_number)
+            new_user = False
+        except get_user_model().DoesNotExist:
+            user = get_user_model().objects.create_user(phone_number=phone_number)
             new_user = True
         auth.login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])
+        del request.session['verification_code']
         return JsonResponse({'new_user': new_user})
     else:
+        del request.session['verification_code']
         return JsonResponse({'message': 'Wrong verification code.'}, status=401)
 
 
