@@ -11,6 +11,11 @@ export default new Router({
       component: () => import('@/adminviews/components/navbar')
     },
     {
+      path: '/login',
+      name: 'Login',
+      component: () => import('@/userviews/components/login')
+    },
+    {
       path: '/',
       name: 'UserNavBar',
       component: () => import('@/userviews/components/navbar')
