@@ -1,3 +1,4 @@
+<!--suppress ALL -->
 <template>
   <div>
     <b-navbar
@@ -36,7 +37,8 @@
         <b-tab
           title="课程管理"
           active>
-          Tab Contents 1
+          <li
+            :is="AdminPage"/>
         </b-tab>
         <b-tab title="留言管理">
           Tab Contents 2
@@ -62,7 +64,15 @@
 </template>
 
 <script>
+import AdminManagement from '../admin/management'
 export default {
-  name: 'AdminNavbar'
+  name: 'AdminNavbar',
+  components: {AdminManagement},
+  data: function () {
+    return {
+      AdminPage: 'AdminManagement'
+    }
+  }
+
 }
 </script>
