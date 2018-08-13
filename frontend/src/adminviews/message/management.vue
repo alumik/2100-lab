@@ -14,7 +14,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr align="center">
           <td>
             <div class="input-group">
               <input
@@ -54,6 +54,7 @@
             状态选择
             <span class="caret"/>
           </td>
+          <td/>
         </tr>
         <tr
           v-for="message in messages"
@@ -64,6 +65,23 @@
           <td>{{ message.courseName }}</td>
           <td>{{ message.message }}</td>
           <td> {{ message.state }} </td>
+          <td class="buttons">
+            <button
+              type="button"
+              class="btn-primary btn-xs">
+              详情
+            </button>
+            <button
+              type="button"
+              class="btn-primary btn-xs">
+              回复
+            </button>
+            <button
+              type="button"
+              class="btn-primary btn-xs">
+              删除
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -112,5 +130,13 @@ export default {
   h4 {
     padding-left: 2vh;
     text-align: left;
+  }
+
+  .buttons {
+    display: flex;
+  }
+
+  .input-group {
+    width: 70%;
   }
 </style>
