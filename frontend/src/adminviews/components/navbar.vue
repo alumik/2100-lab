@@ -37,10 +37,7 @@
         <b-tab
           title="课程管理"
           active>
-          <li
-            :is="AdminPage"
-            @add_new_admin="add_new_admin"
-          />
+          kasnkca
         </b-tab>
         <b-tab title="留言管理">
           Tab Contents 2
@@ -51,8 +48,14 @@
         <b-tab title="订单管理">
           Tab Contents 2
         </b-tab>
-        <b-tab title="管理员管理">
-          Tab Contents 2
+        <b-tab
+          title="管理员管理"
+          @click="admin_manage">
+          <li
+            :is="AdminPage"
+            @add_new_admin="add_new_admin"
+            @detail_information="detail_information"
+          />
         </b-tab>
         <b-tab title="数据分析">
           Tab Contents 2
@@ -67,17 +70,24 @@
 
 <script>
 import AdminManagement from '../admin/management'
+import AdminDetail from '../admin/detail'
 export default {
   name: 'AdminNavbar',
-  components: {AdminManagement},
   data: function () {
     return {
-      AdminPage: 'AdminManagement'
+      AdminPage: AdminManagement
     }
   },
   methods: {
+    admin_manage () {
+      this.AdminPage = AdminManagement
+      console.log('sklncjk')
+    },
     add_new_admin () {
-      this.AdminPage = 'Admin'
+      this.AdminPage = ''
+    },
+    detail_information () {
+      this.AdminPage = AdminDetail
     }
   }
 }
