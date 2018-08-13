@@ -1,21 +1,24 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import AdminNavBar from '@/adminviews/components/navbar'
-import UserNavBar from '@/userviews/components/navbar'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/admin',
       name: 'AdminNavBar',
-      component: AdminNavBar
+      component: () => import('@/adminviews/components/navbar')
     },
     {
-      path: '/user',
+      path: '/',
       name: 'UserNavBar',
-      component: UserNavBar
+      component: () => import('@/userviews/components/navbar')
+    },
+    {
+      path: '/admin/message',
+      name: 'MessageManagement',
+      component: () => import('@/adminviews/message/management')
     }
   ]
 })
