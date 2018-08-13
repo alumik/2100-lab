@@ -94,16 +94,14 @@ export default {
       }],
       rows: 20,
       messages: messages,
-      sortBy: 'data',
-      sortDesc: true,
       titles: [
-        { key: 'data', label: '日期', sortable: true },
-        { key: 'user', label: '用户', sortable: false },
-        { key: 'courseCode', label: '课程代码', sortable: false },
-        { key: 'courseName', label: '课程名', sortable: false },
-        { key: 'message', label: '留言', sortable: false },
-        { key: 'state', label: '状态', sortable: false },
-        { key: 'operation', label: '操作', sortable: false }
+        { label: '日期' },
+        { label: '用户' },
+        { label: '课程代码' },
+        { label: '课程名' },
+        { label: '留言' },
+        { label: '状态' },
+        { label: '操作' }
       ]
     }
   }
