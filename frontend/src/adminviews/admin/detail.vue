@@ -1,0 +1,117 @@
+<template>
+  <div class="father">
+    <div class="row">
+      <div class="sentence">管理员详情</div>
+      <div class="button_group">
+        <button
+          type="button"
+          class="row btn btn-primary btn-sm"
+          @click="distribute_authourity"
+        >分配权限</button>
+        <button
+          type="button"
+          class="row btn btn-primary btn-sm"
+          @click="change_password"
+        >修改密码</button>
+        <button
+          type="button"
+          class="row btn btn-primary btn-sm"
+          @click="delete_admin"
+        >删除管理员</button>
+      </div>
+    </div>
+    <table
+      class="table table-striped"
+      width="100%">
+      <tbody>
+        <tr>
+          <td class="head-td">
+            管理员ID
+          </td>
+          <td class="content-td">
+            {{ admin.ID }}
+          </td>
+        </tr>
+        <tr>
+          <td class="head-td">
+            管理员账号
+          </td>
+          <td class="content-td">
+            {{ admin.name }}
+          </td>
+        </tr>
+        <tr>
+          <td class="head-td">
+            添加时间
+          </td>
+          <td class="content-td">
+            {{ admin.create_time }}
+          </td>
+        </tr>
+        <tr>
+          <td class="head-td">
+            修改时间
+          </td>
+          <td class="content-td">
+            {{ admin.change_time }}
+          </td>
+        </tr>
+        <tr>
+          <td class="head-td">
+            权限
+          </td>
+          <td class="content-td">
+            {{ admin.authority }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'AdminDetail',
+  data: function () {
+    return {
+      admin: {
+        'ID': '000001',
+        'name': 'DINGQUAN',
+        'create_time': '2018-08-13',
+        'change_time': '2018-08-13',
+        'authority': 'askcnkj'
+      }
+    }
+  }
+}
+</script>
+
+<style scoped>
+  .father {
+    min-width: 800px;
+  }
+
+  .row {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .head-td {
+    width: 20%;
+  }
+
+  .content-td {
+    width: 80%;
+  }
+
+  .sentence {
+    margin-left: -10%;
+  }
+
+  .button_group {
+    display: flex;
+    flex: 0.2 1 auto;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+</style>

@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="father">
     <div class="row">
-      <div id="list">管理员列表</div>
+      <div class="list">管理员列表</div>
       <button
         type="button"
-        class="row btn btn-primary btn-sm"
+        class="row head-btn btn btn-primary btn-sm"
         @click="add_new_admin"
       >新增管理员</button>
     </div>
@@ -41,11 +41,15 @@
           </div></td>
         </tr>
         <tr
-          v-for="user in users"
-          :key="user.id">
-          <td>{{ user.ID }}</td>
-          <td>{{ user.name }}</td>
-          <td>详情</td>
+          v-for="admin in admins"
+          :key="admin.id">
+          <td>{{ admin.ID }}</td>
+          <td>{{ admin.name }}</td>
+          <button
+            type="button"
+            class="row inner-btn btn-primary btn-sm"
+            @click="detail_information"
+          >详情</button>
         </tr>
       </tbody>
     </table>
@@ -57,7 +61,7 @@ export default {
   name: 'AdminManagement',
   data: function () {
     return {
-      users: [
+      admins: [
         {'ID': '000000', 'name': 'DingQuan'},
         {'ID': '000001', 'name': 'DingQuan1'},
         {'ID': '000002', 'name': 'DingQuan2'},
@@ -73,26 +77,16 @@ export default {
   methods: {
     add_new_admin () {
       this.$emit('add_new_admin')
+    },
+    detail_information () {
+      this.$emit('detail_information')
     }
   }
 }
 </script>
 
 <style>
-  .row {
-    display: flex;
-    flex-direction: row;
-  }
 
-  #list {
-    margin-top: 3%;
-    margin-left: 20%;
-  }
-
-  .btn {
-    margin-top: 2%;
-    margin-left: 50%;
-  }
 
   .table {
     margin-top: 1%;
