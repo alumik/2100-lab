@@ -71,6 +71,7 @@
 <script>
 import AdminManagement from '../admin/management'
 import AdminDetail from '../admin/detail'
+import AddAdmin from '../admin/addadmin'
 export default {
   name: 'AdminNavbar',
   data: function () {
@@ -84,7 +85,7 @@ export default {
       console.log('sklncjk')
     },
     add_new_admin () {
-      this.AdminPage = ''
+      this.AdminPage = AddAdmin
     },
     detail_information () {
       this.AdminPage = AdminDetail
