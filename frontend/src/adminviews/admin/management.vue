@@ -4,7 +4,9 @@
       <div id="list">管理员列表</div>
       <button
         type="button"
-        class="row btn btn-primary btn-sm">新增管理员</button>
+        class="row btn btn-primary btn-sm"
+        @click="add_new_admin"
+      >新增管理员</button>
     </div>
     <table class="table table-striped">
       <thead>
@@ -66,6 +68,11 @@ export default {
         {'ID': '000001', 'name': 'DingQuan7'},
         {'ID': '000002', 'name': 'DingQuan8'}
       ]
+    }
+  },
+  methods: {
+    add_new_admin () {
+      this.$emit('add_new_admin')
     }
   }
 }
