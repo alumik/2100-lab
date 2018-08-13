@@ -86,7 +86,29 @@ export default {
 </script>
 
 <style>
+  .father {
+    min-width: 800px;
+  }
 
+  .row {
+    display: flex;
+    flex: 0 1 auto;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .list {
+    margin-left: -18%;
+  }
+
+  .head-btn {
+    margin-right: -18%;
+  }
+
+  .inner-btn {
+    margin-top: 2%;
+    margin-left: 50%;
+  }
 
   .table {
     margin-top: 1%;

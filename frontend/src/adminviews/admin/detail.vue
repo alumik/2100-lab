@@ -97,15 +97,11 @@ export default {
   }
 
   .head-td {
-    width: 20%;
+    width: 35%;
   }
 
   .content-td {
-    width: 80%;
-  }
-
-  .sentence {
-    margin-left: -10%;
+    width: 65%;
   }
 
   .button_group {
