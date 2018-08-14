@@ -2,7 +2,9 @@
   <div>
     <AdminNavbar/>
     <div id="body">
-      <Menu/>
+      <div>
+        <Menu/>
+      </div>
       <div id="detail">
         <BreadCrumb :items="items"/>
         <h1>留言详情</h1>
@@ -12,7 +14,7 @@
               v-b-modal.reply
               type="button"
               class="btn-primary btn-lg"
-              style="margin-right: 2vh;">
+              style="margin-right: 10px;">
               回复留言
             </button>
             <b-modal
@@ -25,9 +27,10 @@
               @ok="handleOk"
               @shown="clearReply">
               <form @submit.stop.prevent="handleSubmit">
-                <b-form-input
+                <textarea
                   v-model="reply"
-                  type="text"
+                  class="form-control"
+                  rows="3"
                   placeholder="请输入你要回复的内容"/>
               </form>
             </b-modal>
@@ -131,23 +134,15 @@ export default {
 
 <style scoped>
   h1 {
-    padding-left: 2vh;
+    padding-left: 15px;
     text-align: left;
   }
 
   .buttons {
     display: flex;
     justify-content: flex-end;
-    padding-right: 2vh;
-    padding-bottom: 2vh;
+    padding-bottom: 15px;
     text-align: right;
-  }
-
-  .table {
-    width: 98%;
-    margin-right: 2vh;
-    margin-left: 2vh;
-    font-size: 1.5em;
   }
 
   #delete_confirm {
@@ -160,10 +155,14 @@ export default {
   }
 
   #detail {
-    flex-basis: 90%;
+    flex-basis: 100%;
+    padding-right: 15px;
   }
 
   table {
-    min-width: 100vh;
+    min-width: 800px;
+    padding-right: 15px;
+    margin-left: 15px;
+    font-size: 1.5em;
   }
 </style>
