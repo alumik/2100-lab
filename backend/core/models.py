@@ -81,7 +81,7 @@ class UserManager(BaseUserManager):
 
 
 class CustomUser(SoftDeletionModel, AbstractUser):
-    phone_number = models.CharField(max_length=20, unique=True)
+    phone_number = models.CharField(max_length=150, unique=True)
     avatar = models.ImageField(upload_to='uploads/customers/avatars/',
                                default='default/customers/avatars/2100_lab.jpg')
     reward_coin = models.DecimalField(decimal_places=2, max_digits=12, default=0)
