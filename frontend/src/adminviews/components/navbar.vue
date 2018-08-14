@@ -29,42 +29,6 @@
 
       </b-collapse>
     </b-navbar>
-    <b-card no-body>
-      <b-tabs
-        pills
-        card
-        vertical>
-        <b-tab
-          title="课程管理"
-          active>
-          kasnkca
-        </b-tab>
-        <b-tab title="留言管理">
-          Tab Contents 2
-        </b-tab>
-        <b-tab title="用户管理">
-          Tab Contents 2
-        </b-tab>
-        <b-tab title="订单管理">
-          Tab Contents 2
-        </b-tab>
-        <b-tab
-          title="管理员管理"
-          @click="admin_manage">
-          <li
-            :is="AdminPage"
-            @add_new_admin="add_new_admin"
-            @detail_information="detail_information"
-          />
-        </b-tab>
-        <b-tab title="数据分析">
-          Tab Contents 2
-        </b-tab>
-        <b-tab title="日志查询">
-          Tab Contents 2
-        </b-tab>
-      </b-tabs>
-    </b-card>
   </div>
 </template>
 
