@@ -1,4 +1,5 @@
 #!/bin/bash
+
 source ~/venv/bin/activate
-cd ~/project/backend;
+cd ~/project/backend
 ./manage.py runserver
