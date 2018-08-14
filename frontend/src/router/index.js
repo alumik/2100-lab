@@ -23,8 +23,8 @@ export default new Router({
     },
     {
       path: '/admin',
-      name: 'AdminNavBar',
-      component: () => import('@/adminviews/components/navbar')
+      name: 'MessageManagement',
+      component: () => import('@/adminviews/admin/management')
     },
     {
       path: '/admin/message',

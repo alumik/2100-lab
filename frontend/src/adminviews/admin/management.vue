@@ -1,64 +1,76 @@
 <template>
-  <div class="father">
-    <div class="row">
-      <div class="list">管理员列表</div>
-      <button
-        type="button"
-        class="row head-btn btn btn-primary btn-sm"
-        @click="add_new_admin"
-      >新增管理员</button>
+  <div>
+    <div>
+      <AdminNavbar/>
     </div>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th scope="col">管理员ID</th>
-          <th scope="col">管理员手机号</th>
-          <th scope="col">操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <div class="input-group">
-              <input
-                type="text"
-                class="form-control col-xs-2"
-                placeholder="">
-          </div></td>
-          <td>
-            <div class="input-group">
-              <input
-                type="text"
-                class="form-control col-xs-2"
-                placeholder="">
-            </div>
-          </td><td>
-            <div class="input-group">
-              <input
-                type="text"
-                class="form-control col-xs-2"
-                placeholder="">
-          </div></td>
-        </tr>
-        <tr
-          v-for="admin in admins"
-          :key="admin.id">
-          <td>{{ admin.ID }}</td>
-          <td>{{ admin.name }}</td>
+    <div style="display: flex;">
+      <div>
+        <Menu/>
+      </div>
+      <div class="father container-fluid">
+        <div class="row">
+          <div class="list">管理员列表</div>
           <button
             type="button"
-            class="row inner-btn btn-primary btn-sm"
-            @click="detail_information"
-          >详情</button>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</template>
+            class="row head-btn btn btn-primary btn-sm"
+            @click="add_new_admin"
+          >新增管理员</button>
+        </div>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">管理员ID</th>
+              <th scope="col">管理员手机号</th>
+              <th scope="col">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control col-xs-2"
+                    placeholder="">
+              </div></td>
+              <td>
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control col-xs-2"
+                    placeholder="">
+                </div>
+              </td><td>
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control col-xs-2"
+                    placeholder="">
+              </div></td>
+            </tr>
+            <tr
+              v-for="admin in admins"
+              :key="admin.id">
+              <td>{{ admin.ID }}</td>
+              <td>{{ admin.name }}</td>
+              <button
+                type="button"
+                class="row inner-btn btn-primary btn-sm"
+                @click="detail_information"
+              >详情</button>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+</div></template>
 
 <script>
+import AdminNavbar from '../components/navbar'
+import Menu from '../components/menu'
 export default {
   name: 'AdminManagement',
+  components: {Menu, AdminNavbar},
   data: function () {
     return {
       admins: [
@@ -88,6 +100,9 @@ export default {
 <style>
   .father {
     min-width: 800px;
+    margin-top: 40px;
+    margin-right: -15px;
+    margin-left: -15px;
   }
 
   .row {
