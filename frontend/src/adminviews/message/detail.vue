@@ -1,74 +1,95 @@
 <template>
   <div>
-    <BreadCrumb :items="items"/>
-    <h4>留言详情</h4>
-    <div class="buttons">
-      <div>
-        <button
-          v-b-modal.reply
-          type="button"
-          class="btn-primary">
-          回复留言
-        </button>
-        <b-modal
-          id="reply"
-          ref="modal"
-          title="回复留言"
-          centered
-          ok-title="保存"
-          cancel-title="关闭"
-          @ok="handleOk"
-          @shown="clearReply">
-          <form @submit.stop.prevent="handleSubmit">
-            <b-form-input
-              v-model="name"
-              type="text"
-              placeholder="请输入你要回复的内容"/>
-          </form>
-        </b-modal>
+    <AdminNavbar/>
+    <div id="body">
+      <Menu/>
+      <div id="detail">
+        <BreadCrumb :items="items"/>
+        <h1>留言详情</h1>
+        <div class="buttons">
+          <div>
+            <button
+              v-b-modal.reply
+              type="button"
+              class="btn-primary btn-lg"
+              style="margin-right: 2vh;">
+              回复留言
+            </button>
+            <b-modal
+              id="reply"
+              ref="modal"
+              title="回复留言"
+              centered
+              ok-title="保存"
+              cancel-title="关闭"
+              @ok="handleOk"
+              @shown="clearReply">
+              <form @submit.stop.prevent="handleSubmit">
+                <b-form-input
+                  v-model="reply"
+                  type="text"
+                  placeholder="请输入你要回复的内容"/>
+              </form>
+            </b-modal>
+          </div>
+          <div>
+            <button
+              v-b-modal.delete
+              type="button"
+              class="btn-primary btn-lg">
+              删除留言
+            </button>
+            <b-modal
+              id="delete"
+              ref="modal"
+              title="确认删除"
+              centered
+              ok-title="确定"
+              cancel-title="取消">
+              <p id="delete_confirm">您确定要删除此条留言吗？</p>
+            </b-modal>
+          </div>
+        </div>
+        <table class="table table-bordered table-hover">
+          <tbody class="w-100">
+            <tr class="row mx-0">
+              <td class="col-2">留言日期</td>
+              <td class="col-10">{{ message.data }}</td>
+            </tr>
+            <tr class="row mx-0">
+              <td class="col-2">用户</td>
+              <td class="col-10">{{ message.user }}</td>
+            </tr>
+            <tr class="row mx-0">
+              <td class="col-2">课程代码</td>
+              <td class="col-10">{{ message.courseCode }}</td>
+            </tr>
+            <tr class="row mx-0">
+              <td class="col-2">课程名</td>
+              <td class="col-10">{{ message.courseName }}</td>
+            </tr>
+            <tr class="row mx-0">
+              <td class="col-2">状态</td>
+              <td class="col-10">{{ message.state }}</td>
+            </tr>
+            <tr class="row mx-0">
+              <td class="col-2">内容</td>
+              <td class="col-10">{{ message.message }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <button
-        type="button"
-        class="btn-primary">
-        删除留言
-      </button>
     </div>
-    <table class="table table-bordered table-hover">
-      <tbody class="w-100">
-        <tr class="row mx-0">
-          <td class="col-2">留言日期</td>
-          <td class="col-10">{{ message.data }}</td>
-        </tr>
-        <tr class="row mx-0">
-          <td class="col-2">用户</td>
-          <td class="col-10">{{ message.user }}</td>
-        </tr>
-        <tr class="row mx-0">
-          <td class="col-2">课程代码</td>
-          <td class="col-10">{{ message.courseCode }}</td>
-        </tr>
-        <tr class="row mx-0">
-          <td class="col-2">课程名</td>
-          <td class="col-10">{{ message.courseName }}</td>
-        </tr>
-        <tr class="row mx-0">
-          <td class="col-2">状态</td>
-          <td class="col-10">{{ message.state }}</td>
-        </tr>
-        <tr class="row mx-0">
-          <td class="col-2">内容</td>
-          <td class="col-10">{{ message.message }}</td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 </template>
 
 <script>
 import BreadCrumb from '../../components/breadCrumb'
+import AdminNavbar from '../components/navbar'
+import Menu from '../components/menu'
 export default {
   name: 'Message',
-  components: {BreadCrumb},
+  components: {AdminNavbar, BreadCrumb, Menu},
   data () {
     return {
       items: [{
@@ -94,7 +115,7 @@ export default {
     handleOk (evt) {
       // Prevent modal from closing
       evt.preventDefault()
-      if (!this.name) {
+      if (!this.reply) {
         alert('请输入内容后提交')
       } else {
         this.handleSubmit()
@@ -109,12 +130,14 @@ export default {
 </script>
 
 <style scoped>
-  h4 {
+  h1 {
     padding-left: 2vh;
     text-align: left;
   }
 
   .buttons {
+    display: flex;
+    justify-content: flex-end;
     padding-right: 2vh;
     padding-bottom: 2vh;
     text-align: right;
@@ -124,5 +147,19 @@ export default {
     width: 98%;
     margin-right: 2vh;
     margin-left: 2vh;
+    font-size: 1.5em;
+  }
+
+  #delete_confirm {
+    text-align: left;
+  }
+
+  #body {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  #detail {
+    flex-basis: 90%;
   }
 </style>
