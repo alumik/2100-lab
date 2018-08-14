@@ -9,14 +9,14 @@
       </div>
       <div class="father container-fluid">
         <div class="row">
-          <div class="list">管理员列表</div>
+          <h3 class="list">管理员列表</h3>
           <button
             type="button"
             class="row head-btn btn btn-primary btn-sm"
             @click="add_new_admin"
           >新增管理员</button>
         </div>
-        <table class="table table-striped">
+        <table class="table table-striped table-hover">
           <thead>
             <tr>
               <th scope="col">管理员ID</th>
@@ -99,10 +99,9 @@ export default {
 
 <style>
   .father {
-    min-width: 800px;
+    min-width: 500px;
+    padding: 0;
     margin-top: 40px;
-    margin-right: -15px;
-    margin-left: -15px;
   }
 
   .row {
