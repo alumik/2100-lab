@@ -51,6 +51,16 @@ export default new Router({
       path: '/admin/adminmanagement/detail',
       name: 'AdminDetail',
       component: () => import('@/adminviews/admin/detail')
+    },
+    {
+      path: '/admin/message/detail',
+      name: 'Message',
+      component: () => import('@/adminviews/message/message')
+    },
+    {
+      path: '/coursedetail',
+      name: 'CourseDetail',
+      component: () => import('@/userviews/coursedetail/index')
     }
   ]
 })
