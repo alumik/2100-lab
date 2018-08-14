@@ -2,6 +2,7 @@
 <template>
   <div>
     <b-navbar
+      style="margin-bottom: 0px"
       toggleable="md"
       type="dark"
       variant="info"
