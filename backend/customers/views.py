@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.contrib.auth import get_user_model
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
-from .models import LearningLog
+from .models import LearningLog, OrderLog
 
 
 @login_required
@@ -54,6 +54,33 @@ def personal_center_learning_log(request):
         {
             'count': count,
             'content': learning_log_list
+        },
+        safe=False
+    )
+
+
+@login_required
+def personal_center_order_log(request):
+    order_log_object_list = OrderLog.objects.filter(customer=request.user).order_by('-created_at')
+    count = order_log_object_list.count()
+
+    page = request.GET.get('page', request.POST['page'])
+    paginator = Paginator(order_log_object_list, request.POST['page_limit'])
+
+    try:
+        order_log_objects = paginator.page(page)
+    except PageNotAnInteger:
+        order_log_objects = paginator.page(request.POST['page'])
+    except EmptyPage:
+        order_log_objects = paginator.page(paginator.num_pages)
+
+    order_log_list = list(
+        map(lambda order_log_object: order_log_object.as_dict(), list(order_log_objects))
+    )
+    return JsonResponse(
+        {
+            'count': count,
+            'content': order_log_list
         },
         safe=False
     )

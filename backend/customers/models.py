@@ -19,7 +19,7 @@ class LearningLog(models.Model):
         return {
             'course_codename': self.course.codename,
             'course_title': self.course.title,
-            'start_time': self.created_at,
+            'created_at': self.created_at,
             'expire_time': self.expire_time
         }
 
@@ -27,9 +27,21 @@ class LearningLog(models.Model):
 class OrderLog(models.Model):
     customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    status = models.BooleanField(default=False)
     cash_spent = models.DecimalField(decimal_places=2, max_digits=12, default=0)
     reward_spent = models.DecimalField(decimal_places=2, max_digits=12, default=0)
     payment_method = models.SmallIntegerField()
     created_at = models.DateTimeField(default=timezone.now)
-    refunded_at = models.DateTimeField(default=timezone.now)
+    refunded_at = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        unique_together = ('customer', 'course')
+
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'course_codename': self.course.codename,
+            'course_title': self.course.title,
+            'created_at': self.created_at,
+            'money': self.cash_spent + self.reward_spent,
+            'refunded': self.refunded_at is not None
+        }
