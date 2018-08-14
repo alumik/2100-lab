@@ -7,9 +7,9 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/admin',
-      name: 'AdminNavBar',
-      component: () => import('@/adminviews/components/navbar')
+      path: '/',
+      name: 'Homepage',
+      component: Homepage
     },
     {
       path: '/login',
@@ -17,19 +17,24 @@ export default new Router({
       component: () => import('@/userviews/components/login')
     },
     {
-      path: '/',
-      name: 'Homepage',
-      component: Homepage
-    },
-    {
       path: '/personal',
       name: 'PersonalCenter',
       component: () => import('@/userviews/personal/personalCenter')
     },
     {
+      path: '/admin',
+      name: 'AdminNavBar',
+      component: () => import('@/adminviews/components/navbar')
+    },
+    {
       path: '/admin/message',
       name: 'MessageManagement',
       component: () => import('@/adminviews/message/management')
+    },
+    {
+      path: '/admin/message/detail',
+      name: 'Message',
+      component: () => import('@/adminviews/message/message')
     },
     {
       path: '/admin/adminmanagement/changecode',
@@ -40,6 +45,11 @@ export default new Router({
       path: '/admin/message/detail',
       name: 'Message',
       component: () => import('@/adminviews/message/detail')
+    },
+    {
+      path: '/admin/adminmanagement/distribution',
+      name: 'DistributeAuthority',
+      component: () => import('@/adminviews/admin/distributeauthority')
     }
   ]
 })
