@@ -3,25 +3,22 @@
     <label class="head-text">新增管理员</label>
     <form class="write">
       <div>
-        <label class="short-text">管理员账号</label>
+        <label class="short-text">管理员手机号</label>
         <input
           class="input"
-          type="text"
-          placeholder="AdminName">
+          type="text">
       </div>
       <div>
         <label class="short-text">管理员密码</label>
         <input
           class="input"
-          type="text"
-          placeholder="AdminPassword">
+          type="text">
       </div>
       <div>
         <label>再次输入密码</label>
         <input
           class="input"
-          type="text"
-          placeholder="AdminPasswordAgain">
+          type="text">
       </div>
       <button
         type="button"

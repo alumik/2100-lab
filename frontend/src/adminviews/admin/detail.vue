@@ -34,7 +34,7 @@
         </tr>
         <tr>
           <td class="head-td">
-            管理员账号
+            管理员手机号
           </td>
           <td class="content-td">
             {{ admin.name }}
