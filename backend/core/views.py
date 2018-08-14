@@ -52,3 +52,14 @@ def is_authenticated(request):
     if request.user.is_authenticated:
         return JsonResponse({'is_authenticated': True})
     return JsonResponse({'is_authenticated': False})
+
+
+@login_required
+def delete(request):
+    user = request.user
+    auth.logout(request)
+    user.phone_number += '_deleted'
+    user.username += '_deleted'
+    user.save()
+    user.delete()
+    return JsonResponse({'message': 'Account deleted.'})

@@ -12,4 +12,5 @@ urlpatterns = [
     path('auth/logout/', views.logout, name='logout'),
     path('auth/is_authenticated/', views.is_authenticated, name='is_authenticated'),
     path('auth/get_eula/', views.get_eula, name='get_eula'),
+    path('auth/delete/', views.delete, name='delete'),
 ]

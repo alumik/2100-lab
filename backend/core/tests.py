@@ -9,6 +9,7 @@ from django.contrib.auth import get_user_model
 class AuthModuleTests(TestCase):
     def setUp(self):
         get_user_model().objects.create_user(phone_number='00000000001')
+        get_user_model().objects.create_user(phone_number='00000000010')
 
     def test_get_verification_code_success(self):
         response = self.client.post(
@@ -150,5 +151,41 @@ class AuthModuleTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(json.loads(response.content)['is_authenticated'])
         self.assertTrue(get_user_model().objects.filter(phone_number='00000000003').exists())
+
+        self.client.logout()
+
+    def test_account_deletion(self):
+        old_user = get_user_model().objects.get(phone_number='00000000010')
+        old_user_id = old_user.id
+        self.client.force_login(old_user)
+
+        response = self.client.delete(reverse('api:core:delete'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content)['message'], 'Account deleted.')
+        self.assertRaises(
+            get_user_model().DoesNotExist,
+            get_user_model().objects.get,
+            phone_number='00000000010_deleted'
+        )
+        self.assertIsNotNone(get_user_model().all_objects.get(phone_number='00000000010_deleted').deleted_at)
+
+        response = self.client.post(
+            reverse('api:core:get_verification_code'),
+            {'phone_number': '00000000010'}
+        )
+        verification_code = json.loads(response.content)['verification_code']
+
+        response = self.client.post(
+            reverse('api:core:authenticate'),
+            {'phone_number': '00000000010', 'verification_code': verification_code}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(json.loads(response.content)['new_user'])
+        self.assertNotEqual(get_user_model().objects.get(phone_number='00000000010').id, old_user_id)
+
+        response = self.client.get(reverse('api:core:is_authenticated'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(json.loads(response.content)['is_authenticated'])
+        self.assertTrue(get_user_model().objects.filter(phone_number='00000000010').exists())
 
         self.client.logout()

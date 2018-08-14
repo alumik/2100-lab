@@ -76,8 +76,11 @@ class UserManager(BaseUserManager):
 
         return self._create_user(phone_number, password, **extra_fields)
 
+    def get_queryset(self):
+        return SoftDeletionQuerySet(self.model).filter(deleted_at=None)
 
-class CustomUser(AbstractUser, SoftDeletionModel):
+
+class CustomUser(SoftDeletionModel, AbstractUser):
     phone_number = models.CharField(max_length=20, unique=True)
     avatar = models.ImageField(upload_to='uploads/customers/avatars/',
                                default='default/customers/avatars/2100_lab.jpg')
