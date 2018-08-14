@@ -1,6 +1,6 @@
 <!--suppress ALL -->
 <template>
-  <div>
+  <div style="min-width: 500px">
     <b-navbar
       style="margin-bottom: 0px"
       toggleable="md"

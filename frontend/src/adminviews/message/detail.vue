@@ -97,10 +97,10 @@ export default {
     return {
       items: [{
         text: '主页',
-        to: { name: 'AdminNavBar' }
+        href: '/admin'
       }, {
         text: '留言管理',
-        to: { name: 'MessageManagement' }
+        href: '/admin/message'
       }, {
         text: '留言详情',
         active: true

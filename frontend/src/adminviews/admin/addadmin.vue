@@ -57,6 +57,11 @@ export default {
 </script>
 
 <style>
+  .father {
+    min-width: 500px;
+    text-align: left;
+  }
+
   .head-text {
     margin-top: 40px;
     margin-bottom: 40px;
