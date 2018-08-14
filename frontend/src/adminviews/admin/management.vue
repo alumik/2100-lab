@@ -101,7 +101,7 @@ export default {
   .father {
     min-width: 500px;
     padding: 0;
-    margin-top: 40px;
+    margin-left: 0;
   }
 
   .row {

@@ -2,11 +2,13 @@
   <div>
     <AdminNavbar/>
     <div id="body">
-      <Menu/>
+      <div>
+        <Menu/>
+      </div>
       <div id="management">
         <BreadCrumb :items="items"/>
         <h1>留言列表</h1>
-        <table class="table table-striped">
+        <table class="table table-bordered">
           <thead>
             <tr>
               <td
@@ -18,7 +20,7 @@
           </thead>
           <tbody>
             <tr align="center">
-              <td style="width: 20vh;">
+              <td style="width: 160px;">
                 <div class="input-group-sm">
                   <input
                     type="text"
@@ -26,7 +28,7 @@
                     placeholder="">
                 </div>
               </td>
-              <td style="width: 20vh;">
+              <td style="width: 160px;">
                 <div class="input-group-sm">
                   <input
                     type="text"
@@ -34,7 +36,7 @@
                     placeholder="">
                 </div>
               </td>
-              <td style="width: 20vh;">
+              <td style="width: 160px;">
                 <div class="input-group-sm">
                   <input
                     type="text"
@@ -42,7 +44,7 @@
                     placeholder="">
                 </div>
               </td>
-              <td style="width: 20vh;">
+              <td style="width: 160px;">
                 <div class="input-group-sm">
                   <input
                     type="text"
@@ -50,15 +52,19 @@
                     placeholder="">
                 </div>
               </td>
-              <td style="width: 50vh;"/>
-              <td
-                style="width: 20vh;"
-                class="dropdown-toggle"
-                data-toggle="dropdown">
-                状态
-                <span class="caret"/>
+              <td style="width: 350px;"/>
+              <td style="width: 200px;">
+                <div>
+                  <select
+                    v-model="state"
+                    class="selectpicker">
+                    <option value="whole">全部</option>
+                    <option value="reserved">未删除</option>
+                    <option value="deleted">已删除</option>
+                  </select>
+                </div>
               </td>
-              <td style="width: 40vh;"/>
+              <td style="width: 270px;"/>
             </tr>
             <tr
               v-for="message in messages"
@@ -71,29 +77,55 @@
               <td> {{ message.state }} </td>
               <td
                 class="buttons"
-                style="padding-left: 5vh;">
+                style="padding-left: 30px;">
                 <button
                   type="button"
                   class="btn-primary btn-xs"
-                  @click="to_detail()">
+                  @click="to_detail">
                   详情
                 </button>
                 <button
+                  v-b-modal.reply
                   type="button"
-                  class="btn-primary btn-xs"
-                >
+                  class="btn-primary">
                   回复
                 </button>
                 <button
+                  v-b-modal.delete
                   type="button"
-                  class="btn-primary btn-xs">
+                  class="btn-primary">
                   删除
                 </button>
               </td>
             </tr>
           </tbody>
         </table>
-
+        <b-modal
+          id="reply"
+          ref="modal"
+          title="回复留言"
+          centered
+          ok-title="保存"
+          cancel-title="关闭"
+          @ok="handleOk"
+          @shown="clearReply">
+          <form @submit.stop.prevent="handleSubmit">
+            <textarea
+              v-model="reply"
+              class="form-control"
+              rows="3"
+              placeholder="请输入你要回复的内容"/>
+          </form>
+        </b-modal>
+        <b-modal
+          id="delete"
+          ref="modal"
+          title="确认删除"
+          centered
+          ok-title="确定"
+          cancel-title="取消">
+          <p id="delete_confirm">您确定要删除此条留言吗？</p>
+        </b-modal>
         <Pagination :rows="rows"/>
       </div>
     </div>
@@ -116,7 +148,7 @@ export default {
     return {
       items: [{
         text: '主页',
-        to: { name: 'AdminManagement' }
+        href: '/admin'
       }, {
         text: '留言管理',
         active: true
@@ -131,12 +163,30 @@ export default {
         { label: '留言' },
         { label: '状态' },
         { label: '操作' }
-      ]
+      ],
+      state: null,
+      reply: ''
     }
   },
   methods: {
     to_detail: function () {
       this.$router.push({ path: '/admin/message/detail' })
+    },
+    clearReply () {
+      this.reply = ''
+    },
+    handleOk (evt) {
+      // Prevent modal from closing
+      evt.preventDefault()
+      if (!this.reply) {
+        alert('请输入内容后提交')
+      } else {
+        this.handleSubmit()
+      }
+    },
+    handleSubmit () {
+      this.clearReply()
+      this.$refs.modal.hide()
     }
   }
 }
@@ -144,9 +194,9 @@ export default {
 
 <style scoped>
   h1 {
-    padding-left: 2vh;
-    margin-top: 4vh;
-    margin-bottom: 4vh;
+    padding-left: 15px;
+    margin-top: 25px;
+    margin-bottom: 25px;
     text-align: left;
   }
 
@@ -155,7 +205,7 @@ export default {
   }
 
   table {
-    min-width: 160vh;
+    min-width: 1300px;
     font-size: 1.2em;
   }
 
@@ -164,16 +214,31 @@ export default {
     justify-content: space-between;
   }
 
-  .dropdown-toggle::after {
-    position: static;
-  }
-
   #management {
-    flex-basis: 90%;
+    flex-basis: 100%;
+    padding: 0;
   }
 
   td button {
-    margin-right: 1vh;
-    margin-left: 1vh;
+    margin-right: 7px;
+    margin-left: 7px;
+    border-radius: 10px;
+    outline: none;
+    box-shadow: #adb5bd inset;
+  }
+
+  select {
+    width: 130px;
+    height: 30px;
+    border-radius: 5px;
+    outline: none;
+  }
+
+  option {
+    font-size: 10px;
+  }
+
+  #delete_confirm {
+    text-align: left;
   }
 </style>
