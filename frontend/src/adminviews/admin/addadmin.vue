@@ -12,13 +12,13 @@
         <label class="short-text">管理员密码</label>
         <input
           class="input"
-          type="text">
+          type="password">
       </div>
       <div>
         <label>再次输入密码</label>
         <input
           class="input"
-          type="text">
+          type="password">
       </div>
       <button
         type="button"
