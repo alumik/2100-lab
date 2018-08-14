@@ -5,7 +5,7 @@
       <Menu/>
       <div id="management">
         <BreadCrumb :items="items"/>
-        <h1>留言列表</h1>
+        <h1>订单列表</h1>
         <table class="table table-striped">
           <thead>
             <tr>
@@ -18,7 +18,7 @@
           </thead>
           <tbody>
             <tr align="center">
-              <td style="width: 20vh;">
+              <td style="width: 27vh;">
                 <div class="input-group-sm">
                   <input
                     type="text"
@@ -26,7 +26,7 @@
                     placeholder="">
                 </div>
               </td>
-              <td style="width: 20vh;">
+              <td style="width: 27vh;">
                 <div class="input-group-sm">
                   <input
                     type="text"
@@ -34,7 +34,7 @@
                     placeholder="">
                 </div>
               </td>
-              <td style="width: 20vh;">
+              <td style="width: 27vh;">
                 <div class="input-group-sm">
                   <input
                     type="text"
@@ -42,7 +42,7 @@
                     placeholder="">
                 </div>
               </td>
-              <td style="width: 20vh;">
+              <td style="width: 27vh;">
                 <div class="input-group-sm">
                   <input
                     type="text"
@@ -50,50 +50,39 @@
                     placeholder="">
                 </div>
               </td>
-              <td style="width: 50vh;"/>
-              <td
-                style="width: 20vh;"
-                class="dropdown-toggle"
-                data-toggle="dropdown">
-                状态
-                <span class="caret"/>
+              <td/>
+              <td style="width: 30vh;">
+                <div>
+                  <select
+                    v-model="state"
+                    class="selectpicker">
+                    <option value="whole">全部</option>
+                    <option value="finished">已完成</option>
+                    <option value="refunded">已退款</option>
+                  </select>
+                </div>
               </td>
-              <td style="width: 40vh;"/>
+              <td/>
             </tr>
             <tr
-              v-for="message in messages"
-              :key="message.id">
-              <td>{{ message.data }}</td>
-              <td>{{ message.user }}</td>
-              <td>{{ message.courseCode }}</td>
-              <td>{{ message.courseName }}</td>
-              <td>{{ message.message }}</td>
-              <td> {{ message.state }} </td>
-              <td
-                class="buttons"
-                style="padding-left: 5vh;">
+              v-for="order in orders"
+              :key="order.id">
+              <td>{{ order.orderCode }}</td>
+              <td>{{ order.courseCode }}</td>
+              <td>{{ order.courseName }}</td>
+              <td>{{ order.user }}</td>
+              <td>{{ order.charge }}</td>
+              <td> {{ order.state }} </td>
+              <td>
                 <button
                   type="button"
-                  class="btn-primary btn-xs"
-                  @click="to_detail()">
+                  class="btn-primary">
                   详情
-                </button>
-                <button
-                  type="button"
-                  class="btn-primary btn-xs"
-                >
-                  回复
-                </button>
-                <button
-                  type="button"
-                  class="btn-primary btn-xs">
-                  删除
                 </button>
               </td>
             </tr>
           </tbody>
         </table>
-
         <Pagination :rows="rows"/>
       </div>
     </div>
@@ -105,38 +94,43 @@ import AdminNavbar from '../components/navbar'
 import BreadCrumb from '../../components/breadCrumb'
 import Pagination from '../../components/pagination'
 import Menu from '../components/menu'
-let messages = [
-  { data: '2018-08-10', user: '小红', courseCode: 'SOFT1', courseName: '计算机', message: '很好', state: '已删除' },
-  { data: '2018-08-11', user: '小明', courseCode: 'English2', courseName: '口语', message: '还不错', state: '未删除' }
-]
 export default {
-  name: 'MessageManagement',
+  name: 'OrderManagement',
   components: { Menu, AdminNavbar, BreadCrumb, Pagination },
   data () {
     return {
       items: [{
         text: '主页',
-        to: { name: 'AdminManagement' }
+        href: '/admin'
       }, {
-        text: '留言管理',
+        text: '订单管理',
         active: true
       }],
-      rows: 20,
-      messages: messages,
       titles: [
-        { label: '日期' },
-        { label: '用户' },
+        { label: '订单编号' },
         { label: '课程代码' },
         { label: '课程名' },
-        { label: '留言' },
+        { label: '用户名' },
+        { label: '金额' },
         { label: '状态' },
         { label: '操作' }
-      ]
-    }
-  },
-  methods: {
-    to_detail: function () {
-      this.$router.push({ path: '/admin/message/detail' })
+      ],
+      orders: [
+        { orderCode: '1001',
+          courseCode: 'SOFT1',
+          courseName: '计算机',
+          user: '小红',
+          charge: '100.00',
+          state: '已完成' },
+        { orderCode: '1002',
+          courseCode: 'ENGLISH2',
+          courseName: '口语',
+          user: '小明',
+          charge: '120.00',
+          state: '已退款' }
+      ],
+      rows: 2,
+      state: null
     }
   }
 }
@@ -150,10 +144,6 @@ export default {
     text-align: left;
   }
 
-  .buttons {
-    display: flex;
-  }
-
   table {
     min-width: 160vh;
     font-size: 1.2em;
@@ -164,16 +154,23 @@ export default {
     justify-content: space-between;
   }
 
-  .dropdown-toggle::after {
-    position: static;
-  }
-
   #management {
     flex-basis: 90%;
   }
 
-  td button {
-    margin-right: 1vh;
-    margin-left: 1vh;
+  button {
+    border-radius: 10px;
+    box-shadow: #adb5bd inset;
+  }
+
+  select {
+    width: 20vh;
+    height: 4vh;
+    border-radius: 5px;
+    outline: none;
+  }
+
+  option {
+    font-size: 2.5vh;
   }
 </style>
