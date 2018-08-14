@@ -18,7 +18,7 @@
       <br>
       <b-button
         id="btn"
-        href="/#/personal"
+        href="/personal"
         type="submit"
         variant="success">登录</b-button>
     </div>

@@ -5,25 +5,25 @@
 
     <ul class="components">
       <li class="active">
-        <a href="#">课程管理</a>
+        <a href="">课程管理</a>
       </li>
       <li>
-        <a href="#admin/message">留言管理</a>
+        <a href="admin/message">留言管理</a>
       </li>
       <li>
-        <a href="#">用户管理</a>
+        <a href="">用户管理</a>
       </li>
       <li>
-        <a href="#">订单管理</a>
+        <a href="">订单管理</a>
       </li>
       <li>
-        <a href="#">管理员管理</a>
+        <a href="/admin">管理员管理</a>
       </li>
       <li>
-        <a href="#">数据分析</a>
+        <a href="">数据分析</a>
       </li>
       <li>
-        <a href="#">日志查询</a>
+        <a href="">日志查询</a>
       </li>
     </ul>
   </nav>

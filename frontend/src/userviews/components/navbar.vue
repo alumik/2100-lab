@@ -8,7 +8,7 @@
     <b-navbar-toggle target="nav_collapse"/>
 
     <b-navbar-brand
-      href="#"
+      href=""
       disabled>2100实验室
     </b-navbar-brand>
 
@@ -21,10 +21,10 @@
           src="../../assets/logo.png"
           class="img-rounded">
 
-        <b-nav-text>用户一</b-nav-text>
+        <b-nav-item href="/personal">用户一</b-nav-item>
 
         <b-nav-item
-          href="#"
+          href="/login"
           right>
           注销
         </b-nav-item>
