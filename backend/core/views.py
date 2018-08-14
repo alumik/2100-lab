@@ -1,10 +1,11 @@
+import re
+
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from random import randint
-import re
 
 
 def get_verification_code(request):
