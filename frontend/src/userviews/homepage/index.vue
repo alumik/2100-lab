@@ -19,17 +19,23 @@
         </ul>
       </div>
     </div>
+    <FreeRecommendList/>
+    <PaidRecommendList/>
   </div>
 
 </template>
 
 <script>
 import UserNavbar from '../components/navbar'
+import FreeRecommendList from '../components/freeRecommendList'
+import PaidRecommendList from '../components/paidRecommendList'
 
 export default {
   name: 'Homepage',
   components: {
-    UserNavbar
+    UserNavbar,
+    FreeRecommendList,
+    PaidRecommendList
   },
   data () {
     return {
