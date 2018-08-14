@@ -66,6 +66,16 @@ export default new Router({
       path: '/admin/adminmanagement/creation',
       name: 'AddAdmin',
       component: () => import('@/adminviews/admin/addadmin')
+    },
+    {
+      path: '/admin/order',
+      name: 'OrderManagement',
+      component: () => import('@/adminviews/order/management')
+    },
+    {
+      path: '/admin/order/detail',
+      name: 'OrderDetail',
+      component: () => import('@/adminviews/order/detail')
     }
   ]
 })
