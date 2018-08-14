@@ -3,11 +3,30 @@
     <BreadCrumb :items="items"/>
     <h4>留言详情</h4>
     <div class="buttons">
-      <button
-        type="button"
-        class="btn-primary">
-        回复留言
-      </button>
+      <div>
+        <button
+          v-b-modal.reply
+          type="button"
+          class="btn-primary">
+          回复留言
+        </button>
+        <b-modal
+          id="reply"
+          ref="modal"
+          title="回复留言"
+          centered
+          ok-title="保存"
+          cancel-title="关闭"
+          @ok="handleOk"
+          @shown="clearReply">
+          <form @submit.stop.prevent="handleSubmit">
+            <b-form-input
+              v-model="name"
+              type="text"
+              placeholder="请输入你要回复的内容"/>
+          </form>
+        </b-modal>
+      </div>
       <button
         type="button"
         class="btn-primary">
@@ -64,7 +83,26 @@ export default {
       }],
       message: {
         data: '2018-08-10', user: '小红', courseCode: 'SOFT1', courseName: '计算机', message: '很好', state: '已删除'
+      },
+      reply: ''
+    }
+  },
+  methods: {
+    clearReply () {
+      this.reply = ''
+    },
+    handleOk (evt) {
+      // Prevent modal from closing
+      evt.preventDefault()
+      if (!this.name) {
+        alert('请输入内容后提交')
+      } else {
+        this.handleSubmit()
       }
+    },
+    handleSubmit () {
+      this.clearReply()
+      this.$refs.modal.hide()
     }
   }
 }
