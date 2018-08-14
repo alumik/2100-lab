@@ -5,6 +5,7 @@ import Homepage from '@/userviews/homepage/index'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -23,7 +24,7 @@ export default new Router({
     },
     {
       path: '/admin',
-      name: 'MessageManagement',
+      name: 'AdminManagement',
       component: () => import('@/adminviews/admin/management')
     },
     {
