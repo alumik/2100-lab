@@ -1,6 +1,9 @@
 <template>
   <div>
     <AdminNavbar/>
+    <router-link
+      to="/admin/message/detail"
+      class="btn-group">详情</router-link>
     <BreadCrumb :items="items"/>
     <h4>留言列表</h4>
     <table class="table table-striped">
@@ -68,12 +71,14 @@
           <td class="buttons">
             <button
               type="button"
-              class="btn-primary btn-xs">
+              class="btn-primary btn-xs"
+              @click="to_detail()">
               详情
             </button>
             <button
               type="button"
-              class="btn-primary btn-xs">
+              class="btn-primary btn-xs"
+            >
               回复
             </button>
             <button
@@ -104,10 +109,10 @@ export default {
   data () {
     return {
       items: [{
-        text: 'Admin',
+        text: '主页',
         to: { name: 'AdminNavBar' }
       }, {
-        text: 'Manage',
+        text: '留言管理',
         active: true
       }],
       rows: 20,
@@ -121,6 +126,11 @@ export default {
         { label: '状态' },
         { label: '操作' }
       ]
+    }
+  },
+  methods: {
+    to_detail: function () {
+      this.$router.push({ path: '/admin/message/detail' })
     }
   }
 }
