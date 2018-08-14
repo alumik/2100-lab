@@ -7,78 +7,55 @@ import re
 
 class AuthModuleTests(TestCase):
     def setUp(self):
-        get_user_model().objects.create_user(phone_number='12345678901')
+        get_user_model().objects.create_user(phone_number='00000000001')
 
     def test_get_verification_code_success(self):
-        json_data = json.dumps({'phone_number': '12345678901'})
-
         response = self.client.post(
             reverse('api:core:get_verification_code'),
-            json_data,
-            content_type='application/json'
+            {'phone_number': '00000000001'}
         )
-
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(bool(re.match(r'\d{6}$', json.loads(response.content)['verification_code'])), True)
+        self.assertTrue(bool(re.match(r'\d{6}$', json.loads(response.content)['verification_code'])))
 
     def test_get_verification_code_fail(self):
-        json_data = json.dumps({'phone_number': 'apple'})
-
         response = self.client.post(
             reverse('api:core:get_verification_code'),
-            json_data,
-            content_type='application/json'
+            {'phone_number': 'apple'}
         )
-
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.content)['message'], 'Not a valid phone number.')
 
     def test_get_eula(self):
-        response = self.client.get(
-            reverse('api:core:get_eula'),
-            content_type='application/json'
-        )
-
+        response = self.client.get(reverse('api:core:get_eula'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content)['content'], 'Test EULA.')
 
     def test_logout(self):
-        self.client.force_login(get_user_model().objects.get(phone_number='12345678901'))
+        self.client.force_login(get_user_model().objects.get(phone_number='00000000001'))
 
-        response = self.client.get(
-            reverse('api:core:logout'),
-            content_type='application/json'
-        )
+        response = self.client.get(reverse('api:core:logout'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content)['message'], 'User logged out.')
 
-        response = self.client.get(
-            reverse('api:core:is_authenticated'),
-            content_type='application/json'
-        )
+        response = self.client.get(reverse('api:core:is_authenticated'))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content)['is_authenticated'], False)
+        self.assertFalse(json.loads(response.content)['is_authenticated'])
 
     def test_old_user_login_success(self):
         session = self.client.session
         session['verification_code'] = '123456'
         session.save()
-        json_data = json.dumps({'phone_number': '12345678901', 'verification_code': '123456'})
 
         response = self.client.post(
             reverse('api:core:authenticate'),
-            json_data,
-            content_type='application/json'
+            {'phone_number': '00000000001', 'verification_code': '123456'}
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content)['new_user'], False)
+        self.assertFalse(json.loads(response.content)['new_user'])
 
-        response = self.client.get(
-            reverse('api:core:is_authenticated'),
-            content_type='application/json'
-        )
+        response = self.client.get(reverse('api:core:is_authenticated'))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content)['is_authenticated'], True)
+        self.assertTrue(json.loads(response.content)['is_authenticated'])
 
         self.client.logout()
 
@@ -86,22 +63,18 @@ class AuthModuleTests(TestCase):
         session = self.client.session
         session['verification_code'] = '111111'
         session.save()
-        json_data = json.dumps({'phone_number': '11122223333', 'verification_code': '111111'})
 
         response = self.client.post(
             reverse('api:core:authenticate'),
-            json_data,
-            content_type='application/json'
+            {'phone_number': '00000000002', 'verification_code': '111111'}
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content)['new_user'], True)
+        self.assertTrue(json.loads(response.content)['new_user'])
 
-        response = self.client.get(
-            reverse('api:core:is_authenticated'),
-            content_type='application/json'
-        )
+        response = self.client.get(reverse('api:core:is_authenticated'))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content)['is_authenticated'], True)
+        self.assertTrue(json.loads(response.content)['is_authenticated'])
+        self.assertTrue(get_user_model().objects.filter(phone_number='00000000002').exists())
 
         self.client.logout()
 
@@ -109,41 +82,72 @@ class AuthModuleTests(TestCase):
         session = self.client.session
         session['verification_code'] = '123456'
         session.save()
-        json_data = json.dumps({'phone_number': '1234567890', 'verification_code': '111111'})
 
         response = self.client.post(
             reverse('api:core:authenticate'),
-            json_data,
-            content_type='application/json'
+            {'phone_number': '00000000001', 'verification_code': '000000'}
         )
         self.assertEqual(response.status_code, 401)
         self.assertEqual(json.loads(response.content)['message'], 'Wrong verification code.')
 
-        response = self.client.get(
-            reverse('api:core:is_authenticated'),
-            content_type='application/json'
-        )
+        response = self.client.get(reverse('api:core:is_authenticated'))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content)['is_authenticated'], False)
+        self.assertFalse(json.loads(response.content)['is_authenticated'])
 
     def test_new_user_login_fail(self):
         session = self.client.session
-        session['verification_code'] = '123456'
+        session['verification_code'] = '111111'
         session.save()
-        json_data = json.dumps({'phone_number': '11144443333', 'verification_code': '111111'})
 
         response = self.client.post(
             reverse('api:core:authenticate'),
-            json_data,
-            content_type='application/json'
+            {'phone_number': '00000000002', 'verification_code': '000000'}
         )
         self.assertEqual(response.status_code, 401)
         self.assertEqual(json.loads(response.content)['message'], 'Wrong verification code.')
 
-        response = self.client.get(
-            reverse('api:core:is_authenticated'),
-            content_type='application/json'
+        response = self.client.get(reverse('api:core:is_authenticated'))
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(json.loads(response.content)['is_authenticated'])
+        self.assertFalse(get_user_model().objects.filter(phone_number='00000000002').exists())
+
+    def test_old_user_login_whole_process(self):
+        response = self.client.post(
+            reverse('api:core:get_verification_code'),
+            {'phone_number': '00000000001'}
+        )
+        verification_code = json.loads(response.content)['verification_code']
+
+        response = self.client.post(
+            reverse('api:core:authenticate'),
+            {'phone_number': '00000000001', 'verification_code': verification_code}
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content)['is_authenticated'], False)
+        self.assertFalse(json.loads(response.content)['new_user'])
 
+        response = self.client.get(reverse('api:core:is_authenticated'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(json.loads(response.content)['is_authenticated'])
+
+        self.client.logout()
+
+    def test_new_user_login_whole_process(self):
+        response = self.client.post(
+            reverse('api:core:get_verification_code'),
+            {'phone_number': '00000000003'}
+        )
+        verification_code = json.loads(response.content)['verification_code']
+
+        response = self.client.post(
+            reverse('api:core:authenticate'),
+            {'phone_number': '00000000003', 'verification_code': verification_code}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(json.loads(response.content)['new_user'])
+
+        response = self.client.get(reverse('api:core:is_authenticated'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(json.loads(response.content)['is_authenticated'])
+        self.assertTrue(get_user_model().objects.filter(phone_number='00000000003').exists())
+
+        self.client.logout()
