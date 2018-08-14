@@ -34,17 +34,12 @@ export default new Router({
     {
       path: '/admin/message/detail',
       name: 'Message',
-      component: () => import('@/adminviews/message/message')
+      component: () => import('@/adminviews/message/detail')
     },
     {
       path: '/admin/adminmanagement/changecode',
       name: 'ChangeCode',
       component: () => import('@/adminviews/admin/changecode')
-    },
-    {
-      path: '/admin/message/detail',
-      name: 'Message',
-      component: () => import('@/adminviews/message/detail')
     },
     {
       path: '/admin/adminmanagement/distribution',
