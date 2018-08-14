@@ -162,4 +162,8 @@ export default {
   #detail {
     flex-basis: 90%;
   }
+
+  table {
+    min-width: 100vh;
+  }
 </style>
