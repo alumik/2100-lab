@@ -39,7 +39,7 @@ export default new Router({
     {
       path: '/admin/message/detail',
       name: 'Message',
-      component: () => import('@/adminviews/message/message')
+      component: () => import('@/adminviews/message/detail')
     }
   ]
 })
