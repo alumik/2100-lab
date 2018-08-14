@@ -6,4 +6,5 @@ app_name = 'api'
 
 urlpatterns = [
     path('core/', include('core.urls', namespace='core')),
+    path('customers/', include('customers.urls', namespace='customers')),
 ]
