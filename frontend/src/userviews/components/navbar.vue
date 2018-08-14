@@ -5,8 +5,7 @@
     variant="info"
     class="navbar">
 
-    <b-navbar-toggle
-      target="nav_collapse"/>
+    <b-navbar-toggle target="nav_collapse"/>
 
     <b-navbar-brand
       href="#"
