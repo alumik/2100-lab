@@ -46,6 +46,11 @@ export default new Router({
       path: '/admin/adminmanagement/distribution',
       name: 'DistributeAuthority',
       component: () => import('@/adminviews/admin/distributeauthority')
+    },
+    {
+      path: '/admin/adminmanagement/detail',
+      name: 'AdminDetail',
+      component: () => import('@/adminviews/admin/detail')
     }
   ]
 })
