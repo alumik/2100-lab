@@ -1,4 +1,5 @@
 import re
+import time
 
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
@@ -52,3 +53,14 @@ def is_authenticated(request):
     if request.user.is_authenticated:
         return JsonResponse({'is_authenticated': True})
     return JsonResponse({'is_authenticated': False})
+
+
+@login_required
+def delete(request):
+    user = request.user
+    auth.logout(request)
+    user.phone_number += '_deleted_' + str(int(round(time.time() * 1000)))
+    user.username = user.phone_number
+    user.save()
+    user.delete()
+    return JsonResponse({'message': 'Account deleted.'})

@@ -26,5 +26,5 @@ urlpatterns = [
         'personal_center/order_log/',
         views.personal_center_order_log,
         name='personal_center_order_log'
-    )
+    ),
 ]

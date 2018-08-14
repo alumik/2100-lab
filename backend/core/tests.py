@@ -9,6 +9,7 @@ from django.contrib.auth import get_user_model
 class AuthModuleTests(TestCase):
     def setUp(self):
         get_user_model().objects.create_user(phone_number='00000000001')
+        get_user_model().objects.create_user(phone_number='00000000010')
 
     def test_get_verification_code_success(self):
         response = self.client.post(
@@ -150,5 +151,58 @@ class AuthModuleTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(json.loads(response.content)['is_authenticated'])
         self.assertTrue(get_user_model().objects.filter(phone_number='00000000003').exists())
+
+        self.client.logout()
+
+    def test_account_deletion(self):
+        first_user = get_user_model().objects.get(phone_number='00000000010')
+        first_user_id = first_user.id
+        self.client.force_login(first_user)
+
+        response = self.client.delete(reverse('api:core:delete'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content)['message'], 'Account deleted.')
+
+        response = self.client.post(
+            reverse('api:core:get_verification_code'),
+            {'phone_number': '00000000010'}
+        )
+        verification_code = json.loads(response.content)['verification_code']
+
+        response = self.client.post(
+            reverse('api:core:authenticate'),
+            {'phone_number': '00000000010', 'verification_code': verification_code}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(json.loads(response.content)['new_user'])
+        second_user_id = get_user_model().objects.get(phone_number='00000000010').id
+        self.assertNotEqual(second_user_id, first_user_id)
+
+        response = self.client.get(reverse('api:core:is_authenticated'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(json.loads(response.content)['is_authenticated'])
+
+        response = self.client.delete(reverse('api:core:delete'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content)['message'], 'Account deleted.')
+
+        response = self.client.post(
+            reverse('api:core:get_verification_code'),
+            {'phone_number': '00000000010'}
+        )
+        verification_code = json.loads(response.content)['verification_code']
+
+        response = self.client.post(
+            reverse('api:core:authenticate'),
+            {'phone_number': '00000000010', 'verification_code': verification_code}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(json.loads(response.content)['new_user'])
+        third_user_id = get_user_model().objects.get(phone_number='00000000010').id
+        self.assertNotEqual(third_user_id, second_user_id)
+
+        response = self.client.get(reverse('api:core:is_authenticated'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(json.loads(response.content)['is_authenticated'])
 
         self.client.logout()
