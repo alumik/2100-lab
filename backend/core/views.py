@@ -4,13 +4,11 @@ from django.http import JsonResponse
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from random import randint
-import json
 import re
 
 
 def get_verification_code(request):
-    received_json_data = json.loads(request.body.decode('utf-8'))
-    phone_number = received_json_data['phone_number']
+    phone_number = request.POST.get('phone_number')
     match = re.search(r'^\d{11}$', phone_number)
     if match:
         verification_code = str(randint(0, 999999)).zfill(6)
@@ -21,9 +19,8 @@ def get_verification_code(request):
 
 
 def authenticate(request):
-    received_json_data = json.loads(request.body.decode('utf-8'))
-    phone_number = received_json_data['phone_number']
-    verification_code = received_json_data['verification_code']
+    phone_number = request.POST.get('phone_number')
+    verification_code = request.POST.get('verification_code')
 
     if verification_code == request.session['verification_code']:
         try:
