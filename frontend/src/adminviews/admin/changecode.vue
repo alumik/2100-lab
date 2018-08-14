@@ -1,63 +1,64 @@
 <template>
-  <div class="father">
-    <AdminNavbar/>
-    <label class="head-text row col-lg-5">修改密码</label>
-    <div class="row col-lg-5">
-      <form
-        role="form">
-        <div class="form-group">
-          <label
-            for="new-code"
-            class="short-text">新密码</label>
-          <input
-            id="new-code"
-            class="form-control"
-            type="password">
-        </div>
-        <div class="form-group">
-          <label
-            for="new-code-again">重新输入密码</label>
-          <input
-            id="new-code-again"
-            class="form-control"
-            type="password">
-        </div>
-        <button
-          type="submit"
-          class="btn btn-primary"
-        >保存</button>
-      </form>
+  <div>
+    <div>
+      <AdminNavbar/>
+    </div>
+    <div style="display: flex;">
+      <div>
+        <Menu/>
+      </div>
+      <div class="container">
+        <h1 class="head-text">修改密码</h1>
+        <form>
+          <div class="form-group">
+            <label
+              class="form-check-label"
+              for="newpassword">新密码</label>
+            <input
+              id="newpassword"
+              class="input form-control col-lg-3"
+              type="text">
+          </div>
+          <div class="form-group">
+            <label
+              class="form form-check-label"
+              for="newpasswordagain">重新输入密码</label>
+            <input
+              id="newpasswordagain"
+              class="form-control col-lg-3"
+              type="password">
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary btn-sm"
+          >保存</button>
+        </form>
+
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import AdminNavbar from '../components/navbar'
+import Menu from '../components/menu'
 export default {
   name: 'ChangeCode',
-  components: {AdminNavbar}
+  components: {Menu, AdminNavbar}
 }
 </script>
 
 <style scoped>
-  .father {
-    min-width: 800px;
-  }
-
   .head-text {
-    margin-left: 15px;
-    font-size: 40px;
+    margin-top: 60px;
+    margin-bottom: 60px;
   }
 
-  .short-text {
-    padding-right: 45px;
+  .form-group {
+    margin-top: 60px;
   }
 
   .btn {
-    margin-left: -40px;
-  }
-
-  .form-control {
-    margin-left: 120px;
+    margin-top: 25px;
   }
 </style>
