@@ -10,7 +10,18 @@ class LearningLog(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     progress = models.IntegerField(default=0)
     created_at = models.DateTimeField(default=timezone.now)
-    expire_time = models.DateTimeField(null=True)
+    expire_time = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        unique_together = ('customer', 'course')
+
+    def as_dict(self):
+        return {
+            'course_codename': self.course.codename,
+            'course_title': self.course.title,
+            'start_time': self.created_at,
+            'expire_time': self.expire_time
+        }
 
 
 class OrderLog(models.Model):

@@ -17,4 +17,9 @@ urlpatterns = [
         views.personal_center_change_username,
         name='personal_center_change_username'
     ),
+    path(
+        'personal_center/learning_log/',
+        views.personal_center_learning_log,
+        name='personal_center_learning_log'
+    )
 ]
