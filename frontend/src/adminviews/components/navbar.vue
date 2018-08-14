@@ -11,7 +11,7 @@
 
       <b-navbar-brand
         href="#"
-        disabled>2100实验室 管理后台
+        disabled>2100实验室
       </b-navbar-brand>
 
       <b-collapse
@@ -58,3 +58,9 @@ export default {
   }
 }
 </script>
+
+<style>
+  .navbar {
+    background-color: #4fc8ff !important;
+  }
+</style>
