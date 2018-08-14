@@ -23,6 +23,11 @@ export default new Router({
       component: () => import('@/userviews/personal/personalCenter')
     },
     {
+      path: '/coursedetail',
+      name: 'CourseDetail',
+      component: () => import('@/userviews/coursedetail/index')
+    },
+    {
       path: '/admin',
       name: 'AdminManagement',
       component: () => import('@/adminviews/admin/management')
@@ -36,6 +41,11 @@ export default new Router({
       path: '/admin/message/detail',
       name: 'Message',
       component: () => import('@/adminviews/message/detail')
+    },
+    {
+      path: '/admin/adminmanagement',
+      name: 'AdminManagement',
+      component: () => import('@/adminviews/admin/management')
     },
     {
       path: '/admin/adminmanagement/changecode',
@@ -53,19 +63,9 @@ export default new Router({
       component: () => import('@/adminviews/admin/detail')
     },
     {
-      path: '/admin/message/detail',
-      name: 'Message',
-      component: () => import('@/adminviews/message/management')
-    },
-    {
-      path: '/coursedetail',
-      name: 'CourseDetail',
-      component: () => import('@/userviews/coursedetail/index')
-    },
-    {
-      path: '/admin/order',
-      name: 'OrderManagement',
-      component: () => import('@/adminviews/order/management')
+      path: '/admin/adminmanagement/creation',
+      name: 'AddAdmin',
+      component: () => import('@/adminviews/admin/addadmin')
     }
   ]
 })
