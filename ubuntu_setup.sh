@@ -14,7 +14,7 @@ apt autoremove -y
 
 # install apache2 and mysql
 apt install apache2 -y
-apt install mysql-server mysql-client -y
+apt install mariadb-server mariadb-client -y
 
 # install nodejs and vue
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
