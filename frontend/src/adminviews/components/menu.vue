@@ -5,10 +5,10 @@
 
     <ul class="components">
       <li class="active">
-        <a href="">课程管理</a>
+        <a href="/admin">课程管理</a>
       </li>
       <li>
-        <a href="admin/message">留言管理</a>
+        <a href="/admin/message">留言管理</a>
       </li>
       <li>
         <a href="">用户管理</a>

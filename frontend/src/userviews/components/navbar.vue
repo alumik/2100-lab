@@ -3,7 +3,8 @@
     toggleable="md"
     type="dark"
     variant="info"
-    class="navbar">
+    style="margin: 0"
+    class="navbar navbar-inverse">
 
     <b-navbar-toggle target="nav_collapse"/>
 
@@ -44,5 +45,8 @@ export default {
   img {
     width: 40px;
     height: 40px;
+  }
+  .navbar {
+    background-color: #4fc8ff !important;
   }
 </style>
