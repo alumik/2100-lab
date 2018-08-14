@@ -5,6 +5,46 @@
     <div style="margin-left: 10px;">
       <h3>课程详情</h3>
     </div>
+    <div>
+      <!-- 分享按钮的弹窗 -->
+      <b-modal
+        id="modal1"
+        title="分享二维码">
+        <p
+          v-if="course.value!=0"
+          class="my-4">&emsp; &emsp;分享该课程的二维码，如果小伙伴点击
+          你分享的链接购买课程，你就将获得奖励金哦！</p>
+        <p
+          v-else
+          class="my-4">&emsp; &emsp;分享该课程的二维码，和小伙伴一起学习吧~</p>
+        <qrcode
+          :options="{ size: 200 }"
+          value="share_url"
+          style="margin-left: 130px;"/>
+      </b-modal>
+      <!-- 分享按钮的弹窗 -->
+    </div>
+    <div>
+      <!-- 分享按钮的弹窗 -->
+      <b-modal
+        id="modal2"
+        title="购买课程">
+        <h5 class="my-4">请选择支付方式</h5>
+        <qrcode
+          :options="{ size: 200 }"
+          value="alipay_url"
+          style="margin-left: 20px;"/>
+        <qrcode
+          :options="{ size: 200 }"
+          value="wxpay_url"
+          style="margin-left: 20px;"/>
+        <b-row>
+          <h5 style="margin-left: 100px;">支付宝</h5>
+          <h5 style="margin-left: 180px;">微信</h5>
+        </b-row>
+      </b-modal>
+      <!-- 分享按钮的弹窗 -->
+    </div>
     <div
       id="profile"
       class="row profile-style"
@@ -41,6 +81,7 @@
             </div>
             <div v-else>
               <b-button
+                v-b-modal.modal2
                 size="lg"
                 variant="primary">
                 立即购买
@@ -52,22 +93,30 @@
             id="sharebutton"
             class="row-btn">
             <b-button
+              v-b-modal.modal1
               size="lg"
               variant="primary"
-              class="row-btn">
+              class="row-btn"
+            >
               分享
             </b-button>
           </div>
           <b-badge
+            :title="share_introduction"
             pill
             variant="primary"
-            class="reminder"
+            class="reminder btn btn-primary"
+            data-container="body"
+            data-toggle="popover"
+            data-content="share_introduction"
+            data-placement="top"
           >
             !</b-badge>
           <b-button
             size="lg"
             variant="primary"
-            class="row-btn praise">
+            class="row-btn praise"
+            @click="course.num_of_praise+=1">
             <h style="color: lawngreen; font-size: 18px;">
               {{ course.num_of_praise }}
             </h>
@@ -114,7 +163,14 @@ export default{
   },
   data () {
     return {
+      share_url: 'http://www.baidu.com',
+      alipay_url: 'http://www.jisuanke.com',
+      wxpay_url: 'http://se.jisuanke.com',
       user_balance: 50,
+      share_introduction: '        小可爱，你可以通过分享该二维码和' +
+        '小朋友一起学习有趣的实验哦~ 分享付费课程给好朋友，如果' +
+        '他/她购买该课程，你将会获得奖励金哦~奖励金可以用来购买' +
+        '其他有趣的实验课程呢，所以赶紧拿起你的手机进行分享吧(*^▽^*)',
       course: {
         name: '小孔成像',
         value: 0,
@@ -154,7 +210,7 @@ export default{
     position: absolute;
     bottom: 3px;
     left: 240px;
-    height: 30%;
+    height: 40%;
     margin-left: 10px;
   }
 

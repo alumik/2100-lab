@@ -6,7 +6,9 @@ import router from './router'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import VueQrcode from '@xkeshi/vue-qrcode'
 
+Vue.component(VueQrcode.name, VueQrcode)
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 
