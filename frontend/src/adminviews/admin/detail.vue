@@ -114,7 +114,7 @@ export default {
     flex-direction: row;
     justify-content: space-between;
     margin-top: 60px;
-    margin-bottom: 60px;
+    margin-bottom: 100px;
   }
 
   .head-td {

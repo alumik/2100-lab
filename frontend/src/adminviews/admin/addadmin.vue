@@ -1,63 +1,72 @@
 <template>
-  <div class="father">
-    <label class="head-text">新增管理员</label>
-    <form class="write">
+  <div>
+    <div>
+      <AdminNavbar/>
+    </div>
+    <div style="display: flex;">
       <div>
-        <label class="short-text">管理员手机号</label>
-        <input
-          class="input"
-          type="text">
+        <Menu/>
       </div>
-      <div>
-        <label class="short-text">管理员密码</label>
-        <input
-          class="input"
-          type="password">
+      <div class="father container">
+        <h1 class="head-text">新增管理员</h1>
+        <form>
+          <div class="form-group">
+            <label
+              class="form-check-label"
+              for="telephone">管理员手机号</label>
+            <input
+              id="telephone"
+              class="input form-control col-lg-3"
+              type="text">
+          </div>
+          <div class="form-group">
+            <label
+              class="form form-check-label"
+              for="password">管理员密码</label>
+            <input
+              id="password"
+              class="form-control col-lg-3"
+              type="password">
+          </div>
+          <div class="form-group">
+            <label
+              class="form form-check-label"
+              for="passwordagain">再次输入密码</label>
+            <input
+              id="passwordagain"
+              class="form-control col-lg-3"
+              type="password">
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary btn-sm"
+          >保存</button>
+        </form>
       </div>
-      <div>
-        <label>再次输入密码</label>
-        <input
-          class="input"
-          type="password">
-      </div>
-      <button
-        type="button"
-        class="btn btn-primary btn-sm"
-      >保存</button>
-    </form>
+    </div>
   </div>
 </template>
 
 <script>
+import AdminNavbar from '../components/navbar'
+import Menu from '../components/menu'
 export default {
-  name: 'AddAdmin'
+  name: 'AddAdmin',
+  components: {Menu, AdminNavbar}
 }
 </script>
 
-<style scoped>
-  .father {
-    min-width: 800px;
-  }
-
+<style>
   .head-text {
-    margin-bottom: 4%;
-    margin-left: -750px;
+    margin-top: 40px;
+    margin-bottom: 40px;
   }
 
-  .short-text {
-    padding-right: 17px;
-  }
-
-  .input {
-    margin-left: 100px;
-  }
-
-  .write {
-    margin-left: -400px;
+  .form-group {
+    margin-top: 25px;
   }
 
   .btn {
-    margin-top: 2%;
-    margin-left: -380px;
+    margin-top: 25px;
   }
 </style>
