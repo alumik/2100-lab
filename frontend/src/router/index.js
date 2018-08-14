@@ -61,6 +61,11 @@ export default new Router({
       path: '/coursedetail',
       name: 'CourseDetail',
       component: () => import('@/userviews/coursedetail/index')
+    },
+    {
+      path: '/admin/order',
+      name: 'OrderManagement',
+      component: () => import('@/adminviews/order/management')
     }
   ]
 })

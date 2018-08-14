@@ -6,7 +6,6 @@
       :per-page="perpage"
       align="center"
       size="md"/>
-    <div id="page">第 {{ currentPage }} 页</div>
   </div>
 </template>
 
