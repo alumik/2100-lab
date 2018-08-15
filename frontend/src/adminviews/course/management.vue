@@ -28,10 +28,10 @@
         <table class="table table-striped table-hover">
           <thead>
             <tr>
-              <th scope="col-2">课程代码</th>
-              <th scope="col-2">课程名</th>
-              <th scope="col-4">修改时间</th>
-              <th scope="col-4">操作</th>
+              <th scope="col">课程代码</th>
+              <th scope="col">课程名</th>
+              <th scope="col">修改时间</th>
+              <th scope="col">操作</th>
             </tr>
           </thead>
           <tbody>
@@ -57,7 +57,7 @@
                     class="form-control col-5"
                     placeholder="">
               </div></td>
-              <td>
+              <td style="width: 250px;">
               <div/></td>
             </tr>
             <tr
@@ -66,11 +66,21 @@
               <td>{{ course.ID }}</td>
               <td>{{ course.name }}</td>
               <td>{{ course.change_time }}</td>
-              <button
-                type="button"
-                class="in-btn row inner-btn btn-primary btn-sm"
-                @click="detail_information"
-              >详情</button>
+              <div style="display: flex;">
+                <button
+                  type="button"
+                  class="in-btn row btn-primary btn-sm"
+                  style="margin-right: -10px;
+                  margin-top: 10px;"
+                  @click="detail_information"
+                >详情</button>
+                <button
+                  type="button"
+                  class="in-btn row btn-primary btn-sm"
+                  style="margin-top: 10px;"
+                  @click="detail_information"
+                >修改</button>
+              </div>
             </tr>
           </tbody>
         </table>
