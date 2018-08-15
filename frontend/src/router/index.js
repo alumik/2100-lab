@@ -44,7 +44,7 @@ export default new Router({
     },
     {
       path: '/admin/course',
-      name: 'AddCourse',
+      name: 'CourseManagement',
       component: () => import('@/adminviews/course/management')
     },
     {
@@ -54,8 +54,13 @@ export default new Router({
     },
     {
       path: '/admin/course/creation',
-      name: 'BackendCourseDetail',
+      name: 'AddCourse',
       component: () => import('@/adminviews/course/add_course')
+    },
+    {
+      path: '/admin/course/edit',
+      name: 'EditCourse',
+      component: () => import('@/adminviews/course/edit_course')
     },
     {
       path: '/admin/message',
@@ -64,7 +69,7 @@ export default new Router({
     },
     {
       path: '/admin/message/detail',
-      name: 'Message',
+      name: 'MessageDetail',
       component: () => import('@/adminviews/message/detail')
     },
     {
