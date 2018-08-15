@@ -5,32 +5,25 @@
     variant="primary"
     style="margin: 0"
     class="navbar navbar-inverse">
-
-    <b-navbar-toggle target="nav_collapse"/>
-
     <b-navbar-brand
       href=""
       disabled>2100实验室
     </b-navbar-brand>
-
+    <b-navbar-toggle target="nav_collapse"/>
     <b-collapse
       id="nav_collapse"
       is-nav>
       <b-navbar-nav class="ml-auto">
-
-        <img
-          src="../../assets/logo.png"
-          class="img-rounded">
-
-        <b-nav-item href="/personal">用户一</b-nav-item>
-
+        <b-nav-item href="/personal">
+          <img
+          src="../../assets/logo.png">用户一
+        </b-nav-item>
         <b-nav-item
-          href="/login"
-          right>
+          id="logout"
+          href="/login">
           注销
         </b-nav-item>
       </b-navbar-nav>
-
     </b-collapse>
   </b-navbar>
 </template>
@@ -49,5 +42,9 @@ export default {
   .navbar {
     padding: 15px 10px;
     /*background-color: #4fc8ff !important;*/
+    min-width: 350px;
+  }
+  #logout {
+    padding: 7px 0;
   }
 </style>
