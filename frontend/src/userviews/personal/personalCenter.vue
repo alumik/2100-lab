@@ -1,7 +1,7 @@
 <template>
   <div>
     <UserNavbar/>
-    <div>
+    <div id="div">
       <UserMenu/>
     </div>
   </div>
@@ -23,5 +23,11 @@ export default {
   img {
     width: 40px;
     height: 40px;
+  }
+  div {
+    height: 100%;
+  }
+  #div {
+    height: calc(100% - 70px);
   }
 </style>

@@ -1,7 +1,6 @@
 <template>
   <nav id="sidebar">
     <div class="sidebar-header">个人中心</div>
-
     <ul class="components">
       <li class="active">
         <a href="">查看学习记录</a>
