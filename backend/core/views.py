@@ -33,7 +33,13 @@ def authenticate(request):
             new_user = True
         auth.login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])
         del request.session['verification_code']
-        return JsonResponse({'new_user': new_user})
+        return JsonResponse(
+            {
+                'new_user': new_user,
+                'username': user.username,
+                'avatar': str(user.avatar)
+            }
+        )
     else:
         del request.session['verification_code']
         return JsonResponse({'message': 'Wrong verification code.'}, status=401)
