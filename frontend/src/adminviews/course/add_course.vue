@@ -64,7 +64,7 @@
                     id="flare_time"
                     class="input form-control col-lg-1"
                     type="text"
-                    style="width: 60px; min-width: 60px; max-width: 60px;">
+                    style="width: 80px; min-width: 80px; max-width: 80px;">
                   <div class="input-group-prepend">
                     <span class="input-group-text">天</span>
                   </div>
@@ -78,7 +78,7 @@
                     id="flare_time_1"
                     class="input form-control col-lg-1"
                     type="text"
-                    style="width: 72px; min-width: 72px; max-width: 72px;">
+                    style="width: 70px; min-width: 70px; max-width: 70px;">
                   <div class="input-group-prepend">
                     <span class="input-group-text">小时</span>
                   </div>
@@ -96,7 +96,7 @@
                   id="price"
                   class="input form-control col-lg-1"
                   type="text"
-                  style="width: 190px; min-width: 190px; max-width: 190px;">
+                  style="width: 210px; min-width: 210px; max-width: 210px;">
                 <div class="input-group-prepend">
                   <span class="input-group-text">元</span>
                 </div>
@@ -130,7 +130,7 @@
                 <input
                   id="percent"
                   class="input form-control col-lg-3"
-                  style="width: 190px; min-width: 190px; max-width: 190px;"
+                  style="width: 210px; min-width: 210px; max-width: 210px;"
                   type="text">
                 <div class="input-group-prepend">
                   <span
@@ -208,9 +208,9 @@ export default {
   }
 
   .input {
-    width: 230px;
-    min-width: 230px;
-    max-width: 230px;
+    width: 260px;
+    min-width: 260px;
+    max-width: 260px;
     margin-top: 20px;
   }
 
@@ -220,7 +220,7 @@ export default {
 
   .my-btn,
   #intro {
-    max-width: 380px;
+    max-width: 405px;
     margin-top: 10px;
     margin-left: 20px;
   }
