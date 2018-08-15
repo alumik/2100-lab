@@ -7,4 +7,5 @@ app_name = 'api'
 urlpatterns = [
     path('core/', include('core.urls', namespace='core')),
     path('customers/', include('customers.urls', namespace='customers')),
+    path('courses/', include('courses.urls', namespace='courses')),
 ]

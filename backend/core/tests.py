@@ -52,8 +52,12 @@ class AuthModuleTests(TestCase):
             reverse('api:core:authenticate'),
             {'phone_number': '00000000001', 'verification_code': '123456'}
         )
+        response_json_data = json.loads(response.content)
+        user = get_user_model().objects.get(phone_number='00000000001')
         self.assertEqual(response.status_code, 200)
-        self.assertFalse(json.loads(response.content)['new_user'])
+        self.assertFalse(response_json_data['new_user'])
+        self.assertEqual(response_json_data['username'], user.username)
+        self.assertTrue('avatar' in response_json_data)
 
         response = self.client.get(reverse('api:core:is_authenticated'))
         self.assertEqual(response.status_code, 200)
@@ -70,8 +74,12 @@ class AuthModuleTests(TestCase):
             reverse('api:core:authenticate'),
             {'phone_number': '00000000002', 'verification_code': '111111'}
         )
+        response_json_data = json.loads(response.content)
+        user = get_user_model().objects.get(phone_number='00000000002')
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(json.loads(response.content)['new_user'])
+        self.assertTrue(response_json_data['new_user'])
+        self.assertEqual(response_json_data['username'], user.username)
+        self.assertTrue('avatar' in response_json_data)
 
         response = self.client.get(reverse('api:core:is_authenticated'))
         self.assertEqual(response.status_code, 200)
