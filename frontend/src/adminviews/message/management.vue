@@ -241,7 +241,7 @@ export default {
   }
 
   option {
-    font-size: 10px;
+    font-size: 18px;
   }
 
   #delete_confirm {
