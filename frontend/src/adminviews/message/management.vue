@@ -1,14 +1,17 @@
 <template>
   <div>
-    <AdminNavbar/>
-    <div id="body">
+    <AdminNavbar
+      style="min-width: 1300px;"/>
+    <div
+      id="body">
       <div>
         <Menu/>
       </div>
-      <div id="management">
+      <div
+        id="management">
         <BreadCrumb :items="items"/>
         <h1>留言列表</h1>
-        <table class="table table-bordered">
+        <table class="table table-striped">
           <thead>
             <tr>
               <td
@@ -71,8 +74,8 @@
               :key="message.id">
               <td>{{ message.data }}</td>
               <td>{{ message.user }}</td>
-              <td>{{ message.courseCode }}</td>
-              <td>{{ message.courseName }}</td>
+              <td>{{ message.course_code }}</td>
+              <td>{{ message.course_name }}</td>
               <td>{{ message.message }}</td>
               <td> {{ message.state }} </td>
               <td
@@ -107,9 +110,9 @@
           centered
           ok-title="保存"
           cancel-title="关闭"
-          @ok="handleOk"
-          @shown="clearReply">
-          <form @submit.stop.prevent="handleSubmit">
+          @ok="handle_ok"
+          @shown="clear_reply">
+          <form @submit.stop.prevent="handle_submit">
             <textarea
               v-model="reply"
               class="form-control"
@@ -138,8 +141,8 @@ import BreadCrumb from '../../components/breadCrumb'
 import Pagination from '../../components/pagination'
 import Menu from '../components/menu'
 let messages = [
-  { data: '2018-08-10', user: '小红', courseCode: 'SOFT1', courseName: '计算机', message: '很好', state: '已删除' },
-  { data: '2018-08-11', user: '小明', courseCode: 'English2', courseName: '口语', message: '还不错', state: '未删除' }
+  { data: '2018-08-10', user: '小红', course_code: 'SOFT1', course_name: '计算机', message: '很好', state: '已删除' },
+  { data: '2018-08-11', user: '小明', course_code: 'English2', course_name: '口语', message: '还不错', state: '未删除' }
 ]
 export default {
   name: 'MessageManagement',
@@ -172,21 +175,20 @@ export default {
     to_detail: function () {
       this.$router.push({ path: '/admin/message/detail' })
     },
-    clearReply () {
+    clear_reply () {
       this.reply = ''
     },
-    handleOk (evt) {
-      // Prevent modal from closing
-      evt.preventDefault()
+    handle_ok (evt) {
       if (!this.reply) {
+        evt.preventDefault()
         alert('请输入内容后提交')
       } else {
-        this.handleSubmit()
+        this.handle_submit()
       }
     },
-    handleSubmit () {
-      this.clearReply()
+    handle_submit () {
       this.$refs.modal.hide()
+      this.clear_reply()
     }
   }
 }
@@ -205,13 +207,17 @@ export default {
   }
 
   table {
-    min-width: 1300px;
     font-size: 1.2em;
+  }
+
+  td {
+    vertical-align: middle;
   }
 
   #body {
     display: flex;
     justify-content: space-between;
+    min-width: 1300px;
   }
 
   #management {

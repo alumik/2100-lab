@@ -1,7 +1,8 @@
 <template>
   <div>
     <div>
-      <AdminNavbar/>
+      <AdminNavbar
+        style="min-width: 500px;"/>
     </div>
     <div style="display: flex;">
       <div>
