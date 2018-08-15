@@ -2,7 +2,9 @@
   <div>
     <UserNavbar/>
     <div id="div">
-      <UserMenu/>
+      <UserMenu
+        :list="list"
+        @select="select"/>
     </div>
   </div>
 </template>
@@ -15,6 +17,22 @@ export default {
   components: {
     UserNavbar,
     UserMenu
+  },
+  data: function () {
+    return {
+      list: [
+        {id: 0, text: '查看学习记录', isActive: false},
+        {id: 1, text: '查看订单记录', isActive: false}
+      ]
+    }
+  },
+  methods: {
+    select: function (id) {
+      this.list.forEach((obj) => {
+        obj.isActive = false
+      })
+      this.list[id].isActive = true
+    }
   }
 }
 </script>
