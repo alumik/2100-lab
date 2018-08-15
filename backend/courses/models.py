@@ -24,6 +24,14 @@ class Course(SoftDeletionModel):
     def __str__(self):
         return self.title
 
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'thumbnail': str(self.thumbnail),
+            'title': self.title,
+            'description': self.description
+        }
+
 
 class Image(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)

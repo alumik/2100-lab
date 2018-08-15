@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 from .models import Heroes, Course
 
@@ -23,21 +24,59 @@ def get_recent_courses(request):
         'paid_courses': []
     }
     for free_course in free_courses:
-        json_data['free_courses'].append(
-            {
-                'id': free_course.id,
-                'thumbnail': str(free_course.thumbnail),
-                'title': free_course.title,
-                'description': free_course.description
-            }
-        )
+        json_data['free_courses'].append(free_course.as_dict())
     for paid_course in paid_courses:
-        json_data['paid_courses'].append(
-            {
-                'id': paid_course.id,
-                'thumbnail': str(paid_course.thumbnail),
-                'title': paid_course.title,
-                'description': paid_course.description
-            }
-        )
+        json_data['paid_courses'].append(paid_course.as_dict())
     return JsonResponse(json_data)
+
+
+def get_free_course_list(request):
+    course_objects = Course.objects.filter(price='0.00').order_by('-modified_at')
+    count = course_objects.count()
+
+    page = request.GET.get('page', request.POST['page'])
+    paginator = Paginator(course_objects, request.POST['page_limit'])
+
+    try:
+        course_page = paginator.page(page)
+    except PageNotAnInteger:
+        course_page = paginator.page(request.POST['page'])
+    except EmptyPage:
+        course_page = paginator.page(paginator.num_pages)
+
+    course_list = list(
+        map(lambda course_object: course_object.as_dict(), list(course_page))
+    )
+    return JsonResponse(
+        {
+            'count': count,
+            'content': course_list
+        },
+        safe=False
+    )
+
+
+def get_paid_course_list(request):
+    course_objects = Course.objects.exclude(price='0.00').order_by('-modified_at')
+    count = course_objects.count()
+
+    page = request.GET.get('page', request.POST['page'])
+    paginator = Paginator(course_objects, request.POST['page_limit'])
+
+    try:
+        course_page = paginator.page(page)
+    except PageNotAnInteger:
+        course_page = paginator.page(request.POST['page'])
+    except EmptyPage:
+        course_page = paginator.page(paginator.num_pages)
+
+    course_list = list(
+        map(lambda course_object: course_object.as_dict(), list(course_page))
+    )
+    return JsonResponse(
+        {
+            'count': count,
+            'content': course_list
+        },
+        safe=False
+    )
