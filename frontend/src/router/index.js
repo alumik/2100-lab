@@ -8,6 +8,11 @@ export default new Router({
   mode: 'history',
   routes: [
     {
+      path: '/personal',
+      name: 'PersonalCenter',
+      component: () => import('@/userviews/personal/personalCenter')
+    },
+    {
       path: '/studypage',
       name: 'Studypage',
       component: () => import('@/userviews/studypage/index')
@@ -23,9 +28,9 @@ export default new Router({
       component: () => import('@/userviews/personal/login')
     },
     {
-      path: '/personal',
-      name: 'PersonalCenter',
-      component: () => import('@/userviews/personal/personalCenter')
+      path: '/studylog',
+      name: 'StudyLog',
+      component: () => import('@/userviews/personal/log/studyLog')
     },
     {
       path: '/coursedetail',
