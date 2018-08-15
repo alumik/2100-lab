@@ -10,7 +10,8 @@
       </div>
       <div
         style="display: block;"
-        class="father">
+        class="father container-fluid">
+        <BreadCrumb :items="items"/>
         <h1 class="header">分配权限</h1>
         <div class="text-left">
           <h6>管理员账号：{{ admin.ID }}</h6>
@@ -132,14 +133,28 @@
 <script>
 import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
+import BreadCrumb from '../../components/breadCrumb'
 export default {
   name: 'DistributeAuthority',
-  components: {Menu, AdminNavbar},
+  components: {BreadCrumb, Menu, AdminNavbar},
   data: function () {
     return {
       admin: {
         ID: 'DingQuan'
-      }
+      },
+      items: [{
+        text: '主页',
+        href: '/admin'
+      }, {
+        text: '管理员管理',
+        href: '/admin/adminmanagement'
+      }, {
+        text: '管理员详情',
+        href: '/admin/adminmanagement/detail'
+      }, {
+        text: '分配权限',
+        active: true
+      }]
     }
   }
 }
@@ -148,11 +163,12 @@ export default {
 <style scoped>
   .father {
     min-width: 500px;
+    padding: 0;
     text-align: left;
   }
 
   .header {
-    margin-top: 15%;
+    margin-top: 60px;
     margin-left: 120px;
   }
 

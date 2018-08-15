@@ -8,7 +8,8 @@
       <div>
         <Menu/>
       </div>
-      <div class="father container">
+      <div class="father container-fluid">
+        <BreadCrumb :items="items"/>
         <h1 class="head-text">新增管理员</h1>
         <form>
           <div class="form-group">
@@ -51,28 +52,47 @@
 <script>
 import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
+import BreadCrumb from '../../components/breadCrumb'
 export default {
   name: 'AddAdmin',
-  components: {Menu, AdminNavbar}
+  components: {BreadCrumb, Menu, AdminNavbar},
+  data: function () {
+    return {
+      items: [{
+        text: '主页',
+        href: '/admin'
+      }, {
+        text: '管理员管理',
+        href: '/admin/adminmanagement'
+      }, {
+        text: '新增管理员',
+        active: true
+      }]
+    }
+  }
 }
 </script>
 
 <style>
   .father {
     min-width: 500px;
+    padding: 0;
     text-align: left;
   }
 
   .head-text {
     margin-top: 40px;
     margin-bottom: 40px;
+    margin-left: 25px;
   }
 
   .form-group {
     margin-top: 25px;
+    margin-left:25px;
   }
 
   .btn {
     margin-top: 25px;
+    margin-left: 25px;
   }
 </style>
