@@ -2,11 +2,12 @@
   <nav id="sidebar">
     <div class="sidebar-header">个人中心</div>
     <ul class="components">
-      <li class="active">
-        <a href="">查看学习记录</a>
-      </li>
-      <li>
-        <a href="">查看订单记录</a>
+      <li
+        v-for="item in list"
+        :key="item.id"
+        :class="{active: item.isActive}"
+        @click="$emit('select', item.id)">
+        <a>{{ item.text }}</a>
       </li>
     </ul>
   </nav>
@@ -15,7 +16,15 @@
 <script>
 import './style/style.css'
 export default {
-  name: 'Menu'
+  name: 'Menu',
+  props: {
+    list: {
+      type: Array,
+      default: () => []
+    }
+  },
+  methods: {
+  }
 }
 </script>
 
