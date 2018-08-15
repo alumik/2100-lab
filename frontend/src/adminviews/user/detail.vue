@@ -12,17 +12,47 @@
           <h1>用户详情</h1>
           <div class="buttons">
             <button
+              v-b-modal.authenticate
               type="button"
               class="btn-primary btn-lg"
               style="margin-right: 10px;">
               认证用户
             </button>
+            <b-modal
+              id="authenticate"
+              ref="modal"
+              title="认证理由"
+              centered
+              ok-title="确认"
+              cancel-title="关闭">
+              <p id="authenticate_confirm">您确定要认证此用户吗？</p>
+            </b-modal>
             <button
+              v-if="is_banned"
+              type="button"
+              class="btn-primary btn-lg"
+              style="margin-right: 10px;"
+              @click="change_banned">
+              取消禁言
+            </button>
+            <button
+              v-b-modal.ban
+              v-else
               type="button"
               class="btn-primary btn-lg"
               style="margin-right: 10px;">
               禁言用户
             </button>
+            <b-modal
+              id="ban"
+              ref="modal"
+              title="确认禁言"
+              centered
+              ok-title="确定"
+              cancel-title="取消"
+              @ok="change_banned">
+              <p id="ban_confirm">您确定要禁言此用户吗？</p>
+            </b-modal>
             <button
               v-b-modal.delete
               type="button"
@@ -196,7 +226,13 @@ export default {
       study_logs: [
         { course_code: 'SOFT1', course_name: '计算机', progress: '01:22', time: '2018-08-14', state: '已焚毁' },
         { course_code: 'ENGLISH3', course_name: '英语写作', progress: '15:00', time: '2018-05-14', state: '未焚毁' }
-      ]
+      ],
+      is_banned: true
+    }
+  },
+  methods: {
+    change_banned () {
+      this.is_banned = !this.is_banned
     }
   }
 }
@@ -205,7 +241,7 @@ export default {
 <style scoped>
   h1,
   h2 {
-    padding-left: 15px;
+    padding-left: 20px;
     text-align: left;
   }
 
@@ -235,7 +271,9 @@ export default {
     width: 40px;
   }
 
-  #delete_confirm {
+  #delete_confirm,
+  #ban_confirm,
+  #authenticate_confirm {
     text-align: left;
   }
 
