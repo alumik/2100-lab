@@ -39,13 +39,18 @@ export default new Router({
     },
     {
       path: '/admin/course',
-      name: 'CourseManagement',
+      name: 'AddCourse',
       component: () => import('@/adminviews/course/management')
     },
     {
       path: '/admin/course/detail',
       name: 'BackendCourseDetail',
       component: () => import('@/adminviews/course/detail')
+    },
+    {
+      path: '/admin/course/creation',
+      name: 'BackendCourseDetail',
+      component: () => import('@/adminviews/course/create_course')
     },
     {
       path: '/admin/message',
