@@ -1,17 +1,16 @@
 <template>
   <div
     id="message-board"
-    style="height: 100%; width: 100%;"
+    style="height: 100%; width: 100%; text-align: center;"
     class="container">
     <div
       class="panel"
       style="height: 80%; width: 100%;">
-      <ul style="width: 100%; padding: 0; border: 1px solid #c6c8ca; text-align: center;">
+      <ul class="form-style">
         <li
           v-for="msg in message_list"
           :key="msg"
-          class="form-control"
-          style="text-align: left; height:50%; width: 98%; margin: 10px;">
+          class="form-control piece-of-message">
           <div id="message">
             <h style="font-weight: bold;">{{ msg.username }}</h>
             留言：{{ msg.message_content }}
@@ -28,18 +27,22 @@
       </ul>
     </div>
     <div
-      class="container"
-      style="marigin-left: 80px; height: 20%; height: 100%; border: 1px solid #c6c8ca; padding: 5px 10px;">
-      <input
+      class="container leave-message">
+      <textarea
         v-model="newMsg"
         autofocus
-        class="form-control"
+        style="width: 100%; height:100%;"
         placeholder="请输入留言"
-        @keyup.enter="addmessage">
+        @keyup.enter="addmessage"/>
       <br>
-      <button
-        class="btn btn-primary btn-block"
-        @click="addmessage">提交</button>
+      <div
+        id="commit-button"
+        style="width: 100%; text-align: right;">
+        <button
+          class="btn btn-primary"
+          style="width: 10%; margin-top: 10px;"
+          @click="addmessage">提交</button>
+      </div>
     </div>
   </div>
 </template>
@@ -76,7 +79,8 @@ export default {
   methods: {
     addmessage: function () {
       var value = this.newMsg && this.newMsg.trim()
-      this.message_list.push({ username: this.username,
+      this.message_list.push({
+        username: this.username,
         message_content: value,
         num_of_praise: 0,
         num_of_detest: 0})
@@ -87,4 +91,25 @@ export default {
 </script>
 
 <style>
+  .leave-message {
+    width: 100%;
+    height: 20%;
+    padding: 5px 10px;
+    margin-left: 0;
+    border: 1px solid #c6c8ca;
+  }
+
+  .form-style {
+    width: 100%;
+    padding: 0;
+    text-align: center;
+    border: 1px solid #c6c8ca;
+  }
+
+  .piece-of-message {
+    text-align: left;
+    height:50%;
+    width: 98%;
+    margin: 10px;
+  }
 </style>
