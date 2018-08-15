@@ -9,14 +9,7 @@ from .models import LearningLog, OrderLog
 @login_required
 def personal_center_get_customer_detail(request):
     user = request.user
-    json_data = {
-        'username': user.username,
-        'avatar': str(user.avatar),
-        'phone_number': user.phone_number,
-        'reward_coin': user.reward_coin,
-        'date_joined': user.date_joined
-    }
-    return JsonResponse(json_data)
+    return JsonResponse(request.user.as_brief_dict())
 
 
 @login_required
@@ -48,7 +41,7 @@ def personal_center_get_learning_log(request):
         learning_log_objects = paginator.page(paginator.num_pages)
 
     learning_log_list = list(
-        map(lambda learning_log_object: learning_log_object.as_dict(), list(learning_log_objects))
+        map(lambda learning_log_object: learning_log_object.as_brief_dict(), list(learning_log_objects))
     )
     return JsonResponse(
         {
@@ -75,7 +68,7 @@ def personal_center_get_order_log(request):
         order_log_objects = paginator.page(paginator.num_pages)
 
     order_log_list = list(
-        map(lambda order_log_object: order_log_object.as_dict(), list(order_log_objects))
+        map(lambda order_log_object: order_log_object.as_brief_dict(), list(order_log_objects))
     )
     return JsonResponse(
         {

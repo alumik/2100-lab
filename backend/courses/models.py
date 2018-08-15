@@ -24,7 +24,7 @@ class Course(SoftDeletionModel):
     def __str__(self):
         return self.title
 
-    def as_dict(self):
+    def as_brief_dict(self):
         return {
             'id': self.id,
             'thumbnail': str(self.thumbnail),

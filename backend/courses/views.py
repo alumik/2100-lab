@@ -24,9 +24,9 @@ def get_recent_courses(request):
         'paid_courses': []
     }
     for free_course in free_courses:
-        json_data['free_courses'].append(free_course.as_dict())
+        json_data['free_courses'].append(free_course.as_brief_dict())
     for paid_course in paid_courses:
-        json_data['paid_courses'].append(paid_course.as_dict())
+        json_data['paid_courses'].append(paid_course.as_brief_dict())
     return JsonResponse(json_data)
 
 
@@ -45,7 +45,7 @@ def get_free_course_list(request):
         course_page = paginator.page(paginator.num_pages)
 
     course_list = list(
-        map(lambda course_object: course_object.as_dict(), list(course_page))
+        map(lambda course_object: course_object.as_brief_dict(), list(course_page))
     )
     return JsonResponse(
         {
@@ -71,7 +71,7 @@ def get_paid_course_list(request):
         course_page = paginator.page(paginator.num_pages)
 
     course_list = list(
-        map(lambda course_object: course_object.as_dict(), list(course_page))
+        map(lambda course_object: course_object.as_brief_dict(), list(course_page))
     )
     return JsonResponse(
         {

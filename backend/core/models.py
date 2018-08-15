@@ -96,3 +96,12 @@ class CustomUser(SoftDeletionModel, AbstractUser):
 
     def __str__(self):
         return self.username
+
+    def as_brief_dict(self):
+        return {
+            'username': self.username,
+            'avatar': str(self.avatar),
+            'phone_number': self.phone_number,
+            'reward_coin': self.reward_coin,
+            'date_joined': self.date_joined
+        }

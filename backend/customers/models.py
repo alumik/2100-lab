@@ -15,7 +15,7 @@ class LearningLog(models.Model):
     class Meta:
         unique_together = ('customer', 'course')
 
-    def as_dict(self):
+    def as_brief_dict(self):
         return {
             'course_codename': self.course.codename,
             'course_title': self.course.title,
@@ -36,7 +36,7 @@ class OrderLog(models.Model):
     class Meta:
         unique_together = ('customer', 'course')
 
-    def as_dict(self):
+    def as_brief_dict(self):
         return {
             'id': self.id,
             'course_codename': self.course.codename,
