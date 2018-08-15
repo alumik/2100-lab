@@ -12,4 +12,9 @@ urlpatterns = [
         views.get_heroes,
         name='get_heroes'
     ),
+    path(
+        'courses/recent_courses/',
+        views.get_recent_courses,
+        name='get_recent_courses'
+    ),
 ]
