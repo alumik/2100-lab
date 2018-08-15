@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <AdminNavbar/>
+      <AdminNavbar style="min-width: 500px;"/>
     </div>
     <div style="display: flex;">
       <div>
@@ -15,9 +15,9 @@
             <button
               type="button"
               class="row btn btn-primary btn-sm my-in-btn"
+              style="margin-right: 15%;"
               @click="add_new_course"
             >新增课程</button>
-            <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
             <button
               type="button"
               class="row btn btn-primary btn-sm my-in-btn"
@@ -70,8 +70,7 @@
                 <button
                   type="button"
                   class="in-btn row btn-primary btn-sm"
-                  style="margin-right: -10px;
-                  margin-top: 10px;"
+                  style="margin-right: -10px; margin-top: 10px;"
                   @click="detail_information"
                 >详情</button>
                 <button
@@ -84,7 +83,7 @@
             </tr>
           </tbody>
         </table>
-
+        <Pagination :rows="rows"/>
       </div>
     </div>
   </div>
@@ -94,9 +93,10 @@
 import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
 import BreadCrumb from '../../components/breadCrumb'
+import Pagination from '../../components/pagination'
 export default {
   name: 'CourseManagement',
-  components: {BreadCrumb, Menu, AdminNavbar},
+  components: {Pagination, BreadCrumb, Menu, AdminNavbar},
   data: function () {
     return {
       courses: [
@@ -113,7 +113,8 @@ export default {
       }, {
         text: '课程管理',
         active: true
-      }]
+      }],
+      rows: 20
     }
   }
 }
@@ -130,11 +131,10 @@ export default {
 
   .my-row {
     display: flex;
-    flex: 0 1 auto;
     flex-direction: row;
-    justify-content: space-around;
-    margin-top: 60px;
-    margin-bottom: 60px;
+    justify-content: space-between;
+    margin-top: 20px;
+    margin-bottom: 10px;
   }
 
   .head-btn {
@@ -143,8 +143,7 @@ export default {
   }
 
   .my-list {
-    position: relative;
-    margin-right: 30%;
+    margin-left: 25px;
   }
 
   .my-in-btn {
