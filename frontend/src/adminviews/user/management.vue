@@ -1,6 +1,7 @@
 <template>
   <div>
-    <AdminNavbar/>
+    <AdminNavbar
+      style="min-width: 800px;"/>
     <div id="body">
       <div>
         <Menu/>
@@ -19,6 +20,44 @@
             </tr>
           </thead>
           <tbody>
+            <tr align="center">
+              <td style="width: 140px;">
+                <div class="input-group-sm">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="">
+                </div>
+              </td>
+              <td style="width: 140px;">
+                <div class="input-group-sm">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="">
+                </div>
+              </td>
+              <td style="width: 160px;">
+                <div class="input-group-sm">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="">
+                </div>
+              </td>
+              <td style="width: 200px;">
+                <div>
+                  <select
+                    v-model="state"
+                    class="selectpicker">
+                    <option value="whole">全部</option>
+                    <option value="reserved">未删除</option>
+                    <option value="deleted">已删除</option>
+                  </select>
+                </div>
+              </td>
+              <td style="width: 200px;"/>
+            </tr>
             <tr
               v-for="user in users"
               :key="user.id">
@@ -26,6 +65,13 @@
               <td>{{ user.user_name }}</td>
               <td>{{ user.phone }}</td>
               <td>{{ user.state }}</td>
+              <td>
+                <button
+                  type="button"
+                  class="btn-primary">
+                  详情
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -77,17 +123,33 @@ export default {
   }
 
   table {
-    min-width: 1300px;
     font-size: 1.2em;
   }
 
   #body {
     display: flex;
     justify-content: space-between;
+    min-width: 800px;
   }
 
   #management {
     flex-basis: 100%;
     padding: 0;
+  }
+
+  button {
+    border-radius: 10px;
+    box-shadow: #adb5bd inset;
+  }
+
+  select {
+    width: 160px;
+    height: 30px;
+    border-radius: 5px;
+    outline: none;
+  }
+
+  option {
+    font-size: 18px;
   }
 </style>
