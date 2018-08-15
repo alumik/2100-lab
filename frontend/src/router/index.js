@@ -76,6 +76,11 @@ export default new Router({
       path: '/admin/order/detail',
       name: 'OrderDetail',
       component: () => import('@/adminviews/order/detail')
+    },
+    {
+      path: '/admin/user',
+      name: 'UserManagement',
+      component: () => import('@/adminviews/user/management')
     }
   ]
 })
