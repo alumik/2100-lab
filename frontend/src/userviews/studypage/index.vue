@@ -29,21 +29,61 @@
           </audio>
         </div>
       </div>
-      <div
-        id="introduction"
-        style="width: 100%; border: 1px solid #999;">
-        <div style="text-align: left;">
-          <b-btn
-            v-b-toggle.collapse3
-            class="m-1">课程简介</b-btn>
+      <div role="tablist">
+        <b-card
+          no-body
+          class="mb-1">
+          <b-card-header
+            header-tag="header"
+            class="p-1"
+            role="tab">
+            <b-btn
+              v-b-toggle.accordion1
+              block
+              href="#"
+              variant="info">课程简介</b-btn>
+          </b-card-header>
           <b-collapse
-            id="collapse3"
-            visible>
-            <b-card>
-              &emsp; &emsp;{{ course.introduction }}
-            </b-card>
+            id="accordion1"
+            visible
+            accordion="my-accordion"
+            role="tabpanel">
+            <b-card-body>
+              <p
+                class="card-text"
+                style="text-align: left;">
+                &emsp; &emsp;{{ course.introduction }}
+              </p>
+            </b-card-body>
           </b-collapse>
-        </div>
+        </b-card>
+        <b-card
+          no-body
+          class="">
+          <b-card-header
+            header-tag="header"
+            class="p-1"
+            role="tab">
+            <b-btn
+              v-b-toggle.accordion2
+              block
+              href="#"
+              variant="info">留言板</b-btn>
+          </b-card-header>
+          <b-collapse
+            id="accordion2"
+            accordion="my-accordion"
+            role="tabpanel"
+            style="width: 100%;">
+            <b-card-body>
+              <p
+                class="card-text"
+                style="width: 100%;">
+                <MessageBoard/>
+              </p>
+            </b-card-body>
+          </b-collapse>
+        </b-card>
       </div>
     </div>
   </div>
@@ -51,11 +91,13 @@
 
 <script>
 import UserNavbar from '../components/navbar'
+import MessageBoard from '../components/messageboard'
 
 export default {
   name: 'StudyPage',
   components: {
-    UserNavbar
+    UserNavbar,
+    MessageBoard
   },
   data () {
     return {
