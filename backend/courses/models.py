@@ -44,3 +44,14 @@ class Comment(SoftDeletionModel):
             return self.content
         else:
             return self.content[:50] + '...'
+
+
+class Heroes(models.Model):
+    image = models.ImageField(upload_to='uploads/common/heroes/')
+    caption = models.CharField(max_length=255, blank=True)
+
+    def as_dict(self):
+        return {
+            'image': str(self.image),
+            'caption': self.caption
+        }
