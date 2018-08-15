@@ -29,8 +29,13 @@ export default new Router({
     },
     {
       path: '/admin',
-      name: 'AdminManagement',
-      component: () => import('@/adminviews/admin/management')
+      name: 'CourseManagement',
+      component: () => import('@/adminviews/course/management')
+    },
+    {
+      path: '/admin/course',
+      name: 'CourseManagement',
+      component: () => import('@/adminviews/course/management')
     },
     {
       path: '/admin/message',
