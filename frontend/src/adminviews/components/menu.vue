@@ -5,7 +5,7 @@
 
     <ul class="components">
       <li class="active">
-        <a href="/admin">课程管理</a>
+        <a href="/admin/course">课程管理</a>
       </li>
       <li>
         <a href="/admin/message">留言管理</a>
@@ -17,7 +17,7 @@
         <a href="">订单管理</a>
       </li>
       <li>
-        <a href="/admin">管理员管理</a>
+        <a href="/admin/adminmanagement">管理员管理</a>
       </li>
       <li>
         <a href="">数据分析</a>
