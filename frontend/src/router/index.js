@@ -8,11 +8,6 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '/studypage',
-      name: 'Studypage',
-      component: () => import('@/userviews/studypage/index')
-    },
-    {
       path: '/',
       name: 'Homepage',
       component: Homepage
