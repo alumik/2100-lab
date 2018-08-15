@@ -85,6 +85,10 @@
             </tr>
           </tbody>
         </table>
+        <div class="my-intro">
+          <h3 class="text-left">课程简介</h3>
+          <p class="text-justify">{{ course.introduction }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -116,7 +120,8 @@ export default {
         'price': 'ascmk',
         'percent': 'aslcm',
         'add_time': 'aslcmklamlc',
-        'change_time': 'ak njksdjvksnjk'
+        'change_time': 'ak njksdjvksnjk',
+        'introduction': 'sncklsndkjvbweuiaciusDnmcksndkjcshndovi;jpaoerjvoigeahngvuihwroigrioahnvhios '
       }
     }
   }
@@ -155,5 +160,9 @@ export default {
 
   .btn {
     margin-right: 25px;
+  }
+
+  .my-intro {
+    margin-left: 25px;
   }
 </style>
