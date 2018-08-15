@@ -8,23 +8,23 @@ app_name = 'customers'
 
 urlpatterns = [
     path(
-        'personal_center/main_page/',
-        views.personal_center_main_page,
-        name='personal_center_main_page'
+        'personal-center/get-customer-detail/',
+        views.personal_center_get_customer_detail,
+        name='personal-center-get-customer-detail'
     ),
     path(
-        'personal_center/change_username/',
+        'personal-center/change-username/',
         views.personal_center_change_username,
-        name='personal_center_change_username'
+        name='personal-center-change-username'
     ),
     path(
-        'personal_center/learning_log/',
-        views.personal_center_learning_log,
-        name='personal_center_learning_log'
+        'personal-center/get-learning-log/',
+        views.personal_center_get_learning_log,
+        name='personal-center-get-learning-log'
     ),
     path(
-        'personal_center/order_log/',
-        views.personal_center_order_log,
-        name='personal_center_order_log'
+        'personal-center/get-order-log/',
+        views.personal_center_get_order_log,
+        name='personal-center-get-order-log'
     ),
 ]

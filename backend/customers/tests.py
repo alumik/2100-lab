@@ -15,7 +15,7 @@ class PersonalCenterMainPageTests(TestCase):
 
     def test_main_page_logged_in(self):
         self.client.force_login(get_user_model().objects.get(phone_number='00000000001'))
-        response = self.client.get(reverse('api:customers:personal_center_main_page'))
+        response = self.client.get(reverse('api:customers:personal-center-get-customer-detail'))
         response_json_data = json.loads(response.content)
         self.assertEqual(response.status_code, 200)
         self.assertTrue('username' in response_json_data)
@@ -26,13 +26,13 @@ class PersonalCenterMainPageTests(TestCase):
         self.client.logout()
 
     def test_main_page_logged_out(self):
-        response = self.client.get(reverse('api:customers:personal_center_main_page'))
+        response = self.client.get(reverse('api:customers:personal-center-get-customer-detail'))
         self.assertEqual(response.status_code, 302)
 
     def test_change_username_no_conflict(self):
         self.client.force_login(get_user_model().objects.get(phone_number='00000000001'))
         response = self.client.post(
-            reverse('api:customers:personal_center_change_username'),
+            reverse('api:customers:personal-center-change-username'),
             {'username': '00000000003'}
         )
         response_json_data = json.loads(response.content)
@@ -42,7 +42,7 @@ class PersonalCenterMainPageTests(TestCase):
     def test_change_username_conflict(self):
         self.client.force_login(get_user_model().objects.get(phone_number='00000000001'))
         response = self.client.post(
-            reverse('api:customers:personal_center_change_username'),
+            reverse('api:customers:personal-center-change-username'),
             {'username': '00000000002'}
         )
         response_json_data = json.loads(response.content)
@@ -90,7 +90,7 @@ class PersonalCenterLogTests(TestCase):
         self.client.force_login(get_user_model().objects.get(phone_number='00000000001'))
 
         response = self.client.post(
-            reverse('api:customers:personal_center_learning_log'),
+            reverse('api:customers:personal-center-get-learning-log'),
             {'page_limit': 1, 'page': 1}
         )
         response_json_data = json.loads(response.content)
@@ -101,7 +101,7 @@ class PersonalCenterLogTests(TestCase):
         self.assertEqual(response_json_data['count'], 2)
 
         response = self.client.post(
-            reverse('api:customers:personal_center_learning_log'),
+            reverse('api:customers:personal-center-get-learning-log'),
             {'page_limit': 1, 'page': 2}
         )
         response_json_data = json.loads(response.content)
@@ -115,7 +115,7 @@ class PersonalCenterLogTests(TestCase):
         self.client.force_login(get_user_model().objects.get(phone_number='00000000001'))
 
         response = self.client.post(
-            reverse('api:customers:personal_center_order_log'),
+            reverse('api:customers:personal-center-get-order-log'),
             {'page_limit': 1, 'page': 1}
         )
         response_json_data = json.loads(response.content)
@@ -127,7 +127,7 @@ class PersonalCenterLogTests(TestCase):
         self.assertEqual(response_json_data['count'], 2)
 
         response = self.client.post(
-            reverse('api:customers:personal_center_order_log'),
+            reverse('api:customers:personal-center-get-order-log'),
             {'page_limit': 1, 'page': 2}
         )
         response_json_data = json.loads(response.content)

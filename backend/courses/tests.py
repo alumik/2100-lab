@@ -21,7 +21,7 @@ class MainPageTests(TestCase):
             caption='c3'
         )
 
-        response = self.client.get(reverse('api:courses:get_heroes'))
+        response = self.client.get(reverse('api:courses:get-heroes'))
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(
             str(response.content, encoding='utf8'),
@@ -73,7 +73,7 @@ class MainPageTests(TestCase):
             price='500.00'
         )
 
-        response = self.client.get(reverse('api:courses:get_recent_courses'))
+        response = self.client.get(reverse('api:courses:get-recent-courses'))
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(
             str(response.content, encoding='utf8'),

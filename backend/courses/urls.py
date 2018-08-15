@@ -7,14 +7,6 @@ from . import views
 app_name = 'courses'
 
 urlpatterns = [
-    path(
-        'util/get_heroes/',
-        views.get_heroes,
-        name='get_heroes'
-    ),
-    path(
-        'courses/recent_courses/',
-        views.get_recent_courses,
-        name='get_recent_courses'
-    ),
+    path('util/get-heroes/', views.get_heroes, name='get-heroes'),
+    path('courses/get-recent-courses/', views.get_recent_courses, name='get-recent-courses'),
 ]
