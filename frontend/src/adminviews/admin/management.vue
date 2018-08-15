@@ -101,8 +101,7 @@ export default {
 <style>
   .father {
     min-width: 500px;
-    padding: 0px;
-
+    padding: 0;
   }
 
   .head-row {
