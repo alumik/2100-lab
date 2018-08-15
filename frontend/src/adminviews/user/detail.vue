@@ -144,7 +144,8 @@
             <button
               type="button"
               class="btn-primary"
-              style="margin-right: 10px;">
+              style="margin-right: 10px;"
+              @click="to_course">
               查看更多
             </button>
           </div>
@@ -156,21 +157,21 @@
             <thead>
               <tr style="background-color: #6c757d; color: white; font-weight: bold;">
                 <td
-                  v-for="study_title in study_titles"
-                  :key="study_title.id">
-                  {{ study_title.label }}
+                  v-for="course_title in course_titles"
+                  :key="course_title.id">
+                  {{ course_title.label }}
                 </td>
               </tr>
             </thead>
             <tbody>
               <tr
-                v-for="study_log in study_logs"
-                :key="study_log.id">
-                <td>{{ study_log.course_code }}</td>
-                <td>{{ study_log.course_name }}</td>
-                <td>{{ study_log.progress }}</td>
-                <td>{{ study_log.time }}</td>
-                <td>{{ study_log.state }}</td>
+                v-for="course_log in course_logs"
+                :key="course_log.id">
+                <td>{{ course_log.course_code }}</td>
+                <td>{{ course_log.course_name }}</td>
+                <td>{{ course_log.progress }}</td>
+                <td>{{ course_log.time }}</td>
+                <td>{{ course_log.state }}</td>
               </tr>
             </tbody>
           </table>
@@ -216,14 +217,14 @@ export default {
         { order_code: '0001', course_code: 'SOFT1', course_name: '计算机', charge: '110.00', state: '已完成' },
         { order_code: '0010', course_code: 'ENGLISH2', course_name: '口语', charge: '120.00', state: '已退款' }
       ],
-      study_titles: [
+      course_titles: [
         { label: '课程代码' },
         { label: '课程名' },
         { label: '学习进度' },
         { label: '最近学习时间' },
         { label: '是否焚毁' }
       ],
-      study_logs: [
+      course_logs: [
         { course_code: 'SOFT1', course_name: '计算机', progress: '01:22', time: '2018-08-14', state: '已焚毁' },
         { course_code: 'ENGLISH3', course_name: '英语写作', progress: '15:00', time: '2018-05-14', state: '未焚毁' }
       ],
@@ -233,6 +234,9 @@ export default {
   methods: {
     change_banned () {
       this.is_banned = !this.is_banned
+    },
+    to_course () {
+      this.$router.push('/admin/user/detail/course')
     }
   }
 }
