@@ -169,7 +169,21 @@ import Menu from '../components/menu'
 import BreadCrumb from '../../components/breadCrumb'
 export default {
   name: 'EditCourse',
-  components: {BreadCrumb, Menu, AdminNavbar}
+  components: {BreadCrumb, Menu, AdminNavbar},
+  data: function () {
+    return {
+      items: [{
+        text: '主页',
+        href: '/admin'
+      }, {
+        text: '课程管理',
+        href: '/admin/course'
+      }, {
+        text: '新增课程',
+        active: true
+      }]
+    }
+  }
 }
 </script>
 
