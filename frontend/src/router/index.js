@@ -50,7 +50,7 @@ export default new Router({
     {
       path: '/admin/course/creation',
       name: 'BackendCourseDetail',
-      component: () => import('@/adminviews/course/create_course')
+      component: () => import('@/adminviews/course/add_course')
     },
     {
       path: '/admin/message',

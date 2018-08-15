@@ -55,19 +55,53 @@
             <label
               class="form-check-label my-label"
               for="flare_time">阅后即焚时间</label>
-            <input
-              id="flare_time"
-              class="input form-control col-lg-3"
-              type="text">
+            <div style="display: flex;">
+              <div>
+                <div
+                  class="input-group mb-3"
+                  style="display: flex;">
+                  <input
+                    id="flare_time"
+                    class="input form-control col-lg-1"
+                    type="text"
+                    style="width: 60px; min-width: 60px; max-width: 60px;">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">天</span>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div
+                  class="input-group mb-3"
+                  style="display: flex;">
+                  <input
+                    id="flare_time_1"
+                    class="input form-control col-lg-1"
+                    type="text"
+                    style="width: 72px; min-width: 72px; max-width: 72px;">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">小时</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="form-group form-inline">
             <label
               class="form-check-label my-label"
               for="price">金额</label>
-            <input
-              id="price"
-              class="input form-control col-lg-3"
-              type="text">
+            <div>
+              <div class="input-group mb-3">
+                <input
+                  id="price"
+                  class="input form-control col-lg-1"
+                  type="text"
+                  style="width: 190px; min-width: 190px; max-width: 190px;">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">元</span>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="form-group form-inline">
             <label
@@ -90,11 +124,20 @@
           <div class="form-inline">
             <label
               class="form-check-label my-label"
-              for="percent">分销金</label>
-            <input
-              id="percent"
-              class="input form-control col-lg-3"
-              type="text">
+              for="percent">分销金比例</label>
+            <div>
+              <div class="input-group mb-3">
+                <input
+                  id="percent"
+                  class="input form-control col-lg-3"
+                  style="width: 190px; min-width: 190px; max-width: 190px;"
+                  type="text">
+                <div class="input-group-prepend">
+                  <span
+                    class="input-group-text">%</span>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="form-group">
             <label
@@ -168,6 +211,11 @@ export default {
     width: 230px;
     min-width: 230px;
     max-width: 230px;
+    margin-top: 20px;
+  }
+
+  .input-group-text {
+    margin-top: 20px;
   }
 
   .my-btn,
