@@ -10,7 +10,7 @@
       <div class="father container-fluid">
         <BreadCrumb :items="items"/>
         <div class="my-row">
-          <h2 class="text-left">新增课程</h2>
+          <h2 class="text-left">修改课程</h2>
         </div>
         <form class="text-left son">
           <div class="form-group form-inline">
@@ -46,19 +46,21 @@
               <button
                 type="button"
                 class="col-lg-8 btn btn-primary btn-sm"
-                style="margin-left: 25px; max-width: 10rem"
+                style="margin-left: 25px; max-width: 10rem;"
                 @click="delete_course"
               >同步音频/图片</button>
             </div>
           </div>
           <div class="form-group form-inline">
-            <label
-              class="form-check-label my-label"
-              for="flare_time">阅后即焚时间</label>
+            <div>
+              <label
+                class="form-check-label my-label"
+                for="flare_time">阅后即焚时间</label>
+            </div>
             <div style="display: flex;">
               <div>
                 <div
-                  class="input-group mb-3"
+                  class="input-group"
                   style="display: flex;">
                   <input
                     id="flare_time"
@@ -72,7 +74,7 @@
               </div>
               <div>
                 <div
-                  class="input-group mb-3"
+                  class="input-group"
                   style="display: flex;">
                   <input
                     id="flare_time_1"
@@ -91,7 +93,7 @@
               class="form-check-label my-label"
               for="price">金额</label>
             <div>
-              <div class="input-group mb-3">
+              <div class="input-group">
                 <input
                   id="price"
                   class="input form-control col-lg-1"
@@ -113,11 +115,14 @@
               <label for="Yes"><input
                 id="Yes"
                 type="radio"
-                name="optn">是</label>
+                name="optn"
+                value="Yes"
+              >是</label>
               <label for="No"><input
                 id="No"
                 type="radio"
                 name="optn"
+                value="No"
                 style="margin-left: 100px;">否</label>
             </div>
           </div>
@@ -126,7 +131,7 @@
               class="form-check-label my-label"
               for="percent">分销金比例</label>
             <div>
-              <div class="input-group mb-3">
+              <div class="input-group">
                 <input
                   id="percent"
                   class="input form-control col-lg-3"
@@ -141,6 +146,7 @@
           </div>
           <div class="form-group">
             <label
+              id="intro-l"
               class="form-check-label my-label"
               for="intro">简介</label>
             <textarea
@@ -162,22 +168,8 @@ import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
 import BreadCrumb from '../../components/breadCrumb'
 export default {
-  name: 'AddCourse',
-  components: {BreadCrumb, Menu, AdminNavbar},
-  data: function () {
-    return {
-      items: [{
-        text: '主页',
-        href: '/admin'
-      }, {
-        text: '课程管理',
-        href: '/admin/course'
-      }, {
-        text: '新增课程',
-        active: true
-      }]
-    }
-  }
+  name: 'EditCourse',
+  components: {BreadCrumb, Menu, AdminNavbar}
 }
 </script>
 
@@ -211,18 +203,17 @@ export default {
     width: 260px;
     min-width: 260px;
     max-width: 260px;
-    margin-top: 20px;
-  }
-
-  .input-group-text {
-    margin-top: 20px;
   }
 
   .my-btn,
   #intro {
     max-width: 405px;
-    margin-top: 10px;
     margin-left: 20px;
+  }
+
+  #intro-l {
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 
   .son {
