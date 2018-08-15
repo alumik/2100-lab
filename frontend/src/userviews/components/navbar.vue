@@ -2,7 +2,7 @@
   <b-navbar
     toggleable="md"
     type="dark"
-    variant="info"
+    variant="primary"
     style="margin: 0"
     class="navbar navbar-inverse">
 
@@ -47,6 +47,7 @@ export default {
     height: 40px;
   }
   .navbar {
-    background-color: #4fc8ff !important;
+    padding: 15px 10px;
+    /*background-color: #4fc8ff !important;*/
   }
 </style>

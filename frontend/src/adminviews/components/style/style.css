@@ -4,19 +4,6 @@
 
 @import "fontFamily.css";
 
-body {
-  font-family: 'Poppins', sans-serif;
-  background: #fafafa;
-}
-
-p {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.1em;
-  font-weight: 300;
-  line-height: 1.7em;
-  color: #999;
-}
-
 .navbar {
   padding: 15px 10px;
   margin-bottom: 40px;
@@ -26,33 +13,14 @@ p {
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.navbar-btn {
-  border: none;
-  outline: none !important;
-  box-shadow: none;
-}
-
-.line {
-  width: 100%;
-  height: 1px;
-  margin: 40px 0;
-  border-bottom: 1px dashed #ddd;
-}
-
 /* ---------------------------------------------------
     SIDEBAR STYLE
 ----------------------------------------------------- */
 
-.wrapper {
-  display: flex;
-  align-items: stretch;
-  width: 100%;
-}
-
 #sidebar {
-  min-width: 150px;
-  max-width: 150px;
-  color: #ffeb14;
+  min-width: 180px;
+  max-width: 180px;
+  color: #b7fffa;
   background: #4aceff;
   transition: all 0.3s;
 }

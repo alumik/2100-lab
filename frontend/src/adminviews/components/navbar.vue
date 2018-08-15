@@ -5,8 +5,9 @@
       style="margin-bottom: 0px"
       toggleable="md"
       type="dark"
-      variant="info"
-      class="navbar">
+      variant="primary"
+      class="navbar"
+      sticky="true">
       <b-navbar-toggle target="nav_collapse"/>
 
       <b-navbar-brand
@@ -61,6 +62,7 @@ export default {
 
 <style>
   .navbar {
-    background-color: #4fc8ff !important;
+    /*background-color: #4fc8ff !important;*/
+    position: sticky!important;
   }
 </style>

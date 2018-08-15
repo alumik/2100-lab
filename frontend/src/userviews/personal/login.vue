@@ -38,12 +38,12 @@ export default {
 <style scoped>
   .container {
     border: 1px solid #ccc;
-    -webkit-box-shadow: 0px 3px 30px rgba(0, 0, 0, 0.1) inset;
-    -webkit-border-bottom-right-radius: 6px 50px;
+    box-shadow: 5px 6px 5px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     display: block;
     width: 350px;
     margin: 100px auto;
+    text-align: center;
   }
   img {
     width: 80%;
