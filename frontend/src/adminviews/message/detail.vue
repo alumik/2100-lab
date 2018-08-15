@@ -1,6 +1,7 @@
 <template>
   <div>
-    <AdminNavbar/>
+    <AdminNavbar
+      style="min-width: 1000px;"/>
     <div id="body">
       <div>
         <Menu/>
@@ -24,9 +25,9 @@
               centered
               ok-title="保存"
               cancel-title="关闭"
-              @ok="handleOk"
-              @shown="clearReply">
-              <form @submit.stop.prevent="handleSubmit">
+              @ok="handle_ok"
+              @shown="clear_reply">
+              <form @submit.stop.prevent="handle_submit">
                 <textarea
                   v-model="reply"
                   class="form-control"
@@ -65,11 +66,11 @@
             </tr>
             <tr class="row mx-0">
               <td class="col-2">课程代码</td>
-              <td class="col-10">{{ message.courseCode }}</td>
+              <td class="col-10">{{ message.course_code }}</td>
             </tr>
             <tr class="row mx-0">
               <td class="col-2">课程名</td>
-              <td class="col-10">{{ message.courseName }}</td>
+              <td class="col-10">{{ message.course_name }}</td>
             </tr>
             <tr class="row mx-0">
               <td class="col-2">状态</td>
@@ -106,26 +107,25 @@ export default {
         active: true
       }],
       message: {
-        data: '2018-08-10', user: '小红', courseCode: 'SOFT1', courseName: '计算机', message: '很好', state: '已删除'
+        data: '2018-08-10', user: '小红', course_code: 'SOFT1', course_name: '计算机', message: '很好', state: '已删除'
       },
       reply: ''
     }
   },
   methods: {
-    clearReply () {
+    clear_reply () {
       this.reply = ''
     },
-    handleOk (evt) {
-      // Prevent modal from closing
-      evt.preventDefault()
+    handle_ok (evt) {
       if (!this.reply) {
+        evt.preventDefault()
         alert('请输入内容后提交')
       } else {
-        this.handleSubmit()
+        this.handle_submit()
       }
     },
-    handleSubmit () {
-      this.clearReply()
+    handle_submit () {
+      this.clear_reply()
       this.$refs.modal.hide()
     }
   }
@@ -135,12 +135,15 @@ export default {
 <style scoped>
   h1 {
     padding-left: 15px;
+    margin-top: 25px;
+    margin-bottom: 25px;
     text-align: left;
   }
 
   .buttons {
     display: flex;
     justify-content: flex-end;
+    padding-right: 15px;
     padding-bottom: 15px;
     text-align: right;
   }
@@ -152,17 +155,19 @@ export default {
   #body {
     display: flex;
     justify-content: space-between;
+    min-width: 1000px;
   }
 
   #detail {
     flex-basis: 100%;
-    padding-right: 15px;
+    padding: 0;
   }
 
   table {
-    min-width: 800px;
-    padding-right: 15px;
-    margin-left: 15px;
     font-size: 1.5em;
+  }
+
+  td {
+    vertical-align: middle;
   }
 </style>
