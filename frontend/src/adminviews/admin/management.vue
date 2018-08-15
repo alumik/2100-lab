@@ -63,7 +63,8 @@
         </table>
       </div>
     </div>
-</div></template>
+  </div>
+</template>
 
 <script>
 import AdminNavbar from '../components/navbar'
@@ -109,6 +110,7 @@ export default {
     flex: 0 1 auto;
     flex-direction: row;
     justify-content: space-around;
+    margin-top: 60px;
   }
 
   .list {

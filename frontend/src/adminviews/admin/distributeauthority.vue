@@ -7,8 +7,10 @@
       <div>
         <Menu/>
       </div>
-      <div style="display: block;">
-        <h3 class="header">分配权限</h3>
+      <div
+        style="display: block;"
+        class="father">
+        <h1 class="header">分配权限</h1>
         <div class="text-left">
           <h6>管理员账号：{{ admin.ID }}</h6>
         </div>
@@ -143,8 +145,14 @@ export default {
 </script>
 
 <style scoped>
+  .father {
+    min-width: 500px;
+    text-align: left;
+  }
+
   .header {
     margin-top: 15%;
+    margin-left: 120px;
   }
 
   .text-left {

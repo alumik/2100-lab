@@ -7,7 +7,7 @@
       <div>
         <Menu/>
       </div>
-      <div class="container">
+      <div class="father container">
         <h1 class="head-text">修改密码</h1>
         <form>
           <div class="form-group">
@@ -49,6 +49,11 @@ export default {
 </script>
 
 <style scoped>
+  .father {
+    min-width: 500px;
+    text-align: left;
+  }
+
   .head-text {
     margin-top: 60px;
     margin-bottom: 60px;
