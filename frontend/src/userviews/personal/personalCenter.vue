@@ -24,7 +24,4 @@ export default {
     width: 40px;
     height: 40px;
   }
-  html, body, div {
-    height: 100%
-  }
 </style>
