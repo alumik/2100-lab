@@ -62,7 +62,7 @@ def is_authenticated(request):
 
 
 @login_required
-def delete(request):
+def delete_customer(request):
     user = request.user
     auth.logout(request)
     user.phone_number += '_deleted_' + str(int(round(time.time() * 1000)))

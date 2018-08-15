@@ -7,7 +7,7 @@ from .models import LearningLog, OrderLog
 
 
 @login_required
-def personal_center_main_page(request):
+def personal_center_get_customer_detail(request):
     user = request.user
     json_data = {
         'username': user.username,
@@ -33,7 +33,7 @@ def personal_center_change_username(request):
 
 
 @login_required
-def personal_center_learning_log(request):
+def personal_center_get_learning_log(request):
     learning_log_object_list = LearningLog.objects.filter(customer=request.user).order_by('-created_at')
     count = learning_log_object_list.count()
 
@@ -60,7 +60,7 @@ def personal_center_learning_log(request):
 
 
 @login_required
-def personal_center_order_log(request):
+def personal_center_get_order_log(request):
     order_log_object_list = OrderLog.objects.filter(customer=request.user).order_by('-created_at')
     count = order_log_object_list.count()
 

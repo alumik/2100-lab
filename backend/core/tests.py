@@ -13,7 +13,7 @@ class AuthModuleTests(TestCase):
 
     def test_get_verification_code_success(self):
         response = self.client.post(
-            reverse('api:core:get_verification_code'),
+            reverse('api:core:get-verification-code'),
             {'phone_number': '00000000001'}
         )
         self.assertEqual(response.status_code, 200)
@@ -21,14 +21,14 @@ class AuthModuleTests(TestCase):
 
     def test_get_verification_code_fail(self):
         response = self.client.post(
-            reverse('api:core:get_verification_code'),
+            reverse('api:core:get-verification-code'),
             {'phone_number': 'apple'}
         )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.content)['message'], 'Not a valid phone number.')
 
     def test_get_eula(self):
-        response = self.client.get(reverse('api:core:get_eula'))
+        response = self.client.get(reverse('api:core:get-eula'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content)['content'], 'Test EULA.')
 
@@ -39,7 +39,7 @@ class AuthModuleTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content)['message'], 'User logged out.')
 
-        response = self.client.get(reverse('api:core:is_authenticated'))
+        response = self.client.get(reverse('api:core:is-authenticated'))
         self.assertEqual(response.status_code, 200)
         self.assertFalse(json.loads(response.content)['is_authenticated'])
 
@@ -59,7 +59,7 @@ class AuthModuleTests(TestCase):
         self.assertEqual(response_json_data['username'], user.username)
         self.assertTrue('avatar' in response_json_data)
 
-        response = self.client.get(reverse('api:core:is_authenticated'))
+        response = self.client.get(reverse('api:core:is-authenticated'))
         self.assertEqual(response.status_code, 200)
         self.assertTrue(json.loads(response.content)['is_authenticated'])
 
@@ -81,7 +81,7 @@ class AuthModuleTests(TestCase):
         self.assertEqual(response_json_data['username'], user.username)
         self.assertTrue('avatar' in response_json_data)
 
-        response = self.client.get(reverse('api:core:is_authenticated'))
+        response = self.client.get(reverse('api:core:is-authenticated'))
         self.assertEqual(response.status_code, 200)
         self.assertTrue(json.loads(response.content)['is_authenticated'])
         self.assertTrue(get_user_model().objects.filter(phone_number='00000000002').exists())
@@ -100,7 +100,7 @@ class AuthModuleTests(TestCase):
         self.assertEqual(response.status_code, 401)
         self.assertEqual(json.loads(response.content)['message'], 'Wrong verification code.')
 
-        response = self.client.get(reverse('api:core:is_authenticated'))
+        response = self.client.get(reverse('api:core:is-authenticated'))
         self.assertEqual(response.status_code, 200)
         self.assertFalse(json.loads(response.content)['is_authenticated'])
 
@@ -116,14 +116,14 @@ class AuthModuleTests(TestCase):
         self.assertEqual(response.status_code, 401)
         self.assertEqual(json.loads(response.content)['message'], 'Wrong verification code.')
 
-        response = self.client.get(reverse('api:core:is_authenticated'))
+        response = self.client.get(reverse('api:core:is-authenticated'))
         self.assertEqual(response.status_code, 200)
         self.assertFalse(json.loads(response.content)['is_authenticated'])
         self.assertFalse(get_user_model().objects.filter(phone_number='00000000002').exists())
 
     def test_old_user_login_whole_process(self):
         response = self.client.post(
-            reverse('api:core:get_verification_code'),
+            reverse('api:core:get-verification-code'),
             {'phone_number': '00000000001'}
         )
         verification_code = json.loads(response.content)['verification_code']
@@ -135,7 +135,7 @@ class AuthModuleTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertFalse(json.loads(response.content)['new_user'])
 
-        response = self.client.get(reverse('api:core:is_authenticated'))
+        response = self.client.get(reverse('api:core:is-authenticated'))
         self.assertEqual(response.status_code, 200)
         self.assertTrue(json.loads(response.content)['is_authenticated'])
 
@@ -143,7 +143,7 @@ class AuthModuleTests(TestCase):
 
     def test_new_user_login_whole_process(self):
         response = self.client.post(
-            reverse('api:core:get_verification_code'),
+            reverse('api:core:get-verification-code'),
             {'phone_number': '00000000003'}
         )
         verification_code = json.loads(response.content)['verification_code']
@@ -155,7 +155,7 @@ class AuthModuleTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(json.loads(response.content)['new_user'])
 
-        response = self.client.get(reverse('api:core:is_authenticated'))
+        response = self.client.get(reverse('api:core:is-authenticated'))
         self.assertEqual(response.status_code, 200)
         self.assertTrue(json.loads(response.content)['is_authenticated'])
         self.assertTrue(get_user_model().objects.filter(phone_number='00000000003').exists())
@@ -167,12 +167,12 @@ class AuthModuleTests(TestCase):
         first_user_id = first_user.id
         self.client.force_login(first_user)
 
-        response = self.client.delete(reverse('api:core:delete'))
+        response = self.client.delete(reverse('api:core:delete-customer'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content)['message'], 'Account deleted.')
 
         response = self.client.post(
-            reverse('api:core:get_verification_code'),
+            reverse('api:core:get-verification-code'),
             {'phone_number': '00000000010'}
         )
         verification_code = json.loads(response.content)['verification_code']
@@ -186,16 +186,16 @@ class AuthModuleTests(TestCase):
         second_user_id = get_user_model().objects.get(phone_number='00000000010').id
         self.assertNotEqual(second_user_id, first_user_id)
 
-        response = self.client.get(reverse('api:core:is_authenticated'))
+        response = self.client.get(reverse('api:core:is-authenticated'))
         self.assertEqual(response.status_code, 200)
         self.assertTrue(json.loads(response.content)['is_authenticated'])
 
-        response = self.client.delete(reverse('api:core:delete'))
+        response = self.client.delete(reverse('api:core:delete-customer'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content)['message'], 'Account deleted.')
 
         response = self.client.post(
-            reverse('api:core:get_verification_code'),
+            reverse('api:core:get-verification-code'),
             {'phone_number': '00000000010'}
         )
         verification_code = json.loads(response.content)['verification_code']
@@ -209,7 +209,7 @@ class AuthModuleTests(TestCase):
         third_user_id = get_user_model().objects.get(phone_number='00000000010').id
         self.assertNotEqual(third_user_id, second_user_id)
 
-        response = self.client.get(reverse('api:core:is_authenticated'))
+        response = self.client.get(reverse('api:core:is-authenticated'))
         self.assertEqual(response.status_code, 200)
         self.assertTrue(json.loads(response.content)['is_authenticated'])
 

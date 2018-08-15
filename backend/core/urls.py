@@ -7,10 +7,10 @@ from . import views
 app_name = 'core'
 
 urlpatterns = [
-    path('auth/get_verification_code/', views.get_verification_code, name='get_verification_code'),
+    path('auth/get-verification-code/', views.get_verification_code, name='get-verification-code'),
     path('auth/authenticate/', views.authenticate, name='authenticate'),
     path('auth/logout/', views.logout, name='logout'),
-    path('auth/is_authenticated/', views.is_authenticated, name='is_authenticated'),
-    path('auth/get_eula/', views.get_eula, name='get_eula'),
-    path('auth/delete/', views.delete, name='delete'),
+    path('auth/is-authenticated/', views.is_authenticated, name='is-authenticated'),
+    path('auth/get-eula/', views.get_eula, name='get-eula'),
+    path('auth/delete-customer/', views.delete_customer, name='delete-customer'),
 ]
