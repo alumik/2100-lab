@@ -140,6 +140,7 @@ export default {
   .head-btn {
     display: flex;
     justify-content: space-around;
+    margin-right: 20px;
   }
 
   .my-list {

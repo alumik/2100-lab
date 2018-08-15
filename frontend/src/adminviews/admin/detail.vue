@@ -9,6 +9,7 @@
         <Menu/>
       </div>
       <div class="father container-fluid">
+        <BreadCrumb :items="items"/>
         <div class="myrow" >
           <h2 class="sentence">管理员详情</h2>
           <div class="button_group">
@@ -83,9 +84,10 @@
 <script>
 import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
+import BreadCrumb from '../../components/breadCrumb'
 export default {
   name: 'AdminDetail',
-  components: {Menu, AdminNavbar},
+  components: {BreadCrumb, Menu, AdminNavbar},
   data: function () {
     return {
       admin: {
@@ -94,7 +96,17 @@ export default {
         'create_time': '2018-08-13',
         'change_time': '2018-08-13',
         'authority': 'askcnkj'
-      }
+      },
+      items: [{
+        text: '主页',
+        href: '/admin'
+      }, {
+        text: '管理员管理',
+        href: '/admin/adminmanagement'
+      }, {
+        text: '管理员详情',
+        active: true
+      }]
     }
   }
 }

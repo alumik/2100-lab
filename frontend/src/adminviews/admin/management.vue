@@ -9,6 +9,7 @@
         <Menu/>
       </div>
       <div class="father container-fluid">
+        <BreadCrumb :items="items"/>
         <div class="head-row">
           <h3 class="list">管理员列表</h3>
           <button
@@ -62,6 +63,7 @@
             </tr>
           </tbody>
         </table>
+        <Pagination :rows="rows"/>
       </div>
     </div>
   </div>
@@ -70,9 +72,11 @@
 <script>
 import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
+import BreadCrumb from '../../components/breadCrumb'
+import Pagination from '../../components/pagination'
 export default {
   name: 'AdminManagement',
-  components: {Menu, AdminNavbar},
+  components: {Pagination, BreadCrumb, Menu, AdminNavbar},
   data: function () {
     return {
       admins: [
@@ -85,7 +89,15 @@ export default {
         {'ID': '000000', 'name': 'DingQuan6'},
         {'ID': '000001', 'name': 'DingQuan7'},
         {'ID': '000002', 'name': 'DingQuan8'}
-      ]
+      ],
+      items: [{
+        text: '主页',
+        href: '/admin'
+      }, {
+        text: '管理员管理',
+        active: true
+      }],
+      rows: 20
     }
   },
   methods: {

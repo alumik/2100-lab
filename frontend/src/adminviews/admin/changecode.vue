@@ -8,7 +8,8 @@
       <div>
         <Menu/>
       </div>
-      <div class="father container">
+      <div class="father container-fluid">
+        <BreadCrumb :items="items"/>
         <h1 class="head-text">修改密码</h1>
         <form>
           <div class="form-group">
@@ -43,28 +44,50 @@
 <script>
 import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
+import BreadCrumb from '../../components/breadCrumb'
 export default {
   name: 'ChangeCode',
-  components: {Menu, AdminNavbar}
+  components: {BreadCrumb, Menu, AdminNavbar},
+  data: function () {
+    return {
+      items: [{
+        text: '主页',
+        href: '/admin'
+      }, {
+        text: '管理员管理',
+        href: '/admin/adminmanagement'
+      }, {
+        text: '管理员详情',
+        href: '/admin/adminmanagement/detail'
+      }, {
+        text: '修改密码',
+        active: true
+      }]
+    }
+  }
 }
 </script>
 
 <style scoped>
   .father {
     min-width: 500px;
+    padding: 0;
     text-align: left;
   }
 
   .head-text {
     margin-top: 60px;
     margin-bottom: 60px;
+    margin-left: 25px;
   }
 
   .form-group {
     margin-top: 60px;
+    margin-left: 25px;
   }
 
   .btn {
     margin-top: 25px;
+    margin-left: 25px;
   }
 </style>
