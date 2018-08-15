@@ -28,6 +28,6 @@ export default {
     height: 100%;
   }
   #div {
-    height: 91%;
+    height: calc(100% - 70px);
   }
 </style>
