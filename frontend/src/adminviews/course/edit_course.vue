@@ -48,19 +48,21 @@
               <button
                 type="button"
                 class="col-lg-8 btn btn-primary btn-sm"
-                style="margin-left: 25px; max-width: 10rem"
+                style="margin-left: 25px; max-width: 10rem;"
                 @click="delete_course"
               >同步音频/图片</button>
             </div>
           </div>
           <div class="form-group form-inline">
-            <label
-              class="form-check-label my-label"
-              for="flare_time">阅后即焚时间</label>
+            <div>
+              <label
+                class="form-check-label my-label"
+                for="flare_time">阅后即焚时间</label>
+            </div>
             <div style="display: flex;">
               <div>
                 <div
-                  class="input-group mb-3"
+                  class="input-group"
                   style="display: flex;">
                   <input
                     id="flare_time"
@@ -75,7 +77,7 @@
               </div>
               <div>
                 <div
-                  class="input-group mb-3"
+                  class="input-group"
                   style="display: flex;">
                   <input
                     id="flare_time_1"
@@ -95,7 +97,7 @@
               class="form-check-label my-label"
               for="price">金额</label>
             <div>
-              <div class="input-group mb-3">
+              <div class="input-group">
                 <input
                   id="price"
                   v-model="course.price"
@@ -136,7 +138,7 @@
               class="form-check-label my-label"
               for="percent">分销金比例</label>
             <div>
-              <div class="input-group mb-3">
+              <div class="input-group">
                 <input
                   id="percent"
                   v-model="course.percent"
@@ -152,6 +154,7 @@
           </div>
           <div class="form-group">
             <label
+              id="intro-l"
               class="form-check-label my-label"
               for="intro">简介</label>
             <textarea
@@ -237,18 +240,17 @@ export default {
     width: 260px;
     min-width: 260px;
     max-width: 260px;
-    margin-top: 20px;
-  }
-
-  .input-group-text {
-    margin-top: 20px;
   }
 
   .my-btn,
   #intro {
     max-width: 405px;
-    margin-top: 10px;
     margin-left: 20px;
+  }
+
+  #intro-l {
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 
   .son {
