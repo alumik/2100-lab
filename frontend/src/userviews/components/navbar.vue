@@ -14,7 +14,8 @@
       id="nav_collapse"
       is-nav>
       <b-navbar-nav class="ml-auto">
-        <b-nav-item href="/personal">
+        <b-nav-item
+          href="/personal">
           <img
           src="../../assets/logo.png">用户一
         </b-nav-item>
@@ -44,7 +45,10 @@ export default {
     /*background-color: #4fc8ff !important;*/
     min-width: 350px;
   }
+  .nav-link {
+    padding: 0;
+  }
   #logout {
-    padding: 7px 0;
+    padding: 6px;
   }
 </style>
