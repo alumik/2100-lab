@@ -1,6 +1,7 @@
 <template>
   <div>
-    <AdminNavbar/>
+    <AdminNavbar
+      style="min-width: 1300px;"/>
     <div id="body">
       <Menu/>
       <div id="management">
@@ -18,7 +19,7 @@
           </thead>
           <tbody>
             <tr align="center">
-              <td style="width: 27vh;">
+              <td style="width: 180px;">
                 <div class="input-group-sm">
                   <input
                     type="text"
@@ -26,7 +27,7 @@
                     placeholder="">
                 </div>
               </td>
-              <td style="width: 27vh;">
+              <td style="width: 180px;">
                 <div class="input-group-sm">
                   <input
                     type="text"
@@ -34,7 +35,7 @@
                     placeholder="">
                 </div>
               </td>
-              <td style="width: 27vh;">
+              <td style="width: 180px;">
                 <div class="input-group-sm">
                   <input
                     type="text"
@@ -42,7 +43,7 @@
                     placeholder="">
                 </div>
               </td>
-              <td style="width: 27vh;">
+              <td style="width: 180px;">
                 <div class="input-group-sm">
                   <input
                     type="text"
@@ -51,7 +52,7 @@
                 </div>
               </td>
               <td/>
-              <td style="width: 30vh;">
+              <td style="width: 200px;">
                 <div>
                   <select
                     v-model="state"
@@ -67,16 +68,17 @@
             <tr
               v-for="order in orders"
               :key="order.id">
-              <td>{{ order.orderCode }}</td>
-              <td>{{ order.courseCode }}</td>
-              <td>{{ order.courseName }}</td>
+              <td>{{ order.order_code }}</td>
+              <td>{{ order.course_code }}</td>
+              <td>{{ order.course_name }}</td>
               <td>{{ order.user }}</td>
               <td>{{ order.charge }}</td>
               <td> {{ order.state }} </td>
               <td>
                 <button
                   type="button"
-                  class="btn-primary">
+                  class="btn-primary"
+                  @click="to_detail">
                   详情
                 </button>
               </td>
@@ -116,15 +118,15 @@ export default {
         { label: '操作' }
       ],
       orders: [
-        { orderCode: '1001',
-          courseCode: 'SOFT1',
-          courseName: '计算机',
+        { order_code: '1001',
+          course_code: 'SOFT1',
+          course_name: '计算机',
           user: '小红',
           charge: '100.00',
           state: '已完成' },
-        { orderCode: '1002',
-          courseCode: 'ENGLISH2',
-          courseName: '口语',
+        { order_code: '1002',
+          course_code: 'ENGLISH2',
+          course_name: '口语',
           user: '小明',
           charge: '120.00',
           state: '已退款' }
@@ -132,30 +134,36 @@ export default {
       rows: 2,
       state: null
     }
+  },
+  methods: {
+    to_detail: function () {
+      this.$router.push({ path: '/admin/order/detail' })
+    }
   }
 }
 </script>
 
 <style scoped>
   h1 {
-    padding-left: 2vh;
-    margin-top: 4vh;
-    margin-bottom: 4vh;
+    padding-left: 15px;
+    margin-top: 25px;
+    margin-bottom: 25px;
     text-align: left;
   }
 
   table {
-    min-width: 160vh;
     font-size: 1.2em;
   }
 
   #body {
     display: flex;
     justify-content: space-between;
+    min-width: 1300px;
   }
 
   #management {
-    flex-basis: 90%;
+    flex-basis: 100%;
+    padding: 0;
   }
 
   button {
@@ -164,13 +172,13 @@ export default {
   }
 
   select {
-    width: 20vh;
-    height: 4vh;
+    width: 130px;
+    height: 30px;
     border-radius: 5px;
     outline: none;
   }
 
   option {
-    font-size: 2.5vh;
+    font-size: 18px;
   }
 </style>
