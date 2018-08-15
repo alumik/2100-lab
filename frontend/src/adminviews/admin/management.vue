@@ -8,11 +8,11 @@
         <Menu/>
       </div>
       <div class="father container-fluid">
-        <div class="row">
+        <div class="head-row">
           <h3 class="list">管理员列表</h3>
           <button
             type="button"
-            class="row head-btn btn btn-primary btn-sm"
+            class="head-btn btn btn-primary btn-sm"
             @click="add_new_admin"
           >新增管理员</button>
         </div>
@@ -101,8 +101,18 @@ export default {
 <style>
   .father {
     min-width: 500px;
-    padding: 0;
-    margin-left: 0;
+    padding: 0px;
+
+  }
+
+  .head-row {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 50px;
+  }
+
+  .head-btn {
+    margin-left: 50%;
   }
 
   .row {
@@ -111,14 +121,6 @@ export default {
     flex-direction: row;
     justify-content: space-around;
     margin-top: 60px;
-  }
-
-  .list {
-    margin-left: -18%;
-  }
-
-  .head-btn {
-    margin-right: -18%;
   }
 
   .inner-btn {
