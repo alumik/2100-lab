@@ -96,6 +96,11 @@ export default new Router({
       path: '/admin/user',
       name: 'UserManagement',
       component: () => import('@/adminviews/user/management')
+    },
+    {
+      path: '/admin/user/detail',
+      name: 'UserDetail',
+      component: () => import('@/adminviews/user/detail')
     }
   ]
 })
