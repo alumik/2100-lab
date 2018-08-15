@@ -38,6 +38,11 @@ export default new Router({
       component: () => import('@/adminviews/course/management')
     },
     {
+      path: '/admin/course/detail',
+      name: 'BackendCourseDetail',
+      component: () => import('@/adminviews/course/detail')
+    },
+    {
       path: '/admin/message',
       name: 'MessageManagement',
       component: () => import('@/adminviews/message/management')
