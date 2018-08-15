@@ -2,13 +2,11 @@
   <div>
     <AdminNavbar
       style="min-width: 1300px;"/>
-    <div
-      id="body">
+    <div id="body">
       <div>
         <Menu/>
       </div>
-      <div
-        id="management">
+      <div id="management">
         <BreadCrumb :items="items"/>
         <h1>留言列表</h1>
         <table class="table table-striped">
