@@ -18,23 +18,10 @@
               style="margin-right: 10px;">
               回复留言
             </button>
-            <b-modal
+            <InputModal
               id="reply"
-              ref="modal"
               title="回复留言"
-              centered
-              ok-title="保存"
-              cancel-title="关闭"
-              @ok="handle_ok"
-              @shown="clear_reply">
-              <form @submit.stop.prevent="handle_submit">
-                <textarea
-                  v-model="reply"
-                  class="form-control"
-                  rows="3"
-                  placeholder="请输入你要回复的内容"/>
-              </form>
-            </b-modal>
+              placeholder="请输入你要回复的内容"/>
           </div>
           <div>
             <button
@@ -43,15 +30,10 @@
               class="btn btn-lg">
               删除留言
             </button>
-            <b-modal
+            <ConfirmModal
               id="delete"
-              ref="modal"
               title="确认删除"
-              centered
-              ok-title="确定"
-              cancel-title="取消">
-              <p id="delete_confirm">您确定要删除此条留言吗？</p>
-            </b-modal>
+              text="您确定要删除此条留言吗？"/>
           </div>
         </div>
         <div class="table_div">
@@ -93,9 +75,11 @@
 import BreadCrumb from '../../components/breadCrumb'
 import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
+import ConfirmModal from '../components/ConfirmModal'
+import InputModal from '../components/InputModal'
 export default {
   name: 'Message',
-  components: {AdminNavbar, BreadCrumb, Menu},
+  components: {InputModal, ConfirmModal, AdminNavbar, BreadCrumb, Menu},
   data () {
     return {
       items: [{
@@ -110,25 +94,7 @@ export default {
       }],
       message: {
         data: '2018-08-10', user: '小红', course_code: 'SOFT1', course_name: '计算机', message: '很好', state: '已删除'
-      },
-      reply: ''
-    }
-  },
-  methods: {
-    clear_reply () {
-      this.reply = ''
-    },
-    handle_ok (evt) {
-      if (!this.reply) {
-        evt.preventDefault()
-        alert('请输入内容后提交')
-      } else {
-        this.handle_submit()
       }
-    },
-    handle_submit () {
-      this.clear_reply()
-      this.$refs.modal.hide()
     }
   }
 }
@@ -148,10 +114,6 @@ export default {
     padding-right: 15px;
     padding-bottom: 15px;
     text-align: right;
-  }
-
-  #delete_confirm {
-    text-align: left;
   }
 
   #body {

@@ -101,32 +101,15 @@
             </tbody>
           </table>
         </div>
-        <b-modal
+        <InputModal
           id="reply"
-          ref="modal"
+          :input="reply"
           title="回复留言"
-          centered
-          ok-title="保存"
-          cancel-title="关闭"
-          @ok="handle_ok"
-          @shown="clear_reply">
-          <form @submit.stop.prevent="handle_submit">
-            <textarea
-              v-model="reply"
-              class="form-control"
-              rows="3"
-              placeholder="请输入你要回复的内容"/>
-          </form>
-        </b-modal>
-        <b-modal
+          placeholder="请输入你要回复的内容"/>
+        <ConfirmModal
           id="delete"
-          ref="modal"
           title="确认删除"
-          centered
-          ok-title="确定"
-          cancel-title="取消">
-          <p id="delete_confirm">您确定要删除此条留言吗？</p>
-        </b-modal>
+          text="您确定要删除此条留言吗？"/>
         <Pagination :rows="rows"/>
       </div>
     </div>
@@ -138,13 +121,15 @@ import AdminNavbar from '../components/navbar'
 import BreadCrumb from '../../components/breadCrumb'
 import Pagination from '../../components/pagination'
 import Menu from '../components/menu'
+import ConfirmModal from '../components/ConfirmModal'
+import InputModal from '../components/InputModal'
 let messages = [
   { data: '2018-08-10', user: '小红', course_code: 'SOFT1', course_name: '计算机', message: '很好', state: '已删除' },
   { data: '2018-08-11', user: '小明', course_code: 'English2', course_name: '口语', message: '还不错', state: '未删除' }
 ]
 export default {
   name: 'MessageManagement',
-  components: { Menu, AdminNavbar, BreadCrumb, Pagination },
+  components: { InputModal, ConfirmModal, Menu, AdminNavbar, BreadCrumb, Pagination },
   data () {
     return {
       items: [{
@@ -166,27 +151,12 @@ export default {
         { label: '操作' }
       ],
       state: null,
-      reply: ''
+      reply: '123'
     }
   },
   methods: {
     to_detail: function () {
       this.$router.push({ path: '/admin/message/detail' })
-    },
-    clear_reply () {
-      this.reply = ''
-    },
-    handle_ok (evt) {
-      if (!this.reply) {
-        evt.preventDefault()
-        alert('请输入内容后提交')
-      } else {
-        this.handle_submit()
-      }
-    },
-    handle_submit () {
-      this.$refs.modal.hide()
-      this.clear_reply()
     }
   }
 }
@@ -244,12 +214,7 @@ export default {
     font-size: 18px;
   }
 
-  #delete_confirm {
-    text-align: left;
-  }
-
-  .div1
-  {
+  .div1 {
     height: 100%;
   }
 

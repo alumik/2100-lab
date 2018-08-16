@@ -16,15 +16,10 @@
             class="btn btn-lg">
             退款
           </button>
-          <b-modal
+          <ConfirmModal
             id="refund"
-            ref="modal"
             title="确认退款"
-            centered
-            ok-title="确定"
-            cancel-title="取消">
-            <p id="refund_confirm">您确定要进行退款操作吗？</p>
-          </b-modal>
+            text="您确定要进行退款操作吗？"/>
         </div>
         <div class="table_div">
           <table class="table table-bordered">
@@ -73,9 +68,10 @@
 import BreadCrumb from '../../components/breadCrumb'
 import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
+import ConfirmModal from '../components/ConfirmModal'
 export default {
   name: 'OrderDetail',
-  components: {AdminNavbar, BreadCrumb, Menu},
+  components: {ConfirmModal, AdminNavbar, BreadCrumb, Menu},
   data () {
     return {
       items: [{
@@ -115,10 +111,6 @@ export default {
     padding-right: 15px;
     padding-bottom: 15px;
     text-align: right;
-  }
-
-  #refund_confirm {
-    text-align: left;
   }
 
   #body {

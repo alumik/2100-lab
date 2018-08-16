@@ -18,15 +18,10 @@
               style="margin-right: 10px;">
               认证用户
             </button>
-            <b-modal
+            <ConfirmModal
               id="authenticate"
-              ref="modal"
-              title="认证理由"
-              centered
-              ok-title="确认"
-              cancel-title="关闭">
-              <p id="authenticate_confirm">您确定要认证此用户吗？</p>
-            </b-modal>
+              title="确认认证"
+              text="您确定要认证此用户吗？"/>
             <button
               v-if="is_banned"
               type="button"
@@ -60,15 +55,10 @@
               style="margin-right: 10px;">
               删除用户
             </button>
-            <b-modal
+            <ConfirmModal
               id="delete"
-              ref="modal"
               title="确认删除"
-              centered
-              ok-title="确定"
-              cancel-title="取消">
-              <p id="delete_confirm">您确定要删除此用户吗？</p>
-            </b-modal>
+              text="您确定要删除此用户吗？"/>
           </div>
         </div>
         <div class="table_div">
@@ -186,9 +176,10 @@
 import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
 import BreadCrumb from '../../components/breadCrumb'
+import ConfirmModal from '../components/ConfirmModal'
 export default {
   name: 'UserDetail',
-  components: {BreadCrumb, AdminNavbar, Menu},
+  components: {ConfirmModal, BreadCrumb, AdminNavbar, Menu},
   data () {
     return {
       user: { img: require('../../assets/logo.png'),
