@@ -63,6 +63,6 @@ a[aria-expanded="true"] {
 
 @media (max-width: 768px) {
   nav {
-    margin-left: -150px;
+    margin-left: -200px;
   }
 }

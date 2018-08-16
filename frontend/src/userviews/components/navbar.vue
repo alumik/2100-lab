@@ -3,7 +3,7 @@
     toggleable="md"
     type="dark"
     variant="primary"
-    style="margin: 0">
+    sticky="true">
     <button
       @click="$emit('hide')"><span class="navbar-toggler-icon"/></button>
     <b-navbar-brand

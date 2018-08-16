@@ -1,14 +1,9 @@
 <template>
   <div>
-    <div>
-      <AdminNavbar
-        style="min-width: 500px;"/>
-    </div>
-    <div style="display: flex;">
-      <div>
-        <Menu/>
-      </div>
-      <div class="father container-fluid"/>
+    <AdminNavbar style="min-width: 500px;"/>
+    <div class="div">
+      <AdminMenu/>
+      <div class="father container-fluid"></div>
     </div>
   </div>
 </template>
@@ -18,7 +13,7 @@ import Menu from './components/menu'
 import AdminNavbar from './components/navbar'
 export default {
   name: 'Main',
-  components: {Menu, AdminNavbar}
+  components: {AdminMenu, AdminNavbar}
 }
 </script>
 
@@ -26,5 +21,12 @@ export default {
   .father {
     min-width: 500px;
     padding: 0;
+  }
+  div {
+    height: 100%;
+  }
+  .div {
+    display: flex;
+    height: calc(100% - 70px);
   }
 </style>

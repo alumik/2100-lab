@@ -4,24 +4,16 @@
 
 @import "fontFamily.css";
 
-.navbar {
-  margin-bottom: 40px;
-  background: #ff0067;
-  border: none;
-  border-radius: 0;
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-}
-
 /* ---------------------------------------------------
     SIDEBAR STYLE
 ----------------------------------------------------- */
 
 #sidebar {
-  min-width: 150px;
-  max-width: 150px;
+  min-width: 200px;
+  max-width: 200px;
   height: 100%;
-  color: #2d18af;
-  background: #4aceff;
+  color: #5610a7;
+  background: #f5f5f5;
   transition: all 0.3s;
 }
 
@@ -32,7 +24,8 @@
 #sidebar .sidebar-header {
   padding: 20px;
   font-size: 1.25rem;
-  background: #4aceff;
+  background: #f3f5ee;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1) inset;
 }
 
 #sidebar ul.components {
@@ -50,18 +43,18 @@ a:focus {
   display: block;
   padding: 10px;
   font-size: 1.1em;
-  color: #3b42bb;
+  color: #5e0057;
 }
 
 #sidebar ul li a:hover {
-  color: #1332ff;
-  background: #fff;
+  color: #f5f1fb;
+  background: #8d6592;
 }
 
 #sidebar ul li.active > a,
 a[aria-expanded="true"] {
-  color: #fff;
-  background: #6ad6ff;
+  color: #8d4e91;
+  background: #fff;
 }
 
 /* ---------------------------------------------------
@@ -70,6 +63,6 @@ a[aria-expanded="true"] {
 
 @media (max-width: 768px) {
   #sidebar {
-    margin-left: -250px;
+    margin-left: -200px;
   }
 }
