@@ -206,6 +206,7 @@ export default {
 
   table {
     font-size: 1.2em;
+    border: 1px solid #d3d9df;
   }
 
   td {
@@ -269,5 +270,11 @@ export default {
   .btn:hover,
   .btn:active {
     background-color: #5e0057;
+  }
+
+  thead tr {
+    font-weight: bold;
+    color: white;
+    background-color: #6c757d;
   }
 </style>

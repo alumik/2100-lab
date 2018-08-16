@@ -191,4 +191,14 @@ export default {
   .btn:active {
     background-color: #5e0057;
   }
+
+  .col-2 {
+    font-weight: bold;
+    color: white;
+    background-color: #6c757d;
+  }
+
+  .col-10 {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
 </style>
