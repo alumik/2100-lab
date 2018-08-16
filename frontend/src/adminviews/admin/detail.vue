@@ -16,17 +16,17 @@
             <button
               type="button"
               class="row btn btn-primary btn-sm"
-              @click="distribute_authourity"
+              @click="jump(1)"
             >分配权限</button>
             <button
               type="button"
               class="row btn btn-primary btn-sm"
-              @click="change_password"
+              @click="jump(2)"
             >修改密码</button>
             <button
               type="button"
               class="row btn btn-primary btn-sm"
-              @click="delete_admin"
+              @click="jump(3)"
             >删除管理员</button>
           </div>
         </div>
@@ -107,6 +107,18 @@ export default {
         text: '管理员详情',
         active: true
       }]
+    }
+  },
+  methods: {
+    jump: function (id) {
+      switch (id) {
+        case 1:
+          this.$router.push({name: 'DistributeAuthority'})
+          break
+        case 2:
+          this.$router.push({name: 'ChangeCode'})
+          break
+      }
     }
   }
 }

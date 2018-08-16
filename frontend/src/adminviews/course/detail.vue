@@ -15,7 +15,7 @@
             <button
               type="button"
               class="row btn btn-primary btn-sm"
-              @click="edit_course"
+              @click="jump(0)"
             >修改课程</button>
             <button
               type="button"
@@ -122,6 +122,16 @@ export default {
         'add_time': 'aslcmklamlc',
         'change_time': 'ak njksdjvksnjk',
         'introduction': 'sncklsndkjvbweuiaciusDnmcksndkjcshndovi;jpaoerjvoigeahngvuihwroigrioahnvhios '
+      }
+    }
+  },
+  methods: {
+    jump: function (id) {
+      console.log(id)
+      if (id === 0) {
+        this.$router.push({name: 'EditCourse'})
+      } else {
+        this.$router.push({name: ''})
       }
     }
   }
