@@ -1,10 +1,21 @@
 <template>
-  <div>
+  <div id="page">
     <UserNavbar @hide="hide"/>
-    <div id="div">
+    <div id="main">
       <UserMenu
         :list="list"
         :hidden="hidden"/>
+      <b-container>
+        <b-img
+          thumbnail
+          fluid
+          src="https://picsum.photos/250/250/?image=54"
+          alt="Thumbnail" />
+        <button
+          type="button"
+          class="btn btn-warning btn-lg imgbtn">
+          修改头像</button>
+      </b-container>
     </div>
   </div>
 </template>
@@ -23,7 +34,7 @@ export default {
       hidden: false,
       list: [
         {id: 0, text: '查看学习记录', isActive: false},
-        {id: 1, text: '查看订单记录', isActive: true}
+        {id: 1, text: '查看订单记录', isActive: false}
       ]
     }
   },
@@ -36,14 +47,18 @@ export default {
 </script>
 
 <style scoped>
-  img {
-    width: 40px;
-    height: 40px;
-  }
-  div {
+  #page {
     height: 100%;
   }
-  #div {
+  #main {
+    display: flex;
     height: calc(100% - 70px);
+  }
+  b-container {
+    max-height: 100px;
+  }
+  .imgbtn {
+    position: relative;
+    bottom: -106px;
   }
 </style>

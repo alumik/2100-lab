@@ -2,7 +2,9 @@
   <nav
     id="sidebar"
     :class="{hide: hidden, 'sidebar': true}">
-    <div class="sidebar-header">个人中心</div>
+    <div
+      class="sidebar-header"
+      @click="jump(0)">个人中心</div>
     <ul class="components">
       <li
         v-for="item in list"
@@ -31,9 +33,9 @@ export default {
   methods: {
     jump: function (id) {
       if (id === 1) {
-        this.$router.push({path: '/personal'})
+        this.$router.push({path: '/personal/orderlog'})
       } else {
-        this.$router.push({path: '/studylog'})
+        this.$router.push({path: '/personal/studylog'})
       }
     }
   }
