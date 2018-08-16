@@ -12,55 +12,57 @@
           <h3 class="list">管理员列表</h3>
           <button
             type="button"
-            class="head-btn btn btn-primary btn-sm"
+            class="head-btn btn btn-sm"
             @click="jump(-1)"
           >新增管理员</button>
         </div>
-        <table class="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th scope="col">管理员ID</th>
-              <th scope="col">管理员手机号</th>
-              <th scope="col">操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <div class="input-group">
-                  <input
-                    type="text"
-                    class="form-control col-xs-2"
-                    placeholder="">
-              </div></td>
-              <td>
-                <div class="input-group">
-                  <input
-                    type="text"
-                    class="form-control col-xs-2"
-                    placeholder="">
-                </div>
-              </td><td>
-                <div class="input-group">
-                  <input
-                    type="text"
-                    class="form-control col-xs-2"
-                    placeholder="">
-              </div></td>
-            </tr>
-            <tr
-              v-for="admin in admins"
-              :key="admin.id">
-              <td>{{ admin.ID }}</td>
-              <td>{{ admin.name }}</td>
-              <button
-                type="button"
-                class="row inner-btn btn-primary btn-sm"
-                @click="jump(admin.id)"
-              >详情</button>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table_div">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th scope="col">管理员ID</th>
+                <th scope="col">管理员手机号</th>
+                <th scope="col">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      class="form-control col-xs-2"
+                      placeholder="">
+                </div></td>
+                <td>
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      class="form-control col-xs-2"
+                      placeholder="">
+                  </div>
+                </td><td>
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      class="form-control col-xs-2"
+                      placeholder="">
+                </div></td>
+              </tr>
+              <tr
+                v-for="admin in admins"
+                :key="admin.id">
+                <td>{{ admin.ID }}</td>
+                <td>{{ admin.name }}</td>
+                <button
+                  type="button"
+                  class="row inner-btn btn-sm"
+                  @click="jump(admin.id)"
+                >详情</button>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <Pagination :rows="rows"/>
       </div>
     </div>
@@ -120,7 +122,8 @@ export default {
   .head-row {
     display: flex;
     justify-content: space-evenly;
-    margin-top: 50px;
+    margin-top: 30px;
+    margin-bottom: 30px;
   }
 
   .head-btn {
@@ -141,7 +144,35 @@ export default {
   }
 
   .table {
-    margin-top: 1%;
+    border: 1px solid #d3d9df;
+  }
+
+  .table_div {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+
+  thead tr {
+    font-weight: bold;
+    color: white;
+    background-color: #6c757d;
+  }
+
+  .head-btn,
+  .inner-btn {
+    color: white;
+    background-color: #8d4e91;
+    border-color: #8d6592;
+    border-radius: 10px;
+    outline: none;
+    box-shadow: #8d6592 inset;
+  }
+
+  .head-btn:hover,
+  .inner-btn:hover,
+  .head-btn:active,
+  .inner-btn:active {
+    background-color: #5e0057;
   }
 
   .div1 {

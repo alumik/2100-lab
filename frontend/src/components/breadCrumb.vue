@@ -1,5 +1,5 @@
 <template>
-  <b-breadcrumb style="border-radius: 0;">
+  <b-breadcrumb class="breadcrumb">
     <div
       v-for="link in links"
       :key="link.id">
@@ -45,5 +45,9 @@ export default {
     padding-left: 5px;
     color: #6c757d;
     content: '/';
+  }
+
+  .breadcrumb {
+    border-radius: 0;
   }
 </style>

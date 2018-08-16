@@ -23,16 +23,16 @@
           <div class="button_group">
             <button
               type="button"
-              class="btn btn-primary">A</button>
+              class="btn">A</button>
             <button
               type="button"
-              class="btn btn-primary">B</button>
+              class="btn">B</button>
             <button
               type="button"
-              class="btn btn-primary">C</button>
+              class="btn">C</button>
             <button
               type="button"
-              class="btn btn-primary">D</button>
+              class="btn">D</button>
           </div>
         </div>
         <div class="text-left">
@@ -122,7 +122,7 @@
             <br>
             <button
               type="submit"
-              class="btn btn-primary">保存</button>
+              class="btn">保存</button>
           </form>
         </div>
       </div>
@@ -175,5 +175,19 @@ export default {
   .text-left {
     margin-top: 40px;
     margin-left: 120px;
+  }
+
+  .btn {
+    color: white;
+    background-color: #8d4e91;
+    border-color: #8d6592;
+    border-radius: 10px;
+    outline: none;
+    box-shadow: #8d6592 inset;
+  }
+
+  .btn:hover,
+  .btn:active {
+    background-color: #5e0057;
   }
 </style>
