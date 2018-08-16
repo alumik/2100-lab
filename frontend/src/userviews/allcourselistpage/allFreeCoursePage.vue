@@ -21,6 +21,18 @@ export default {
           introduction: '环滁皆山也。其西南诸峰，林壑尤美，' +
             '望之蔚然而深秀者，琅琊也。',
           src: require('../components/image/7.jpg')
+        },
+        {
+          name: '不爱我就拉倒',
+          introduction: '环滁皆山也。其西南诸峰，林壑尤美，' +
+            '望之蔚然而深秀者，琅琊也。',
+          src: require('../components/image/7.jpg')
+        },
+        {
+          name: '不爱我就拉倒',
+          introduction: '环滁皆山也。其西南诸峰，林壑尤美，' +
+            '望之蔚然而深秀者，琅琊也。',
+          src: require('../components/image/7.jpg')
         }
       ]
     }

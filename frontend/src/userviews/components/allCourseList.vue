@@ -2,11 +2,12 @@
   <div>
     <UserNavbar/>
     <div class="title-style">
-      <h4>{{ page_title }}</h4>
+      <h2>{{ page_title }}</h2>
     </div>
     <div
       id="course-list"
-      class="bv-example-row">
+      class="bv-example-row"
+      style="margin: 30px 0px;">
       <b-card-group
         v-for="course in course_list"
         :key="course"
@@ -80,8 +81,8 @@ export default {
 
 <style>
   .title-style {
-    margin-top: 10px;
-    margin-left: 10px;
+    margin-top: 30px;
+    margin-left: 60px;
     text-align: left;
   }
 
