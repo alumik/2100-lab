@@ -119,7 +119,6 @@ export default {
   },
   methods: {
     jump: function (id) {
-      console.log(id)
       if (id === 0) {
         this.$router.push({name: 'AddCourse'})
       } else if (id === -1) {

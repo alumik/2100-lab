@@ -1,4 +1,3 @@
-<!--suppress ALL -->
 <template>
   <b-navbar
     toggleable="md"
@@ -27,38 +26,19 @@
 </template>
 
 <script>
-import AdminManagement from '../admin/management'
-import AdminDetail from '../admin/detail'
-import AddAdmin from '../admin/addadmin'
 export default {
-  name: 'AdminNavbar',
-  data: function () {
-    return {
-      AdminPage: AdminManagement
-    }
-  },
-  methods: {
-    admin_manage () {
-      this.AdminPage = AdminManagement
-      console.log('sklncjk')
-    },
-    add_new_admin () {
-      this.AdminPage = AddAdmin
-    },
-    detail_information () {
-      this.AdminPage = AdminDetail
-    }
-  }
+  name: 'AdminNavbar'
 }
 </script>
 
 <style scoped>
   .navbar {
+    min-width: 350px;
     padding: 15px 10px;
     background-color: #6f5499 !important;
-    min-width: 350px;
-    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
   }
+
   @media (min-width: 768px) {
     button {
       display: none;
