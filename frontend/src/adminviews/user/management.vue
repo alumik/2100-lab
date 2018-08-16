@@ -67,7 +67,7 @@
                 <td>
                   <button
                     type="button"
-                    class="btn-primary"
+                    class="btn"
                     @click="to_detail">
                     详情
                   </button>
@@ -152,12 +152,18 @@ export default {
     padding: 0;
   }
 
-  button {
-    background-color: #0056b3;
-    border-color: #0062cc;
+  .btn {
+    color: white;
+    background-color: #8d4e91;
+    border-color: #8d6592;
     border-radius: 10px;
     outline: none;
-    box-shadow: #0062cc inset;
+    box-shadow: #8d6592 inset;
+  }
+
+  .btn:hover,
+  .btn:active {
+    background-color: #5e0057;
   }
 
   select {

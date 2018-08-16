@@ -7,98 +7,100 @@
       <div id="management">
         <BreadCrumb :items="items"/>
         <h1>留言列表</h1>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <td
-                v-for="title in titles"
-                :key="title.id">
-                {{ title.label }}
-              </td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr align="center">
-              <td style="width: 160px;">
-                <div class="input-group-sm">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="">
-                </div>
-              </td>
-              <td style="width: 160px;">
-                <div class="input-group-sm">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="">
-                </div>
-              </td>
-              <td style="width: 160px;">
-                <div class="input-group-sm">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="">
-                </div>
-              </td>
-              <td style="width: 160px;">
-                <div class="input-group-sm">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="">
-                </div>
-              </td>
-              <td style="width: 350px;"/>
-              <td style="width: 200px;">
-                <div>
-                  <select
-                    v-model="state"
-                    class="selectpicker">
-                    <option value="whole">全部</option>
-                    <option value="reserved">未删除</option>
-                    <option value="deleted">已删除</option>
-                  </select>
-                </div>
-              </td>
-              <td style="width: 270px;"/>
-            </tr>
-            <tr
-              v-for="message in messages"
-              :key="message.id">
-              <td>{{ message.data }}</td>
-              <td>{{ message.user }}</td>
-              <td>{{ message.course_code }}</td>
-              <td>{{ message.course_name }}</td>
-              <td>{{ message.message }}</td>
-              <td> {{ message.state }} </td>
-              <td
-                class="buttons"
-                style="padding-left: 30px;">
-                <button
-                  type="button"
-                  class="btn-primary btn-xs"
-                  @click="to_detail">
-                  详情
-                </button>
-                <button
-                  v-b-modal.reply
-                  type="button"
-                  class="btn-primary">
-                  回复
-                </button>
-                <button
-                  v-b-modal.delete
-                  type="button"
-                  class="btn-primary">
-                  删除
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table_div">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <td
+                  v-for="title in titles"
+                  :key="title.id">
+                  {{ title.label }}
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr align="center">
+                <td style="width: 160px;">
+                  <div class="input-group-sm">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="">
+                  </div>
+                </td>
+                <td style="width: 160px;">
+                  <div class="input-group-sm">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="">
+                  </div>
+                </td>
+                <td style="width: 160px;">
+                  <div class="input-group-sm">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="">
+                  </div>
+                </td>
+                <td style="width: 160px;">
+                  <div class="input-group-sm">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="">
+                  </div>
+                </td>
+                <td style="width: 350px;"/>
+                <td style="width: 200px;">
+                  <div>
+                    <select
+                      v-model="state"
+                      class="selectpicker">
+                      <option value="whole">全部</option>
+                      <option value="reserved">未删除</option>
+                      <option value="deleted">已删除</option>
+                    </select>
+                  </div>
+                </td>
+                <td style="width: 270px;"/>
+              </tr>
+              <tr
+                v-for="message in messages"
+                :key="message.id">
+                <td>{{ message.data }}</td>
+                <td>{{ message.user }}</td>
+                <td>{{ message.course_code }}</td>
+                <td>{{ message.course_name }}</td>
+                <td>{{ message.message }}</td>
+                <td> {{ message.state }} </td>
+                <td
+                  class="buttons"
+                  style="padding-left: 30px;">
+                  <button
+                    type="button"
+                    class="btn btn-xs"
+                    @click="to_detail">
+                    详情
+                  </button>
+                  <button
+                    v-b-modal.reply
+                    type="button"
+                    class="btn">
+                    回复
+                  </button>
+                  <button
+                    v-b-modal.delete
+                    type="button"
+                    class="btn">
+                    删除
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <b-modal
           id="reply"
           ref="modal"
@@ -204,6 +206,7 @@ export default {
 
   table {
     font-size: 1.2em;
+    border: 1px solid #d3d9df;
   }
 
   td {
@@ -245,7 +248,33 @@ export default {
     text-align: left;
   }
 
-  .div1 {
+  .div1
+  {
     height: 100%;
+  }
+
+  .table_div {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+
+  .btn {
+    color: white;
+    background-color: #8d4e91;
+    border-color: #8d6592;
+    border-radius: 10px;
+    outline: none;
+    box-shadow: #8d6592 inset;
+  }
+
+  .btn:hover,
+  .btn:active {
+    background-color: #5e0057;
+  }
+
+  thead tr {
+    font-weight: bold;
+    color: white;
+    background-color: #6c757d;
   }
 </style>

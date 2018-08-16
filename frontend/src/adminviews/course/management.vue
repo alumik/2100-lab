@@ -12,75 +12,77 @@
           <div class="head-btn">
             <button
               type="button"
-              class="row btn btn-primary btn-sm my-in-btn"
+              class="row btn btn-sm my-in-btn"
               style="margin-right: 15%;"
               @click="jump(0)"
             >新增课程</button>
             <button
               type="button"
-              class="row btn btn-primary btn-sm my-in-btn"
+              class="row btn btn-sm my-in-btn"
               @click="jump(-1)"
             >更换首页图片</button>
           </div>
         </div>
-        <table class="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th scope="col">课程代码</th>
-              <th scope="col">课程名</th>
-              <th scope="col">修改时间</th>
-              <th scope="col">操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <div class="input-group short-input">
-                  <input
-                    type="text"
-                    class="form-control col-5"
-                    placeholder="">
-              </div></td>
-              <td>
-                <div class="input-group long-input">
-                  <input
-                    type="text"
-                    class="form-control col-6"
-                    placeholder="">
+        <div class="table_div">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th scope="col">课程代码</th>
+                <th scope="col">课程名</th>
+                <th scope="col">修改时间</th>
+                <th scope="col">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="input-group short-input">
+                    <input
+                      type="text"
+                      class="form-control col-5"
+                      placeholder="">
+                </div></td>
+                <td>
+                  <div class="input-group long-input">
+                    <input
+                      type="text"
+                      class="form-control col-6"
+                      placeholder="">
+                  </div>
+                </td><td>
+                  <div class="input-group short-input">
+                    <input
+                      type="text"
+                      class="form-control col-5"
+                      placeholder="">
+                </div></td>
+                <td style="width: 250px;">
+                <div/></td>
+              </tr>
+              <tr
+                v-for="course in courses"
+                :key="course.id">
+                <td>{{ course.ID }}</td>
+                <td>{{ course.name }}</td>
+                <td>{{ course.change_time }}</td>
+                <div style="display: flex;">
+                  <button
+                    type="button"
+                    class="in-btn row btn-sm"
+                    style="margin-right: -10px; margin-top: 10px;"
+                    @click="jump(course.id + 1)"
+                  >详情</button>
+                  <button
+                    type="button"
+                    class="in-btn row btn-sm"
+                    style="margin-top: 10px;"
+                    @click="jump(course.id * (-1) - 2)"
+                  >修改</button>
                 </div>
-              </td><td>
-                <div class="input-group short-input">
-                  <input
-                    type="text"
-                    class="form-control col-5"
-                    placeholder="">
-              </div></td>
-              <td style="width: 250px;">
-              <div/></td>
-            </tr>
-            <tr
-              v-for="course in courses"
-              :key="course.id">
-              <td>{{ course.ID }}</td>
-              <td>{{ course.name }}</td>
-              <td>{{ course.change_time }}</td>
-              <div style="display: flex;">
-                <button
-                  type="button"
-                  class="in-btn row btn-primary btn-sm"
-                  style="margin-right: -10px; margin-top: 10px;"
-                  @click="jump(course.id + 1)"
-                >详情</button>
-                <button
-                  type="button"
-                  class="in-btn row btn-primary btn-sm"
-                  style="margin-top: 10px;"
-                  @click="jump(course.id * (-1) - 2)"
-                >修改</button>
-              </div>
-            </tr>
-          </tbody>
-        </table>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <Pagination :rows="rows"/>
       </div>
     </div>
@@ -144,14 +146,14 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-top: 20px;
-    margin-bottom: 10px;
+    margin-top: 30px;
+    margin-bottom: 30px;
   }
 
   .head-btn {
     display: flex;
     justify-content: space-around;
-    margin-right: 20px;
+    margin-right: 30px;
   }
 
   .my-list {
@@ -182,5 +184,37 @@ export default {
 
   .div2 {
     height: calc(100% - 70px);
+  }
+
+  thead tr {
+    font-weight: bold;
+    color: white;
+    background-color: #6c757d;
+  }
+
+  .table {
+    border: 1px solid #d3d9df;
+  }
+
+  .table_div {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+
+  .btn,
+  .in-btn {
+    color: white;
+    background-color: #8d4e91;
+    border-color: #8d6592;
+    border-radius: 10px;
+    outline: none;
+    box-shadow: #8d6592 inset;
+  }
+
+  .btn:hover,
+  .in-btn:hover,
+  .btn:active,
+  .in-btn:active {
+    background-color: #5e0057;
   }
 </style>

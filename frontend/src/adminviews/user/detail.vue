@@ -14,7 +14,7 @@
             <button
               v-b-modal.authenticate
               type="button"
-              class="btn-primary btn-lg"
+              class="btn btn-lg"
               style="margin-right: 10px;">
               认证用户
             </button>
@@ -30,7 +30,7 @@
             <button
               v-if="is_banned"
               type="button"
-              class="btn-primary btn-lg"
+              class="btn btn-lg"
               style="margin-right: 10px;"
               @click="change_banned">
               取消禁言
@@ -39,7 +39,7 @@
               v-b-modal.ban
               v-else
               type="button"
-              class="btn-primary btn-lg"
+              class="btn btn-lg"
               style="margin-right: 10px;">
               禁言用户
             </button>
@@ -56,7 +56,7 @@
             <button
               v-b-modal.delete
               type="button"
-              class="btn-primary btn-lg"
+              class="btn btn-lg"
               style="margin-right: 10px;">
               删除用户
             </button>
@@ -107,7 +107,7 @@
           <h2>相关订单</h2>
           <button
             type="button"
-            class="btn-primary"
+            class="btn"
             style="margin-right: 10px;"
             @click="to_order">
             查看更多
@@ -144,7 +144,7 @@
           <div class="buttons">
             <button
               type="button"
-              class="btn-primary"
+              class="btn"
               style="margin-right: 10px;"
               @click="to_course">
               查看更多
@@ -290,14 +290,18 @@ export default {
     border: 1px solid #d3d9df;
   }
 
-  button {
-    margin-right: 7px;
-    margin-left: 7px;
-    background-color: #0056b3;
-    border-color: #0062cc;
+  .btn {
+    color: white;
+    background-color: #8d4e91;
+    border-color: #8d6592;
     border-radius: 10px;
     outline: none;
-    box-shadow: #0062cc inset;
+    box-shadow: #8d6592 inset;
+  }
+
+  .btn:hover,
+  .btn:active {
+    background-color: #5e0057;
   }
 
   .title {
