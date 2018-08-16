@@ -27,15 +27,16 @@ def authenticate(request):
     if verification_code == request.session['verification_code']:
         try:
             user = get_user_model().objects.get(phone_number=phone_number)
-            new_user = False
+            new_customer = False
         except get_user_model().DoesNotExist:
             user = get_user_model().objects.create_user(phone_number=phone_number)
-            new_user = True
+            new_customer = True
         auth.login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])
         del request.session['verification_code']
         return JsonResponse(
             {
-                'new_user': new_user,
+                'new_customer': new_customer,
+                'customer_id': user.id,
                 'username': user.username,
                 'avatar': str(user.avatar)
             }
