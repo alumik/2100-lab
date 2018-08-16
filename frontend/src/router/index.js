@@ -8,6 +8,16 @@ export default new Router({
   mode: 'history',
   routes: [
     {
+      path: '/allfreecourse',
+      name: 'AllFreeCourse',
+      component: () => import('@/userviews/allcourselistpage/allFreeCoursePage')
+    },
+    {
+      path: '/allpaidcourse',
+      name: 'AllPaidCourse',
+      component: () => import('@/userviews/allcourselistpage/allPaidCoursePage')
+    },
+    {
       path: '/personal',
       name: 'PersonalCenter',
       component: () => import('@/userviews/personal/personalCenter')
