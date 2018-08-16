@@ -152,7 +152,7 @@
             <textarea
               id="intro"
               class="form-control col-lg-2"
-              rows="6s"/>
+              rows="6s">&nbsp;</textarea>
           </div>
           <button
             type="submit"
