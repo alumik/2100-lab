@@ -1,13 +1,13 @@
 <template>
   <div class="html">
-    <AdminNavbar class="navbar"/>
+    <AdminNavbar id="navbar"/>
     <div id="body">
       <Menu/>
       <div id="management">
         <BreadCrumb :items="items"/>
         <h1>日志查询</h1>
         <div class="table_div">
-          <table class="table table-bordered">
+          <table class="table">
             <thead>
               <tr>
                 <th>管理员账号</th>
@@ -52,7 +52,7 @@
                 name="a">
               <label
                 class="custom-control-label form-check-label"
-                for="check-a">a</label>
+                for="check-a">A</label>
             </div>
             <div class="custom-control custom-checkbox custom-control-inline form-group">
               <input
@@ -62,7 +62,7 @@
                 name="b">
               <label
                 class="custom-control-label form-check-label"
-                for="check-b">b</label>
+                for="check-b">B</label>
             </div>
             <div class="custom-control custom-checkbox custom-control-inline form-group">
               <input
@@ -72,7 +72,7 @@
                 name="c">
               <label
                 class="custom-control-label form-check-label"
-                for="check-c">c</label>
+                for="check-c">C</label>
             </div>
             <div class="custom-control custom-checkbox custom-control-inline form-group">
               <input
@@ -82,7 +82,7 @@
                 name="d">
               <label
                 class="custom-control-label form-check-label"
-                for="check-d">d</label>
+                for="check-d">D</label>
             </div>
             <div class="custom-control custom-checkbox custom-control-inline form-group">
               <input
@@ -92,7 +92,7 @@
                 name="e">
               <label
                 class="custom-control-label form-check-label"
-                for="check-e">e</label>
+                for="check-e">E</label>
             </div>
             <br>
             <div class="custom-control custom-checkbox custom-control-inline form-group">
@@ -103,7 +103,7 @@
                 name="f">
               <label
                 class="custom-control-label form-check-label"
-                for="check-f">f</label>
+                for="check-f">F</label>
             </div>
             <div class="custom-control custom-checkbox custom-control-inline form-group">
               <input
@@ -113,7 +113,7 @@
                 name="g">
               <label
                 class="custom-control-label form-check-label"
-                for="check-g">g</label>
+                for="check-g">G</label>
             </div>
             <div class="custom-control custom-checkbox custom-control-inline form-group">
               <input
@@ -123,7 +123,7 @@
                 name="h">
               <label
                 class="custom-control-label form-check-label"
-                for="check-h">h</label>
+                for="check-h">H</label>
             </div>
             <div class="custom-control custom-checkbox custom-control-inline form-group">
               <input
@@ -133,7 +133,7 @@
                 name="h">
               <label
                 class="custom-control-label form-check-label"
-                for="check-h">i</label>
+                for="check-h">I</label>
             </div>
             <div class="custom-control custom-checkbox custom-control-inline form-group">
               <input
@@ -143,13 +143,15 @@
                 name="h">
               <label
                 class="custom-control-label form-check-label"
-                for="check-h">j</label>
+                for="check-h">J</label>
             </div>
             <br>
-            <button
-              type="submit"
-              class="btn">查询</button>
           </form>
+        </div>
+        <div class="button_group">
+          <button
+            type="submit"
+            class="btn">查询</button>
         </div>
       </div>
     </div>
@@ -188,14 +190,14 @@ export default {
     height: 100%;
   }
 
-  .navbar {
-    min-width: 500px;
+  #navbar {
+    min-width: 686.4px;
   }
 
   #body {
     display: flex;
     justify-content: space-between;
-    min-width: 800px;
+    min-width: 500px;
     height: calc(100% - 70px);
   }
 
@@ -204,7 +206,8 @@ export default {
     padding: 0;
   }
 
-  h1 {
+  h1,
+  h4 {
     padding-left: 20px;
     margin-top: 25px;
     margin-bottom: 25px;
@@ -212,28 +215,40 @@ export default {
   }
 
   .table_div {
-    padding-right: 380px;
     padding-left: 20px;
   }
 
   table {
+    width: 400px;
     text-align: center;
   }
 
   input {
-    width: 180px;
+    width: 178px;
   }
 
   .col-md-6 {
     align-items: center;
   }
 
-  thead tr {
+  tr {
     align-items: center;
   }
 
   tr td {
     width: 180px;
+  }
+
+  .checkbox_div {
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 20px;
+  }
+
+  .button_group {
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 20px;
   }
 
   .btn {
