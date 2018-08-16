@@ -9,72 +9,75 @@
       <div id="management">
         <BreadCrumb :items="items"/>
         <h1>用户列表</h1>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <td
-                v-for="title in titles"
-                :key="title.id">
-                {{ title.label }}
-              </td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr align="center">
-              <td style="width: 140px;">
-                <div class="input-group-sm">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="">
-                </div>
-              </td>
-              <td style="width: 140px;">
-                <div class="input-group-sm">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="">
-                </div>
-              </td>
-              <td style="width: 160px;">
-                <div class="input-group-sm">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="">
-                </div>
-              </td>
-              <td style="width: 200px;">
-                <div>
-                  <select
-                    v-model="state"
-                    class="selectpicker">
-                    <option value="whole">全部</option>
-                    <option value="reserved">未删除</option>
-                    <option value="deleted">已删除</option>
-                  </select>
-                </div>
-              </td>
-              <td style="width: 200px;"/>
-            </tr>
-            <tr
-              v-for="user in users"
-              :key="user.id">
-              <td>{{ user.user_id }}</td>
-              <td>{{ user.user_name }}</td>
-              <td>{{ user.phone }}</td>
-              <td>{{ user.state }}</td>
-              <td>
-                <button
-                  type="button"
-                  class="btn-primary">
-                  详情
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table_div">
+          <table class="table table-striped">
+            <thead>
+              <tr style="background-color: #6c757d; color: white; font-weight: bold;">
+                <td
+                  v-for="title in titles"
+                  :key="title.id">
+                  {{ title.label }}
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr align="center">
+                <td style="width: 140px;">
+                  <div class="input-group-sm">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="">
+                  </div>
+                </td>
+                <td style="width: 140px;">
+                  <div class="input-group-sm">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="">
+                  </div>
+                </td>
+                <td style="width: 160px;">
+                  <div class="input-group-sm">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="">
+                  </div>
+                </td>
+                <td style="width: 200px;">
+                  <div>
+                    <select
+                      v-model="state"
+                      class="selectpicker">
+                      <option value="whole">全部</option>
+                      <option value="reserved">未删除</option>
+                      <option value="deleted">已删除</option>
+                    </select>
+                  </div>
+                </td>
+                <td style="width: 200px;"/>
+              </tr>
+              <tr
+                v-for="user in users"
+                :key="user.id">
+                <td>{{ user.user_id }}</td>
+                <td>{{ user.user_name }}</td>
+                <td>{{ user.phone }}</td>
+                <td>{{ user.state }}</td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn-primary"
+                    @click="to_detail">
+                    详情
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <Pagination :rows="rows"/>
       </div>
     </div>
@@ -85,9 +88,10 @@
 import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
 import BreadCrumb from '../../components/breadCrumb'
+import Pagination from '../../components/pagination'
 export default {
   name: 'UserManagement',
-  components: {BreadCrumb, Menu, AdminNavbar},
+  components: {BreadCrumb, Menu, AdminNavbar, Pagination},
   data () {
     return {
       items: [{
@@ -110,20 +114,32 @@ export default {
       ],
       rows: 20
     }
+  },
+  methods: {
+    to_detail: function () {
+      this.$router.push('/admin/user/detail')
+    }
   }
 }
 </script>
 
 <style scoped>
   h1 {
-    padding-left: 15px;
+    padding-left: 20px;
     margin-top: 25px;
     margin-bottom: 25px;
     text-align: left;
   }
 
+  .table_div {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+
   table {
     font-size: 1.2em;
+    text-align: center;
+    border: 1px solid #d3d9df;
   }
 
   #body {
@@ -138,8 +154,11 @@ export default {
   }
 
   button {
+    background-color: #0056b3;
+    border-color: #0062cc;
     border-radius: 10px;
-    box-shadow: #adb5bd inset;
+    outline: none;
+    box-shadow: #0062cc inset;
   }
 
   select {
