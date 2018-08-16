@@ -1,12 +1,13 @@
 <template>
-  <nav id="sidebar">
+  <nav
+    id="sidebar"
+    :class="{hide: hidden}">
     <div class="sidebar-header">个人中心</div>
     <ul class="components">
       <li
         v-for="item in list"
         :key="item.id"
-        :class="{active: item.isActive}"
-        @click="$emit('select', item.id)">
+        :class="{active: item.isActive}">
         <a @click="jump(item.id)">{{ item.text }}</a>
       </li>
     </ul>
@@ -18,6 +19,10 @@ import './style/style.css'
 export default {
   name: 'Menu',
   props: {
+    hidden: {
+      type: Boolean,
+      default: true
+    },
     list: {
       type: Array,
       default: () => []
@@ -36,5 +41,8 @@ export default {
 </script>
 
 <style scoped>
-
+button {
+  position: fixed;
+  margin-top: -50px;
+}
 </style>

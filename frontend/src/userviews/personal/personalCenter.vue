@@ -1,10 +1,10 @@
 <template>
   <div>
-    <UserNavbar/>
+    <UserNavbar @hide="hide"/>
     <div id="div">
       <UserMenu
         :list="list"
-        @select="select"/>
+        :hidden="hidden"/>
     </div>
   </div>
 </template>
@@ -20,18 +20,16 @@ export default {
   },
   data: function () {
     return {
+      hidden: false,
       list: [
         {id: 0, text: '查看学习记录', isActive: false},
-        {id: 1, text: '查看订单记录', isActive: false}
+        {id: 1, text: '查看订单记录', isActive: true}
       ]
     }
   },
   methods: {
-    select: function (id) {
-      this.list.forEach((obj) => {
-        obj.isActive = false
-      })
-      this.list[id].isActive = true
+    hide: function () {
+      this.hidden = !this.hidden
     }
   }
 }
