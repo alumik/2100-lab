@@ -5,10 +5,10 @@
 
     <ul class="components">
       <li class="active">
-        <a @click="jump('/admin/course')">课程管理</a>
+        <a @click="jump('/course')">课程管理</a>
       </li>
       <li>
-        <a @click="jump('/admin/message')">留言管理</a>
+        <a @click="jump('/message')">留言管理</a>
       </li>
       <li>
         <a @click="jump('/admin')">用户管理</a>

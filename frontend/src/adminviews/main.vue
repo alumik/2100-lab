@@ -1,13 +1,8 @@
 <template>
   <div>
-    <div>
-      <AdminNavbar
-        style="min-width: 500px;"/>
-    </div>
-    <div style="display: flex;">
-      <div>
-        <Menu/>
-      </div>
+    <AdminNavbar style="min-width: 500px;"/>
+    <div class="div">
+      <AdminMenu/>
       <div class="father container-fluid">
         <BreadCrumb :items="items"/>
       </div>
@@ -17,11 +12,11 @@
 
 <script>
 import BreadCrumb from '../components/breadCrumb'
-import Menu from './components/menu'
+import AdminMenu from './components/menu'
 import AdminNavbar from './components/navbar'
 export default {
   name: 'Main',
-  components: {Menu, AdminNavbar, BreadCrumb},
+  components: {AdminMenu, AdminNavbar, BreadCrumb},
   data: function () {
     return {
       items: [{
@@ -40,5 +35,12 @@ export default {
   .father {
     min-width: 500px;
     padding: 0;
+  }
+  div {
+    height: 100%;
+  }
+  .div {
+    display: flex;
+    height: calc(100% - 70px);
   }
 </style>
