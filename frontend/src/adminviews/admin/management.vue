@@ -102,7 +102,6 @@ export default {
   },
   methods: {
     jump: function (id) {
-      console.log(id)
       if (id === -1) {
         this.$router.push({name: 'AddAdmin'})
       } else {
