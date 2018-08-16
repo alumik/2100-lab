@@ -7,84 +7,86 @@
       <div id="management">
         <BreadCrumb :items="items"/>
         <h1>订单列表</h1>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <td
-                v-for="title in titles"
-                :key="title.id">
-                {{ title.label }}
-              </td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr align="center">
-              <td style="width: 180px;">
-                <div class="input-group-sm">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="">
-                </div>
-              </td>
-              <td style="width: 180px;">
-                <div class="input-group-sm">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="">
-                </div>
-              </td>
-              <td style="width: 180px;">
-                <div class="input-group-sm">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="">
-                </div>
-              </td>
-              <td style="width: 180px;">
-                <div class="input-group-sm">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="">
-                </div>
-              </td>
-              <td/>
-              <td style="width: 200px;">
-                <div>
-                  <select
-                    v-model="state"
-                    class="selectpicker">
-                    <option value="whole">全部</option>
-                    <option value="finished">已完成</option>
-                    <option value="refunded">已退款</option>
-                  </select>
-                </div>
-              </td>
-              <td/>
-            </tr>
-            <tr
-              v-for="order in orders"
-              :key="order.id">
-              <td>{{ order.order_code }}</td>
-              <td>{{ order.course_code }}</td>
-              <td>{{ order.course_name }}</td>
-              <td>{{ order.user }}</td>
-              <td>{{ order.charge }}</td>
-              <td> {{ order.state }} </td>
-              <td>
-                <button
-                  type="button"
-                  class="btn-primary"
-                  @click="to_detail">
-                  详情
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table_div">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <td
+                  v-for="title in titles"
+                  :key="title.id">
+                  {{ title.label }}
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr align="center">
+                <td style="width: 180px;">
+                  <div class="input-group-sm">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="">
+                  </div>
+                </td>
+                <td style="width: 180px;">
+                  <div class="input-group-sm">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="">
+                  </div>
+                </td>
+                <td style="width: 180px;">
+                  <div class="input-group-sm">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="">
+                  </div>
+                </td>
+                <td style="width: 180px;">
+                  <div class="input-group-sm">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="">
+                  </div>
+                </td>
+                <td/>
+                <td style="width: 200px;">
+                  <div>
+                    <select
+                      v-model="state"
+                      class="selectpicker">
+                      <option value="whole">全部</option>
+                      <option value="finished">已完成</option>
+                      <option value="refunded">已退款</option>
+                    </select>
+                  </div>
+                </td>
+                <td/>
+              </tr>
+              <tr
+                v-for="order in orders"
+                :key="order.id">
+                <td>{{ order.order_code }}</td>
+                <td>{{ order.course_code }}</td>
+                <td>{{ order.course_name }}</td>
+                <td>{{ order.user }}</td>
+                <td>{{ order.charge }}</td>
+                <td> {{ order.state }} </td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn"
+                    @click="to_detail">
+                    详情
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <Pagination :rows="rows"/>
       </div>
     </div>
@@ -153,6 +155,7 @@ export default {
 
   table {
     font-size: 1.2em;
+    border: 1px solid #d3d9df;
   }
 
   #body {
@@ -167,9 +170,18 @@ export default {
     padding: 0;
   }
 
-  button {
+  .btn {
+    color: white;
+    background-color: #8d4e91;
+    border-color: #8d6592;
     border-radius: 10px;
-    box-shadow: #adb5bd inset;
+    outline: none;
+    box-shadow: #8d6592 inset;
+  }
+
+  .btn:hover,
+  .btn:active {
+    background-color: #5e0057;
   }
 
   select {
@@ -185,5 +197,16 @@ export default {
 
   .div1 {
     height: 100%;
+  }
+
+  .table_div {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+
+  thead tr {
+    font-weight: bold;
+    color: white;
+    background-color: #6c757d;
   }
 </style>
