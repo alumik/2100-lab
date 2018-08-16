@@ -43,9 +43,14 @@ export default new Router({
       component: () => import('@/userviews/personal/login')
     },
     {
-      path: '/studylog',
+      path: '/personal/studylog',
       name: 'StudyLog',
       component: () => import('@/userviews/personal/log/studyLog')
+    },
+    {
+      path: '/personal/orderlog',
+      name: 'OrderLog',
+      component: () => import('@/userviews/personal/log/orderLog')
     },
     {
       path: '/coursedetail',
