@@ -17,6 +17,12 @@
   transition: all 0.3s;
 }
 
+@media (max-width: 768px) {
+  .sidebar {
+    margin-left: -200px;
+  }
+}
+
 .hide {
   margin-left: 0;
 }
@@ -55,14 +61,4 @@ a:focus {
 a[aria-expanded="true"] {
   color: #8d4e91;
   background: #fff;
-}
-
-/* ---------------------------------------------------
-    MEDIAQUERIES
------------------------------------------------------ */
-
-@media (max-width: 768px) {
-  #sidebar {
-    margin-left: -200px;
-  }
 }

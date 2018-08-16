@@ -4,7 +4,9 @@
     type="dark"
     variant="primary"
     sticky="true">
-    <button @click="$emit('hide')"><span class="navbar-toggler-icon"/></button>
+    <button
+      class="navbar-toggler"
+      @click="$emit('hide')"><span class="navbar-toggler-icon"/></button>
     <b-navbar-brand disabled>2100实验室
     </b-navbar-brand>
     <b-navbar-toggle target="nav_collapse"/>
@@ -49,9 +51,6 @@ export default {
   }
   #logout {
     padding: 6px;
-  }
-  button {
-    padding: 4px 12px;
   }
   @media (min-width: 768px) {
     button {

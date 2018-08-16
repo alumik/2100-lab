@@ -6,6 +6,9 @@
     variant="primary"
     class="navbar"
     sticky="true">
+    <button
+      class="navbar-toggler"
+      @click="$emit('hide')"><span class="navbar-toggler-icon"/></button>
     <b-navbar-brand disabled>2100实验室</b-navbar-brand>
     <b-navbar-toggle target="nav_collapse"/>
     <b-collapse
@@ -49,7 +52,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .navbar {
     padding: 15px 10px;
     background-color: #6f5499 !important;

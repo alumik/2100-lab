@@ -1,11 +1,9 @@
 <template>
-  <div>
+  <div class="div1">
     <AdminNavbar
       style="min-width: 800px;"/>
     <div id="body">
-      <div>
-        <Menu/>
-      </div>
+      <Menu/>
       <div id="management">
         <BreadCrumb :items="items"/>
         <h1>用户列表</h1>
@@ -146,6 +144,7 @@ export default {
     display: flex;
     justify-content: space-between;
     min-width: 800px;
+    height: calc(100% - 70px);
   }
 
   #management {
@@ -170,5 +169,9 @@ export default {
 
   option {
     font-size: 18px;
+  }
+
+  .div1 {
+    height: 100%;
   }
 </style>

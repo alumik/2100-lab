@@ -1,7 +1,7 @@
 <template>
   <nav
     id="sidebar"
-    :class="{hide: hidden}">
+    :class="{hide: hidden, 'sidebar': true}">
     <div class="sidebar-header">个人中心</div>
     <ul class="components">
       <li

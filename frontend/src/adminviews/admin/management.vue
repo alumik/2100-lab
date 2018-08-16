@@ -1,13 +1,11 @@
 <template>
-  <div>
-    <div>
-      <AdminNavbar
-        style="min-width: 500px;"/>
-    </div>
-    <div style="display: flex;">
-      <div>
-        <Menu/>
-      </div>
+  <div class="div1">
+    <AdminNavbar
+      style="min-width: 500px;"/>
+    <div
+      class="div2"
+      style="display: flex;">
+      <Menu/>
       <div class="father container-fluid">
         <BreadCrumb :items="items"/>
         <div class="head-row">
@@ -144,5 +142,13 @@ export default {
 
   .table {
     margin-top: 1%;
+  }
+
+  .div1 {
+    height: 100%;
+  }
+
+  .div2 {
+    height: calc(100% - 70px);
   }
 </style>
