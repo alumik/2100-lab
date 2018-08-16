@@ -3,13 +3,12 @@
     <AdminNavbar style="min-width: 500px;"/>
     <div class="div">
       <AdminMenu/>
-      <div class="father container-fluid"></div>
     </div>
   </div>
 </template>
 
 <script>
-import Menu from './components/menu'
+import AdminMenu from './components/menu'
 import AdminNavbar from './components/navbar'
 export default {
   name: 'Main',

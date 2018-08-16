@@ -41,8 +41,5 @@ export default {
 </script>
 
 <style scoped>
-button {
-  position: fixed;
-  margin-top: -50px;
-}
+
 </style>
