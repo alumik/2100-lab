@@ -6,14 +6,12 @@
     </div>
     <div
       id="course-list"
-      class="bv-example-row"
-      style="margin: 30px 0px;">
+      class="bv-example-row course-list-style">
       <b-card-group
         v-for="course in course_list"
         :key="course"
         deck
-        class="mb-3"
-        style="margin: 10px; width: 30%;">
+        class="mb-3 b-card-group-style">
         <b-card
           :header="course.name"
           border-variant="primary"
@@ -21,7 +19,7 @@
           header-text-variant="white"
           align="center">
           <div class="card-content">
-            <div style="width: 50%; height: 100%;">
+            <div class="course-img-style">
               <b-img
                 :src="course.src"
                 fluid
@@ -37,7 +35,7 @@
         </b-card>
       </b-card-group>
     </div>
-    <div style="display: flex; justify-content: center;">
+    <div class="pagination-style">
       <Pagination
         :rows="rows"
         :perpage="perpage"/>
@@ -114,5 +112,24 @@ export default {
     height: 100%;
     padding: 10px;
     border: 2px solid #b8daff;
+  }
+
+  .course-list-style {
+    margin: 30px 0;
+  }
+
+  .b-card-group-style {
+    width: 30%;
+    margin: 10px;
+  }
+
+  .course-img-style {
+    width: 50%;
+    height: 100%;
+  }
+
+  .pagination-style {
+    display: flex;
+    justify-content: center;
   }
 </style>

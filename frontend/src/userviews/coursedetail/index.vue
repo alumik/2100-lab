@@ -1,8 +1,8 @@
 <template>
   <body
-    style="width: 100%;">
+    class="width-style">
     <UserNavbar/>
-    <div style="margin-left: 10px;">
+    <div class="content-style">
       <h3>课程详情</h3>
     </div>
     <div>
@@ -20,7 +20,7 @@
         <qrcode
           :options="{ size: 200 }"
           value="share_url"
-          style="margin-left: 130px;"/>
+          class="qrcode-style"/>
       </b-modal>
       <!-- 分享按钮的弹窗 -->
     </div>
@@ -33,22 +33,21 @@
         <qrcode
           :options="{ size: 200 }"
           value="alipay_url"
-          style="margin-left: 20px;"/>
+          class="qrcode-margin-style"/>
         <qrcode
           :options="{ size: 200 }"
           value="wxpay_url"
-          style="margin-left: 20px;"/>
+          class="qrcode-margin-style"/>
         <b-row>
-          <h5 style="margin-left: 100px;">支付宝</h5>
-          <h5 style="margin-left: 180px;">微信</h5>
+          <h5 class="alipay-title">支付宝</h5>
+          <h5 class="wxpay-title">微信</h5>
         </b-row>
       </b-modal>
       <!-- 分享按钮的弹窗 -->
     </div>
     <div
       id="profile"
-      class="row profile-style"
-      style="height: 300px;">
+      class="row profile-style">
       <div
         id="image"
         style="height: 100%; width: 50%;">
@@ -57,16 +56,14 @@
           fluid
           thumbnail
           alt="Responsive image Thumbnail"
-          class="img-thumbnail"
-          style="height: 100%; width: 80%; margin-left: 10px;"/>
+          class="img-thumbnail course-img-style"/>
       </div>
       <div
         id="introduction"
-        style="width: 50%;">
+        class="introduction-style">
         <h3
           id="coursename"
-          class="row"
-          style="margin-top: 10px; positon: relative;">
+          class="row coursename-style">
           课程：{{ course.name }}</h3>
         <div class="row row-btn-style">
           <div
@@ -117,27 +114,24 @@
             variant="primary"
             class="row-btn praise"
             @click="course.num_of_praise+=1">
-            <h style="color: lawngreen; font-size: 18px;">
+            <h class="praise-style">
               {{ course.num_of_praise }}
             </h>
             赞</b-button>
         </div>
-        <div style="margin-top: 30px;">
+        <div class="reminder-style">
           <div
             v-if="course.value!=0"
-            class="row"
-            style="position: relative;">
+            class="row row-style">
             <h5>现价 ￥{{ course.value-user_balance }}  ￥</h5>
-            <h5 style="text-decoration: line-through;">{{ course.value }}</h5>
+            <h5 class="origin-value">{{ course.value }}</h5>
           </div>
           <div
-            class="row"
-            style="position: relative;">
+            class="row time-style">
             <h5>课程时效 {{ course.validate_time }} h</h5>
           </div>
           <div
-            class="row"
-            style="position: relative;">
+            class="row time-style">
             <h5>距离失效还有 {{ course.time_to_end }} h</h5>
           </div>
         </div>
@@ -145,8 +139,7 @@
     </div>
     <div
       id="course-introduction"
-      class="profile-style"
-      style="height: 250px;">
+      class="profile-style">
       <h3>课程简介</h3>
       <p>&emsp; &emsp;{{ course.introduction }}</p>
     </div>
@@ -194,6 +187,7 @@ export default{
 
 <style>
   .profile-style {
+    height: 300px;
     margin: 10px;
     border: 3px solid #f00;
     -webkit-box-shadow: 10px 8px 10px 3px #999;
@@ -202,8 +196,69 @@ export default{
     opacity: 0.9;
   }
 
+  #course-introduction .profile-style {
+    height: 250px;
+  }
+
   .row-btn {
     margin-right: 50px;
+  }
+
+  .width-style {
+    width: 100%;
+  }
+
+  .content-style {
+    margin-left: 10px;
+  }
+
+  .qrcode-margin-style {
+    margin-left: 20px;
+  }
+
+  .alipay-title {
+    margin-left: 100px;
+  }
+
+  .wxpay-title {
+    margin-left: 180px;
+  }
+
+  .course-img-style {
+    width: 80%;
+    height: 100%;
+    margin-left: 10px;
+  }
+
+  .introduction-style {
+    width: 50%;
+  }
+
+  .coursename-style {
+    position: relative;
+    margin-top: 10px;
+  }
+
+  .time-style {
+    position: relative;
+  }
+
+  .praise-style {
+    font-size: 18px;
+    color: lawngreen;
+  }
+
+  .reminder-style {
+    margin-top: 30px;
+  }
+
+  .row-style {
+    position: relative;
+  }
+
+  .origin-value {
+    text-decoration:
+      line-through;
   }
 
   .reminder {
@@ -212,6 +267,10 @@ export default{
     left: 240px;
     height: 40%;
     margin-left: 10px;
+  }
+
+  .qrcode-style {
+    margin-left: 130px;
   }
 
   .row-btn-style {
