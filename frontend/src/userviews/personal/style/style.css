@@ -62,7 +62,7 @@ a[aria-expanded="true"] {
 ----------------------------------------------------- */
 
 @media (max-width: 768px) {
-  nav {
+  #sidebar {
     margin-left: -200px;
   }
 }
