@@ -1,13 +1,14 @@
-from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.http import JsonResponse
 
-from .models import Heroes, Course
+from .models import Hero, Course
+from .utils import get_courses
+from core.utils import get_page
 from customers.models import LearningLog
 
 
 def get_heroes(request):
-    heroes = Heroes.objects.all()
+    heroes = Hero.objects.all()
     count = heroes.count()
     json_data = {
         'count': count,
@@ -19,78 +20,35 @@ def get_heroes(request):
 
 
 def get_recent_courses(request):
-    free_courses = Course.objects.filter(price='0.00').order_by('-modified_at')[:10]
-    paid_courses = Course.objects.exclude(price='0.00').order_by('-modified_at')[:10]
+    free_courses = get_courses(Course.TYPE_FREE, 10)
+    paid_courses = get_courses(Course.TYPE_PAID, 10)
     json_data = {
         'free_courses': [],
         'paid_courses': []
     }
     for free_course in free_courses:
-        json_data['free_courses'].append(free_course.as_brief_dict())
+        json_data['free_courses'].append(free_course.as_dict())
     for paid_course in paid_courses:
-        json_data['paid_courses'].append(paid_course.as_brief_dict())
+        json_data['paid_courses'].append(paid_course.as_dict())
     return JsonResponse(json_data)
 
 
-def get_free_course_list(request):
-    course_objects = Course.objects.filter(price='0.00').order_by('-modified_at')
-    count = course_objects.count()
-
-    page = request.GET.get('page', request.POST['page'])
-    paginator = Paginator(course_objects, request.POST['page_limit'])
-
-    try:
-        course_page = paginator.page(page)
-    except PageNotAnInteger:
-        course_page = paginator.page(request.POST['page'])
-    except EmptyPage:
-        course_page = paginator.page(paginator.num_pages)
-
-    course_list = list(
-        map(lambda course_object: course_object.as_brief_dict(), list(course_page))
-    )
-    return JsonResponse(
-        {
-            'count': count,
-            'content': course_list
-        },
-        safe=False
-    )
+def get_course_list(request):
+    courses = get_courses(int(request.POST.get('course_type')))
+    return get_page(request, courses)
 
 
-def get_paid_course_list(request):
-    course_objects = Course.objects.exclude(price='0.00').order_by('-modified_at')
-    count = course_objects.count()
-
-    page = request.GET.get('page', request.POST['page'])
-    paginator = Paginator(course_objects, request.POST['page_limit'])
+def get_customer_course_detail(request):
+    course_id = request.GET.get('course_id')
+    request.session['referer_id'] = request.GET.get('referer_id', '')
 
     try:
-        course_page = paginator.page(page)
-    except PageNotAnInteger:
-        course_page = paginator.page(request.POST['page'])
-    except EmptyPage:
-        course_page = paginator.page(paginator.num_pages)
+        course = Course.objects.get(id=course_id)
+    except Course.DoesNotExist:
+        return JsonResponse({'message', 'Course not found.'}, status=404)
 
-    course_list = list(
-        map(lambda course_object: course_object.as_brief_dict(), list(course_page))
-    )
-    return JsonResponse(
-        {
-            'count': count,
-            'content': course_list
-        },
-        safe=False
-    )
-
-
-def get_course_detail(request):
-    course_id = request.GET.get('id')
-    referer_id = request.GET.get('ref', '')
-    request.session['referer_id'] = referer_id
-    course = Course.objects.get(id=course_id)
     course_detail = {
-        'id': course.id,
+        'course_id': course.id,
         'thumbnail': str(course.thumbnail),
         'title': course.title,
         'description': course.description,

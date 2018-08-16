@@ -1,59 +1,8 @@
-import re
 import time
 
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.conf import settings
-from django.contrib.auth import get_user_model
-from random import randint
-
-
-def get_verification_code(request):
-    phone_number = request.POST.get('phone_number')
-    match = re.search(r'^\d{11}$', phone_number)
-    if match:
-        verification_code = str(randint(0, 999999)).zfill(6)
-        request.session['verification_code'] = verification_code
-        return JsonResponse({'verification_code': verification_code})
-    else:
-        return JsonResponse({'message': 'Not a valid phone number.'}, status=400)
-
-
-def authenticate(request):
-    phone_number = request.POST.get('phone_number')
-    verification_code = request.POST.get('verification_code')
-
-    if verification_code == request.session['verification_code']:
-        try:
-            user = get_user_model().objects.get(phone_number=phone_number)
-            new_customer = False
-        except get_user_model().DoesNotExist:
-            user = get_user_model().objects.create_user(phone_number=phone_number)
-            new_customer = True
-        auth.login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])
-        del request.session['verification_code']
-        return JsonResponse(
-            {
-                'new_customer': new_customer,
-                'customer_id': user.id,
-                'username': user.username,
-                'avatar': str(user.avatar)
-            }
-        )
-    else:
-        del request.session['verification_code']
-        return JsonResponse({'message': 'Wrong verification code.'}, status=401)
-
-
-def get_eula(request):
-    return JsonResponse({'content': 'Test EULA.'})
-
-
-@login_required
-def logout(request):
-    auth.logout(request)
-    return JsonResponse({'message': 'User logged out.'})
 
 
 def is_authenticated(request):
@@ -63,11 +12,17 @@ def is_authenticated(request):
 
 
 @login_required
-def delete_customer(request):
+def logout(request):
+    auth.logout(request)
+    return JsonResponse({'message': 'User logged out.'})
+
+
+@login_required
+def delete_user(request):
     user = request.user
     auth.logout(request)
     user.phone_number += '_deleted_' + str(int(round(time.time() * 1000)))
     user.username = user.phone_number
     user.save()
     user.delete()
-    return JsonResponse({'message': 'Account deleted.'})
+    return JsonResponse({'message': 'User deleted.'})

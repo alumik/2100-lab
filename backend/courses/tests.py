@@ -1,29 +1,19 @@
 import json
 import pytz
 
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib.auth import get_user_model
 from django.utils import timezone
 
-from .models import Heroes, Course
+from .models import Course
 from customers.models import LearningLog
+from core.utils import create_test_customers, create_test_heroes, create_test_courses
 
 
 class MainPageTests(TestCase):
     def test_get_heroes(self):
-        Heroes.objects.create(
-            image='fake/path/image1.png',
-            caption='c1'
-        )
-        Heroes.objects.create(
-            image='fake/path/image2.png',
-            caption='c2'
-        )
-        Heroes.objects.create(
-            image='fake/path/image3.png',
-            caption='c3'
-        )
+        create_test_heroes(3)
 
         response = self.client.get(reverse('api:courses:get-heroes'))
         self.assertEqual(response.status_code, 200)
@@ -49,33 +39,13 @@ class MainPageTests(TestCase):
         )
 
     def test_get_recent_courses(self):
-        Course.objects.create(
-            title='t1',
-            description='d1',
-            codename='c1'
-        )
-        Course.objects.create(
-            title='t2',
-            description='d2',
-            codename='c2',
-            price='200.00'
-        )
-        Course.objects.create(
-            title='t3',
-            description='d3',
-            codename='c3'
-        )
-        Course.objects.create(
-            title='t4',
-            description='d4',
-            codename='c4'
-        )
-        Course.objects.create(
-            title='t5',
-            description='d5',
-            codename='c5',
-            price='500.00'
-        )
+        create_test_courses(5)
+        _course = Course.objects.get(codename='c2')
+        _course.price = '200.00'
+        _course.save()
+        _course = Course.objects.get(codename='c5')
+        _course.price = '500.00'
+        _course.save()
 
         response = self.client.get(reverse('api:courses:get-recent-courses'))
         self.assertEqual(response.status_code, 200)
@@ -99,38 +69,22 @@ class MainPageTests(TestCase):
 
 class CourseListTests(TestCase):
     def setUp(self):
-        Course.objects.create(
-            title='t1',
-            description='d1',
-            codename='c1'
-        )
-        Course.objects.create(
-            title='t2',
-            description='d2',
-            codename='c2',
-            price='200.00'
-        )
-        Course.objects.create(
-            title='t3',
-            description='d3',
-            codename='c3'
-        )
-        Course.objects.create(
-            title='t4',
-            description='d4',
-            codename='c4'
-        )
-        Course.objects.create(
-            title='t5',
-            description='d5',
-            codename='c5',
-            price='500.00'
-        )
+        create_test_courses(5)
+        _course = Course.objects.get(codename='c2')
+        _course.price = '200.00'
+        _course.save()
+        _course = Course.objects.get(codename='c5')
+        _course.price = '500.00'
+        _course.save()
 
     def test_get_free_course_list(self):
         response = self.client.post(
-            reverse('api:courses:get-free-course-list'),
-            {'page_limit': 1, 'page': 1}
+            reverse('api:courses:get-course-list'),
+            {
+                'course_type': Course.TYPE_FREE,
+                'page_limit': 1,
+                'page': 1
+            }
         )
         self.assertEqual(response.status_code, 200)
         response_json_data = json.loads(response.content)
@@ -140,8 +94,12 @@ class CourseListTests(TestCase):
         self.assertEqual(response_json_data['content'][0]['description'], 'd4')
 
         response = self.client.post(
-            reverse('api:courses:get-free-course-list'),
-            {'page_limit': 1, 'page': 3}
+            reverse('api:courses:get-course-list'),
+            {
+                'course_type': Course.TYPE_FREE,
+                'page_limit': 1,
+                'page': 3
+            }
         )
         self.assertEqual(response.status_code, 200)
         response_json_data = json.loads(response.content)
@@ -152,8 +110,12 @@ class CourseListTests(TestCase):
 
     def test_get_paid_course_list(self):
         response = self.client.post(
-            reverse('api:courses:get-paid-course-list'),
-            {'page_limit': 1, 'page': 1}
+            reverse('api:courses:get-course-list'),
+            {
+                'course_type': Course.TYPE_PAID,
+                'page_limit': 1,
+                'page': 1
+            }
         )
         self.assertEqual(response.status_code, 200)
         response_json_data = json.loads(response.content)
@@ -162,44 +124,21 @@ class CourseListTests(TestCase):
         self.assertEqual(response_json_data['content'][0]['title'], 't5')
         self.assertEqual(response_json_data['content'][0]['description'], 'd5')
 
-        response = self.client.post(
-            reverse('api:courses:get-paid-course-list'),
-            {'page_limit': 1, 'page': 2}
-        )
-        self.assertEqual(response.status_code, 200)
-        response_json_data = json.loads(response.content)
-        self.assertEqual(response_json_data['count'], 2)
-        self.assertEqual(response_json_data['content'][0]['thumbnail'], '')
-        self.assertEqual(response_json_data['content'][0]['title'], 't2')
-        self.assertEqual(response_json_data['content'][0]['description'], 'd2')
-
 
 class CourseDetailTests(TestCase):
     def setUp(self):
-        get_user_model().objects.create_user(phone_number='00000000001')
-        Course.objects.create(
-            title='t1',
-            description='d1',
-            codename='c1',
-            price='100.00'
-        )
-        Course.objects.create(
-            title='t2',
-            description='d2',
-            codename='c2',
-            expire_duration=timezone.timedelta(days=1, hours=5)
-        )
-        Course.objects.create(
-            title='t3',
-            description='d3',
-            codename='c3'
-        )
-        Course.objects.create(
-            title='t4',
-            description='d4',
-            codename='c4',
-            expire_duration=timezone.timedelta(days=3, hours=7)
-        )
+        create_test_customers(1)
+        create_test_courses(4)
+        _course = Course.objects.get(codename='c1')
+        _course.price = '100.00'
+        _course.save()
+        _course = Course.objects.get(codename='c2')
+        _course.expire_duration = timezone.timedelta(days=1, hours=5)
+        _course.save()
+        _course = Course.objects.get(codename='c4')
+        _course.expire_duration = timezone.timedelta(days=3, hours=7)
+        _course.save()
+
         LearningLog.objects.create(
             customer=get_user_model().objects.get(phone_number='00000000001'),
             course=Course.objects.get(codename='c1')
@@ -219,12 +158,12 @@ class CourseDetailTests(TestCase):
         course_id = Course.objects.get(codename='c4').id
 
         response = self.client.get(
-            reverse('api:courses:get-course-detail'),
-            {'id': course_id}
+            reverse('api:courses:get-customer-course-detail'),
+            {'course_id': course_id}
         )
         self.assertEqual(response.status_code, 200)
         response_json_data = json.loads(response.content)
-        self.assertEqual(response_json_data['id'], course_id)
+        self.assertEqual(response_json_data['course_id'], course_id)
         self.assertEqual(response_json_data['thumbnail'], '')
         self.assertEqual(response_json_data['title'], 't4')
         self.assertEqual(response_json_data['description'], 'd4')
@@ -240,12 +179,12 @@ class CourseDetailTests(TestCase):
         course_id = Course.objects.get(codename='c3').id
 
         response = self.client.get(
-            reverse('api:courses:get-course-detail'),
-            {'id': course_id}
+            reverse('api:courses:get-customer-course-detail'),
+            {'course_id': course_id}
         )
         self.assertEqual(response.status_code, 200)
         response_json_data = json.loads(response.content)
-        self.assertEqual(response_json_data['id'], course_id)
+        self.assertEqual(response_json_data['course_id'], course_id)
         self.assertEqual(response_json_data['thumbnail'], '')
         self.assertEqual(response_json_data['title'], 't3')
         self.assertEqual(response_json_data['description'], 'd3')
@@ -261,12 +200,12 @@ class CourseDetailTests(TestCase):
         course_id = Course.objects.get(codename='c2').id
 
         response = self.client.get(
-            reverse('api:courses:get-course-detail'),
-            {'id': course_id}
+            reverse('api:courses:get-customer-course-detail'),
+            {'course_id': course_id}
         )
         self.assertEqual(response.status_code, 200)
         response_json_data = json.loads(response.content)
-        self.assertEqual(response_json_data['id'], course_id)
+        self.assertEqual(response_json_data['course_id'], course_id)
         self.assertEqual(response_json_data['thumbnail'], '')
         self.assertEqual(response_json_data['title'], 't2')
         self.assertEqual(response_json_data['description'], 'd2')
@@ -282,10 +221,10 @@ class CourseDetailTests(TestCase):
         course_id = Course.objects.get(codename='c1').id
 
         response = self.client.get(
-            reverse('api:courses:get-course-detail'),
+            reverse('api:courses:get-customer-course-detail'),
             {
-                'id': course_id,
-                'ref': '1234'
+                'course_id': course_id,
+                'referer_id': '1234'
             }
         )
         self.assertEqual(response.status_code, 200)

@@ -13,18 +13,33 @@ urlpatterns = [
         name='personal-center-get-customer-detail'
     ),
     path(
+        'personal-center/get-learning-logs/',
+        views.personal_center_get_learning_logs,
+        name='personal-center-get-learning-logs'
+    ),
+    path(
+        'personal-center/get-order-logs/',
+        views.personal_center_get_order_logs,
+        name='personal-center-get-order-logs'
+    ),
+    path(
         'personal-center/change-username/',
         views.personal_center_change_username,
         name='personal-center-change-username'
     ),
     path(
-        'personal-center/get-learning-log/',
-        views.personal_center_get_learning_log,
-        name='personal-center-get-learning-log'
+        'auth/get-eula/',
+        views.get_eula,
+        name='get-eula'
     ),
     path(
-        'personal-center/get-order-log/',
-        views.personal_center_get_order_log,
-        name='personal-center-get-order-log'
+        'auth/get-verification-code/',
+        views.get_verification_code,
+        name='get-verification-code'
+    ),
+    path(
+        'auth/authenticate-customer/',
+        views.authenticate_customer,
+        name='authenticate-customer'
     ),
 ]

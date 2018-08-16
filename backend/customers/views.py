@@ -1,15 +1,54 @@
+import re
+from random import randint
+
+from django.conf import settings
+from django.contrib.auth import get_user_model, login
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.contrib.auth import get_user_model
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 from .models import LearningLog, OrderLog
+from core.utils import get_page
 
 
-@login_required
-def personal_center_get_customer_detail(request):
-    user = request.user
-    return JsonResponse(request.user.as_brief_dict())
+def get_verification_code(request):
+    phone_number = request.POST.get('phone_number')
+    match = re.search(r'^\d{11}$', phone_number)
+    if match:
+        verification_code = str(randint(0, 999999)).zfill(6)
+        request.session['verification_code'] = verification_code
+        return JsonResponse({'verification_code': verification_code})
+    else:
+        return JsonResponse({'message': 'Not a valid phone number.'}, status=400)
+
+
+def authenticate_customer(request):
+    phone_number = request.POST.get('phone_number')
+    verification_code = request.POST.get('verification_code')
+
+    if verification_code == request.session['verification_code']:
+        try:
+            user = get_user_model().objects.get(phone_number=phone_number)
+            new_customer = False
+        except get_user_model().DoesNotExist:
+            user = get_user_model().objects.create_user(phone_number=phone_number)
+            new_customer = True
+        login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])
+        del request.session['verification_code']
+        return JsonResponse(
+            {
+                'new_customer': new_customer,
+                'customer_id': user.id,
+                'username': user.username,
+                'avatar': str(user.avatar)
+            }
+        )
+    else:
+        del request.session['verification_code']
+        return JsonResponse({'message': 'Wrong verification code.'}, status=401)
+
+
+def get_eula(request):
+    return JsonResponse({'content': 'Test EULA.'})
 
 
 @login_required
@@ -26,54 +65,17 @@ def personal_center_change_username(request):
 
 
 @login_required
-def personal_center_get_learning_log(request):
-    learning_log_object_list = LearningLog.objects.filter(customer=request.user).order_by('-created_at')
-    count = learning_log_object_list.count()
-
-    page = request.GET.get('page', request.POST['page'])
-    paginator = Paginator(learning_log_object_list, request.POST['page_limit'])
-
-    try:
-        learning_log_objects = paginator.page(page)
-    except PageNotAnInteger:
-        learning_log_objects = paginator.page(request.POST['page'])
-    except EmptyPage:
-        learning_log_objects = paginator.page(paginator.num_pages)
-
-    learning_log_list = list(
-        map(lambda learning_log_object: learning_log_object.as_brief_dict(), list(learning_log_objects))
-    )
-    return JsonResponse(
-        {
-            'count': count,
-            'content': learning_log_list
-        },
-        safe=False
-    )
+def personal_center_get_customer_detail(request):
+    return JsonResponse(request.user.as_dict())
 
 
 @login_required
-def personal_center_get_order_log(request):
-    order_log_object_list = OrderLog.objects.filter(customer=request.user).order_by('-created_at')
-    count = order_log_object_list.count()
+def personal_center_get_learning_logs(request):
+    learning_logs = LearningLog.objects.filter(customer=request.user).order_by('-created_at')
+    return get_page(request, learning_logs)
 
-    page = request.GET.get('page', request.POST['page'])
-    paginator = Paginator(order_log_object_list, request.POST['page_limit'])
 
-    try:
-        order_log_objects = paginator.page(page)
-    except PageNotAnInteger:
-        order_log_objects = paginator.page(request.POST['page'])
-    except EmptyPage:
-        order_log_objects = paginator.page(paginator.num_pages)
-
-    order_log_list = list(
-        map(lambda order_log_object: order_log_object.as_brief_dict(), list(order_log_objects))
-    )
-    return JsonResponse(
-        {
-            'count': count,
-            'content': order_log_list
-        },
-        safe=False
-    )
+@login_required
+def personal_center_get_order_logs(request):
+    order_logs = OrderLog.objects.filter(customer=request.user).order_by('-created_at')
+    return get_page(request, order_logs)
