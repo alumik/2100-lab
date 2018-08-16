@@ -1,32 +1,40 @@
 <template>
   <div>
-    <div>
-      <AdminNavbar
-        style="min-width: 500px;"/>
+    <div class="my-nav">
+      <AdminNavbar/>
     </div>
-    <div style="display: flex;">
+    <div class="my-menu">
       <div>
         <Menu/>
       </div>
       <div class="father container-fluid">
         <BreadCrumb :items="items"/>
-        <h1 class="head-text">修改密码</h1>
+        <h1 class="head-text">新增管理员</h1>
         <form>
           <div class="form-group">
             <label
               class="form-check-label"
-              for="newpassword">新密码</label>
+              for="telephone">管理员手机号</label>
             <input
-              id="newpassword"
+              id="telephone"
               class="input form-control col-lg-3"
               type="text">
           </div>
           <div class="form-group">
             <label
               class="form form-check-label"
-              for="newpasswordagain">重新输入密码</label>
+              for="password">管理员密码</label>
             <input
-              id="newpasswordagain"
+              id="password"
+              class="form-control col-lg-3"
+              type="password">
+          </div>
+          <div class="form-group">
+            <label
+              class="form form-check-label"
+              for="passwordagain">再次输入密码</label>
+            <input
+              id="passwordagain"
               class="form-control col-lg-3"
               type="password">
           </div>
@@ -35,7 +43,6 @@
             class="btn btn-sm"
           >保存</button>
         </form>
-
       </div>
     </div>
   </div>
@@ -46,7 +53,7 @@ import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
 import BreadCrumb from '../../components/breadCrumb'
 export default {
-  name: 'ChangeCode',
+  name: 'AddAdmin',
   components: {BreadCrumb, Menu, AdminNavbar},
   data: function () {
     return {
@@ -57,10 +64,7 @@ export default {
         text: '管理员管理',
         href: '/admin/adminmanagement'
       }, {
-        text: '管理员详情',
-        href: '/admin/adminmanagement/detail'
-      }, {
-        text: '修改密码',
+        text: '新增管理员',
         active: true
       }]
     }
@@ -75,14 +79,22 @@ export default {
     text-align: left;
   }
 
+  .my-menu {
+    display: flex;
+  }
+
+  .my-nav {
+    min-width: 500px;
+  }
+
   .head-text {
-    margin-top: 60px;
-    margin-bottom: 60px;
+    margin-top: 40px;
+    margin-bottom: 40px;
     margin-left: 25px;
   }
 
   .form-group {
-    margin-top: 60px;
+    margin-top: 25px;
     margin-left: 25px;
   }
 

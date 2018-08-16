@@ -1,9 +1,7 @@
 <template>
-  <div class="div1">
-    <AdminNavbar style="min-width: 500px;"/>
-    <div
-      class="div2"
-      style="display: flex;">
+  <div class="my-head">
+    <AdminNavbar class="my-navbar"/>
+    <div class="my-menu">
       <Menu/>
       <div class="father container-fluid">
         <BreadCrumb :items="items"/>
@@ -13,7 +11,6 @@
             <button
               type="button"
               class="row btn btn-sm my-in-btn"
-              style="margin-right: 15%;"
               @click="jump(0)"
             >新增课程</button>
             <button
@@ -36,27 +33,27 @@
             <tbody>
               <tr>
                 <td>
-                  <div class="input-group short-input">
+                  <div class="input-group my-short-input">
                     <input
                       type="text"
                       class="form-control col-5"
                       placeholder="">
                 </div></td>
                 <td>
-                  <div class="input-group long-input">
+                  <div class="input-group my-long-input">
                     <input
                       type="text"
                       class="form-control col-6"
                       placeholder="">
                   </div>
                 </td><td>
-                  <div class="input-group short-input">
+                  <div class="input-group my-short-input">
                     <input
                       type="text"
                       class="form-control col-5"
                       placeholder="">
                 </div></td>
-                <td style="width: 250px;">
+                <td class="my-td">
                 <div/></td>
               </tr>
               <tr
@@ -65,17 +62,17 @@
                 <td>{{ course.ID }}</td>
                 <td>{{ course.name }}</td>
                 <td>{{ course.change_time }}</td>
-                <div style="display: flex;">
+                <div class="my-in-for-btn">
                   <button
+                    id="content"
                     type="button"
                     class="in-btn row btn-sm"
-                    style="margin-right: -10px; margin-top: 10px;"
                     @click="jump(course.id + 1)"
                   >详情</button>
                   <button
+                    id="edit"
                     type="button"
                     class="in-btn row btn-sm"
-                    style="margin-top: 10px;"
                     @click="jump(course.id * (-1) - 2)"
                   >修改</button>
                 </div>
@@ -133,20 +130,54 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+  .my-head {
+    height: 100%;
+  }
+
+  .my-navbar {
+    min-width: 500px;
+  }
+
+  .my-menu {
+    display: flex;
+    height: calc(100% - 70px);
+  }
+
   .father {
     min-width: 500px;
     padding: 0;
     margin-left: 0;
     text-align: center;
   }
-
   .my-row {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     margin-top: 30px;
     margin-bottom: 30px;
+  }
+
+  .my-in-btn {
+    margin-right: 15%;
+    margin-left: auto;
+  }
+
+  .my-td {
+    width: 250px
+  }
+
+  .my-in-for-btn {
+    display: flex;
+  }
+
+  #content {
+    margin-top: 10px;
+    margin-right: -10px;
+  }
+
+  #edit {
+    margin-top: 10px;
   }
 
   .head-btn {
@@ -159,30 +190,17 @@ export default {
     margin-left: 25px;
   }
 
-  .my-in-btn {
-    margin-right: auto;
-    margin-left: auto;
-  }
-
-  .long-input {
+  .my-long-input {
     margin-left: 25%;
   }
 
-  .short-input {
+  .my-short-input {
     margin-left: 28%;
   }
 
   .in-btn {
     margin-right: auto;
     margin-left: auto;
-  }
-
-  .div1 {
-    height: 100%;
-  }
-
-  .div2 {
-    height: calc(100% - 70px);
   }
 
   thead tr {

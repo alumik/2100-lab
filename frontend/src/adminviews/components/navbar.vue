@@ -1,10 +1,10 @@
 <template>
   <b-navbar
+    :sticky="true"
     toggleable="md"
     type="dark"
     variant="primary"
-    class="navbar"
-    sticky="true">
+    class="navbar">
     <button
       class="navbar-toggler"
       @click="$emit('hide')"><span class="navbar-toggler-icon"/></button>

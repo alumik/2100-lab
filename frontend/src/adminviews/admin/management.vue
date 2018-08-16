@@ -1,10 +1,8 @@
 <template>
-  <div class="div1">
-    <AdminNavbar
-      style="min-width: 500px;"/>
+  <div class="my-head">
+    <AdminNavbar/>
     <div
-      class="div2"
-      style="display: flex;">
+      class="my-navbar">
       <Menu/>
       <div class="father container-fluid">
         <BreadCrumb :items="items"/>
@@ -112,7 +110,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .father {
     min-width: 500px;
     padding: 0;
@@ -174,11 +172,12 @@ export default {
     background-color: #5e0057;
   }
 
-  .div1 {
+  .my-head {
     height: 100%;
   }
 
-  .div2 {
+  .my-navbar {
+    display: flex;
     height: calc(100% - 70px);
   }
 </style>

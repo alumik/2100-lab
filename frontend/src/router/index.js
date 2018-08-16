@@ -100,12 +100,12 @@ export default new Router({
     {
       path: '/admin/adminmanagement/changecode',
       name: 'ChangeCode',
-      component: () => import('@/adminviews/admin/changecode')
+      component: () => import('@/adminviews/admin/change_code')
     },
     {
       path: '/admin/adminmanagement/distribution',
       name: 'DistributeAuthority',
-      component: () => import('@/adminviews/admin/distributeauthority')
+      component: () => import('@/adminviews/admin/distribute_authority')
     },
     {
       path: '/admin/adminmanagement/detail',
@@ -115,7 +115,7 @@ export default new Router({
     {
       path: '/admin/adminmanagement/creation',
       name: 'AddAdmin',
-      component: () => import('@/adminviews/admin/addadmin')
+      component: () => import('@/adminviews/admin/add_admin')
     },
     {
       path: '/admin/order',
