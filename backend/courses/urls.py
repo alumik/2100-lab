@@ -12,4 +12,5 @@ urlpatterns = [
     path('courses/get-free-course-list/', views.get_free_course_list, name='get-free-course-list'),
     path('courses/get-paid-course-list/', views.get_paid_course_list, name='get-paid-course-list'),
     path('courses/get-course-detail/', views.get_course_detail, name='get-course-detail'),
+    path('courses/up-vote-course/', views.up_vote_course, name='up-vote-course'),
 ]

@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 from .models import Heroes, Course
@@ -107,3 +108,26 @@ def get_course_detail(request):
         except LearningLog.DoesNotExist:
             pass
     return JsonResponse(course_detail)
+
+
+@login_required
+def up_vote_course(request):
+    course_id = request.POST.get('course_id')
+    try:
+        course = Course.objects.get(id=course_id)
+    except Course.DoesNotExist:
+        return JsonResponse({'message': 'Course not found.'}, status=404)
+
+    customer = request.user
+    if customer in course.up_votes.all():
+        up_voted = False
+        course.up_votes.remove(customer)
+    else:
+        up_voted = True
+        course.up_votes.add(customer)
+    return JsonResponse(
+        {
+            'up_voted': up_voted,
+            'up_votes': course.up_votes.count()
+        }
+    )
