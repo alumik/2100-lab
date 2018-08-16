@@ -8,31 +8,17 @@
       <div>
         <Menu/>
       </div>
-      <div class="father container-fluid">
-        <BreadCrumb :items="items"/>
-      </div>
+      <div class="father container-fluid"/>
     </div>
   </div>
 </template>
 
 <script>
-import BreadCrumb from '../components/breadCrumb'
 import Menu from './components/menu'
 import AdminNavbar from './components/navbar'
 export default {
   name: 'Main',
-  components: {Menu, AdminNavbar, BreadCrumb},
-  data: function () {
-    return {
-      items: [{
-        text: '主页',
-        href: '/admin'
-      }, {
-        text: '',
-        active: true
-      }]
-    }
-  }
+  components: {Menu, AdminNavbar}
 }
 </script>
 
