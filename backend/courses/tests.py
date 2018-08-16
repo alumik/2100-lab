@@ -292,3 +292,40 @@ class CourseDetailTests(TestCase):
         self.assertEqual(self.client.session['referer_id'], '1234')
 
         self.client.logout()
+
+    def test_up_vote_course_logged_out(self):
+        course_id = Course.objects.get(codename='c1').id
+
+        response = self.client.post(
+            reverse('api:courses:up-vote-course'),
+            {'course_id': course_id}
+        )
+        self.assertEqual(response.status_code, 302)
+
+    def test_up_vote_course_not_exists(self):
+        self.client.force_login(get_user_model().objects.get(phone_number='00000000001'))
+
+        response = self.client.post(
+            reverse('api:courses:up-vote-course'),
+            {'course_id': 10000}
+        )
+        self.assertEqual(response.status_code, 404)
+
+    def test_up_vote_course_logged_in(self):
+        self.client.force_login(get_user_model().objects.get(phone_number='00000000001'))
+        course = Course.objects.get(codename='c1')
+        self.assertEqual(course.up_votes.count(), 0)
+
+        response = self.client.post(
+            reverse('api:courses:up-vote-course'),
+            {'course_id': course.id}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(course.up_votes.count(), 1)
+
+        response = self.client.post(
+            reverse('api:courses:up-vote-course'),
+            {'course_id': course.id}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(course.up_votes.count(), 0)
