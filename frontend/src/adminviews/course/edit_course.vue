@@ -42,12 +42,12 @@
               class="button-group">
               <button
                 type="button"
-                class="col-lg-8 btn btn-primary btn-sm"
+                class="col-lg-8 btn btn-sm"
                 @click="edit_course"
               >管理资料</button>
               <button
                 type="button"
-                class="col-lg-8 btn btn-primary btn-sm"
+                class="col-lg-8 btn btn-sm"
                 style="margin-left: 25px; max-width: 10rem;"
                 @click="delete_course"
               >同步音频/图片</button>
@@ -165,7 +165,7 @@
           </div>
           <button
             type="submit"
-            class="btn btn-primary my-btn">保存</button>
+            class="btn my-btn">保存</button>
         </form>
       </div>
     </div>
@@ -257,4 +257,17 @@ export default {
     margin-left: 50px;
   }
 
+  .btn {
+    color: white;
+    background-color: #8d4e91;
+    border-color: #8d6592;
+    border-radius: 10px;
+    outline: none;
+    box-shadow: #8d6592 inset;
+  }
+
+  .btn:hover,
+  .btn:active {
+    background-color: #5e0057;
+  }
 </style>

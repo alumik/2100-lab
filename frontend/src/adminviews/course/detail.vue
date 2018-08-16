@@ -24,67 +24,69 @@
             >删除课程</button>
           </div>
         </div>
-        <table
-          class="table table-striped table-hover"
-          width="100%">
-          <tbody>
-            <tr>
-              <td class="head-td">
-                课程代码
-              </td>
-              <td class="content-td">
-                {{ course.ID }}
-              </td>
-            </tr>
-            <tr>
-              <td class="head-td">
-                课程名
-              </td>
-              <td class="content-td">
-                {{ course.name }}
-              </td>
-            </tr>
-            <tr>
-              <td class="head-td">
-                阅后即焚时间
-              </td>
-              <td class="content-td">
-                {{ course.time }}
-              </td>
-            </tr>
-            <tr>
-              <td class="head-td">
-                价格
-              </td>
-              <td class="content-td">
-                {{ course.price }}
-              </td>
-            </tr>            <tr>
-              <td class="head-td">
-                分销金比例
-              </td>
-              <td class="content-td">
-                {{ course.percent }}
-              </td>
-            </tr>
-            <tr>
-              <td class="head-td">
-                添加时间
-              </td>
-              <td class="content-td">
-                {{ course.add_time }}
-              </td>
-            </tr>
-            <tr>
-              <td class="head-td">
-                修改时间
-              </td>
-              <td class="content-td">
-                {{ course.change_time }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table_div">
+          <table
+            class="table table-striped table-hover"
+            width="100%">
+            <tbody>
+              <tr>
+                <td class="head-td">
+                  课程代码
+                </td>
+                <td class="content-td">
+                  {{ course.ID }}
+                </td>
+              </tr>
+              <tr>
+                <td class="head-td">
+                  课程名
+                </td>
+                <td class="content-td">
+                  {{ course.name }}
+                </td>
+              </tr>
+              <tr>
+                <td class="head-td">
+                  阅后即焚时间
+                </td>
+                <td class="content-td">
+                  {{ course.time }}
+                </td>
+              </tr>
+              <tr>
+                <td class="head-td">
+                  价格
+                </td>
+                <td class="content-td">
+                  {{ course.price }}
+                </td>
+              </tr>            <tr>
+                <td class="head-td">
+                  分销金比例
+                </td>
+                <td class="content-td">
+                  {{ course.percent }}
+                </td>
+              </tr>
+              <tr>
+                <td class="head-td">
+                  添加时间
+                </td>
+                <td class="content-td">
+                  {{ course.add_time }}
+                </td>
+              </tr>
+              <tr>
+                <td class="head-td">
+                  修改时间
+                </td>
+                <td class="content-td">
+                  {{ course.change_time }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <div class="my-intro">
           <h3 class="text-left">课程简介</h3>
           <p class="text-justify">{{ course.introduction }}</p>
@@ -174,5 +176,28 @@ export default {
 
   .my-intro {
     margin-left: 25px;
+  }
+
+  .table {
+    border: 1px solid #d3d9df;
+  }
+
+  .table_div {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+
+  .btn {
+    color: white;
+    background-color: #8d4e91;
+    border-color: #8d6592;
+    border-radius: 10px;
+    outline: none;
+    box-shadow: #8d6592 inset;
+  }
+
+  .btn:hover,
+  .btn:active {
+    background-color: #5e0057;
   }
 </style>
