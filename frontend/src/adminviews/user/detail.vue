@@ -108,7 +108,8 @@
           <button
             type="button"
             class="btn-primary"
-            style="margin-right: 10px;">
+            style="margin-right: 10px;"
+            @click="to_order">
             查看更多
           </button>
         </div>
@@ -237,6 +238,9 @@ export default {
     },
     to_course () {
       this.$router.push('/admin/user/detail/course')
+    },
+    to_order () {
+      this.$router.push('/admin/user/detail/order')
     }
   }
 }
