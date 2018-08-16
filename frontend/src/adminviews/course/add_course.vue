@@ -1,16 +1,16 @@
 <template>
   <div>
-    <div>
-      <AdminNavbar style="min-width: 500px;"/>
+    <div class="my-navbar">
+      <AdminNavbar/>
     </div>
-    <div style="display: flex;">
+    <div class="my-menu">
       <div>
         <Menu/>
       </div>
       <div class="father container-fluid">
         <BreadCrumb :items="items"/>
         <div class="my-row">
-          <h2 class="text-left">修改课程</h2>
+          <h2 class="text-left">新增课程</h2>
         </div>
         <form class="text-left son">
           <div class="form-group form-inline">
@@ -41,13 +41,11 @@
               <button
                 type="button"
                 class="col-lg-8 btn btn-sm"
-                @click="edit_course"
               >管理资料</button>
               <button
+                id="sync-btn"
                 type="button"
                 class="col-lg-8 btn btn-sm"
-                style="margin-left: 25px; max-width: 10rem;"
-                @click="delete_course"
               >同步音频/图片</button>
             </div>
           </div>
@@ -57,16 +55,15 @@
                 class="form-check-label my-label"
                 for="flare_time">阅后即焚时间</label>
             </div>
-            <div style="display: flex;">
+            <div class="group-middle">
               <div>
                 <div
-                  class="input-group"
-                  style="display: flex;">
+                  id="input-group-1"
+                  class="input-group">
                   <input
                     id="flare_time"
                     class="input form-control col-lg-1"
-                    type="text"
-                    style="width: 80px; min-width: 80px; max-width: 80px;">
+                    type="text">
                   <div class="input-group-prepend">
                     <span class="input-group-text">天</span>
                   </div>
@@ -74,13 +71,12 @@
               </div>
               <div>
                 <div
-                  class="input-group"
-                  style="display: flex;">
+                  id="input-group-flare"
+                  class="input-group">
                   <input
                     id="flare_time_1"
                     class="input form-control col-lg-1"
-                    type="text"
-                    style="width: 70px; min-width: 70px; max-width: 70px;">
+                    type="text">
                   <div class="input-group-prepend">
                     <span class="input-group-text">小时</span>
                   </div>
@@ -123,7 +119,7 @@
                 type="radio"
                 name="optn"
                 value="No"
-                style="margin-left: 100px;">否</label>
+              >否</label>
             </div>
           </div>
           <div class="form-inline">
@@ -135,7 +131,6 @@
                 <input
                   id="percent"
                   class="input form-control col-lg-3"
-                  style="width: 210px; min-width: 210px; max-width: 210px;"
                   type="text">
                 <div class="input-group-prepend">
                   <span
@@ -168,7 +163,7 @@ import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
 import BreadCrumb from '../../components/breadCrumb'
 export default {
-  name: 'EditCourse',
+  name: 'AddCourse',
   components: {BreadCrumb, Menu, AdminNavbar},
   data: function () {
     return {
@@ -193,6 +188,14 @@ export default {
     padding: 0;
   }
 
+  .my-menu {
+    display: flex;
+  }
+
+  .my-navbar {
+    min-width: 500px;
+  }
+
   .my-row {
     margin-top: 40px;
     margin-bottom: 40px;
@@ -206,11 +209,30 @@ export default {
     text-align: left;
   }
 
+  #flare_time_1 {
+    width: 70px;
+    min-width: 70px;
+    max-width: 70px;
+  }
+
   .button-group {
     display: flex;
     flex-direction: row;
     justify-content: left;
     max-width: 8rem;
+  }
+
+  #sync-btn {
+    max-width: 10rem;
+    margin-left: 25px;
+  }
+
+  .group-middle {
+    display: flex;
+  }
+
+  #input-group-1 {
+    display: flex;
   }
 
   .input {
@@ -219,10 +241,22 @@ export default {
     max-width: 260px;
   }
 
+  #can_review {
+    display: flex;
+  }
+
+  #input-group-flare {
+    display: flex;
+  }
+
   .my-btn,
   #intro {
     max-width: 405px;
     margin-left: 20px;
+  }
+
+  #No {
+    margin-left: 100px;
   }
 
   #intro-l {
@@ -230,9 +264,28 @@ export default {
     margin-bottom: 20px;
   }
 
+  #percent {
+    width: 210px;
+    min-width: 210px;
+    max-width: 210px;
+  }
+
+  #flare_time {
+    width: 80px;
+    min-width: 80px;
+    max-width: 80px;
+  }
+
+  #price {
+    width: 210px;
+    min-width: 210px;
+    max-width: 210px;
+  }
+
   .son {
     margin-left: 50px;
   }
+
   .btn {
     color: white;
     background-color: #8d4e91;

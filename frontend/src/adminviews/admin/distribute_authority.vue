@@ -1,24 +1,21 @@
 <template>
   <div>
-    <div>
-      <AdminNavbar
-        style="min-width: 500px;"/>
+    <div class="my-nav">
+      <AdminNavbar/>
     </div>
-    <div style="display: flex;">
+    <div class="my-menu">
       <div>
         <Menu/>
       </div>
       <div
-        style="display: block;"
-        class="father container-fluid">
+        class="father container-fluid my-row">
         <BreadCrumb :items="items"/>
         <h1 class="header">分配权限</h1>
         <div class="text-left">
           <h6>管理员账号：{{ admin.ID }}</h6>
         </div>
         <div
-          class="text-left"
-          style="display: flex;">
+          class="text-left my-auth-group">
           <h6>权限组：</h6>
           <div class="button_group">
             <button
@@ -161,15 +158,31 @@ export default {
 </script>
 
 <style scoped>
+  .my-nav {
+    min-width: 500px;
+  }
+
+  .my-menu {
+    display: flex;
+  }
+
   .father {
     min-width: 500px;
     padding: 0;
     text-align: left;
   }
 
+  .my-row {
+    display: block;
+  }
+
   .header {
     margin-top: 60px;
     margin-left: 120px;
+  }
+
+  .my-auth-group {
+    display: flex;
   }
 
   .text-left {

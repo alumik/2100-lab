@@ -1,10 +1,9 @@
 <template>
   <div>
-    <div>
-      <AdminNavbar
-        style="min-width: 500px;"/>
+    <div class="my-nav">
+      <AdminNavbar/>
     </div>
-    <div style="display: flex;">
+    <div class="my-menu">
       <div>
         <Menu/>
       </div>
@@ -127,6 +126,14 @@ export default {
 </script>
 
 <style scoped>
+  .my-nav {
+    min-width: 500px;
+  }
+
+  .my-menu {
+    display: flex;
+  }
+
   .father {
     min-width: 500px;
     padding: 0;

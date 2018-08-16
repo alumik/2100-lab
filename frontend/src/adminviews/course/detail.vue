@@ -3,7 +3,7 @@
     <div>
       <AdminNavbar/>
     </div>
-    <div style="display: flex;">
+    <div class="my-menu">
       <div>
         <Menu/>
       </div>
@@ -20,7 +20,6 @@
             <button
               type="button"
               class="row btn btn-primary btn-sm"
-              @click="delete_course"
             >删除课程</button>
           </div>
         </div>
@@ -129,7 +128,6 @@ export default {
   },
   methods: {
     jump: function (id) {
-      console.log(id)
       if (id === 0) {
         this.$router.push({name: 'EditCourse'})
       } else {
@@ -144,6 +142,10 @@ export default {
   .father {
     min-width: 500px;
     padding: 0;
+  }
+
+  .my-menu {
+    display: flex;
   }
 
   .my-list {
