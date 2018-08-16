@@ -15,16 +15,18 @@ class LearningLog(models.Model):
     class Meta:
         unique_together = ('customer', 'course')
 
-    def as_brief_dict(self):
+    def as_dict(self):
         return {
             'course_codename': self.course.codename,
             'course_title': self.course.title,
+            'customer_username': self.customer.username,
             'created_at': self.created_at,
             'expire_time': self.expire_time
         }
 
 
 class OrderLog(models.Model):
+    order_no = models.CharField(max_length=20, unique=True)
     customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     cash_spent = models.DecimalField(decimal_places=2, max_digits=12, default=0)
@@ -36,11 +38,12 @@ class OrderLog(models.Model):
     class Meta:
         unique_together = ('customer', 'course')
 
-    def as_brief_dict(self):
+    def as_dict(self):
         return {
-            'id': self.id,
+            'order_no': self.order_no,
             'course_codename': self.course.codename,
             'course_title': self.course.title,
+            'customer_username': self.customer.username,
             'created_at': self.created_at,
             'money': self.cash_spent + self.reward_spent,
             'refunded': self.refunded_at is not None

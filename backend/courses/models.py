@@ -21,12 +21,16 @@ class Course(SoftDeletionModel):
     created_at = models.DateTimeField(default=timezone.now)
     modified_at = models.DateTimeField(default=timezone.now)
 
+    TYPE_FREE = 0
+    TYPE_PAID = 1
+    TYPE_ALL = 3
+
     def __str__(self):
         return self.title
 
-    def as_brief_dict(self):
+    def as_dict(self):
         return {
-            'id': self.id,
+            'course_id': self.id,
             'thumbnail': str(self.thumbnail),
             'title': self.title,
             'description': self.description
@@ -54,7 +58,7 @@ class Comment(SoftDeletionModel):
             return self.content[:50] + '...'
 
 
-class Heroes(models.Model):
+class Hero(models.Model):
     image = models.ImageField(upload_to='uploads/common/heroes/')
     caption = models.CharField(max_length=255, blank=True)
 

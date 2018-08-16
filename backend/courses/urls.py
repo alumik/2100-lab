@@ -7,10 +7,29 @@ from . import views
 app_name = 'courses'
 
 urlpatterns = [
-    path('util/get-heroes/', views.get_heroes, name='get-heroes'),
-    path('courses/get-recent-courses/', views.get_recent_courses, name='get-recent-courses'),
-    path('courses/get-free-course-list/', views.get_free_course_list, name='get-free-course-list'),
-    path('courses/get-paid-course-list/', views.get_paid_course_list, name='get-paid-course-list'),
-    path('courses/get-course-detail/', views.get_course_detail, name='get-course-detail'),
-    path('courses/up-vote-course/', views.up_vote_course, name='up-vote-course'),
+    path(
+        'util/get-heroes/',
+        views.get_heroes,
+        name='get-heroes'
+    ),
+    path(
+        'courses/get-recent-courses/',
+        views.get_recent_courses,
+        name='get-recent-courses'
+    ),
+    path(
+        'courses/get-course-list/',
+        views.get_course_list,
+        name='get-course-list'
+    ),
+    path(
+        'courses/get-customer-course-detail/',
+        views.get_customer_course_detail,
+        name='get-customer-course-detail'
+    ),
+    path(
+        'courses/up-vote-course/',
+        views.up_vote_course,
+        name='up-vote-course'
+    ),
 ]

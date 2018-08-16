@@ -1,10 +1,9 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.db import models
 from django.utils import timezone
-from django.db.models.query import QuerySet
 
 
-class SoftDeletionQuerySet(QuerySet):
+class SoftDeletionQuerySet(models.query.QuerySet):
     def delete(self):
         return super(SoftDeletionQuerySet, self).update(deleted_at=timezone.now())
 
@@ -82,8 +81,10 @@ class UserManager(BaseUserManager):
 
 class CustomUser(SoftDeletionModel, AbstractUser):
     phone_number = models.CharField(max_length=150, unique=True)
-    avatar = models.ImageField(upload_to='uploads/customers/avatars/',
-                               default='default/customers/avatars/2100_lab.jpg')
+    avatar = models.ImageField(
+        upload_to='uploads/customers/avatars/',
+        default='default/customers/avatars/2100_lab.jpg'
+    )
     reward_coin = models.DecimalField(decimal_places=2, max_digits=12, default=0)
     is_vip = models.BooleanField(default=False)
     is_banned = models.BooleanField(default=False)
@@ -97,11 +98,15 @@ class CustomUser(SoftDeletionModel, AbstractUser):
     def __str__(self):
         return self.username
 
-    def as_brief_dict(self):
+    def as_dict(self):
         return {
+            'user_id': self.id,
             'username': self.username,
-            'avatar': str(self.avatar),
             'phone_number': self.phone_number,
+            'avatar': str(self.avatar),
             'reward_coin': self.reward_coin,
-            'date_joined': self.date_joined
+            'is_vip': self.is_vip,
+            'is_banned': self.is_banned,
+            'date_joined': self.date_joined,
+            'modified_at': self.modified_at
         }

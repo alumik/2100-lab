@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from .models import Course, Image, Comment
 
 admin.site.register(Course)
