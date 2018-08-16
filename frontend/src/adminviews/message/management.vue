@@ -1,11 +1,9 @@
 <template>
-  <div>
+  <div class="div1">
     <AdminNavbar
       style="min-width: 1300px;"/>
     <div id="body">
-      <div>
-        <Menu/>
-      </div>
+      <Menu/>
       <div id="management">
         <BreadCrumb :items="items"/>
         <h1>留言列表</h1>
@@ -216,6 +214,7 @@ export default {
     display: flex;
     justify-content: space-between;
     min-width: 1300px;
+    height: calc(100% - 70px);
   }
 
   #management {
@@ -244,5 +243,9 @@ export default {
 
   #delete_confirm {
     text-align: left;
+  }
+
+  .div1 {
+    height: 100%;
   }
 </style>

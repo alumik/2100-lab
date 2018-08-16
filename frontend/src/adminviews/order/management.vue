@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="div1">
     <AdminNavbar
       style="min-width: 1300px;"/>
     <div id="body">
@@ -159,6 +159,7 @@ export default {
     display: flex;
     justify-content: space-between;
     min-width: 1300px;
+    height: calc(100% - 70px);
   }
 
   #management {
@@ -180,5 +181,9 @@ export default {
 
   option {
     font-size: 18px;
+  }
+
+  .div1 {
+    height: 100%;
   }
 </style>
