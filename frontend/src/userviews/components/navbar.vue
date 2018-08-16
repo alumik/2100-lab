@@ -3,8 +3,9 @@
     toggleable="md"
     type="dark"
     variant="primary"
-    style="margin: 0"
-    class="navbar navbar-inverse">
+    style="margin: 0">
+    <button
+      @click="$emit('hide')"><span class="navbar-toggler-icon"/></button>
     <b-navbar-brand
       href=""
       disabled>2100实验室
@@ -42,13 +43,19 @@ export default {
   }
   .navbar {
     padding: 15px 10px;
-    /*background-color: #4fc8ff !important;*/
+    background-color: #6f5499 !important;
     min-width: 350px;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
   }
   .nav-link {
     padding: 0;
   }
   #logout {
     padding: 6px;
+  }
+  @media (min-width: 768px) {
+    button {
+      display: none;
+    }
   }
 </style>

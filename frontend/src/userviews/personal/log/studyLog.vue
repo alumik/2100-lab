@@ -3,12 +3,10 @@
     <UserNavbar/>
     <div id="div">
       <UserMenu
-        :list="list"
-        @select="select"/>
+        :list="list"/>
     </div>
   </div>
 </template>
-
 <script>
 import UserNavbar from '../../components/navbar'
 import UserMenu from '../menu'
@@ -21,18 +19,12 @@ export default {
   data: function () {
     return {
       list: [
-        {id: 0, text: '查看学习记录', isActive: false},
+        {id: 0, text: '查看学习记录', isActive: true},
         {id: 1, text: '查看订单记录', isActive: false}
       ]
     }
   },
   methods: {
-    select: function (id) {
-      this.list.forEach((obj) => {
-        obj.isActive = false
-      })
-      this.list[id].isActive = true
-    }
   }
 }
 </script>
