@@ -110,7 +110,8 @@ export default {
         { user_id: '001', user_name: '小红', phone: '13102250001', state: '已禁言' },
         { user_id: '002', user_name: '小明', phone: '13102250002', state: '未禁言' }
       ],
-      rows: 20
+      rows: 20,
+      state: ''
     }
   },
   methods: {
