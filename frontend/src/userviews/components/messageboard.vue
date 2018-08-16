@@ -1,11 +1,9 @@
 <template>
   <div
     id="message-board"
-    style="height: 100%; width: 100%; text-align: center;"
-    class="container">
+    class="container msgboard-style">
     <div
-      class="panel"
-      style="height: 80%; width: 100%;">
+      class="panel panel-style">
       <ul class="form-style">
         <li
           v-for="msg in message_list"
@@ -31,16 +29,15 @@
       <textarea
         v-model="newMsg"
         autofocus
-        style="width: 100%; height:100%;"
+        class="textarea-style"
         placeholder="请输入留言"
         @keyup.enter="addmessage"/>
       <br>
       <div
         id="commit-button"
-        style="width: 100%; text-align: right;">
+        class="commit-button-style">
         <button
-          class="btn btn-primary"
-          style="width: 10%; margin-top: 10px;"
+          class="btn btn-primary btn-style"
           @click="addmessage">提交</button>
       </div>
     </div>
@@ -91,6 +88,27 @@ export default {
 </script>
 
 <style>
+  .msgboard-style {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+  }
+
+  .textarea-style {
+    width: 100%;
+    height: 100%;
+  }
+
+  .commit-button-style {
+    width: 100%;
+    text-align: right;
+  }
+
+  .btn-style {
+    width: 10%;
+    margin-top: 10px;
+  }
+
   .leave-message {
     width: 100%;
     height: 20%;
@@ -107,9 +125,14 @@ export default {
   }
 
   .piece-of-message {
-    text-align: left;
-    height:50%;
     width: 98%;
+    height: 50%;
     margin: 10px;
+    text-align: left;
+  }
+
+  .panel-style {
+    width: 100%;
+    height: 80%;
   }
 </style>
