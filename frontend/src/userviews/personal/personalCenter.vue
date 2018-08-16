@@ -18,7 +18,7 @@
             修改头像</button>
           <b-form-file
             v-model="file2"
-            class="mt-3"
+            :class="{'active': active, 'mt-3': true}"
             plain/>
         </b-row>
         <b-row>
@@ -83,7 +83,15 @@ export default {
     padding: 10px 0;
     border-bottom: 2px solid #dec1e3;
   }
+  .mt-3 {
+    position: relative;
+    left: -114px;
+    max-width: 114px;
+    min-height: 47px;
+    opacity: 0;
+    -ms-filter: 'alpha(opacity=0)';
+  }
   .custom-file-input:lang(en)~.custom-file-label::after {
-    content: "";
+    content: "789";
   }
 </style>
