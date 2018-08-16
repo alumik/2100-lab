@@ -5,17 +5,34 @@
       <UserMenu
         :list="list"
         :hidden="hidden"/>
-      <b-container>
-        <b-img
-          thumbnail
-          fluid
-          src="https://picsum.photos/250/250/?image=54"
-          alt="Thumbnail" />
-        <button
-          type="button"
-          class="btn btn-warning btn-lg imgbtn">
-          修改头像</button>
-      </b-container>
+      <div class="info">
+        <b-row>
+          <b-img
+            thumbnail
+            fluid
+            src="https://picsum.photos/250/250/?image=54"
+            alt="Thumbnail" />
+          <button
+            type="button"
+            class="btn btn-warning btn-lg imgbtn">
+            修改头像</button>
+          <b-form-file
+            v-model="file2"
+            :class="{'active': active, 'mt-3': true}"
+            plain/>
+        </b-row>
+        <b-row>
+          <b-img
+            thumbnail
+            fluid
+            src="https://picsum.photos/250/250/?image=54"
+            alt="Thumbnail" />
+          <button
+            type="button"
+            class="btn btn-warning btn-lg imgbtn">
+            修改头像</button>
+        </b-row>
+      </div>
     </div>
   </div>
 </template>
@@ -57,8 +74,24 @@ export default {
   b-container {
     max-height: 100px;
   }
-  .imgbtn {
+  .info {
+    margin-top: 40px;
+    margin-left: 40px;
+   }
+  .row {
+    align-items: flex-end;
+    padding: 10px 0;
+    border-bottom: 2px solid #dec1e3;
+  }
+  .mt-3 {
     position: relative;
-    bottom: -106px;
+    left: -114px;
+    max-width: 114px;
+    min-height: 47px;
+    opacity: 0;
+    -ms-filter: 'alpha(opacity=0)';
+  }
+  .custom-file-input:lang(en)~.custom-file-label::after {
+    content: "789";
   }
 </style>
