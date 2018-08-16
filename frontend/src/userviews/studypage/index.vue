@@ -1,31 +1,32 @@
 <template>
   <div
     id="studypage"
-    style="width: 100%;">
+    class="width-style">
     <UserNavbar/>
     <div
       id="content"
-      style="width: 100%;">
+      class="width-style">
       <div
         id="media"
         class="media-style">
         <div
-          id="course-name"
-          style="height: 10%; width: 100%; text-align: center;">
-          <h3 style="color: #fff;">{{ course.name }}</h3>
+          id="image"
+          class="image-style">
+          <b-img
+            :src="now_picture"
+            class="course-image"/>
         </div>
         <div
-          id="image"
-          style="height: 70%; width: 100%; text-align: center;">
-          <b-img
-            :src="course.image[0]"
-            style="height: 100%; width: 70%;"/>
-        </div>
-        <div style="height: 20%; width: 100%; text-align: center;">
+          id="audio"
+          class="audio-style">
           <audio
+            ref="player"
             controls
-            style="height: 100%; width: 99%;" >
-            Your browser does not support the audio element.
+            preload
+            class="audio-player">
+            <source
+              src="./media/background.mp3"
+              type="audio/mpeg">
           </audio>
         </div>
       </div>
@@ -50,8 +51,7 @@
             role="tabpanel">
             <b-card-body>
               <p
-                class="card-text"
-                style="text-align: left;">
+                class="card-text text-style">
                 &emsp; &emsp;{{ course.introduction }}
               </p>
             </b-card-body>
@@ -74,11 +74,10 @@
             id="accordion2"
             accordion="my-accordion"
             role="tabpanel"
-            style="width: 100%;">
+            class="width-style">
             <b-card-body>
               <p
-                class="card-text"
-                style="width: 100%;">
+                class="card-text width-style">
                 <MessageBoard/>
               </p>
             </b-card-body>
@@ -101,7 +100,13 @@ export default {
   },
   data () {
     return {
+      now_picture: '',
+      now_index: 0,
+      time_num: 0,
+      ctime: null,
+      dtime: null,
       course: {
+        time_list: [0, 10, 20, 30],
         image: [
           require('../homepage/image/1.jpg'),
           require('../homepage/image/2.jpg'),
@@ -114,23 +119,99 @@ export default {
             '水涨起来了，太阳的脸红起来了。\n' +
             '　　小草偷偷地从土地里钻出来，嫩嫩的，绿绿的。园子里，田野里，' +
             '瞧去，一大片一大片满是的。坐着，躺着，打两个滚，踢几脚球，' +
-            '赛几趟跑，捉几回迷藏。风轻悄悄的，草软绵绵的。\n' +
-            '　　桃树，杏树，梨树，你不让我，我不让你，都开满了花赶趟儿。' +
-            '红的像火，粉的像霞，白的像雪。花里带着甜味；闭了眼，' +
-            '树上仿佛已经满是桃儿，杏儿，梨儿。花下成千成百的蜜蜂嗡嗡的闹着，' +
-            '大小的蝴蝶飞来飞去。野花遍地是：杂样儿，有名字的，没名字的，' +
-            '散在草丛里像眼睛像星星，还眨呀眨的。',
+            '赛几趟跑，捉几回迷藏。风轻悄悄的，草软绵绵的。',
         name: '我们是坠胖的'
       }
     }
+  },
+  watch: {
+    ctime: function () {
+      if (this.ctime === 0) {
+        this.now_index = 0
+        this.change_picture()
+      } else if (this.ctime >= this.course.time_list[this.time_num - 1]) {
+        this.now_index = this.time_num - 1
+        this.change_picture()
+      } else {
+        for (var i = 1; i < this.time_num; i++) {
+          var first = this.course.time_list[i - 1]
+          var second = this.course.time_list[i]
+          if (this.ctime >= first && this.ctime < second) {
+            this.now_index = i - 1
+            this.change_picture()
+          }
+        }
+      }
+    }
+  },
+  mounted () {
+    this.ctime = this.$refs.player.currentTime
+    this.time_num = this.course.time_list.length
+    this.addEventListeners()
+  },
+  methods: {
+    change_picture: function () {
+      this.now_picture = this.course.image[this.now_index]
+    },
+    addEventListeners: function () {
+      const self = this
+      self.$refs.player.addEventListener('timeupdate', self._currentTime)
+    },
+    removeEventListeners: function () {
+      const self = this
+      self.$refs.player.removeEventListener('timeupdate', self._currentTime)
+    },
+    _currentTime: function () {
+      const self = this
+      self.ctime = parseInt(self.$refs.player.currentTime)
+    }
+  },
+  beforeDestroyed () {
+    this.removeEventListeners()
   }
 }
 </script>
 
 <style>
   .media-style {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     width: 100%;
     height: 80%;
+    height: 500px;
     background-image: url('./media/background.jpg');
+  }
+
+  .image-style {
+    width: 100%;
+    height: 90%;
+    padding: 0;
+    text-align: center;
+  }
+
+  .course-image {
+    width: 60%;
+    height: 100%;
+  }
+
+  .audio-style {
+    width: 100%;
+    height: 30px;
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .audio-player {
+    width: 99%;
+    height: 100%;
+  }
+
+  .text-style {
+    text-align: left;
+  }
+
+  .width-style {
+    width: 100%;
   }
 </style>
