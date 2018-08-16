@@ -14,7 +14,7 @@
             <button
               v-b-modal.reply
               type="button"
-              class="btn-primary btn-lg"
+              class="btn btn-lg"
               style="margin-right: 10px;">
               回复留言
             </button>
@@ -40,7 +40,7 @@
             <button
               v-b-modal.delete
               type="button"
-              class="btn-primary btn-lg">
+              class="btn btn-lg">
               删除留言
             </button>
             <b-modal
@@ -54,34 +54,36 @@
             </b-modal>
           </div>
         </div>
-        <table class="table table-bordered table-hover">
-          <tbody class="w-100">
-            <tr class="row mx-0">
-              <td class="col-2">留言日期</td>
-              <td class="col-10">{{ message.data }}</td>
-            </tr>
-            <tr class="row mx-0">
-              <td class="col-2">用户</td>
-              <td class="col-10">{{ message.user }}</td>
-            </tr>
-            <tr class="row mx-0">
-              <td class="col-2">课程代码</td>
-              <td class="col-10">{{ message.course_code }}</td>
-            </tr>
-            <tr class="row mx-0">
-              <td class="col-2">课程名</td>
-              <td class="col-10">{{ message.course_name }}</td>
-            </tr>
-            <tr class="row mx-0">
-              <td class="col-2">状态</td>
-              <td class="col-10">{{ message.state }}</td>
-            </tr>
-            <tr class="row mx-0">
-              <td class="col-2">内容</td>
-              <td class="col-10">{{ message.message }}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table_div">
+          <table class="table table-bordered table-hover">
+            <tbody class="w-100">
+              <tr class="row mx-0">
+                <td class="col-2">留言日期</td>
+                <td class="col-10">{{ message.data }}</td>
+              </tr>
+              <tr class="row mx-0">
+                <td class="col-2">用户</td>
+                <td class="col-10">{{ message.user }}</td>
+              </tr>
+              <tr class="row mx-0">
+                <td class="col-2">课程代码</td>
+                <td class="col-10">{{ message.course_code }}</td>
+              </tr>
+              <tr class="row mx-0">
+                <td class="col-2">课程名</td>
+                <td class="col-10">{{ message.course_name }}</td>
+              </tr>
+              <tr class="row mx-0">
+                <td class="col-2">状态</td>
+                <td class="col-10">{{ message.state }}</td>
+              </tr>
+              <tr class="row mx-0">
+                <td class="col-2">内容</td>
+                <td class="col-10">{{ message.message }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -169,5 +171,24 @@ export default {
 
   td {
     vertical-align: middle;
+  }
+
+  .table_div {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+
+  .btn {
+    color: white;
+    background-color: #8d4e91;
+    border-color: #8d6592;
+    border-radius: 10px;
+    outline: none;
+    box-shadow: #8d6592 inset;
+  }
+
+  .btn:hover,
+  .btn:active {
+    background-color: #5e0057;
   }
 </style>
