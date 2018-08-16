@@ -8,6 +8,11 @@ export default new Router({
   mode: 'history',
   routes: [
     {
+      path: '/burnedcourse',
+      name: 'BurnedCourse',
+      component: () => import('@/userviews/burnedcoursepage/index')
+    },
+    {
       path: '/allfreecourse',
       name: 'AllFreeCourse',
       component: () => import('@/userviews/allcourselistpage/allFreeCoursePage')

@@ -17,7 +17,8 @@
         <b-nav-item
           href="/personal">
           <img
-          src="../../assets/logo.png">用户一
+            id="userimg"
+            src="../../assets/logo.png">用户一
         </b-nav-item>
         <b-nav-item
           id="logout"
@@ -36,22 +37,26 @@ export default {
 </script>
 
 <style>
-  img {
+  #userimg {
     width: 40px;
     height: 40px;
   }
+
   .navbar {
+    min-width: 350px;
     padding: 15px 10px;
     background-color: #6f5499 !important;
-    min-width: 350px;
-    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
   }
+
   .nav-link {
     padding: 0;
   }
+
   #logout {
     padding: 6px;
   }
+
   @media (min-width: 768px) {
     button {
       display: none;
