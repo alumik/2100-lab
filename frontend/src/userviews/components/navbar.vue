@@ -1,9 +1,9 @@
 <template>
   <b-navbar
+    :sticky="true"
     toggleable="md"
     type="dark"
-    variant="primary"
-    sticky="true">
+    variant="primary">
     <button
       class="navbar-toggler"
       @click="$emit('hide')"><span class="navbar-toggler-icon"/></button>
