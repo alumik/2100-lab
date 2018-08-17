@@ -1,25 +1,43 @@
 <template>
-  <div>
+  <div id="page">
     <UserNavbar/>
     <div id="main">
       <UserMenu
         :list="list"/>
-      <b-table
-        :items="items"
-        :fields="fields"
-        striped
-        hover/>
+      <div id="info">
+        <BreadCrumb :items="crumbs"/>
+        <b-table
+          :items="items"
+          :fields="fields"
+          :current-page="currentPage"
+          :per-page="perPage"
+          striped
+          hover/>
+        <b-pagination
+          :total-rows="items.length"
+          :per-page="perPage"
+          v-model="currentPage"
+          class="my-0" />
+      </div>
     </div>
   </div>
 </template>
 <script>
 import UserNavbar from '../../components/navbar'
 import UserMenu from '../menu'
+import BreadCrumb from '../../../components/breadCrumb'
+const Items = [
+  { isActive: true, age: 40, first_name: 'Dickerson', last_name: 'Macdonald', address: { country: 'USA', city: 'New York' } },
+  { isActive: false, age: 21, first_name: 'Larsen', last_name: 'Shaw', address: { country: 'Canada', city: 'Toronto' } },
+  { isActive: false, age: 89, first_name: 'Geneva', last_name: 'Wilson', address: { country: 'Australia', city: 'Sydney' } },
+  { isActive: true, age: 38, first_name: 'Jami', last_name: 'Carney', address: { country: 'England', city: 'London' } }
+]
 export default {
   name: 'StudyLog',
   components: {
     UserNavbar,
-    UserMenu
+    UserMenu,
+    BreadCrumb
   },
   data: function () {
     return {
@@ -33,11 +51,9 @@ export default {
           sortable: true
         },
         first_name: {
-          label: 'Person first name',
-          sortable: false
+          label: 'Person first name'
         },
         foo: {
-          // This key overrides `foo`!
           key: 'age',
           label: 'Person age',
           sortable: true
@@ -49,12 +65,19 @@ export default {
           label: 'Country'
         }
       },
-      items: [
-        { isActive: true, age: 40, first_name: 'Dickerson', last_name: 'Macdonald', address: { country: 'USA', city: 'New York' } },
-        { isActive: false, age: 21, first_name: 'Larsen', last_name: 'Shaw', address: { country: 'Canada', city: 'Toronto' } },
-        { isActive: false, age: 89, first_name: 'Geneva', last_name: 'Wilson', address: { country: 'Australia', city: 'Sydney' } },
-        { isActive: true, age: 38, first_name: 'Jami', last_name: 'Carney', address: { country: 'England', city: 'London' } }
-      ]
+      crumbs: [{
+        text: '个人中心',
+        href: '/personal'
+      },
+      {
+        text: '学习记录',
+        href: '/personal/studylog'
+      }
+      ],
+      items: Items.concat(Items.concat(Items.concat(Items.concat(Items)))),
+      currentPage: 1,
+      perPage: 10
+      // pageOptions: [ 5, 10, 15 ]
     }
   },
   methods: {
@@ -63,15 +86,17 @@ export default {
 </script>
 
 <style scoped>
-  img {
-    width: 40px;
-    height: 40px;
-  }
-  div {
+  #page {
     height: 100%;
   }
   #main {
     display: flex;
     height: 100%;
+  }
+  #info {
+    margin: 40px 40px;
+  }
+  .my-0 {
+    justify-content: center;
   }
 </style>

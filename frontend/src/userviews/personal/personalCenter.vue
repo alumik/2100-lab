@@ -142,10 +142,11 @@ export default {
 }
 .info {
   margin: 40px 40px;
+
 }
 .breadcrumb {
-  margin-top: -20px;
-  margin-left: -15px;
+  /*margin-top: -20px;*/
+  /*margin-left: -15px;*/
 }
 .row {
   align-items: flex-end;
