@@ -37,19 +37,7 @@
             <label
               class="form-check-label my-label"
               for="course_content">课程素材</label>
-            <div
-              id="course_content"
-              class="button-group">
-              <button
-                type="button"
-                class="col-lg-8 btn btn-sm"
-              >管理资料</button>
-              <button
-                id="sync-btn"
-                type="button"
-                class="col-lg-8 btn btn-sm"
-              >同步音频/图片</button>
-            </div>
+            <UploadSource id="course_content"/>
           </div>
           <div class="form-group form-inline">
             <div>
@@ -169,9 +157,10 @@
 import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
 import BreadCrumb from '../../components/breadCrumb'
+import UploadSource from './upload_source'
 export default {
   name: 'EditCourse',
-  components: {BreadCrumb, Menu, AdminNavbar},
+  components: {UploadSource, BreadCrumb, Menu, AdminNavbar},
   data: function () {
     return {
       items: [{
