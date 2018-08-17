@@ -39,8 +39,8 @@
     <input
       ref="input"
       :id="inputId"
-      style="display: none;"
       type="file"
+      class="hidden-input"
       accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
       multiple="multiple"
       @change="handleFileChange">
@@ -169,6 +169,10 @@ export default {
 </script>
 
 <style scoped>
+  .hidden-input {
+    display: none;
+  }
+
   .img-uploader {
     position: relative;
     width: auto;
