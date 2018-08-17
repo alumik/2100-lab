@@ -37,6 +37,38 @@
             </b-input-group-append>
           </b-input-group>
         </b-row>
+        <b-row>
+          <b-input-group
+            size="lg"
+            prepend="手机号">
+            <b-form-input
+              v-model="phone"
+              class="uneditable"
+              disabled/>
+          </b-input-group>
+        </b-row>
+        <b-row>
+          <b-input-group
+            class="money"
+            size="lg"
+            prepend="奖励金余额"
+            append="币">
+            <b-form-input
+              v-model="money"
+              class="uneditable"
+              disabled/>
+          </b-input-group>
+        </b-row>
+        <b-row >
+          <b-input-group
+            size="lg"
+            prepend="注册时间">
+            <b-form-input
+              v-model="time"
+              class="uneditable"
+              disabled/>
+          </b-input-group>
+        </b-row>
       </div>
     </div>
   </div>
@@ -62,7 +94,10 @@ export default {
       file: null,
       value: '我们是坠胖的',
       disabled: true,
-      status: '修改'
+      status: '修改',
+      phone: 18309351612,
+      money: 10,
+      time: Date()
     }
   },
   methods: {
@@ -95,7 +130,7 @@ export default {
 }
 #main {
   display: flex;
-  height: calc(100% - 70px);
+  height: 100%;
 }
 b-container {
   max-height: 100px;
@@ -127,7 +162,13 @@ img {
   opacity: 0;
   -ms-filter: "alpha(opacity=0)";
 }
-.input-group {
-
+.uneditable {
+  text-align: right;
+}
+.input-group-text {
+  background-color: #efe4eb;
+}
+.money .input-group-text {
+  background-color: #efe67f;
 }
 </style>
