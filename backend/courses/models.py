@@ -3,7 +3,6 @@
 import datetime
 
 from django.db import models
-from django.utils import timezone
 from django.conf import settings
 
 from core.models import SoftDeletionModel
@@ -24,12 +23,8 @@ class Course(SoftDeletionModel):
     audio = models.FileField(upload_to='uploads/courses/audios/', blank=True)
     expire_duration = models.DurationField(default=datetime.timedelta())
     can_comment = models.BooleanField(default=True)
-    created_at = models.DateTimeField(default=timezone.now)
-    modified_at = models.DateTimeField(default=timezone.now)
-
-    TYPE_FREE = 0
-    TYPE_PAID = 1
-    TYPE_ALL = 3
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
@@ -41,6 +36,9 @@ class Course(SoftDeletionModel):
             'title': self.title,
             'description': self.description
         }
+
+    def is_free(self):
+        return self.price == 0
 
 
 class Image(models.Model):
@@ -69,7 +67,7 @@ class Comment(SoftDeletionModel):
         blank=True,
         related_name='comment_down_vote_customer'
     )
-    created_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         if len(self.content) < 50:

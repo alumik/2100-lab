@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
 from .models import Hero, Course, Image, Comment
-from .utils import get_courses, can_access
+from .utils import get_courses, can_access, check_learning_log
 from core.utils import get_page
 from customers.models import LearningLog
 
@@ -20,8 +20,8 @@ def get_heroes(request):
 
 
 def get_recent_courses(request):
-    free_courses = get_courses(Course.TYPE_FREE, 10)
-    paid_courses = get_courses(Course.TYPE_PAID, 10)
+    free_courses = get_courses('free', 10)
+    paid_courses = get_courses('paid', 10)
     json_data = {
         'free_courses': [],
         'paid_courses': []
@@ -34,7 +34,7 @@ def get_recent_courses(request):
 
 
 def get_course_list(request):
-    courses = get_courses(int(request.POST.get('course_type')))
+    courses = get_courses(request.GET.get('course_type')).order_by('-updated_at')
     return get_page(request, courses)
 
 
@@ -56,7 +56,7 @@ def get_customer_course_detail(request):
         'up_votes': course.up_votes.count(),
         'expire_duration': course.expire_duration,
         'expire_time': None,
-        'is_paid': False
+        'can_access': False
     }
     if request.user.is_authenticated:
         try:
@@ -66,13 +66,13 @@ def get_customer_course_detail(request):
                 course_detail['expire_time'] = expire_time
         except LearningLog.DoesNotExist:
             pass
-        course_detail['is_paid'] = can_access(course, request.user)
+        course_detail['can_access'] = can_access(course, request.user)
     return JsonResponse(course_detail)
 
 
 @login_required
 def up_vote_course(request):
-    course_id = request.POST.get('course_id')
+    course_id = request.GET.get('course_id')
     try:
         course = Course.objects.get(id=course_id)
     except Course.DoesNotExist:
@@ -95,17 +95,23 @@ def up_vote_course(request):
 
 @login_required
 def get_course_assets(request):
-    course = Course.objects.get(id=request.POST.get('course_id'))
+    try:
+        course = Course.objects.get(id=request.GET.get('course_id'))
+    except Course.DoesNotExist:
+        return JsonResponse({'message': 'Course not found.'}, status=404)
+
     if not can_access(course, request.user):
         return JsonResponse({'message': 'Access denied.'}, status=403)
 
+    progress = check_learning_log(course, request.user)
     images = Image.objects.filter(course=course).all().order_by('load_time')
     json_data = {
         'course_id': course.id,
         'title': course.title,
         'description': course.description,
         'audio': str(course.audio),
-        'images': []
+        'images': [],
+        'progress': progress
     }
     for image in images:
         json_data['images'].append(image.as_dict())
@@ -114,25 +120,53 @@ def get_course_assets(request):
 
 
 @login_required
-def get_course_comments(request):
-    course = Course.objects.get(id=request.POST.get('course_id'))
+def save_learning_log(request):
+    try:
+        course = Course.objects.get(id=request.GET.get('course_id'))
+    except Course.DoesNotExist:
+        return JsonResponse({'message': 'Course not found.'}, status=404)
+
     if not can_access(course, request.user):
         return JsonResponse({'message': 'Access denied.'}, status=403)
 
-    comments = Comment.objects.filter(course=course)
+    try:
+        learning_log = LearningLog.objects.get(course=course, customer=request.user)
+    except LearningLog.DoesNotExist:
+        return JsonResponse({'message': 'Learning log not found.'}, status=404)
+
+    learning_log.progress = request.GET.get('progress')
+    learning_log.save()
+
+    return JsonResponse({'message': 'Success.'})
+
+
+@login_required
+def get_course_comments(request):
+    try:
+        course = Course.objects.get(id=request.GET.get('course_id'))
+    except Course.DoesNotExist:
+        return JsonResponse({'message': 'Course not found.'}, status=404)
+
+    if not can_access(course, request.user):
+        return JsonResponse({'message': 'Access denied.'}, status=403)
+
+    comments = Comment.objects.filter(course=course).order_by('-created_at')
     return get_page(request, comments)
 
 
 @login_required
 def delete_comment(request):
-    comment = Comment.objects.get(id=request.POST.get('comment_id'))
-    user = request.user
+    try:
+        comment = Comment.objects.get(id=request.GET.get('comment_id'))
+    except Comment.DoesNotExist:
+        return JsonResponse({'message': 'Comment not found.'}, status=404)
 
+    user = request.user
     if user.is_staff:
         pass
     else:
-        if not user == comment.customer:
-            return JsonResponse({'message': 'Permission denied.'}, status=403)
+        if not user.id == comment.customer.id:
+            return JsonResponse({'message': 'Access denied.'}, status=403)
 
     comment.delete()
     return JsonResponse({'message': 'Comment deleted.'})
@@ -140,15 +174,15 @@ def delete_comment(request):
 
 @login_required
 def up_vote_comment(request):
-    course = Course.objects.get(id=request.POST.get('course_id'))
     customer = request.user
-    if not can_access(course, customer):
-        return JsonResponse({'message': 'Access denied.'}, status=403)
 
     try:
-        comment = Comment.objects.get(id=request.POST.get('comment_id'))
+        comment = Comment.objects.get(id=request.GET.get('comment_id'))
     except Course.DoesNotExist:
         return JsonResponse({'message': 'Comment not found.'}, status=404)
+
+    if not can_access(comment.course, customer):
+        return JsonResponse({'message': 'Access denied.'}, status=403)
 
     if customer in comment.up_votes.all():
         up_voted = False
@@ -166,15 +200,15 @@ def up_vote_comment(request):
 
 @login_required
 def down_vote_comment(request):
-    course = Course.objects.get(id=request.POST.get('course_id'))
     customer = request.user
-    if not can_access(course, customer):
-        return JsonResponse({'message': 'Access denied.'}, status=403)
 
     try:
-        comment = Comment.objects.get(id=request.POST.get('comment_id'))
+        comment = Comment.objects.get(id=request.GET.get('comment_id'))
     except Course.DoesNotExist:
         return JsonResponse({'message': 'Comment not found.'}, status=404)
+
+    if not can_access(comment.course, customer):
+        return JsonResponse({'message': 'Access denied.'}, status=403)
 
     if customer in comment.down_votes.all():
         down_voted = False
@@ -193,7 +227,14 @@ def down_vote_comment(request):
 @login_required
 def add_comment(request):
     user = request.user
-    course = Course.objects.get(id='course_id')
+
+    try:
+        course = Course.objects.get(id=request.GET.get('course_id'))
+    except Course.DoesNotExist:
+        return JsonResponse({'message': 'Course not found.'}, status=404)
+
+    if not can_access(course, request.user):
+        return JsonResponse({'message': 'Access denied.'}, status=403)
 
     Comment.objects.create(
         user=user,
