@@ -111,3 +111,93 @@ def get_course_assets(request):
         json_data['images'].append(image.as_dict())
 
     return JsonResponse(json_data)
+
+
+@login_required
+def get_course_comments(request):
+    course = Course.objects.get(id=request.POST.get('course_id'))
+    if not can_access(course, request.user):
+        return JsonResponse({'message': 'Access denied.'}, status=403)
+
+    comments = Comment.objects.filter(course=course)
+    return get_page(request, comments)
+
+
+@login_required
+def delete_comment(request):
+    comment = Comment.objects.get(id=request.POST.get('comment_id'))
+    user = request.user
+
+    if user.is_staff:
+        pass
+    else:
+        if not user == comment.customer:
+            return JsonResponse({'message': 'Permission denied.'}, status=403)
+
+    comment.delete()
+    return JsonResponse({'message': 'Comment deleted.'})
+
+
+@login_required
+def up_vote_comment(request):
+    course = Course.objects.get(id=request.POST.get('course_id'))
+    customer = request.user
+    if not can_access(course, customer):
+        return JsonResponse({'message': 'Access denied.'}, status=403)
+
+    try:
+        comment = Comment.objects.get(id=request.POST.get('comment_id'))
+    except Course.DoesNotExist:
+        return JsonResponse({'message': 'Comment not found.'}, status=404)
+
+    if customer in comment.up_votes.all():
+        up_voted = False
+        comment.up_votes.remove(customer)
+    else:
+        up_voted = True
+        comment.up_votes.add(customer)
+    return JsonResponse(
+        {
+            'up_voted': up_voted,
+            'up_votes': comment.up_votes.count()
+        }
+    )
+
+
+@login_required
+def down_vote_comment(request):
+    course = Course.objects.get(id=request.POST.get('course_id'))
+    customer = request.user
+    if not can_access(course, customer):
+        return JsonResponse({'message': 'Access denied.'}, status=403)
+
+    try:
+        comment = Comment.objects.get(id=request.POST.get('comment_id'))
+    except Course.DoesNotExist:
+        return JsonResponse({'message': 'Comment not found.'}, status=404)
+
+    if customer in comment.down_votes.all():
+        down_voted = False
+        comment.down_votes.remove(customer)
+    else:
+        down_voted = True
+        comment.down_votes.add(customer)
+    return JsonResponse(
+        {
+            'down_voted': down_voted,
+            'down_votes': comment.down_votes.count()
+        }
+    )
+
+
+@login_required
+def add_comment(request):
+    user = request.user
+    course = Course.objects.get(id='course_id')
+
+    Comment.objects.create(
+        user=user,
+        course=course,
+        content=request.POST.get('content')
+    )
+    return JsonResponse({'message': 'Success.'})

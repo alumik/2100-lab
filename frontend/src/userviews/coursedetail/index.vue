@@ -3,12 +3,13 @@
     class="width-style">
     <UserNavbar/>
     <div class="content-style">
-      <h3>课程详情</h3>
+      <h3>课程详情id{{ this.$route.params.course_id }}</h3>
     </div>
     <div>
       <!-- 分享按钮的弹窗 -->
       <b-modal
         id="modal1"
+        hide-footer
         title="分享二维码">
         <p
           v-if="course.value!=0"
@@ -21,13 +22,20 @@
           :options="{ size: 200 }"
           value="share_url"
           class="qrcode-style"/>
+        <div class="modal-style">
+          <b-btn @click="hideModal1">取消</b-btn>
+          <b-btn
+            variant="primary"
+            @click="hideModal1">完成分享</b-btn>
+        </div>
       </b-modal>
       <!-- 分享按钮的弹窗 -->
     </div>
     <div>
-      <!-- 分享按钮的弹窗 -->
+      <!-- 支付按钮的弹窗 -->
       <b-modal
         id="modal2"
+        hide-footer
         title="购买课程">
         <h5 class="my-4">请选择支付方式</h5>
         <qrcode
@@ -42,8 +50,33 @@
           <h5 class="alipay-title">支付宝</h5>
           <h5 class="wxpay-title">微信</h5>
         </b-row>
+        <div class="modal-style">
+          <b-btn @click="hideModal2">取消</b-btn>
+          <b-btn
+            variant="primary"
+            @click="finishPay">完成支付</b-btn>
+        </div>
       </b-modal>
-      <!-- 分享按钮的弹窗 -->
+      <!-- 支付按钮的弹窗 -->
+    </div>
+    <div>
+      <!-- 学习按钮的弹窗 -->
+      <b-modal
+        id="modal3"
+        hide-footer
+        title="注意！">
+        <input
+          :value="reminder"
+          readonly
+          style="border:none; width: 100%;">
+        <div class="modal-style">
+          <b-btn @click="hideModal3">取消</b-btn>
+          <b-btn
+            variant="primary"
+            @click="open_study_page(course_id)">我知道了</b-btn>
+        </div>
+      </b-modal>
+      <!-- 学习按钮的弹窗 -->
     </div>
     <div
       id="profile"
@@ -69,14 +102,15 @@
           <div
             id="studybutton"
             class="row-btn">
-            <div v-if="course.value === 0">
+            <div v-show="course.value === 0 || is_paid === true">
               <b-button
+                v-b-modal.modal3
                 size="lg"
                 variant="primary">
                 开始学习
               </b-button>
             </div>
-            <div v-else>
+            <div v-show="course.value !== 0 && is_paid === false">
               <b-button
                 v-b-modal.modal2
                 size="lg"
@@ -121,7 +155,7 @@
         </div>
         <div class="reminder-style">
           <div
-            v-if="course.value!=0"
+            v-if="course.value!=0 && is_paid === false"
             class="row row-style">
             <h5>现价 ￥{{ course.value-user_balance }}  ￥</h5>
             <h5 class="origin-value">{{ course.value }}</h5>
@@ -156,6 +190,8 @@ export default{
   },
   data () {
     return {
+      is_paid: false,
+      course_id: 0,
       share_url: 'http://www.baidu.com',
       alipay_url: 'http://www.jisuanke.com',
       wxpay_url: 'http://se.jisuanke.com',
@@ -166,7 +202,7 @@ export default{
         '其他有趣的实验课程呢，所以赶紧拿起你的手机进行分享吧(*^▽^*)',
       course: {
         name: '小孔成像',
-        value: 0,
+        value: 100,
         num_of_praise: 100,
         introduction: '近几年来，父亲和我都是东奔西走，家中光景是一日不如一日。' +
           '他少年出外谋生，独力支持，做了许多大事。哪知老境却如此颓唐！他触目伤怀' +
@@ -177,15 +213,49 @@ export default{
           '在晶莹的泪光中，又看见那肥胖的、青布棉袍黑布马褂的背影。唉！' +
           '我不知何时再能与他相见！',
         src: require('../components/image/1.jpg'),
-        validate_time: 24,
+        validate_time: 25,
         time_to_end: 24
       }
+    }
+  },
+  computed: {
+    reminder: function () {
+      return '  该课程将于初次点开' + this.course.validate_time + '小时后不可再观看'
+    }
+  },
+  created () {
+    if (typeof (this.$route.params.course_id) === 'undefined') {
+      this.$router.push({name: 'BurnedCourse'})
+    } else {
+      this.course_id = this.$route.params.course_id
+    }
+  },
+  methods: {
+    hideModal1 () {
+      this.$root.$emit('bv::hide::modal', 'modal1')
+    },
+    hideModal2 () {
+      this.$root.$emit('bv::hide::modal', 'modal2')
+    },
+    hideModal3 () {
+      this.$root.$emit('bv::hide::modal', 'modal3')
+    },
+    finishPay () {
+      this.$root.$emit('bv::hide::modal', 'modal2')
+      this.is_paid = true
+    },
+    open_study_page: function (id) {
+      this.$router.push({name: 'StudyPage', params: {course_id: id}})
     }
   }
 }
 </script>
 
 <style>
+  .isactive {
+    display: none;
+  }
+
   .profile-style {
     height: 300px;
     margin: 10px;
@@ -202,6 +272,11 @@ export default{
 
   .row-btn {
     margin-right: 50px;
+  }
+
+  .modal-style {
+    margin-top: 20px;
+    text-align: right;
   }
 
   .width-style {
@@ -257,8 +332,7 @@ export default{
   }
 
   .origin-value {
-    text-decoration:
-      line-through;
+    text-decoration: line-through;
   }
 
   .reminder {

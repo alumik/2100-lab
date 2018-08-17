@@ -19,26 +19,102 @@
         </ul>
       </div>
     </div>
-    <FreeRecommendList/>
-    <PaidRecommendList/>
+    <RecommendList
+      :courselist="freecourselist"
+      list_title="免费课程列表"/>
+    <RecommendList
+      :courselist="paidcourselist"
+      list_title="付费课程列表"/>
   </div>
 
 </template>
 
 <script>
 import UserNavbar from '../components/navbar'
-import FreeRecommendList from '../components/freeRecommendList'
-import PaidRecommendList from '../components/paidRecommendList'
+import RecommendList from '../components/recommendList'
 
 export default {
   name: 'Homepage',
   components: {
     UserNavbar,
-    FreeRecommendList,
-    PaidRecommendList
+    RecommendList
   },
   data () {
     return {
+      freecourselist: [
+        {
+          id: 1,
+          name: '数据库',
+          introduction: '床前明月光',
+          src: require('./image/1.jpg'),
+          value: 0
+        },
+        {
+          id: 2,
+          name: '数据结构',
+          introduction: '疑是地上霜',
+          src: require('./image/2.jpg'),
+          value: 0
+        },
+        {
+          id: 3,
+          name: '线性代数',
+          introduction: '举头望明月',
+          src: require('./image/3.jpg'),
+          value: 0
+        },
+        {
+          id: 4,
+          name: '离散数学',
+          introduction: '低头思故乡',
+          src: require('./image/4.jpg'),
+          value: 0
+        },
+        {
+          id: 5,
+          name: '概率论',
+          introduction: '春眠不觉晓',
+          src: require('./image/1.jpg'),
+          value: 0
+        }
+      ],
+      paidcourselist: [
+        {
+          id: 6,
+          name: '数据库',
+          introduction: '床前明月光',
+          src: require('./image/1.jpg'),
+          value: 100
+        },
+        {
+          id: 7,
+          name: '数据结构',
+          introduction: '疑是地上霜',
+          src: require('./image/2.jpg'),
+          value: 90
+        },
+        {
+          id: 8,
+          name: '线性代数',
+          introduction: '举头望明月',
+          src: require('./image/3.jpg'),
+          value: 80
+        },
+        {
+          id: 9,
+          name: '离散数学',
+          introduction: '低头思故乡',
+          src: require('./image/4.jpg'),
+          value: 70
+        },
+        {
+          id: 10,
+          name: '概率论',
+          introduction: '春眠不觉晓',
+          src: require('./image/1.jpg'),
+          value: 60
+        }
+      ],
       slides: [
         {
           src: require('./image/1.jpg'),

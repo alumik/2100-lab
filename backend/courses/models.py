@@ -1,3 +1,5 @@
+# pylint: disable=E1101
+
 import datetime
 
 from django.db import models
@@ -10,7 +12,11 @@ from core.models import SoftDeletionModel
 class Course(SoftDeletionModel):
     title = models.CharField(max_length=100)
     description = models.TextField()
-    up_votes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='course_up_vote_customer')
+    up_votes = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        related_name='course_up_vote_customer'
+    )
     codename = models.CharField(max_length=10, unique=True)
     price = models.DecimalField(decimal_places=2, max_digits=12, default=0)
     reward_percent = models.DecimalField(decimal_places=2, max_digits=2, default=0)
@@ -50,18 +56,37 @@ class Image(models.Model):
 
 
 class Comment(SoftDeletionModel):
-    customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     content = models.TextField()
-    up_votes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='comment_up_vote_customer')
-    down_votes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='comment_down_vote_customer')
+    up_votes = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        related_name='comment_up_vote_customer'
+    )
+    down_votes = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        related_name='comment_down_vote_customer'
+    )
     created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         if len(self.content) < 50:
             return self.content
-        else:
-            return self.content[:50] + '...'
+        return self.content[:50] + '...'
+
+    def as_dict(self):
+        return {
+            'comment_id': self.id,
+            'username': self.user.username,
+            'avatar': str(self.user.avatar),
+            'course_id': self.course.id,
+            'content': self.content,
+            'up_votes': self.up_votes.count(),
+            'down_votes': self.down_votes.count(),
+            'created_at': self.created_at
+        }
 
 
 class Hero(models.Model):

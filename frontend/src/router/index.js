@@ -29,7 +29,7 @@ export default new Router({
     },
     {
       path: '/studypage',
-      name: 'Studypage',
+      name: 'StudyPage',
       component: () => import('@/userviews/studypage/index')
     },
     {
@@ -86,6 +86,11 @@ export default new Router({
       path: '/admin/course/upload',
       name: 'UploadSource',
       component: () => import('@/adminviews/course/upload_source')
+    },
+    {
+      path: '/admin/course/editpic',
+      name: 'SortPicture',
+      component: () => import('@/adminviews/course/sort_picture')
     },
     {
       path: '/admin/message',
@@ -156,6 +161,11 @@ export default new Router({
       path: '/admin/log',
       name: 'LogManagement',
       component: () => import('@/adminviews/log/management')
+    },
+    {
+      path: '/admin/log/detail',
+      name: 'LogDetail',
+      component: () => import('@/adminviews/log/detail')
     }
   ]
 })
