@@ -61,5 +61,10 @@ urlpatterns = [
         'course/add-comment/',
         views.add_comment,
         name='add-comment'
-    )
+    ),
+    path(
+        'course/save-learning-log',
+        views.save_learning_log,
+        name='save-learning-log'
+    ),
 ]

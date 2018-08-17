@@ -88,7 +88,7 @@ class CustomUser(SoftDeletionModel, AbstractUser):
     reward_coin = models.DecimalField(decimal_places=2, max_digits=12, default=0)
     is_vip = models.BooleanField(default=False)
     is_banned = models.BooleanField(default=False)
-    modified_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
 
     USERNAME_FIELD = 'phone_number'
     REQUIRED_FIELDS = []
@@ -108,5 +108,5 @@ class CustomUser(SoftDeletionModel, AbstractUser):
             'is_vip': self.is_vip,
             'is_banned': self.is_banned,
             'date_joined': self.date_joined,
-            'modified_at': self.modified_at
+            'updated_at': self.updated_at
         }

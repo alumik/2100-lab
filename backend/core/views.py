@@ -6,9 +6,7 @@ from django.http import JsonResponse
 
 
 def is_authenticated(request):
-    if request.user.is_authenticated:
-        return JsonResponse({'is_authenticated': True})
-    return JsonResponse({'is_authenticated': False})
+    return JsonResponse({'is_authenticated': request.user.is_authenticated})
 
 
 @login_required
