@@ -47,22 +47,18 @@ export default {
       ],
       fields: {
         last_name: {
-          label: 'Person last name',
+          label: '课程代号',
           sortable: true
         },
         first_name: {
-          label: 'Person first name'
+          label: '课程名'
         },
-        foo: {
-          key: 'age',
-          label: 'Person age',
-          sortable: true
-        },
-        city: {
-          key: 'address.city'
+        isActive: {
+          label: '学习时间'
         },
         'address.country': {
-          label: 'Country'
+          label: '过期时间',
+          variant: 'danger'
         }
       },
       crumbs: [{
@@ -76,8 +72,8 @@ export default {
       ],
       items: Items.concat(Items.concat(Items.concat(Items.concat(Items)))),
       currentPage: 1,
-      perPage: 10
-      // pageOptions: [ 5, 10, 15 ]
+      perPage: 10,
+      pageOptions: [ 5, 10, 15 ]
     }
   },
   methods: {
