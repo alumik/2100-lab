@@ -42,7 +42,7 @@
               ok-title="确定"
               cancel-title="取消"
               @ok="change_banned">
-              <p id="ban_confirm">您确定要禁言此用户吗？</p>
+              <p id="ban-confirm">您确定要禁言此用户吗？</p>
             </b-modal>
             <button
               v-b-modal.delete
@@ -56,7 +56,7 @@
               text="您确定要删除此用户吗？"/>
           </div>
         </div>
-        <div class="table_div">
+        <div class="table-div">
           <table class="table table-bordered">
             <tbody class="w-100">
               <tr class="row mx-0">
@@ -97,9 +97,9 @@
             查看更多
           </button>
         </div>
-        <div class="table_div">
+        <div class="table-div">
           <table
-            id="order_table"
+            id="order-table"
             class="table table-striped table">
             <thead>
               <tr>
@@ -134,9 +134,9 @@
             </button>
           </div>
         </div>
-        <div class="table_div">
+        <div class="table-div">
           <table
-            id="study_table"
+            id="study-table"
             class="table table-striped">
             <thead>
               <tr>
@@ -267,12 +267,12 @@ export default {
     width: 40px;
   }
 
-  #ban_confirm {
+  #ban-confirm {
     text-align: left;
   }
 
-  #order_table,
-  #study_table {
+  #order-table,
+  #study-table {
     border: 1px solid #d3d9df;
   }
 
@@ -300,7 +300,7 @@ export default {
     margin-bottom: 25px;
   }
 
-  .table_div {
+  .table-div {
     padding-right: 15px;
     padding-left: 15px;
   }

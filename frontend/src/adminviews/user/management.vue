@@ -6,7 +6,7 @@
       <div id="management">
         <BreadCrumb :items="items"/>
         <h1>用户列表</h1>
-        <div class="table_div">
+        <div class="table-div">
           <table class="table table-striped">
             <thead>
               <tr>
@@ -19,7 +19,7 @@
             </thead>
             <tbody>
               <tr align="center">
-                <td id="id_td">
+                <td id="id-td">
                   <div class="input-group-sm">
                     <input
                       type="text"
@@ -27,7 +27,7 @@
                       placeholder="">
                   </div>
                 </td>
-                <td id="name_td">
+                <td id="name-td">
                   <div class="input-group-sm">
                     <input
                       type="text"
@@ -35,7 +35,7 @@
                       placeholder="">
                   </div>
                 </td>
-                <td id="phone_td">
+                <td id="phone-td">
                   <div class="input-group-sm">
                     <input
                       type="text"
@@ -43,7 +43,7 @@
                       placeholder="">
                   </div>
                 </td>
-                <td id="state_td">
+                <td id="state-td">
                   <div>
                     <select
                       v-model="state"
@@ -54,7 +54,7 @@
                     </select>
                   </div>
                 </td>
-                <td id="operation_td"/>
+                <td id="operation-td"/>
               </tr>
               <tr
                 v-for="user in users"
@@ -133,7 +133,7 @@ export default {
     text-align: left;
   }
 
-  .table_div {
+  .table-div {
     padding-right: 15px;
     padding-left: 15px;
   }
@@ -191,17 +191,17 @@ export default {
     background-color: #6c757d;
   }
 
-  #id_td,
-  #name_td {
+  #id-td,
+  #name-td {
     width: 140px;
   }
 
-  #phone_td {
+  #phone-td {
     width: 180px;
   }
 
-  #state_td,
-  #operation_td {
+  #state-td,
+  #operation-td {
     width: 200px;
   }
 </style>

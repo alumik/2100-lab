@@ -6,7 +6,7 @@
       <div id="management">
         <BreadCrumb :items="items"/>
         <h1>订单列表</h1>
-        <div class="table_div">
+        <div class="table-div">
           <table class="table table-striped">
             <thead>
               <tr>
@@ -19,7 +19,7 @@
             </thead>
             <tbody>
               <tr align="center">
-                <td class="small_td">
+                <td class="small-td">
                   <div class="input-group-sm">
                     <input
                       type="text"
@@ -27,7 +27,7 @@
                       placeholder="">
                   </div>
                 </td>
-                <td class="small_td">
+                <td class="small-td">
                   <div class="input-group-sm">
                     <input
                       type="text"
@@ -35,7 +35,7 @@
                       placeholder="">
                   </div>
                 </td>
-                <td class="small_td">
+                <td class="small-td">
                   <div class="input-group-sm">
                     <input
                       type="text"
@@ -43,7 +43,7 @@
                       placeholder="">
                   </div>
                 </td>
-                <td class="small_td">
+                <td class="small-td">
                   <div class="input-group-sm">
                     <input
                       type="text"
@@ -52,7 +52,7 @@
                   </div>
                 </td>
                 <td/>
-                <td class="big_td">
+                <td class="big-td">
                   <div>
                     <select
                       v-model="state"
@@ -202,7 +202,7 @@ export default {
     height: 100%;
   }
 
-  .table_div {
+  .table-div {
     padding-right: 15px;
     padding-left: 15px;
   }
@@ -213,11 +213,11 @@ export default {
     background-color: #6c757d;
   }
 
-  .small_td {
+  .small-td {
     width: 180px;
   }
 
-  .big_td {
+  .big-td {
     width: 200px;
   }
 </style>

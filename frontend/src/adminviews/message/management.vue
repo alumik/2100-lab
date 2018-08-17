@@ -6,7 +6,7 @@
       <div id="management">
         <BreadCrumb :items="items"/>
         <h1>留言列表</h1>
-        <div class="table_div">
+        <div class="table-div">
           <table class="table table-striped">
             <thead>
               <tr>
@@ -19,7 +19,7 @@
             </thead>
             <tbody>
               <tr align="center">
-                <td class="xs_td">
+                <td class="xs-td">
                   <div class="input-group-sm">
                     <input
                       type="text"
@@ -27,7 +27,7 @@
                       placeholder="">
                   </div>
                 </td>
-                <td class="xs_td">
+                <td class="xs-td">
                   <div class="input-group-sm">
                     <input
                       type="text"
@@ -35,7 +35,7 @@
                       placeholder="">
                   </div>
                 </td>
-                <td class="xs_td">
+                <td class="xs-td">
                   <div class="input-group-sm">
                     <input
                       type="text"
@@ -43,7 +43,7 @@
                       placeholder="">
                   </div>
                 </td>
-                <td class="xs_td">
+                <td class="xs-td">
                   <div class="input-group-sm">
                     <input
                       type="text"
@@ -51,8 +51,8 @@
                       placeholder="">
                   </div>
                 </td>
-                <td class="lg_td"/>
-                <td class="s_td">
+                <td class="lg-td"/>
+                <td class="s-td">
                   <div>
                     <select
                       v-model="state"
@@ -63,7 +63,7 @@
                     </select>
                   </div>
                 </td>
-                <td class="md_td"/>
+                <td class="md-td"/>
               </tr>
               <tr
                 v-for="message in messages"
@@ -245,19 +245,19 @@ export default {
     background-color: #6c757d;
   }
 
-  .xs_td {
+  .xs-td {
     width: 160px;
   }
 
-  .s_td {
+  .s-td {
     width: 200px;
   }
 
-  .md_td {
+  .md-td {
     width: 270px;
   }
 
-  .lg_td {
+  .lg-td {
     width: 350px;
   }
 </style>

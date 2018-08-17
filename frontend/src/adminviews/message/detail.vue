@@ -34,7 +34,7 @@
               text="您确定要删除此条留言吗？"/>
           </div>
         </div>
-        <div class="table_div">
+        <div class="table-div">
           <table class="table table-bordered table-hover">
             <tbody class="w-100">
               <tr class="row mx-0">
@@ -137,7 +137,7 @@ export default {
     vertical-align: middle;
   }
 
-  .table_div {
+  .table-div {
     padding-right: 15px;
     padding-left: 15px;
   }
