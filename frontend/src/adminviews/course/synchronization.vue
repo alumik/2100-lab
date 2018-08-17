@@ -72,17 +72,19 @@
               <tbody>
                 <tr
                   v-for="data in choose_data"
-                  :key="data.id">
+                  :key="data.id"
+                  align="center">
                   <td>{{ data.index }}</td>
                   <td>{{ data.time }}</td>
                   <td>{{ data.name }}</td>
-                  <button
-                    type="button"
-                    class="row inner-btn btn-sm"
-                    @click="jump(admin.id)"
-                  >详情</button>
-                </tr>
-              </tbody>
+                  <td>
+                    <button
+                      type="button"
+                      class="row inner-btn btn-sm"
+                      @click="jump(admin.id)"
+                    >详情</button>
+                  </td>
+              </tr></tbody>
             </table>
           </div>
         </div>
