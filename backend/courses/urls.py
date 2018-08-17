@@ -32,4 +32,9 @@ urlpatterns = [
         views.up_vote_course,
         name='up-vote-course'
     ),
+    path(
+        'course/get-course-assets/',
+        views.get_course_assets,
+        name='get-course-assets'
+    ),
 ]

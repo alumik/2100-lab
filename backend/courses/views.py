@@ -1,8 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
-from .models import Hero, Course
-from .utils import get_courses
+from .models import Hero, Course, Image, Comment
+from .utils import get_courses, can_access
 from core.utils import get_page
 from customers.models import LearningLog
 
@@ -55,7 +55,8 @@ def get_customer_course_detail(request):
         'price': course.price,
         'up_votes': course.up_votes.count(),
         'expire_duration': course.expire_duration,
-        'expire_time': None
+        'expire_time': None,
+        'is_paid': False
     }
     if request.user.is_authenticated:
         try:
@@ -65,6 +66,7 @@ def get_customer_course_detail(request):
                 course_detail['expire_time'] = expire_time
         except LearningLog.DoesNotExist:
             pass
+        course_detail['is_paid'] = can_access(course, request.user)
     return JsonResponse(course_detail)
 
 
@@ -89,3 +91,23 @@ def up_vote_course(request):
             'up_votes': course.up_votes.count()
         }
     )
+
+
+@login_required
+def get_course_assets(request):
+    course = Course.objects.get(id=request.POST.get('course_id'))
+    if not can_access(course, request.user):
+        return JsonResponse({'message': 'Access denied.'}, status=403)
+
+    images = Image.objects.filter(course=course).all().order_by('load_time')
+    json_data = {
+        'course_id': course.id,
+        'title': course.title,
+        'description': course.description,
+        'audio': str(course.audio),
+        'images': []
+    }
+    for image in images:
+        json_data['images'].append(image.as_dict())
+
+    return JsonResponse(json_data)
