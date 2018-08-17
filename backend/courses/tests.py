@@ -6,8 +6,8 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from .models import Course
-from customers.models import LearningLog
+from .models import Course, Image
+from customers.models import LearningLog, OrderLog
 from core.utils import create_test_customers, create_test_heroes, create_test_courses
 
 
@@ -268,3 +268,98 @@ class CourseDetailTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(course.up_votes.count(), 0)
+
+
+class PlayPageTests(TestCase):
+    def setUp(self):
+        create_test_customers(1)
+        create_test_courses(4)
+        _course = Course.objects.get(codename='c2')
+        _course.price = '100.00'
+        _course.save()
+        _course = Course.objects.get(codename='c3')
+        _course.price = '100.00'
+        _course.save()
+        _course = Course.objects.get(codename='c4')
+        _course.price = '100.00'
+        _course.save()
+        OrderLog.objects.create(
+            order_no='AA01',
+            customer=get_user_model().objects.get(phone_number='00000000001'),
+            course=Course.objects.get(codename='c3'),
+            cash_spent=70,
+            payment_method=1
+        )
+        OrderLog.objects.create(
+            order_no='AA02',
+            customer=get_user_model().objects.get(phone_number='00000000001'),
+            course=Course.objects.get(codename='c4'),
+            cash_spent=50,
+            reward_spent=50,
+            payment_method=2,
+            refunded_at=timezone.now()
+        )
+        Image.objects.create(
+            course=Course.objects.get(codename='c3'),
+            image_path='fake/path/to/img1.png',
+            load_time=200,
+        )
+        Image.objects.create(
+            course=Course.objects.get(codename='c3'),
+            image_path='fake/path/to/img2.png',
+            load_time=100,
+        )
+
+    def test_play_module_access_denied(self):
+        self.client.force_login(get_user_model().objects.get(phone_number='00000000001'))
+
+        response = self.client.post(
+            reverse('api:courses:get-course-assets'),
+            {'course_id': Course.objects.get(codename='c2').id}
+        )
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(json.loads(response.content)['message'], 'Access denied.')
+
+        response = self.client.post(
+            reverse('api:courses:get-course-assets'),
+            {'course_id': Course.objects.get(codename='c4').id}
+        )
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(json.loads(response.content)['message'], 'Access denied.')
+
+        self.client.logout()
+
+    def test_play_module_access_granted(self):
+        self.client.force_login(get_user_model().objects.get(phone_number='00000000001'))
+
+        response = self.client.post(
+            reverse('api:courses:get-course-assets'),
+            {'course_id': Course.objects.get(codename='c1').id}
+        )
+        self.assertEqual(response.status_code, 200)
+
+        course = Course.objects.get(codename='c3')
+        response = self.client.post(
+            reverse('api:courses:get-course-assets'),
+            {'course_id': course.id}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(
+            str(response.content, encoding='utf8'),
+            {
+                'course_id': course.id,
+                'title': course.title,
+                'description': course.description,
+                'audio': '',
+                'images': [
+                    {
+                        'image_path': 'fake/path/to/img2.png',
+                        'load_time': 100
+                    },
+                    {
+                        'image_path': 'fake/path/to/img1.png',
+                        'load_time': 200
+                    },
+                ]
+            }
+        )

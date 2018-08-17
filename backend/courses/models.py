@@ -42,6 +42,12 @@ class Image(models.Model):
     image_path = models.ImageField(upload_to='uploads/courses/images/')
     load_time = models.IntegerField(default=0)
 
+    def as_dict(self):
+        return {
+            'image_path': str(self.image_path),
+            'load_time': self.load_time
+        }
+
 
 class Comment(SoftDeletionModel):
     customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
