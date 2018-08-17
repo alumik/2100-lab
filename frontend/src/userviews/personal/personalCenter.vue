@@ -132,9 +132,6 @@ export default {
   display: flex;
   height: 100%;
 }
-b-container {
-  max-height: 100px;
-}
 .info {
   margin: 40px 40px;
 }
@@ -144,7 +141,8 @@ b-container {
   border-bottom: 2px solid #dec1e3;
 }
 img {
-  width: 500px;
+  /*max-width: 500px;*/
+  max-height: 300px;
   flex-grow: 0;
 }
 .btn-warning {
