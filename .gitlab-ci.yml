@@ -1,0 +1,28 @@
+stages:
+  - backendtest
+  - backendlint
+  - frontendlint
+
+test:
+  stage: backendtest
+  script:
+    - cd backend
+    - pip3 install -r requirements.txt
+    - python3 -m coverage run --source="." manage.py test --noinput
+    - python3 -m coverage report
+
+lint:
+  stage: backendlint
+  script:
+    - cd backend
+    - pylint --rcfile=.pylintrc ./**/*.py || exit $((35 & $?))
+  allow_failure: false
+
+frontendlint:
+  stage: frontendlint
+  script:
+    - cd frontend
+    - npm install
+    - npm run eslint
+    - npm run stylelint
+  allow_failure: false

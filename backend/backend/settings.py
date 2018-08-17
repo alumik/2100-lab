@@ -89,7 +89,7 @@ if 'test' in sys.argv:
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'USER': 'root',
-            'PASSWORD': 'vagrant',
+            'PASSWORD': 'nkcs1612',
             'NAME': 'tech_lab',
         }
     }

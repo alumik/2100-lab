@@ -6,8 +6,8 @@ from django.contrib.auth import get_user_model, login
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
-from .models import LearningLog, OrderLog
 from core.utils import get_page
+from .models import LearningLog, OrderLog
 
 
 def get_verification_code(request):
@@ -18,8 +18,7 @@ def get_verification_code(request):
         request.session['prev_phone_number'] = phone_number
         request.session['verification_code'] = verification_code
         return JsonResponse({'verification_code': verification_code})
-    else:
-        return JsonResponse({'message': 'Not a valid phone number.'}, status=400)
+    return JsonResponse({'message': 'Not a valid phone number.'}, status=400)
 
 
 def authenticate_customer(request):

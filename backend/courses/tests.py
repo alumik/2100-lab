@@ -6,8 +6,8 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from .models import Course, Image, Comment, Hero
 from customers.models import LearningLog, OrderLog
+from .models import Course, Image, Comment, Hero
 
 
 class MainPageTests(TestCase):
@@ -214,7 +214,7 @@ class CourseDetailTests(TestCase):
         self.assertEqual(response_json_data['price'], '0.00')
         self.assertEqual(response_json_data['up_votes'], 0)
         self.assertEqual(response_json_data['expire_duration'], 'P3DT07H00M00S')
-        self.assertIsNone(response_json_data['expire_time']),
+        self.assertIsNone(response_json_data['expire_time'])
         self.assertTrue(response_json_data['can_access'])
 
         self.client.logout()
