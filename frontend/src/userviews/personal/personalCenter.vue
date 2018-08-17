@@ -6,6 +6,7 @@
         :list="list"
         :hidden="hidden"/>
       <div class="info">
+        <BreadCrumb :items="items"/>
         <b-row>
           <b-img
             :src="thumbnail"
@@ -77,11 +78,13 @@
 <script>
 import UserNavbar from '../components/navbar'
 import UserMenu from './menu'
+import BreadCrumb from '../../components/breadCrumb'
 export default {
   name: 'PersonalCenter',
   components: {
     UserNavbar,
-    UserMenu
+    UserMenu,
+    BreadCrumb
   },
   data: function () {
     return {
@@ -89,6 +92,11 @@ export default {
       list: [
         { id: 0, text: '查看学习记录', isActive: false },
         { id: 1, text: '查看订单记录', isActive: false }
+      ],
+      items: [{
+        text: '个人中心',
+        href: '/personal'
+      }
       ],
       thumbnail: require('../../assets/404.gif'),
       file: null,
@@ -134,6 +142,11 @@ export default {
 }
 .info {
   margin: 40px 40px;
+
+}
+.breadcrumb {
+  /*margin-top: -20px;*/
+  /*margin-left: -15px;*/
 }
 .row {
   align-items: flex-end;
