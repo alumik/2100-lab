@@ -121,8 +121,8 @@ export default {
   .choose-list {
     display: flex;
     flex-direction: row;
-    min-height: 300px;
-    max-height: 300px;
+    min-height: 200px;
+    max-height: 200px;
   }
 
   .choose-row {
