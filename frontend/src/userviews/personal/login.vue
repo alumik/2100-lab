@@ -37,18 +37,20 @@ export default {
 
 <style scoped>
   .container {
-    border: 1px solid #ccc;
-    box-shadow: 5px 6px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
     display: block;
     width: 350px;
     margin: 100px auto;
     text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 5px 6px 5px rgba(0, 0, 0, 0.1);
   }
+
   img {
     width: 80%;
     height: 80%;
   }
+
   #btn {
     margin-bottom: 10px;
   }

@@ -39,7 +39,7 @@
     <input
       ref="input"
       :id="inputId"
-      style="display: none"
+      style="display: none;"
       type="file"
       accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
       multiple="multiple"
@@ -169,53 +169,72 @@ export default {
 </script>
 
 <style scoped>
-
   .img-uploader {
     position: relative;
+    width: auto;
     min-width: 260px;
     max-width: 800px;
     height: calc(150px + 25px * 2);
-    width: auto;
-    border-radius: 5px;
     background: #ebebeb;
+    border-radius: 5px;
   }
 
   .img-uploader-placeholder {
-    margin: 0;
     position: absolute;
-    font-size: 15px;
+    top: 50%;
     width: 100%;
+    margin: 0;
+    font-size: 15px;
     color: #aaa;
     text-align: center;
-    top: 50%;
     transform: translate(0%, -50%);
   }
 
   .img-uploader-preview-list {
-    margin: 5px 10px;
-    height: calc(150px + 18px * 2);
     width: 100%;
-    white-space: nowrap;
+    height: calc(150px + 18px * 2);
+    margin: 5px 10px;
     overflow: hidden;
     overflow-x: auto;
+    text-align: center;
+    white-space: nowrap;
     -webkit-backface-visibility: hidden;
     -webkit-perspective: 1000;
     -webkit-overflow-scrolling: touch;
-    text-align: center;
   }
 
   .img-uploader-preview {
-    display: inline-block;
     z-index: 2;
+    display: inline-block;
     min-height: 150px;
     margin: 10px;
-    border-radius: 10px;
     background: #333;
+    border-radius: 10px;
     transition: 0.3s cubic-bezier(0.3, 0, 0.2, 1);
   }
 
   .img-uploader-preview:hover {
     transform: scale(1.02);
+  }
+
+  .img-uploader-mask {
+    position: absolute;
+    bottom: 0;
+    display: none;
+    width: 150px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 1px;
+  }
+
+  .img-uploader-delete-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: none;
+    width: 25px;
+    height: 25px;
+    margin: 5px;
   }
 
   .img-uploader-preview:hover .img-uploader-mask {
@@ -235,60 +254,39 @@ export default {
   .img-uploader-label {
     position: absolute;
     top: 0;
+    right: 0;
+    bottom: 0;
     left: 0;
-    bottom: 0;
-    right: 0;
-    cursor: pointer;
     margin-bottom: 0;
-  }
-
-  .img-uploader-mask {
-    display: none;
-    position: absolute;
-    bottom: 0;
-    width: 150px;
-    border-radius: 1px;
-    text-align: center;
-    background: rgba(0, 0, 0, 0.6);
-  }
-
-  .img-uploader-delete-btn {
-    display: none;
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 5px;
-    width: 25px;
-    height: 25px;
+    cursor: pointer;
   }
 
   .img-uploader-file-name {
-    color: white;
-    font-size: 5px;
-    padding-top: 10px;
-    margin: 0;
     display: inline-block;
     max-width: 90%;
+    padding-top: 10px;
+    margin: 0;
+    overflow: hidden;
+    font-size: 5px;
+    color: white;
     text-overflow: ellipsis;
     white-space: nowrap;
-    overflow: hidden;
     cursor: pointer;
   }
 
   .img-uploader-error {
-    color: #e55;
-    font-size: 12px;
     position: absolute;
     bottom: -28px;
     width: 100%;
+    font-size: 12px;
+    color: #e55;
   }
 
   .img-uploader-count {
-    color: #573e51;
-    font-size: 12px;
     position: absolute;
     bottom: -28px;
     width: 100%;
+    font-size: 12px;
+    color: #573e51;
   }
-
 </style>

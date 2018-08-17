@@ -87,13 +87,16 @@ export default {
   #page {
     height: 100%;
   }
+
   #main {
     display: flex;
     height: 100%;
   }
+
   #info {
     margin: 40px 40px;
   }
+
   .my-0 {
     justify-content: center;
   }
