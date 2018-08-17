@@ -6,6 +6,7 @@
         :list="list"
         :hidden="hidden"/>
       <div class="info">
+        <BreadCrumb :items="items"/>
         <b-row>
           <b-img
             thumbnail
@@ -40,19 +41,34 @@
 <script>
 import UserNavbar from '../components/navbar'
 import UserMenu from './menu'
+import BreadCrumb from '../../components/breadCrumb'
 export default {
   name: 'PersonalCenter',
   components: {
     UserNavbar,
-    UserMenu
+    UserMenu,
+    BreadCrumb
   },
   data: function () {
     return {
       hidden: false,
       list: [
-        {id: 0, text: '查看学习记录', isActive: false},
-        {id: 1, text: '查看订单记录', isActive: false}
-      ]
+        { id: 0, text: '查看学习记录', isActive: false },
+        { id: 1, text: '查看订单记录', isActive: false }
+      ],
+      items: [{
+        text: '个人中心',
+        href: '/personal'
+      }
+      ],
+      thumbnail: require('../../assets/404.gif'),
+      file: null,
+      value: '我们是坠胖的',
+      disabled: true,
+      status: '修改',
+      phone: 18309351612,
+      money: 10,
+      time: Date()
     }
   },
   methods: {
@@ -64,34 +80,52 @@ export default {
 </script>
 
 <style scoped>
-  #page {
-    height: 100%;
-  }
-  #main {
-    display: flex;
-    height: calc(100% - 70px);
-  }
-  b-container {
-    max-height: 100px;
-  }
-  .info {
-    margin-top: 40px;
-    margin-left: 40px;
-   }
-  .row {
-    align-items: flex-end;
-    padding: 10px 0;
-    border-bottom: 2px solid #dec1e3;
-  }
-  .mt-3 {
-    position: relative;
-    left: -114px;
-    max-width: 114px;
-    min-height: 47px;
-    opacity: 0;
-    -ms-filter: 'alpha(opacity=0)';
-  }
-  .custom-file-input:lang(en)~.custom-file-label::after {
-    content: "789";
-  }
+#page {
+  height: 100%;
+}
+#main {
+  display: flex;
+  height: 100%;
+}
+.info {
+  margin: 40px 40px;
+}
+.breadcrumb {
+  margin-top: -20px;
+  margin-left: -15px;
+}
+.row {
+  align-items: flex-end;
+  padding: 10px 0;
+  border-bottom: 2px solid #dec1e3;
+}
+img {
+  /*max-width: 500px;*/
+  max-height: 300px;
+  flex-grow: 0;
+}
+.btn-warning {
+  height: 50px;
+  width: 120px;
+}
+.upload {
+  position: relative;
+  right: 17px;
+  bottom: 39px;
+  margin: 0;
+  padding: 0;
+  width: 120px;
+  height: 50px;
+  opacity: 0;
+  -ms-filter: "alpha(opacity=0)";
+}
+.uneditable {
+  text-align: right;
+}
+.input-group-text {
+  background-color: #efe4eb;
+}
+.money .input-group-text {
+  background-color: #efe67f;
+}
 </style>
