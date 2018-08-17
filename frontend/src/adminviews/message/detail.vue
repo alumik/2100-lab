@@ -1,7 +1,6 @@
 <template>
   <div>
-    <AdminNavbar
-      style="min-width: 1000px;"/>
+    <AdminNavbar id="navbar"/>
     <div id="body">
       <div>
         <Menu/>
@@ -14,8 +13,7 @@
             <button
               v-b-modal.reply
               type="button"
-              class="btn btn-lg"
-              style="margin-right: 10px;">
+              class="btn btn-lg">
               回复留言
             </button>
             <InputModal
@@ -101,6 +99,10 @@ export default {
 </script>
 
 <style scoped>
+  #navbar {
+    min-width: 1000px;
+  }
+
   h1 {
     padding-left: 15px;
     margin-top: 25px;
@@ -141,6 +143,7 @@ export default {
   }
 
   .btn {
+    margin-right: 10px;
     color: white;
     background-color: #8d4e91;
     border-color: #8d6592;
