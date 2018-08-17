@@ -149,7 +149,7 @@ import Menu from '../components/menu'
 import BreadCrumb from '../../components/breadCrumb'
 import UploadSource from './upload_source'
 export default {
-  name: 'EditCourse',
+  name: 'AddCourse',
   components: {UploadSource, BreadCrumb, Menu, AdminNavbar},
   data: function () {
     return {

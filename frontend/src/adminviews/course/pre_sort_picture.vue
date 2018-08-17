@@ -6,6 +6,8 @@
     <b-modal
       ref="edit_picture"
       size="lg"
+      ok-title="确认"
+      cancel-title="取消"
       centered
       no-close-on-esc>
       <div

@@ -23,7 +23,7 @@
         <a href="">数据分析</a>
       </li>
       <li>
-        <a href="">日志查询</a>
+        <a @click="jump('/admin/log')">日志查询</a>
       </li>
     </ul>
   </nav>

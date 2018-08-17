@@ -14,13 +14,13 @@
           <div class="button_group">
             <button
               type="button"
-              class="row btn btn-primary btn-sm"
+              class="row btn btn-sm"
               @click="jump(0)"
             >修改课程</button>
             <button
               v-b-modal.delete
               type="button"
-              class="row btn btn-primary btn-sm"
+              class="row btn btn-sm"
             >删除课程</button>
             <ConfirmModal
               id="delete"
