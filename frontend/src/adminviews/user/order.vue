@@ -8,10 +8,8 @@
       <div id="study">
         <BreadCrumb :items="items"/>
         <h1>相关订单</h1>
-        <div class="table_div">
-          <table
-            id="study_table"
-            class="table table-striped">
+        <div class="table-div">
+          <table class="table table-striped">
             <thead>
               <tr>
                 <td
@@ -109,7 +107,7 @@ export default {
     text-align: center;
   }
 
-  .table_div {
+  .table-div {
     padding-right: 15px;
     padding-left: 15px;
   }

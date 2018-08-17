@@ -6,7 +6,7 @@
       <div id="detail">
         <BreadCrumb :items="items"/>
         <h1>日志列表</h1>
-        <div class="table_div">
+        <div class="table-div">
           <table class="table table-striped">
             <thead>
               <tr>
@@ -21,9 +21,9 @@
               <tr
                 v-for="log in logs"
                 :key="log.id">
-                <td class="sm_td">{{ log.time }}</td>
-                <td class="sm_td">{{ log.account }}</td>
-                <td class="lg_td">{{ log.content }}</td>
+                <td class="sm-td">{{ log.time }}</td>
+                <td class="sm-td">{{ log.account }}</td>
+                <td class="lg-td">{{ log.content }}</td>
               </tr>
             </tbody>
           </table>
@@ -95,7 +95,7 @@ export default {
     text-align: left;
   }
 
-  .table_div {
+  .table-div {
     padding-right: 15px;
     padding-left: 15px;
   }
@@ -115,11 +115,11 @@ export default {
     background-color: #6c757d;
   }
 
-  .sm_td {
+  .sm-td {
     width: 150px;
   }
 
-  .lg_td {
+  .lg-td {
     width: 400px;
   }
 </style>

@@ -20,7 +20,7 @@
             title="确认退款"
             text="您确定要进行退款操作吗？"/>
         </div>
-        <div class="table_div">
+        <div class="table-div">
           <table class="table table-bordered">
             <tbody class="w-100">
               <tr class="row mx-0">
@@ -146,7 +146,7 @@ export default {
     background-color: #5e0057;
   }
 
-  .table_div {
+  .table-div {
     padding-right: 15px;
     padding-left: 15px;
   }

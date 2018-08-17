@@ -6,7 +6,7 @@
       <div id="management">
         <BreadCrumb :items="items"/>
         <h1>日志查询</h1>
-        <div class="table_div">
+        <div class="table-div">
           <table class="table">
             <thead>
               <tr>
@@ -42,7 +42,7 @@
           </table>
         </div>
         <h4>查询项目</h4>
-        <div class="checkbox_div">
+        <div class="checkbox-div">
           <form>
             <div class="custom-control custom-checkbox custom-control-inline form-group">
               <input
@@ -148,7 +148,7 @@
             <br>
           </form>
         </div>
-        <div class="button_group">
+        <div class="button-group">
           <button
             type="submit"
             class="btn"
@@ -220,7 +220,7 @@ export default {
     text-align: left;
   }
 
-  .table_div {
+  .table-div {
     padding-left: 20px;
   }
 
@@ -245,13 +245,13 @@ export default {
     width: 180px;
   }
 
-  .checkbox_div {
+  .checkbox-div {
     display: flex;
     justify-content: flex-start;
     padding-left: 20px;
   }
 
-  .button_group {
+  .button-group {
     display: flex;
     justify-content: flex-start;
     padding-left: 20px;
