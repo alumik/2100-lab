@@ -127,14 +127,6 @@ export default {
     margin-left: 50%;
   }
 
-  .row {
-    display: flex;
-    flex: 0 1 auto;
-    flex-direction: row;
-    justify-content: space-around;
-    margin-top: 60px;
-  }
-
   .inner-btn {
     margin-top: 2%;
     margin-left: 50%;

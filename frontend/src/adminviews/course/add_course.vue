@@ -35,19 +35,7 @@
             <label
               class="form-check-label my-label"
               for="course_content">课程素材</label>
-            <div
-              id="course_content"
-              class="button-group">
-              <button
-                type="button"
-                class="col-lg-8 btn btn-sm"
-              >管理资料</button>
-              <button
-                id="sync-btn"
-                type="button"
-                class="col-lg-8 btn btn-sm"
-              >同步音频/图片</button>
-            </div>
+            <UploadSource/>
           </div>
           <div class="form-group form-inline">
             <div>
@@ -93,8 +81,7 @@
                 <input
                   id="price"
                   class="input form-control col-lg-1"
-                  type="text"
-                  style="width: 210px; min-width: 210px; max-width: 210px;">
+                  type="text">
                 <div class="input-group-prepend">
                   <span class="input-group-text">元</span>
                 </div>
@@ -106,8 +93,7 @@
               class="form-check-label my-label"
               for="can_review">可评论</label>
             <div
-              id="can_review"
-              style="display: flex;">
+              id="can_review">
               <label for="Yes"><input
                 id="Yes"
                 type="radio"
@@ -162,9 +148,10 @@
 import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
 import BreadCrumb from '../../components/breadCrumb'
+import UploadSource from './upload_source'
 export default {
-  name: 'AddCourse',
-  components: {BreadCrumb, Menu, AdminNavbar},
+  name: 'EditCourse',
+  components: {UploadSource, BreadCrumb, Menu, AdminNavbar},
   data: function () {
     return {
       items: [{
