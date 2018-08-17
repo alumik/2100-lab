@@ -9,29 +9,66 @@
         <BreadCrumb :items="items"/>
         <b-row>
           <b-img
+            :src="thumbnail"
             thumbnail
             fluid
-            src="https://picsum.photos/250/250/?image=54"
             alt="Thumbnail" />
           <button
             type="button"
-            class="btn btn-warning btn-lg imgbtn">
-            修改头像</button>
-          <b-form-file
-            v-model="file2"
-            :class="{'active': active, 'mt-3': true}"
-            plain/>
+            class="btn btn-warning btn-lg">
+            修改头像
+            <b-form-file
+              v-model="file"
+              :class="{'upload': true}"
+              plain
+              @change="change"/>
+          </button>
         </b-row>
         <b-row>
-          <b-img
-            thumbnail
-            fluid
-            src="https://picsum.photos/250/250/?image=54"
-            alt="Thumbnail" />
-          <button
-            type="button"
-            class="btn btn-warning btn-lg imgbtn">
-            修改头像</button>
+          <b-input-group
+            size="lg"
+            prepend="昵称">
+            <b-form-input
+              v-model="value"
+              :disabled="disabled"/>
+            <b-input-group-append>
+              <b-btn
+                variant="outline-success"
+                @click="editable">{{ status }}</b-btn>
+            </b-input-group-append>
+          </b-input-group>
+        </b-row>
+        <b-row>
+          <b-input-group
+            size="lg"
+            prepend="手机号">
+            <b-form-input
+              v-model="phone"
+              class="uneditable"
+              disabled/>
+          </b-input-group>
+        </b-row>
+        <b-row>
+          <b-input-group
+            class="money"
+            size="lg"
+            prepend="奖励金余额"
+            append="币">
+            <b-form-input
+              v-model="money"
+              class="uneditable"
+              disabled/>
+          </b-input-group>
+        </b-row>
+        <b-row >
+          <b-input-group
+            size="lg"
+            prepend="注册时间">
+            <b-form-input
+              v-model="time"
+              class="uneditable"
+              disabled/>
+          </b-input-group>
         </b-row>
       </div>
     </div>
@@ -74,6 +111,22 @@ export default {
   methods: {
     hide: function () {
       this.hidden = !this.hidden
+    },
+    change: function (event) {
+      let reader = new FileReader()
+      reader.readAsDataURL(event.target.files[0])
+      let that = this
+      reader.onloadend = function () {
+        that.thumbnail = reader.result
+      }
+    },
+    editable: function () {
+      if (this.status === '修改') {
+        this.status = '保存'
+      } else {
+        this.status = '修改'
+      }
+      this.disabled = !this.disabled
     }
   }
 }

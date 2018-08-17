@@ -18,9 +18,14 @@
               @click="jump(0)"
             >修改课程</button>
             <button
+              v-b-modal.delete
               type="button"
               class="row btn btn-primary btn-sm"
             >删除课程</button>
+            <ConfirmModal
+              id="delete"
+              title="确认删除"
+              text="您确定要删除该课程吗？"/>
           </div>
         </div>
         <div class="table_div">
@@ -99,9 +104,10 @@
 import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
 import BreadCrumb from '../../components/breadCrumb'
+import ConfirmModal from '../components/ConfirmModal'
 export default {
   name: 'BackendCourseDetail',
-  components: {BreadCrumb, Menu, AdminNavbar},
+  components: {ConfirmModal, BreadCrumb, Menu, AdminNavbar},
   data: function () {
     return {
       items: [{
