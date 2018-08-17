@@ -3,7 +3,8 @@
     <UserNavbar/>
     <div id="main">
       <UserMenu
-        :list="list"/>
+        :list="list"
+        :hidden="hidden"/>
       <div id="info">
         <BreadCrumb :items="crumbs"/>
         <b-table
@@ -41,6 +42,7 @@ export default {
   },
   data: function () {
     return {
+      hidden: false,
       list: [
         {id: 0, text: '查看学习记录', isActive: true},
         {id: 1, text: '查看订单记录', isActive: false}

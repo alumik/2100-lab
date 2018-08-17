@@ -43,5 +43,7 @@ export default {
 </script>
 
 <style scoped>
-
+#sidebar {
+  /*position: fixed;*/
+}
 </style>
