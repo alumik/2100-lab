@@ -151,7 +151,8 @@
         <div class="button_group">
           <button
             type="submit"
-            class="btn">查询</button>
+            class="btn"
+            @click="to_detail">查询</button>
         </div>
       </div>
     </div>
@@ -180,6 +181,11 @@ export default {
         format: 'YYYY/MM/DD h:mm:ss',
         useCurrent: true
       }
+    }
+  },
+  methods: {
+    to_detail: function () {
+      this.$router.push('/admin/log/detail')
     }
   }
 }
