@@ -52,9 +52,10 @@
         </b-row>
       </div>
     </b-modal>
-    <b-btn
+    <b-button
       id="sync-btn"
-    >同步音频/图片</b-btn>
+      @click="showModalSync"
+    >同步音频/图片</b-button>
   </div>
 </template>
 
@@ -69,6 +70,9 @@ export default {
     },
     hideModal () {
       this.$refs.upload_source.hide()
+    },
+    showModalSync () {
+      this.$router.push({name: 'SortPicture'})
     }
   }
 }

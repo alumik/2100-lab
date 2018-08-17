@@ -201,18 +201,6 @@ export default {
     max-width: 70px;
   }
 
-  .button-group {
-    display: flex;
-    flex-direction: row;
-    justify-content: left;
-    max-width: 8rem;
-  }
-
-  #sync-btn {
-    max-width: 10rem;
-    margin-left: 25px;
-  }
-
   .group-middle {
     display: flex;
   }
