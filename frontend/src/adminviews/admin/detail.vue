@@ -23,10 +23,14 @@
               @click="jump(2)"
             >修改密码</button>
             <button
+              v-b-modal.delete
               type="button"
               class="row btn btn-sm"
-              @click="jump(3)"
             >删除管理员</button>
+            <ConfirmModal
+              id="delete"
+              title="确认删除"
+              text="您确定要删除该管理员吗？"/>
           </div>
         </div>
         <div class="table_div">
@@ -86,9 +90,10 @@
 import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
 import BreadCrumb from '../../components/breadCrumb'
+import ConfirmModal from '../components/ConfirmModal'
 export default {
   name: 'AdminDetail',
-  components: {BreadCrumb, Menu, AdminNavbar},
+  components: {ConfirmModal, BreadCrumb, Menu, AdminNavbar},
   data: function () {
     return {
       admin: {

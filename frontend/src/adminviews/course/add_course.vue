@@ -35,7 +35,7 @@
             <label
               class="form-check-label my-label"
               for="course_content">课程素材</label>
-            <UploadSource/>
+            <UploadSource id="course_content"/>
           </div>
           <div class="form-group form-inline">
             <div>
