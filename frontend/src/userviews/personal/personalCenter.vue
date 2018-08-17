@@ -8,29 +8,66 @@
       <div class="info">
         <b-row>
           <b-img
+            :src="thumbnail"
             thumbnail
             fluid
-            src="https://picsum.photos/250/250/?image=54"
             alt="Thumbnail" />
           <button
             type="button"
-            class="btn btn-warning btn-lg imgbtn">
-            修改头像</button>
-          <b-form-file
-            v-model="file2"
-            :class="{'active': active, 'mt-3': true}"
-            plain/>
+            class="btn btn-warning btn-lg">
+            修改头像
+            <b-form-file
+              v-model="file"
+              :class="{'upload': true}"
+              plain
+              @change="change"/>
+          </button>
         </b-row>
         <b-row>
-          <b-img
-            thumbnail
-            fluid
-            src="https://picsum.photos/250/250/?image=54"
-            alt="Thumbnail" />
-          <button
-            type="button"
-            class="btn btn-warning btn-lg imgbtn">
-            修改头像</button>
+          <b-input-group
+            size="lg"
+            prepend="昵称">
+            <b-form-input
+              v-model="value"
+              :disabled="disabled"/>
+            <b-input-group-append>
+              <b-btn
+                variant="outline-success"
+                @click="editable">{{ status }}</b-btn>
+            </b-input-group-append>
+          </b-input-group>
+        </b-row>
+        <b-row>
+          <b-input-group
+            size="lg"
+            prepend="手机号">
+            <b-form-input
+              v-model="phone"
+              class="uneditable"
+              disabled/>
+          </b-input-group>
+        </b-row>
+        <b-row>
+          <b-input-group
+            class="money"
+            size="lg"
+            prepend="奖励金余额"
+            append="币">
+            <b-form-input
+              v-model="money"
+              class="uneditable"
+              disabled/>
+          </b-input-group>
+        </b-row>
+        <b-row >
+          <b-input-group
+            size="lg"
+            prepend="注册时间">
+            <b-form-input
+              v-model="time"
+              class="uneditable"
+              disabled/>
+          </b-input-group>
         </b-row>
       </div>
     </div>
@@ -50,48 +87,86 @@ export default {
     return {
       hidden: false,
       list: [
-        {id: 0, text: '查看学习记录', isActive: false},
-        {id: 1, text: '查看订单记录', isActive: false}
-      ]
+        { id: 0, text: '查看学习记录', isActive: false },
+        { id: 1, text: '查看订单记录', isActive: false }
+      ],
+      thumbnail: require('../../assets/404.gif'),
+      file: null,
+      value: '我们是坠胖的',
+      disabled: true,
+      status: '修改',
+      phone: 18309351612,
+      money: 10,
+      time: Date()
     }
   },
   methods: {
     hide: function () {
       this.hidden = !this.hidden
+    },
+    change: function (event) {
+      let reader = new FileReader()
+      reader.readAsDataURL(event.target.files[0])
+      let that = this
+      reader.onloadend = function () {
+        that.thumbnail = reader.result
+      }
+    },
+    editable: function () {
+      if (this.status === '修改') {
+        this.status = '保存'
+      } else {
+        this.status = '修改'
+      }
+      this.disabled = !this.disabled
     }
   }
 }
 </script>
 
 <style scoped>
-  #page {
-    height: 100%;
-  }
-  #main {
-    display: flex;
-    height: calc(100% - 70px);
-  }
-  b-container {
-    max-height: 100px;
-  }
-  .info {
-    margin-top: 40px;
-    margin-left: 40px;
-   }
-  .row {
-    align-items: flex-end;
-    padding: 10px 0;
-    border-bottom: 2px solid #dec1e3;
-  }
-  .mt-3 {
-    position: relative;
-    left: -114px;
-    max-width: 114px;
-    min-height: 47px;
-    opacity: 0;
-    -ms-filter: 'alpha(opacity=0)';
-  }
-  .custom-file-input:lang(en)~.custom-file-label::after {
-    content: "789";
-  }
+#page {
+  height: 100%;
+}
+#main {
+  display: flex;
+  height: 100%;
+}
+.info {
+  margin: 40px 40px;
+}
+.row {
+  align-items: flex-end;
+  padding: 10px 0;
+  border-bottom: 2px solid #dec1e3;
+}
+img {
+  /*max-width: 500px;*/
+  max-height: 300px;
+  flex-grow: 0;
+}
+.btn-warning {
+  height: 50px;
+  width: 120px;
+}
+.upload {
+  position: relative;
+  right: 17px;
+  bottom: 39px;
+  margin: 0;
+  padding: 0;
+  width: 120px;
+  height: 50px;
+  opacity: 0;
+  -ms-filter: "alpha(opacity=0)";
+}
+.uneditable {
+  text-align: right;
+}
+.input-group-text {
+  background-color: #efe4eb;
+}
+.money .input-group-text {
+  background-color: #efe67f;
+}
 </style>
