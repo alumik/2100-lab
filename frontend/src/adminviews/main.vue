@@ -21,9 +21,11 @@ export default {
     min-width: 500px;
     padding: 0;
   }
+
   div {
     height: 100%;
   }
+
   .div {
     display: flex;
     height: calc(100% - 70px);

@@ -150,6 +150,7 @@ export default {
     margin-left: 0;
     text-align: center;
   }
+
   .my-row {
     display: flex;
     flex-direction: row;
@@ -164,7 +165,7 @@ export default {
   }
 
   .my-td {
-    width: 250px
+    width: 250px;
   }
 
   .my-in-for-btn {

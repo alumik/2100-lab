@@ -28,7 +28,7 @@ printf "\nPython validation completed!\n"
 
 printf "\nValidating JavaScript:\n"
 
-STAGED_FILES_JS=$(git diff --cached --name-only --diff-filter=ACM | grep ".jsx\{0,1\}$")
+STAGED_FILES_JS=$(git diff --cached --name-only --diff-filter=ACM | grep -E ".vue$|.js$")
 
 if [[ "$STAGED_FILES_JS" != "" ]]; then
   for FILE in ${STAGED_FILES_JS}
@@ -49,7 +49,7 @@ printf "\nJavaScript validation completed!\n"
 
 printf "\nValidating Stylesheet:\n"
 
-STAGED_FILES_CSS=$(git diff --cached --name-only --diff-filter=ACM | grep ".css$")
+STAGED_FILES_CSS=$(git diff --cached --name-only --diff-filter=ACM | grep -E ".vue$|.css$")
 
 if [[ "$STAGED_FILES_CSS" != "" ]]; then
   for FILE in ${STAGED_FILES_CSS}

@@ -190,7 +190,8 @@ export default {
     display: flex;
   }
 
-  .head-btn, .head-title {
+  .head-btn,
+  .head-title {
     display: inline-block;
   }
 

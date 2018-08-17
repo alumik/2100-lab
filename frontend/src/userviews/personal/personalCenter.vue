@@ -133,53 +133,56 @@ export default {
 </script>
 
 <style scoped>
-#page {
-  height: 100%;
-}
-#main {
-  display: flex;
-  height: 100%;
-}
-.info {
-  margin: 40px 40px;
+  #page {
+    height: 100%;
+  }
 
-}
-.breadcrumb {
-  /*margin-top: -20px;*/
-  /*margin-left: -15px;*/
-}
-.row {
-  align-items: flex-end;
-  padding: 10px 0;
-  border-bottom: 2px solid #dec1e3;
-}
-img {
-  /*max-width: 500px;*/
-  max-height: 300px;
-  flex-grow: 0;
-}
-.btn-warning {
-  height: 50px;
-  width: 120px;
-}
-.upload {
-  position: relative;
-  right: 17px;
-  bottom: 39px;
-  margin: 0;
-  padding: 0;
-  width: 120px;
-  height: 50px;
-  opacity: 0;
-  -ms-filter: "alpha(opacity=0)";
-}
-.uneditable {
-  text-align: right;
-}
-.input-group-text {
-  background-color: #efe4eb;
-}
-.money .input-group-text {
-  background-color: #efe67f;
-}
+  #main {
+    display: flex;
+    height: 100%;
+  }
+
+  .info {
+    margin: 40px 40px;
+  }
+
+  .row {
+    align-items: flex-end;
+    padding: 10px 0;
+    border-bottom: 2px solid #dec1e3;
+  }
+
+  img {
+    flex-grow: 0;
+    max-height: 300px;
+  }
+
+  .btn-warning {
+    width: 120px;
+    height: 50px;
+  }
+
+  .upload {
+    position: relative;
+    right: 17px;
+    bottom: 39px;
+    width: 120px;
+    height: 50px;
+    padding: 0;
+    margin: 0;
+    -ms-filter: "alpha(opacity=0)";
+    opacity: 0;
+  }
+
+  .uneditable {
+    text-align: right;
+  }
+
+  .input-group-text {
+    background-color: #efe4eb;
+  }
+
+  .money .input-group-text {
+    background-color: #efe67f;
+  }
 </style>
