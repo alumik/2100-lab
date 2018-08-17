@@ -111,3 +111,12 @@ def get_course_assets(request):
         json_data['images'].append(image.as_dict())
 
     return JsonResponse(json_data)
+
+
+@login_required
+def get_course_comments(request):
+    course = Course.objects.get(id=request.POST.get('course_id'))
+    if not can_access(course, request.user):
+        return JsonResponse({'message': 'Access denied.'}, status=403)
+
+    comments = Comment.objects.filter(course=course)
