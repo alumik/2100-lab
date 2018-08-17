@@ -88,6 +88,11 @@ export default new Router({
       component: () => import('@/adminviews/course/upload_source')
     },
     {
+      path: '/admin/course/editpic',
+      name: 'SortPicture',
+      component: () => import('@/adminviews/course/sort_picture')
+    },
+    {
       path: '/admin/message',
       name: 'MessageManagement',
       component: () => import('@/adminviews/message/management')
