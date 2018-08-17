@@ -66,7 +66,6 @@ export default {
     onChange: {
       default: (files) => {
         if (files) {
-          console.log(files)
         }
       },
       type: Function
