@@ -1,7 +1,6 @@
 <template>
   <div>
-    <AdminNavbar
-      style="min-width: 1000px;"/>
+    <AdminNavbar id="navbar"/>
     <div id="body">
       <div>
         <Menu/>
@@ -98,6 +97,10 @@ export default {
 </script>
 
 <style scoped>
+  #navbar {
+    min-width: 1000px;
+  }
+
   h1 {
     padding-left: 15px;
     margin-top: 25px;

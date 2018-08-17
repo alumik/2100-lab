@@ -1,7 +1,6 @@
 <template>
   <div class="div1">
-    <AdminNavbar
-      style="min-width: 800px;"/>
+    <AdminNavbar id="navbar"/>
     <div id="body">
       <Menu/>
       <div id="management">
@@ -10,7 +9,7 @@
         <div class="table_div">
           <table class="table table-striped">
             <thead>
-              <tr style="background-color: #6c757d; color: white; font-weight: bold;">
+              <tr>
                 <td
                   v-for="title in titles"
                   :key="title.id">
@@ -20,7 +19,7 @@
             </thead>
             <tbody>
               <tr align="center">
-                <td style="width: 140px;">
+                <td id="id_td">
                   <div class="input-group-sm">
                     <input
                       type="text"
@@ -28,7 +27,7 @@
                       placeholder="">
                   </div>
                 </td>
-                <td style="width: 140px;">
+                <td id="name_td">
                   <div class="input-group-sm">
                     <input
                       type="text"
@@ -36,7 +35,7 @@
                       placeholder="">
                   </div>
                 </td>
-                <td style="width: 160px;">
+                <td id="phone_td">
                   <div class="input-group-sm">
                     <input
                       type="text"
@@ -44,7 +43,7 @@
                       placeholder="">
                   </div>
                 </td>
-                <td style="width: 200px;">
+                <td id="state_td">
                   <div>
                     <select
                       v-model="state"
@@ -55,7 +54,7 @@
                     </select>
                   </div>
                 </td>
-                <td style="width: 200px;"/>
+                <td id="operation_td"/>
               </tr>
               <tr
                 v-for="user in users"
@@ -123,6 +122,10 @@ export default {
 </script>
 
 <style scoped>
+  #navbar {
+    min-width: 800px;
+  }
+
   h1 {
     padding-left: 20px;
     margin-top: 25px;
@@ -180,5 +183,25 @@ export default {
 
   .div1 {
     height: 100%;
+  }
+
+  thead tr {
+    font-weight: bold;
+    color: white;
+    background-color: #6c757d;
+  }
+
+  #id_td,
+  #name_td {
+    width: 140px;
+  }
+
+  #phone_td {
+    width: 180px;
+  }
+
+  #state_td,
+  #operation_td {
+    width: 200px;
   }
 </style>

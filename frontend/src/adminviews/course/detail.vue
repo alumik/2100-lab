@@ -172,10 +172,6 @@ export default {
     display: flex;
   }
 
-  .btn {
-    margin-right: 25px;
-  }
-
   .my-intro {
     margin-left: 25px;
   }
@@ -190,6 +186,7 @@ export default {
   }
 
   .btn {
+    margin-right: 25px;
     color: white;
     background-color: #8d4e91;
     border-color: #8d6592;

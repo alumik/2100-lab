@@ -1,7 +1,6 @@
 <template>
   <div>
-    <AdminNavbar
-      style="min-width: 1000px;"/>
+    <AdminNavbar id="navbar"/>
     <div id="body">
       <div>
         <Menu/>
@@ -14,7 +13,7 @@
             id="study_table"
             class="table table-striped">
             <thead>
-              <tr style="background-color: #6c757d; color: white; font-weight: bold;">
+              <tr>
                 <td
                   v-for="title in titles"
                   :key="title.id">
@@ -83,6 +82,10 @@ export default {
 </script>
 
 <style scoped>
+  #navbar {
+    min-width: 1000px;
+  }
+
   h1 {
     padding-left: 20px;
     margin-top: 25px;
@@ -109,5 +112,11 @@ export default {
   .table_div {
     padding-right: 15px;
     padding-left: 15px;
+  }
+
+  thead tr {
+    font-weight: bold;
+    color: white;
+    background-color: #6c757d;
   }
 </style>

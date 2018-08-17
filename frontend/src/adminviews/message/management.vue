@@ -1,7 +1,6 @@
 <template>
-  <div class="div1">
-    <AdminNavbar
-      style="min-width: 1300px;"/>
+  <div class="html">
+    <AdminNavbar id="navbar"/>
     <div id="body">
       <Menu/>
       <div id="management">
@@ -20,7 +19,7 @@
             </thead>
             <tbody>
               <tr align="center">
-                <td style="width: 160px;">
+                <td class="xs_td">
                   <div class="input-group-sm">
                     <input
                       type="text"
@@ -28,7 +27,7 @@
                       placeholder="">
                   </div>
                 </td>
-                <td style="width: 160px;">
+                <td class="xs_td">
                   <div class="input-group-sm">
                     <input
                       type="text"
@@ -36,7 +35,7 @@
                       placeholder="">
                   </div>
                 </td>
-                <td style="width: 160px;">
+                <td class="xs_td">
                   <div class="input-group-sm">
                     <input
                       type="text"
@@ -44,7 +43,7 @@
                       placeholder="">
                   </div>
                 </td>
-                <td style="width: 160px;">
+                <td class="xs_td">
                   <div class="input-group-sm">
                     <input
                       type="text"
@@ -52,8 +51,8 @@
                       placeholder="">
                   </div>
                 </td>
-                <td style="width: 350px;"/>
-                <td style="width: 200px;">
+                <td class="lg_td"/>
+                <td class="s_td">
                   <div>
                     <select
                       v-model="state"
@@ -64,7 +63,7 @@
                     </select>
                   </div>
                 </td>
-                <td style="width: 270px;"/>
+                <td class="md_td"/>
               </tr>
               <tr
                 v-for="message in messages"
@@ -75,9 +74,7 @@
                 <td>{{ message.course_name }}</td>
                 <td>{{ message.message }}</td>
                 <td> {{ message.state }} </td>
-                <td
-                  class="buttons"
-                  style="padding-left: 30px;">
+                <td class="buttons">
                   <button
                     type="button"
                     class="btn btn-xs"
@@ -163,6 +160,10 @@ export default {
 </script>
 
 <style scoped>
+  #navbar {
+    min-width: 1300px;
+  }
+
   h1 {
     padding-left: 15px;
     margin-top: 25px;
@@ -172,6 +173,7 @@ export default {
 
   .buttons {
     display: flex;
+    padding-left: 30px;
   }
 
   table {
@@ -214,7 +216,7 @@ export default {
     font-size: 18px;
   }
 
-  .div1 {
+  .html {
     height: 100%;
   }
 
@@ -241,5 +243,21 @@ export default {
     font-weight: bold;
     color: white;
     background-color: #6c757d;
+  }
+
+  .xs_td {
+    width: 160px;
+  }
+
+  .s_td {
+    width: 200px;
+  }
+
+  .md_td {
+    width: 270px;
+  }
+
+  .lg_td {
+    width: 350px;
   }
 </style>

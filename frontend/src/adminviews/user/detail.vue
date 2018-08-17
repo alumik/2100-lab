@@ -1,7 +1,6 @@
 <template>
   <div>
-    <AdminNavbar
-      style="min-width: 1000px;"/>
+    <AdminNavbar id="navbar"/>
     <div id="body">
       <div>
         <Menu/>
@@ -14,8 +13,7 @@
             <button
               v-b-modal.authenticate
               type="button"
-              class="btn btn-lg"
-              style="margin-right: 10px;">
+              class="btn btn-lg">
               认证用户
             </button>
             <ConfirmModal
@@ -26,7 +24,6 @@
               v-if="is_banned"
               type="button"
               class="btn btn-lg"
-              style="margin-right: 10px;"
               @click="change_banned">
               取消禁言
             </button>
@@ -34,8 +31,7 @@
               v-b-modal.ban
               v-else
               type="button"
-              class="btn btn-lg"
-              style="margin-right: 10px;">
+              class="btn btn-lg">
               禁言用户
             </button>
             <b-modal
@@ -51,8 +47,7 @@
             <button
               v-b-modal.delete
               type="button"
-              class="btn btn-lg"
-              style="margin-right: 10px;">
+              class="btn btn-lg">
               删除用户
             </button>
             <ConfirmModal
@@ -98,7 +93,6 @@
           <button
             type="button"
             class="btn"
-            style="margin-right: 10px;"
             @click="to_order">
             查看更多
           </button>
@@ -108,7 +102,7 @@
             id="order_table"
             class="table table-striped table">
             <thead>
-              <tr style="background-color: #6c757d; color: white; font-weight: bold;">
+              <tr>
                 <td
                   v-for="order_title in order_titles"
                   :key="order_title.id">
@@ -135,7 +129,6 @@
             <button
               type="button"
               class="btn"
-              style="margin-right: 10px;"
               @click="to_course">
               查看更多
             </button>
@@ -146,7 +139,7 @@
             id="study_table"
             class="table table-striped">
             <thead>
-              <tr style="background-color: #6c757d; color: white; font-weight: bold;">
+              <tr>
                 <td
                   v-for="course_title in course_titles"
                   :key="course_title.id">
@@ -238,6 +231,10 @@ export default {
 </script>
 
 <style scoped>
+  #navbar {
+    min-width: 1000px;
+  }
+
   h1,
   h2 {
     padding-left: 20px;
@@ -270,9 +267,7 @@ export default {
     width: 40px;
   }
 
-  #delete_confirm,
-  #ban_confirm,
-  #authenticate_confirm {
+  #ban_confirm {
     text-align: left;
   }
 
@@ -282,6 +277,7 @@ export default {
   }
 
   .btn {
+    margin-right: 10px;
     color: white;
     background-color: #8d4e91;
     border-color: #8d6592;
@@ -317,5 +313,11 @@ export default {
 
   .col-10 {
     background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  thead tr {
+    font-weight: bold;
+    color: white;
+    background-color: #6c757d;
   }
 </style>

@@ -92,8 +92,7 @@
             <label
               class="form-check-label my-label"
               for="can_review">可评论</label>
-            <div
-              id="can_review">
+            <div id="can_review">
               <label for="Yes"><input
                 id="Yes"
                 type="radio"
