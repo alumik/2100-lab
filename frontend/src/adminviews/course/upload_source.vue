@@ -72,7 +72,7 @@ export default {
       this.$refs.upload_source.hide()
     },
     showModalSync () {
-      this.$router.push({name: 'SortPicture'})
+      this.$router.push({name: 'SyncPicture'})
     }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-btn @click="showModal">
-      OPEN
+      图片预排序
     </b-btn>
     <b-modal
       ref="edit_picture"
@@ -15,7 +15,7 @@
       </div>
       <b-container
         fluid
-        class="p-4 bg-danger row pre-scrollable choose-list">
+        class="p-2 bg-danger row pre-scrollable choose-list">
         <b-row
           v-for="img in sortImageDataList"
           :key="img.index"
@@ -44,7 +44,8 @@
               fluid
               alt="test-image"
               class="img-thumbnail"
-              @click="dropout(img)"/></b-col>
+              @click="dropout(img)"/>
+          </b-col>
         </b-row>
       </b-container>
     </b-modal>
@@ -53,8 +54,8 @@
 
 <script>
 export default {
-  name: 'SortPicture',
-  data () {
+  name: 'PreSortPicture',
+  data: function () {
     return {
       chooseImageDataList: [
         {
