@@ -6,7 +6,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from .models import Course, Image
+from .models import Course, Image, Comment
 from customers.models import LearningLog, OrderLog
 from core.utils import create_test_customers, create_test_heroes, create_test_courses
 
@@ -363,3 +363,35 @@ class PlayPageTests(TestCase):
                 ]
             }
         )
+
+
+class CommentTests(TestCase):
+    def setUp(self):
+        create_test_customers(2)
+        create_test_courses(1)
+        Comment.objects.create(
+            course=Course.objects.get(codename='c1'),
+            user=get_user_model().objects.get(phone_number='00000000001'),
+            content='123456'
+        )
+        Comment.objects.create(
+            course=Course.objects.get(codename='c1'),
+            user=get_user_model().objects.get(phone_number='00000000002'),
+            content='123456'
+        )
+
+    def test_get_comments(self):
+        self.client.force_login(get_user_model().objects.get(phone_number='00000000001'))
+
+        response = self.client.post(
+            reverse('api:courses:get-course-comments'),
+            {
+                'course_id': Course.objects.get(codename='c1').id,
+                'page': 1,
+                'page_limit': 1
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        response_json_data = json.loads(response.content)
+        self.assertEqual(response_json_data['count'], 2)
+

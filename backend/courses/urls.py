@@ -37,4 +37,29 @@ urlpatterns = [
         views.get_course_assets,
         name='get-course-assets'
     ),
+    path(
+        'course/get-course-comments/',
+        views.get_course_comments,
+        name='get-course-comments'
+    ),
+    path(
+        'course/delete-comment/',
+        views.delete_comment,
+        name='delete-comment'
+    ),
+    path(
+        'course/up-vote-comment/',
+        views.up_vote_comment,
+        name='up-vote-comment'
+    ),
+    path(
+        'course/down-vote-comment/',
+        views.down_vote_comment,
+        name='down-vote-comment'
+    ),
+    path(
+        'course/add-comment/',
+        views.add_comment,
+        name='add-comment'
+    )
 ]
