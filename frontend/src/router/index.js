@@ -83,6 +83,11 @@ export default new Router({
       component: () => import('@/adminviews/course/edit_course')
     },
     {
+      path: '/admin/course/upload',
+      name: 'UploadSource',
+      component: () => import('@/adminviews/course/upload_source')
+    },
+    {
       path: '/admin/message',
       name: 'MessageManagement',
       component: () => import('@/adminviews/message/management')
