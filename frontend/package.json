@@ -9,8 +9,8 @@
     "start": "npm run dev",
     "lint": "eslint --ext .js,.vue src",
     "build": "node build/build.js",
-    "eslint": "./node_modules/.bin/eslint ./**/*.js",
-    "stylelint": "./node_modules/.bin/stylelint ./**/*.css"
+    "eslint": "./node_modules/.bin/eslint './**/*.vue'",
+    "stylelint": "./node_modules/.bin/stylelint './**/*.vue'"
   },
   "dependencies": {
     "@xkeshi/vue-qrcode": "^1.0.0",
