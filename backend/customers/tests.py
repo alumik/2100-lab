@@ -20,7 +20,11 @@ class CustomerAuthTests(TestCase):
             {'phone_number': '13312345678'}
         )
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(bool(re.match(r'^\d{6}$', json.loads(response.content)['verification_code'])))
+        self.assertTrue(
+            bool(
+                re.match(r'^\d{6}$', json.loads(response.content)['verification_code'])
+            )
+        )
 
     def test_get_verification_code_invalid_phone_number(self):
         response = self.client.post(

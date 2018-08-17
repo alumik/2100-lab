@@ -1,7 +1,7 @@
 from django.utils import timezone
 
-from .models import Course
 from customers.models import LearningLog, OrderLog
+from .models import Course
 
 
 def get_courses(course_type, limit=None):
