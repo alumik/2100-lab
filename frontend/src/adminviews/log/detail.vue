@@ -21,9 +21,9 @@
               <tr
                 v-for="log in logs"
                 :key="log.id">
-                <td>{{ log.time }}</td>
-                <td>{{ log.account }}</td>
-                <td>{{ log.content }}</td>
+                <td class="sm_td">{{ log.time }}</td>
+                <td class="sm_td">{{ log.account }}</td>
+                <td class="lg_td">{{ log.content }}</td>
               </tr>
             </tbody>
           </table>
@@ -113,5 +113,13 @@ export default {
     font-weight: bold;
     color: white;
     background-color: #6c757d;
+  }
+
+  .sm_td {
+    width: 150px;
+  }
+
+  .lg_td {
+    width: 400px;
   }
 </style>
