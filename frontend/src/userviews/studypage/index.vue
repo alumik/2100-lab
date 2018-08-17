@@ -52,14 +52,14 @@
             <b-card-body>
               <p
                 class="card-text text-style">
+                课程id{{ this.$route.params.course_id }}
                 &emsp; &emsp;{{ course.introduction }}
               </p>
             </b-card-body>
           </b-collapse>
         </b-card>
         <b-card
-          no-body
-          class="">
+          no-body>
           <b-card-header
             header-tag="header"
             class="p-1"
@@ -100,6 +100,7 @@ export default {
   },
   data () {
     return {
+      course_id: 0,
       now_picture: '',
       now_index: 0,
       time_num: 0,
@@ -142,6 +143,13 @@ export default {
           }
         }
       }
+    }
+  },
+  created () {
+    if (typeof (this.$route.params.course_id) === 'undefined') {
+      this.$router.push({name: 'BurnedCourse'})
+    } else {
+      this.course_id = this.$route.params.course_id
     }
   },
   mounted () {

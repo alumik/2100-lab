@@ -26,6 +26,7 @@
                 thumbnail
                 alt="Responsive image Thumbnail"
                 class="img-thumbnail card-image"
+                @click="open_course_detail(course.id)"
               />
             </div>
             <div class="introduction">
@@ -73,6 +74,9 @@ export default {
     }
   },
   methods: {
+    open_course_detail: function (id) {
+      this.$router.push({name: 'CourseDetail', params: {course_id: id}})
+    }
   }
 }
 </script>

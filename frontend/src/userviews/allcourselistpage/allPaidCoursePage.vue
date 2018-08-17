@@ -17,6 +17,7 @@ export default {
       page_title: '付费课程列表',
       course_list: [
         {
+          id: 4,
           name: '不爱我就拉倒',
           introduction: '环滁皆山也。其西南诸峰，林壑尤美，' +
             '望之蔚然而深秀者，琅琊也。',

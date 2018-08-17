@@ -29,7 +29,7 @@ export default new Router({
     },
     {
       path: '/studypage',
-      name: 'Studypage',
+      name: 'StudyPage',
       component: () => import('@/userviews/studypage/index')
     },
     {
