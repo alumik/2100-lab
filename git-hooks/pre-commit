@@ -28,7 +28,7 @@ printf "\nPython validation completed!\n"
 
 printf "\nValidating JavaScript:\n"
 
-STAGED_FILES_JS=$(git diff --cached --name-only --diff-filter=ACM | grep -E ".vue$|.js$")
+STAGED_FILES_JS=$(git diff --cached --name-only --diff-filter=ACM | grep -E ".vue$")
 
 if [[ "$STAGED_FILES_JS" != "" ]]; then
   for FILE in ${STAGED_FILES_JS}
