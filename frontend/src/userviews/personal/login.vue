@@ -14,7 +14,7 @@
         <b-input-group-append>
           <b-btn
             variant="outline-success"
-            @click="send">{{ status }}{{ seconds !== 61 ? seconds : '' }}</b-btn>
+            @click="send">{{ status }}{{ seconds !== 61 ? seconds + 's' : '' }}</b-btn>
         </b-input-group-append>
       </b-input-group>
       <br>
@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     send () {
-      this.status = '再次发送'
+      this.status = '再次发送 '
       let that = this
       let t = setInterval(function () {
         that.seconds = that.seconds - 1
