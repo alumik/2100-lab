@@ -1,31 +1,34 @@
 <template>
   <div
-    id="message-board"
-    class="container msgboard-style">
-    <div
-      class="panel panel-style">
-      <ul class="form-style">
-        <li
+    id="message-board">
+    <div>
+      <div class="form-style">
+        <div
           v-for="msg in message_list"
           :key="msg.id"
-          class="form-control piece-of-message">
+          class="piece-of-message">
           <div id="message">
-            <h5 style="font-weight: bold;">{{ msg.username }}</h5>
-            留言：{{ msg.message_content }}
+            {{ msg.username }}
+            <label class="time-style">&emsp;{{ msg.time_to_comment }}个月前</label>
+            <p style="margin-bottom: 5px;">{{ msg.message_content }}</p>
           </div>
           <div
-            id="operator"
-            style="text-align: right;">
+            id="operator">
             {{ msg.num_of_praise }}
-            <b-button @click="msg.num_of_praise+=1">赞</b-button>
+            <img
+              src="../../assets/praise.png"
+              class="vote-style "
+              @click="msg.num_of_praise+=1">
             &emsp; &emsp;{{ msg.num_of_detest }}
-            <b-button @click="msg.num_of_detest+=1">踩</b-button>
+            <img
+              src="../../assets/detest.png"
+              class="vote-style "
+              @click="msg.num_of_detest+=1">
           </div>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
-    <div
-      class="container leave-message">
+    <div>
       <textarea
         v-model="newMsg"
         autofocus
@@ -36,9 +39,8 @@
       <div
         id="commit-button"
         class="commit-button-style">
-        <button
-          class="btn btn-primary btn-style"
-          @click="addmessage">提交</button>
+        <b-button
+          @click="addmessage">评论</b-button>
       </div>
     </div>
   </div>
@@ -55,23 +57,28 @@ export default {
         {
           id: 1,
           username: '张三丰',
-          message_content: '今天天气不错',
+          message_content: '不是谁家的粉 但觉得真的还挺好听的呀 ' +
+            '毕竟是翻唱演绎 肯定会和之前不太一样的 不然就没有看点了嘛﻿',
           num_of_praise: 50,
-          num_of_detest: 60
+          num_of_detest: 60,
+          time_to_comment: 3
         },
         {
           id: 2,
           username: '张无忌',
           message_content: 'Gitlab服务器炸了，你们知道吗？',
           num_of_praise: 60,
-          num_of_detest: 70
+          num_of_detest: 70,
+          time_to_comment: 3
         },
         {
           id: 3,
           username: '周芷若',
-          message_content: '我想吃糖~',
+          message_content: '這次鄧紫棋唱出自己的特色，' +
+            '她在某幾個調轉了另一種唱法，讓這首歌有着另一種感覺，所以真的不應一直衹唱高音﻿',
           num_of_praise: 20,
-          num_of_detest: 10
+          num_of_detest: 10,
+          time_to_comment: 3
         }
       ]
     }
@@ -91,15 +98,15 @@ export default {
 </script>
 
 <style>
-  .msgboard-style {
-    width: 100%;
-    height: 100%;
-    text-align: center;
+  .time-style {
+    color: #adb5bd;
   }
 
   .textarea-style {
     width: 100%;
     height: 100%;
+    padding: 0;
+    border-color: #d6d8db;
   }
 
   .commit-button-style {
@@ -107,24 +114,10 @@ export default {
     text-align: right;
   }
 
-  .btn-style {
-    width: 10%;
-    margin-top: 10px;
-  }
-
-  .leave-message {
-    width: 100%;
-    height: 20%;
-    padding: 5px 10px;
-    margin-left: 0;
-    border: 1px solid #c6c8ca;
-  }
-
   .form-style {
     width: 100%;
     padding: 0;
     text-align: center;
-    border: 1px solid #c6c8ca;
   }
 
   .piece-of-message {
@@ -134,8 +127,15 @@ export default {
     text-align: left;
   }
 
-  .panel-style {
-    width: 100%;
-    height: 80%;
+  #operator {
+    text-align: left;
+  }
+
+  .vote-style {
+    height: 25px;
+  }
+
+  .vote-style:hover {
+    filter: brightness(110%);
   }
 </style>

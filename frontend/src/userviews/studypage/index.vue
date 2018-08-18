@@ -31,32 +31,18 @@
         </div>
       </div>
       <div role="tablist">
-        <b-card
-          no-body
-          class="mb-1">
-          <b-card-header
-            header-tag="header"
-            class="p-1"
-            role="tab">
-            <b-btn
-              v-b-toggle.accordion1
-              block
-              href="#"
-              variant="info">课程简介</b-btn>
-          </b-card-header>
-          <b-collapse
-            id="accordion1"
-            visible
-            accordion="my-accordion"
-            role="tabpanel">
-            <b-card-body>
-              <p
-                class="card-text text-style">
-                课程id{{ this.$route.params.course_id }}
-                &emsp; &emsp;{{ course.introduction }}
-              </p>
-            </b-card-body>
-          </b-collapse>
+        <b-card>
+          <div class="text-left-style">
+            <label class="delete-margin">
+              <h5>{{ course.name }}</h5>
+              &emsp;&emsp;{{ text_show }}</label>
+            <label v-if="brandFold === false">{{ text_hide }}</label>
+          </div>
+          <div
+            class="text-right-style"
+            @click="changeFoldState">
+            <label class="look-all">{{ brandFold ? '﹀展开':'︿收起' }}</label>
+          </div>
         </b-card>
         <b-card
           no-body>
@@ -64,24 +50,14 @@
             header-tag="header"
             class="p-1"
             role="tab">
-            <b-btn
-              v-b-toggle.accordion2
-              block
-              href="#"
-              variant="info">留言板</b-btn>
+            留言板
           </b-card-header>
-          <b-collapse
-            id="accordion2"
-            accordion="my-accordion"
-            role="tabpanel"
-            class="width-style">
-            <b-card-body>
-              <p
-                class="card-text width-style">
-                <MessageBoard/>
-              </p>
-            </b-card-body>
-          </b-collapse>
+          <b-card-body>
+            <p
+              class="card-text width-style">
+              <MessageBoard/>
+            </p>
+          </b-card-body>
         </b-card>
       </div>
     </div>
@@ -106,21 +82,23 @@ export default {
       time_num: 0,
       ctime: null,
       dtime: null,
+      brandFold: true,
+      text_show: '',
+      text_hide: '',
       course: {
         time_list: [0, 10, 20, 30],
         image: [
-          require('../homepage/image/1.jpg'),
-          require('../homepage/image/2.jpg'),
-          require('../homepage/image/3.jpg'),
-          require('../homepage/image/4.jpg')
+          'https://picsum.photos/1024/480/?image=58'
         ],
         audio: '',
-        introduction: '盼望着，盼望着，东风来了，春天的脚步近了。\n' +
-            '　　一切都像刚睡醒的样子，欣欣然张开了眼。山朗润起来了，' +
-            '水涨起来了，太阳的脸红起来了。\n' +
-            '　　小草偷偷地从土地里钻出来，嫩嫩的，绿绿的。园子里，田野里，' +
-            '瞧去，一大片一大片满是的。坐着，躺着，打两个滚，踢几脚球，' +
-            '赛几趟跑，捉几回迷藏。风轻悄悄的，草软绵绵的。',
+        introduction: '桃树、杏树、梨树，你不让我，我不让你，都开满了花赶趟儿。' +
+          '红的像火，粉的像霞，白的像雪。花里带着甜味儿；闭了眼，树上仿佛已经满是' +
+          '桃儿、杏儿、梨儿。花下成千成百的蜜蜂嗡嗡地闹着，大小的蝴蝶飞来飞去。野花' +
+          '遍地是：杂样儿，有名字的，没名字的，散在草丛里，像眼睛，像星星，还眨呀眨的。\n' +
+          '“吹面不寒杨柳风”，不错的，像母亲的手抚摸着你。风里带来些新翻的泥土的气息，' +
+          '混着青草味儿，还有各种花的香，都在微微润湿的空气里酝酿。鸟儿将巢安在繁花嫩叶当中，' +
+          '高兴起来了，呼朋引伴地卖弄清脆的喉咙，唱出宛转的曲子，与轻风流水应和着。' +
+          '牛背上牧童的短笛，这时候也成天嘹亮地响着。',
         name: '我们是坠胖的'
       }
     }
@@ -155,9 +133,14 @@ export default {
   mounted () {
     this.ctime = this.$refs.player.currentTime
     this.time_num = this.course.time_list.length
+    this.text_show = this.course.introduction.substring(0, 154)
+    this.text_hide = this.course.introduction.substring(154)
     this.addEventListeners()
   },
   methods: {
+    changeFoldState () {
+      this.brandFold = !this.brandFold
+    },
     change_picture: function () {
       this.now_picture = this.course.image[this.now_index]
     },
@@ -188,7 +171,7 @@ export default {
     width: 100%;
     height: 80%;
     height: 500px;
-    background-image: url('./media/background.jpg');
+    background-image: url('https://picsum.photos/1024/480/?image=58');
   }
 
   .image-style {
@@ -196,6 +179,18 @@ export default {
     height: 90%;
     padding: 0;
     text-align: center;
+  }
+
+  .delete-margin {
+    margin: 0;
+  }
+
+  .look-all {
+    color: #686868;
+  }
+
+  .look-all:hover {
+    color: #000;
   }
 
   .course-image {
@@ -210,13 +205,17 @@ export default {
     text-align: center;
   }
 
+  .text-left-style {
+    text-align: left;
+  }
+
+  .text-right-style {
+    text-align: right;
+  }
+
   .audio-player {
     width: 99%;
     height: 100%;
-  }
-
-  .text-style {
-    text-align: left;
   }
 
   .width-style {
