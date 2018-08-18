@@ -9,7 +9,7 @@
       </div>
       <div class="father container-fluid">
         <BreadCrumb :items="items"/>
-        <h1 class="head-text">新增管理员</h1>
+        <h2 class="head-text">新增管理员</h2>
         <form>
           <div class="form-group">
             <label
