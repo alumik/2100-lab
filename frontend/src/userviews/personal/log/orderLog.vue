@@ -1,6 +1,6 @@
 <template>
   <div id="page">
-    <UserNavbar/>
+    <UserNavbar @hide="hide"/>
     <div id="main">
       <UserMenu
         :list="list"
@@ -113,6 +113,9 @@ export default {
     }
   },
   methods: {
+    hide: function () {
+      this.hidden = !this.hidden
+    }
   }
 }
 </script>
