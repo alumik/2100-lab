@@ -166,6 +166,11 @@ export default new Router({
       path: '/admin/log/detail',
       name: 'LogDetail',
       component: () => import('@/adminviews/log/detail')
+    },
+    {
+      path: '/admin/date',
+      name: 'Date',
+      component: () => import('@/adminviews/date/date')
     }
   ]
 })
