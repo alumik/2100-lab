@@ -124,7 +124,11 @@ export default {
   }
 
   #info {
-    margin: 40px 40px;
+    margin: 40px 20px;
+  }
+  .breadcrumb {
+    margin-top: -40px;
+    margin-left: -20px;
   }
 
   .my-0 {
