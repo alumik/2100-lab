@@ -4,14 +4,22 @@
   "description": "A Vue.js project",
   "author": "",
   "private": true,
+  "nyc": {
+    "include": [
+      "src/**/*.(js|vue)"
+    ],
+    "instrument": false,
+    "sourceMap": false
+  },
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
     "lint": "eslint --ext .js,.vue src",
     "build": "node build/build.js",
-    "eslint": "./node_modules/.bin/eslint './**/*.vue' './**/*.js'",
-    "stylelint": "./node_modules/.bin/stylelint './**/*.vue' './**/*.css'",
-    "test": "mocha-webpack --webpack-config test/webpack.config.js --require test/setup.js test/**/*.spec.js"
+    "eslint": "eslint './**/*.vue' './**/*.js'",
+    "stylelint": "stylelint './**/*.vue' './**/*.css'",
+    "test": "cross-env NODE_ENV=test mocha-webpack --webpack-config test/webpack.config.js --require test/setup.js test/**/*.spec.js",
+    "test-coverage": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text npm run test"
   },
   "dependencies": {
     "@xkeshi/vue-qrcode": "^1.0.0",
@@ -29,6 +37,7 @@
     "babel-eslint": "^8.2.1",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
     "babel-loader": "^7.1.1",
+    "babel-plugin-istanbul": "^4.1.6",
     "babel-plugin-syntax-jsx": "^6.18.0",
     "babel-plugin-transform-runtime": "^6.22.0",
     "babel-plugin-transform-vue-jsx": "^3.5.0",
@@ -37,6 +46,7 @@
     "chai": "^4.1.2",
     "chalk": "^2.0.1",
     "copy-webpack-plugin": "^4.0.1",
+    "cross-env": "^5.2.0",
     "css-loader": "^0.28.0",
     "eslint": "^4.15.0",
     "eslint-config-standard": "^10.2.1",
@@ -59,6 +69,7 @@
     "node-notifier": "^5.1.2",
     "node-sass": "^4.9.3",
     "null-loader": "^0.1.1",
+    "nyc": "^12.0.2",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "ora": "^1.2.0",
     "portfinder": "^1.0.13",
