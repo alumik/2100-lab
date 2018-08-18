@@ -23,6 +23,7 @@ frontendtest:
   stage: frontendtest
   script:
     - cd frontend
+    - npm install
     - npm run test
   allow_failure: false
 
@@ -30,7 +31,6 @@ frontendlint:
   stage: frontendlint
   script:
     - cd frontend
-    - npm install
     - npm run eslint
     - npm run stylelint
   allow_failure: false
