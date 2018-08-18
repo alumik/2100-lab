@@ -148,10 +148,11 @@
             variant="primary"
             class="row-btn praise"
             @click="course.num_of_praise+=1">
-            <h class="praise-style">
-              {{ course.num_of_praise }}
-            </h>
-            赞</b-button>
+            <h5>
+              <span class="praise-style">
+                {{ course.num_of_praise }}</span>
+              赞</h5>
+          </b-button>
         </div>
         <div class="reminder-style">
           <div

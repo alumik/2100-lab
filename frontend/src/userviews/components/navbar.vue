@@ -3,11 +3,18 @@
     :sticky="true"
     toggleable="md"
     type="dark"
-    variant="primary">
+    variant="primary"
+    class="my-navbar">
     <button
       class="navbar-toggler"
-      @click="$emit('hide')"><span class="navbar-toggler-icon"/></button>
-    <b-navbar-brand disabled>2100实验室
+      @click="$emit('hide')">
+      <span class="navbar-toggler-icon"/>
+    </button>
+    <b-navbar-brand
+      class="logo">
+      <img
+        id="logoimg"
+        src="../../assets/2100logo.png">
     </b-navbar-brand>
     <b-navbar-toggle target="nav_collapse"/>
     <b-collapse
@@ -37,27 +44,69 @@ export default {
 </script>
 
 <style>
+  .my-navbar {
+    margin: 0;
+    vertical-align: middle;
+  }
+
   #userimg {
     width: 40px;
     height: 40px;
+    margin-right: 20px;
+    border-radius: 50%;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
   }
 
-  .navbar {
-    min-width: 350px;
-    padding: 15px 10px;
-    background-color: #6f5499 !important;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  .logo {
+    height: 50px;
+    margin: 0;
+    vertical-align: middle;
+  }
+
+  .logo img {
+    height: 35px;
   }
 
   .nav-link {
     padding: 0;
   }
 
+  .navbar-dark .navbar-nav .nav-link {
+    color: #999;
+  }
+
+  .navbar-dark .navbar-nav .nav-link:hover,
+  .navbar-dark .navbar-nav .nav-link:focus {
+    color: #f00;
+  }
+
+  .navbar {
+    min-width: 350px;
+    padding: 10px 5px;
+    background-color: #fff !important;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    opacity: 0.8;
+  }
+
+  .navbar-toggler {
+    background-color: #f00;
+  }
+
+  #userimg:hover {
+    -webkit-filter: brightness(150%);
+    filter: brightness(150%);
+  }
+
+  #logoimg:hover {
+    -webkit-filter: brightness(150%);
+    filter: brightness(150%);
+  }
+
   #logout {
     padding: 6px;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 780px) {
     button {
       display: none;
     }

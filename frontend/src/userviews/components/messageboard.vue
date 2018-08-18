@@ -7,10 +7,10 @@
       <ul class="form-style">
         <li
           v-for="msg in message_list"
-          :key="msg"
+          :key="msg.id"
           class="form-control piece-of-message">
           <div id="message">
-            <h style="font-weight: bold;">{{ msg.username }}</h>
+            <h5 style="font-weight: bold;">{{ msg.username }}</h5>
             留言：{{ msg.message_content }}
           </div>
           <div
@@ -53,18 +53,21 @@ export default {
       newMsg: '',
       message_list: [
         {
+          id: 1,
           username: '张三丰',
           message_content: '今天天气不错',
           num_of_praise: 50,
           num_of_detest: 60
         },
         {
+          id: 2,
           username: '张无忌',
           message_content: 'Gitlab服务器炸了，你们知道吗？',
           num_of_praise: 60,
           num_of_detest: 70
         },
         {
+          id: 3,
           username: '周芷若',
           message_content: '我想吃糖~',
           num_of_praise: 20,

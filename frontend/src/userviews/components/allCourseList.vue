@@ -9,7 +9,7 @@
       class="bv-example-row course-list-style">
       <b-card-group
         v-for="course in course_list"
-        :key="course"
+        :key="course.id"
         deck
         class="mb-3 b-card-group-style">
         <b-card
