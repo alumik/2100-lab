@@ -3,12 +3,11 @@
     class="width-style">
     <UserNavbar/>
     <div class="content-style">
-      <h3>课程详情id{{ this.$route.params.course_id }}</h3>
+      <h5>{{ course.name }}</h5>
     </div>
     <div>
-      <!-- 分享按钮的弹窗 -->
       <b-modal
-        id="modal1"
+        id="share-popup"
         hide-footer
         title="分享二维码">
         <p
@@ -23,18 +22,16 @@
           value="share_url"
           class="qrcode-style"/>
         <div class="modal-style">
-          <b-btn @click="hideModal1">取消</b-btn>
+          <b-btn @click="hide_share_popup">取消</b-btn>
           <b-btn
             variant="primary"
-            @click="hideModal1">完成分享</b-btn>
+            @click="hide_share_popup">完成分享</b-btn>
         </div>
       </b-modal>
-      <!-- 分享按钮的弹窗 -->
     </div>
     <div>
-      <!-- 支付按钮的弹窗 -->
       <b-modal
-        id="modal2"
+        id="pay-popup"
         hide-footer
         title="购买课程">
         <h5 class="my-4">请选择支付方式</h5>
@@ -51,18 +48,16 @@
           <h5 class="wxpay-title">微信</h5>
         </b-row>
         <div class="modal-style">
-          <b-btn @click="hideModal2">取消</b-btn>
+          <b-btn @click="hide_pay_popup">取消</b-btn>
           <b-btn
             variant="primary"
             @click="finishPay">完成支付</b-btn>
         </div>
       </b-modal>
-      <!-- 支付按钮的弹窗 -->
     </div>
     <div>
-      <!-- 学习按钮的弹窗 -->
       <b-modal
-        id="modal3"
+        id="study-popup"
         hide-footer
         title="注意！">
         <input
@@ -70,13 +65,12 @@
           readonly
           style="border:none; width: 100%;">
         <div class="modal-style">
-          <b-btn @click="hideModal3">取消</b-btn>
+          <b-btn @click="hide_study_popup">取消</b-btn>
           <b-btn
             variant="primary"
             @click="open_study_page(course_id)">我知道了</b-btn>
         </div>
       </b-modal>
-      <!-- 学习按钮的弹窗 -->
     </div>
     <div
       id="profile"
@@ -94,40 +88,52 @@
       <div
         id="introduction"
         class="introduction-style">
-        <h3
-          id="coursename"
-          class="row coursename-style">
-          课程：{{ course.name }}</h3>
-        <div class="row row-btn-style">
+        <div class="reminder-style">
           <div
-            id="studybutton"
-            class="row-btn">
+            v-if="course.value!=0 && is_paid === false"
+            class="row row-style">
+            <h6>现价 ￥{{ course.value-user_balance }}  ￥</h6>
+            <h6 class="origin-value">{{ course.value }}</h6>
+          </div>
+          <div
+            class="row time-style">
+            <h6>课程时效 {{ course.validate_time }} h</h6>
+          </div>
+          <div
+            class="row time-style">
+            <h6>距离失效还有 {{ course.time_to_end }} h</h6>
+          </div>
+        </div>
+        <div class="row btn-row-style">
+          <div>
             <div v-show="course.value === 0 || is_paid === true">
               <b-button
-                v-b-modal.modal3
+                v-b-modal.study-popup
                 size="lg"
-                variant="primary">
+                variant="primary"
+                class="my-btn">
                 开始学习
               </b-button>
             </div>
             <div v-show="course.value !== 0 && is_paid === false">
               <b-button
-                v-b-modal.modal2
+                v-b-modal.pay-popup
                 size="lg"
-                variant="primary">
+                variant="primary"
+                class="my-btn">
                 立即购买
               </b-button>
               <div/>
             </div>
           </div>
           <div
-            id="sharebutton"
-            class="row-btn">
+            id="sharebutton">
             <b-button
-              v-b-modal.modal1
+              v-b-modal.share-popup
               size="lg"
               variant="primary"
-              class="row-btn"
+              class="my-btn"
+              style="margin-right: 5px;"
             >
               分享
             </b-button>
@@ -136,46 +142,28 @@
             :title="share_introduction"
             pill
             variant="primary"
-            class="reminder btn btn-primary"
+            class="reminder"
             data-container="body"
             data-toggle="popover"
             data-content="share_introduction"
             data-placement="top"
           >
-            !</b-badge>
+            <label>!</label>
+          </b-badge>
           <b-button
             size="lg"
             variant="primary"
-            class="row-btn praise"
+            class="my-btn"
             @click="course.num_of_praise+=1">
-            <h5>
-              <span class="praise-style">
-                {{ course.num_of_praise }}</span>
-              赞</h5>
+            {{ course.num_of_praise }} 赞
           </b-button>
-        </div>
-        <div class="reminder-style">
-          <div
-            v-if="course.value!=0 && is_paid === false"
-            class="row row-style">
-            <h5>现价 ￥{{ course.value-user_balance }}  ￥</h5>
-            <h5 class="origin-value">{{ course.value }}</h5>
-          </div>
-          <div
-            class="row time-style">
-            <h5>课程时效 {{ course.validate_time }} h</h5>
-          </div>
-          <div
-            class="row time-style">
-            <h5>距离失效还有 {{ course.time_to_end }} h</h5>
-          </div>
         </div>
       </div>
     </div>
     <div
       id="course-introduction"
       class="profile-style">
-      <h3>课程简介</h3>
+      <h5>课程简介</h5>
       <p>&emsp; &emsp;{{ course.introduction }}</p>
     </div>
   </body>
@@ -213,7 +201,7 @@ export default{
           '惟膀子疼痛厉害，举箸14提笔，诸多不便，大约大去之期15不远矣。”我读到此处，' +
           '在晶莹的泪光中，又看见那肥胖的、青布棉袍黑布马褂的背影。唉！' +
           '我不知何时再能与他相见！',
-        src: require('../components/image/1.jpg'),
+        src: 'https://picsum.photos/1024/480/?image=54',
         validate_time: 25,
         time_to_end: 24
       }
@@ -232,17 +220,17 @@ export default{
     }
   },
   methods: {
-    hideModal1 () {
-      this.$root.$emit('bv::hide::modal', 'modal1')
+    hide_share_popup () {
+      this.$root.$emit('bv::hide::modal', 'share-popup')
     },
-    hideModal2 () {
-      this.$root.$emit('bv::hide::modal', 'modal2')
+    hide_pay_popup () {
+      this.$root.$emit('bv::hide::modal', 'pay-popup')
     },
-    hideModal3 () {
-      this.$root.$emit('bv::hide::modal', 'modal3')
+    hide_study_popup () {
+      this.$root.$emit('bv::hide::modal', 'study-popup')
     },
     finishPay () {
-      this.$root.$emit('bv::hide::modal', 'modal2')
+      this.$root.$emit('bv::hide::modal', 'pay-popup')
       this.is_paid = true
     },
     open_study_page: function (id) {
@@ -253,26 +241,14 @@ export default{
 </script>
 
 <style>
-  .isactive {
-    display: none;
-  }
-
   .profile-style {
     height: 300px;
-    margin: 10px;
-    border: 3px solid #f00;
-    -webkit-box-shadow: 10px 8px 10px 3px #999;
-    -moz-box-shadow: 10px 8px 10px 3px #000;
-    box-shadow: 10px 8px 10px 3px #999;
+    margin: 50px;
     opacity: 0.9;
   }
 
   #course-introduction .profile-style {
     height: 250px;
-  }
-
-  .row-btn {
-    margin-right: 50px;
   }
 
   .modal-style {
@@ -285,7 +261,7 @@ export default{
   }
 
   .content-style {
-    margin-left: 10px;
+    margin: 40px 60px;
   }
 
   .qrcode-margin-style {
@@ -300,6 +276,11 @@ export default{
     margin-left: 180px;
   }
 
+  .my-btn {
+    margin-right: 60px;
+    font-size: 16px;
+  }
+
   .course-img-style {
     width: 80%;
     height: 100%;
@@ -307,29 +288,11 @@ export default{
   }
 
   .introduction-style {
+    display: flex;
+    flex-direction: column;
     width: 50%;
-  }
-
-  .coursename-style {
-    position: relative;
-    margin-top: 10px;
-  }
-
-  .time-style {
-    position: relative;
-  }
-
-  .praise-style {
-    font-size: 18px;
-    color: lawngreen;
-  }
-
-  .reminder-style {
-    margin-top: 30px;
-  }
-
-  .row-style {
-    position: relative;
+    height: 100%;
+    vertical-align: bottom;
   }
 
   .origin-value {
@@ -337,19 +300,19 @@ export default{
   }
 
   .reminder {
-    position: absolute;
-    bottom: 3px;
-    left: 240px;
-    height: 40%;
-    margin-left: 10px;
+    width: 20px;
+    height: 20px;
+    margin-top: 25px;
+    margin-right: 50px;
   }
 
   .qrcode-style {
     margin-left: 130px;
   }
 
-  .row-btn-style {
-    position: relative;
+  .btn-row-style {
+    display: flex;
+    flex-direction: row;
     width: 100%;
     padding: 3px;
     margin-top: 30px;
