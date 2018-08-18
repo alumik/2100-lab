@@ -78,7 +78,7 @@
                   <button
                     type="button"
                     class="btn btn-xs"
-                    @click="to_detail">
+                    @click="to_detail(message)">
                     详情
                   </button>
                   <button
@@ -152,8 +152,8 @@ export default {
     }
   },
   methods: {
-    to_detail: function () {
-      this.$router.push({ path: '/admin/message/detail' })
+    to_detail: function (val) {
+      this.$router.push({ name: 'MessageDetail', params: {message: val} })
     }
   }
 }

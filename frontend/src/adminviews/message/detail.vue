@@ -76,7 +76,7 @@ import Menu from '../components/menu'
 import ConfirmModal from '../components/ConfirmModal'
 import InputModal from '../components/InputModal'
 export default {
-  name: 'Message',
+  name: 'MessageDetail',
   components: {InputModal, ConfirmModal, AdminNavbar, BreadCrumb, Menu},
   data () {
     return {
@@ -89,10 +89,12 @@ export default {
       }, {
         text: '留言详情',
         active: true
-      }],
-      message: {
-        data: '2018-08-10', user: '小红', course_code: 'SOFT1', course_name: '计算机', message: '很好', state: '已删除'
-      }
+      }]
+    }
+  },
+  computed: {
+    message: function () {
+      return this.$route.params.message
     }
   }
 }
