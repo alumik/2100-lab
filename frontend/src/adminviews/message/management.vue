@@ -220,7 +220,7 @@ export default {
     height: 100%;
   }
 
-  .table_div {
+  .table-div {
     padding-right: 15px;
     padding-left: 15px;
   }
