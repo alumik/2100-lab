@@ -1,8 +1,9 @@
 'use strict'
 const path = require('path')
-const utils = require('./utils')
+const utils = require('../build/utils')
 const config = require('../config')
-const vueLoaderConfig = require('./vue-loader.conf')
+const vueLoaderConfig = require('../build/vue-loader.conf')
+const nodeExternals = require('webpack-node-externals')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -29,13 +30,15 @@ module.exports = {
     filename: '[name].js',
     publicPath: process.env.NODE_ENV === 'production'
       ? config.build.assetsPublicPath
-      : config.dev.assetsPublicPath
+      : config.dev.assetsPublicPath,
+    devtoolModuleFilenameTemplate: '[absolute-resource-path]',
+    devtoolFallbackModuleFilenameTemplate: '[absolute-resource-path]?[hash]'
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src'),
+      '@': resolve('src')
     }
   },
   module: {
@@ -74,6 +77,10 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
+      },
+      {
+        test: /\.css$/,
+        loader: 'null-loader'
       }
     ]
   },
@@ -88,5 +95,7 @@ module.exports = {
     net: 'empty',
     tls: 'empty',
     child_process: 'empty'
-  }
+  },
+  externals: [nodeExternals()],
+  devtool: 'inline-cheap-module-source-map'
 }

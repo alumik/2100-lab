@@ -9,9 +9,9 @@
     "start": "npm run dev",
     "lint": "eslint --ext .js,.vue src",
     "build": "node build/build.js",
-    "eslint": "./node_modules/.bin/eslint './**/*.vue'",
-    "stylelint": "./node_modules/.bin/stylelint './**/*.vue'",
-    "test": "mocha-webpack --webpack-config build/webpack.base.conf.js --require test/setup.js test/**/*.spec.js"
+    "eslint": "./node_modules/.bin/eslint './**/*.vue' './**/*.js'",
+    "stylelint": "./node_modules/.bin/stylelint './**/*.vue' './**/*.css'",
+    "test": "mocha-webpack --webpack-config test/webpack.config.js --require test/setup.js test/**/*.spec.js"
   },
   "dependencies": {
     "@xkeshi/vue-qrcode": "^1.0.0",
@@ -19,7 +19,8 @@
     "prettier": "^1.14.0",
     "vue": "^2.5.17",
     "vue-bootstrap-datetimepicker": "^5.0.0-beta.2",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "webpack-node-externals": "^1.7.2"
   },
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.24",
@@ -80,8 +81,7 @@
     "webpack": "^3.6.0",
     "webpack-bundle-analyzer": "^2.9.0",
     "webpack-dev-server": "^2.9.1",
-    "webpack-merge": "^4.1.0",
-    "webpack-node-externals": "^1.7.2"
+    "webpack-merge": "^4.1.0"
   },
   "engines": {
     "node": ">= 6.0.0",

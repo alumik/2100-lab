@@ -1,6 +1,7 @@
+/* eslint-disable no-undef */
+
 import { shallowMount } from '@vue/test-utils'
-import login from '../src/userviews/personal/login.vue'
-import UserNavbar from '../src/userviews/components/navbar.vue'
+import login from '@/userviews/personal/login.vue'
 
 describe('MessageToggle.vue', () => {
   it('toggles msg passed to Message when button is clicked', () => {
