@@ -1,6 +1,6 @@
 <template>
   <div>
-    <AdminNavbar style="min-width: 500px;"/>
+    <AdminNavbar id="navbar"/>
     <div class="div">
       <AdminMenu/>
     </div>
@@ -17,9 +17,8 @@ export default {
 </script>
 
 <style scoped>
-  .father {
+  #navbar {
     min-width: 500px;
-    padding: 0;
   }
 
   div {
