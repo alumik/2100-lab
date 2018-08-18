@@ -81,7 +81,6 @@ export default {
   }
 
   .navbar {
-    min-width: 350px;
     padding: 10px 5px;
     background-color: #fff !important;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);

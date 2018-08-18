@@ -12,7 +12,9 @@
       <b-input-group prepend="验证码">
         <b-form-input type="text"/>
         <b-input-group-append>
-          <b-btn variant="outline-success">获取验证码</b-btn>
+          <b-btn
+            variant="outline-success"
+            @click="send">{{ status }}{{ seconds !== 61 ? seconds + 's' : '' }}</b-btn>
         </b-input-group-append>
       </b-input-group>
       <br>
@@ -31,6 +33,24 @@ export default {
   name: 'Login',
   components: {
     UserNavbar
+  },
+  data () {
+    return {
+      status: '获取验证码',
+      seconds: 61
+    }
+  },
+  methods: {
+    send () {
+      this.status = '再次发送 '
+      let that = this
+      let t = setInterval(function () {
+        that.seconds = that.seconds - 1
+        if (that.seconds === 0) {
+          clearInterval(t)
+        }
+      }, 1000)
+    }
   }
 }
 </script>

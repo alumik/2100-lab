@@ -7,69 +7,71 @@
         :hidden="hidden"/>
       <div class="info">
         <BreadCrumb :items="items"/>
-        <b-row>
-          <b-img
-            :src="thumbnail"
-            thumbnail
-            fluid
-            alt="Thumbnail" />
-          <button
-            type="button"
-            class="btn btn-warning btn-lg">
-            修改头像
-            <b-form-file
-              v-model="file"
-              :class="{'upload': true}"
-              plain
-              @change="change"/>
-          </button>
-        </b-row>
-        <b-row>
-          <b-input-group
-            size="lg"
-            prepend="昵称">
-            <b-form-input
-              v-model="value"
-              :disabled="disabled"/>
-            <b-input-group-append>
-              <b-btn
-                variant="outline-success"
-                @click="editable">{{ status }}</b-btn>
-            </b-input-group-append>
-          </b-input-group>
-        </b-row>
-        <b-row>
-          <b-input-group
-            size="lg"
-            prepend="手机号">
-            <b-form-input
-              v-model="phone"
-              class="uneditable"
-              disabled/>
-          </b-input-group>
-        </b-row>
-        <b-row>
-          <b-input-group
-            class="money"
-            size="lg"
-            prepend="奖励金余额"
-            append="币">
-            <b-form-input
-              v-model="money"
-              class="uneditable"
-              disabled/>
-          </b-input-group>
-        </b-row>
-        <b-row >
-          <b-input-group
-            size="lg"
-            prepend="注册时间">
-            <b-form-input
-              v-model="time"
-              class="uneditable"
-              disabled/>
-          </b-input-group>
-        </b-row>
+        <div class="content">
+          <b-row>
+            <b-img
+              :src="thumbnail"
+              thumbnail
+              fluid
+              alt="Thumbnail" />
+            <button
+              type="button"
+              class="btn btn-warning btn-lg">
+              修改头像
+              <b-form-file
+                v-model="file"
+                :class="{'upload': true}"
+                plain
+                @change="change"/>
+            </button>
+          </b-row>
+          <b-row>
+            <b-input-group
+              size="lg"
+              prepend="昵称">
+              <b-form-input
+                v-model="value"
+                :disabled="disabled"/>
+              <b-input-group-append>
+                <b-btn
+                  variant="outline-success"
+                  @click="editable">{{ status }}</b-btn>
+              </b-input-group-append>
+            </b-input-group>
+          </b-row>
+          <b-row>
+            <b-input-group
+              size="lg"
+              prepend="手机号">
+              <b-form-input
+                v-model="phone"
+                class="uneditable"
+                disabled/>
+            </b-input-group>
+          </b-row>
+          <b-row>
+            <b-input-group
+              class="money"
+              size="lg"
+              prepend="奖励金余额"
+              append="币">
+              <b-form-input
+                v-model="money"
+                class="uneditable"
+                disabled/>
+            </b-input-group>
+          </b-row>
+          <b-row >
+            <b-input-group
+              size="lg"
+              prepend="注册时间">
+              <b-form-input
+                v-model="time"
+                class="uneditable"
+                disabled/>
+            </b-input-group>
+          </b-row>
+        </div>
       </div>
     </div>
   </div>
@@ -143,7 +145,12 @@ export default {
   }
 
   .info {
-    margin: 40px 40px;
+    flex-grow: 1;
+  }
+
+  .content {
+    display: inline-block;
+    padding: 20px;
   }
 
   .row {

@@ -1,24 +1,27 @@
 <template>
   <div id="page">
-    <UserNavbar/>
+    <UserNavbar @hide="hide"/>
     <div id="main">
       <UserMenu
         :list="list"
         :hidden="hidden"/>
       <div id="info">
         <BreadCrumb :items="crumbs"/>
-        <b-table
-          :items="items"
-          :fields="fields"
-          :current-page="currentPage"
-          :per-page="perPage"
-          striped
-          hover/>
-        <b-pagination
-          :total-rows="items.length"
-          :per-page="perPage"
-          v-model="currentPage"
-          class="my-0" />
+        <div class="content">
+          <b-table
+            :items="items"
+            :fields="fields"
+            :current-page="currentPage"
+            :per-page="perPage"
+            :responsive="responsive"
+            striped
+            hover/>
+          <b-pagination
+            :total-rows="items.length"
+            :per-page="perPage"
+            v-model="currentPage"
+            class="my-0" />
+        </div>
       </div>
     </div>
   </div>
@@ -72,6 +75,7 @@ export default {
         { id: 0, text: '查看学习记录', isActive: false },
         { id: 1, text: '查看订单记录', isActive: true }
       ],
+      responsive: 'lg',
       fields: {
         last_name: {
           label: 'Person last name',
@@ -109,6 +113,9 @@ export default {
     }
   },
   methods: {
+    hide: function () {
+      this.hidden = !this.hidden
+    }
   }
 }
 </script>
@@ -124,7 +131,11 @@ export default {
   }
 
   #info {
-    margin: 40px 40px;
+    flex-grow: 1;
+  }
+
+  .content {
+    padding: 20px;
   }
 
   .my-0 {

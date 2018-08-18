@@ -1,24 +1,26 @@
 <template>
   <div id="page">
-    <UserNavbar/>
+    <UserNavbar @hide="hide"/>
     <div id="main">
       <UserMenu
         :list="list"
         :hidden="hidden"/>
       <div id="info">
         <BreadCrumb :items="crumbs"/>
-        <b-table
-          :items="items"
-          :fields="fields"
-          :current-page="currentPage"
-          :per-page="perPage"
-          striped
-          hover/>
-        <b-pagination
-          :total-rows="items.length"
-          :per-page="perPage"
-          v-model="currentPage"
-          class="my-0" />
+        <div class="content">
+          <b-table
+            :items="items"
+            :fields="fields"
+            :current-page="currentPage"
+            :per-page="perPage"
+            striped
+            hover/>
+          <b-pagination
+            :total-rows="items.length"
+            :per-page="perPage"
+            v-model="currentPage"
+            class="my-0" />
+        </div>
       </div>
     </div>
   </div>
@@ -79,6 +81,9 @@ export default {
     }
   },
   methods: {
+    hide: function () {
+      this.hidden = !this.hidden
+    }
   }
 }
 </script>
@@ -94,7 +99,11 @@ export default {
   }
 
   #info {
-    margin: 40px 40px;
+    flex-grow: 1;
+  }
+
+  .content {
+    padding: 20px;
   }
 
   .my-0 {
