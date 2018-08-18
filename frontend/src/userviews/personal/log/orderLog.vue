@@ -132,7 +132,6 @@ export default {
 
   #info {
     flex-grow: 1;
-    flex-shrink: 1;
   }
 
   .content {
