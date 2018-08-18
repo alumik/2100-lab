@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+
 import { shallowMount } from '@vue/test-utils'
 import personalCenter from '@/userviews/personal/personalCenter.vue'
 

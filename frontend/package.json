@@ -9,8 +9,8 @@
     "start": "npm run dev",
     "lint": "eslint --ext .js,.vue src",
     "build": "node build/build.js",
-    "eslint": "./node_modules/.bin/eslint './**/*.vue'",
-    "stylelint": "./node_modules/.bin/stylelint './**/*.vue'",
+    "eslint": "./node_modules/.bin/eslint './**/*.vue' './**/*.js'",
+    "stylelint": "./node_modules/.bin/stylelint './**/*.vue' './**/*.css'",
     "test": "mocha-webpack --webpack-config test/webpack.config.js --require test/setup.js test/**/*.spec.js"
   },
   "dependencies": {

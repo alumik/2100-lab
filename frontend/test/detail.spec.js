@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+
 import { shallowMount } from '@vue/test-utils'
 import Detail from '@/adminviews/course/detail.vue'
 
