@@ -161,12 +161,8 @@ def delete_comment(request):
     except Comment.DoesNotExist:
         return JsonResponse({'message': 'Comment not found.'}, status=404)
 
-    user = request.user
-    if user.is_staff:
-        pass
-    else:
-        if not user.id == comment.customer.id:
-            return JsonResponse({'message': 'Access denied.'}, status=403)
+    if not request.user.id == comment.customer.id:
+        return JsonResponse({'message': 'Access denied.'}, status=403)
 
     comment.delete()
     return JsonResponse({'message': 'Comment deleted.'})
