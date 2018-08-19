@@ -20,5 +20,4 @@ describe('基本组件单元测验', () => {
   it('包含面包屑', () => {
     expect(wrapper.contains(BreadCrumb)).toBe(true)
   })
-
 })
