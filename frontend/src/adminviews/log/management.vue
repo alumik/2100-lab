@@ -1,83 +1,78 @@
 <template>
-  <div class="html">
-    <AdminNavbar id="navbar"/>
-    <div id="body">
-      <Menu/>
-      <div id="management">
-        <BreadCrumb :items="items"/>
-        <h1>日志查询</h1>
-        <div class="table-div">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>管理员账号</th>
-                <th>开始时间</th>
-                <th>结束时间</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <input
-                    id="admin"
-                    v-model="admin_id"
-                    type="text"
-                    class="form-control">
-                </td>
-                <td>
-                  <div class="col-md-6">
-                    <date-picker
-                      v-model="begin_date"
-                      :config="options"/>
-                  </div>
-                </td>
-                <td>
-                  <div class="col-md-6">
-                    <date-picker
-                      v-model="end_date"
-                      :config="options"/>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <h4>查询项目</h4>
-        <form class="checkbox-div">
-          <b-form-group>
-            <b-form-checkbox-group
-              id="row1"
-              v-model="select1"
-              :options="options1"
-              name="row1"/>
-          </b-form-group>
-          <b-form-group>
-            <b-form-checkbox-group
-              id="row2"
-              v-model="select2"
-              :options="options2"
-              name="row2"/>
-          </b-form-group>
-        </form>
-        <div class="button-group">
-          <button
-            type="submit"
-            class="btn"
-            @click="to_detail">查询</button>
-        </div>
+  <Basic
+    :items="items"
+    class="my-basic">
+    <div>
+      <h1>日志查询</h1>
+      <div class="table-div">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>管理员账号</th>
+              <th>开始时间</th>
+              <th>结束时间</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <input
+                  id="admin"
+                  v-model="admin_id"
+                  type="text"
+                  class="form-control">
+              </td>
+              <td>
+                <div class="col-md-6">
+                  <date-picker
+                    v-model="begin_date"
+                    :config="options"/>
+                </div>
+              </td>
+              <td>
+                <div class="col-md-6">
+                  <date-picker
+                    v-model="end_date"
+                    :config="options"/>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h4>查询项目</h4>
+      <form class="checkbox-div">
+        <b-form-group>
+          <b-form-checkbox-group
+            id="row1"
+            v-model="select1"
+            :options="options1"
+            name="row1"/>
+        </b-form-group>
+        <b-form-group>
+          <b-form-checkbox-group
+            id="row2"
+            v-model="select2"
+            :options="options2"
+            name="row2"/>
+        </b-form-group>
+      </form>
+      <div class="button-group">
+        <button
+          type="submit"
+          class="btn"
+          @click="to_detail">查询</button>
       </div>
     </div>
-  </div>
+  </Basic>
 </template>
 
 <script>
-import AdminNavbar from '../components/navbar'
-import BreadCrumb from '../../components/breadCrumb'
-import Menu from '../components/menu'
+import Basic from '../basic/basic'
 
 export default {
   name: 'LogManagement',
-  components: {BreadCrumb, AdminNavbar, Menu},
+  components: { Basic },
   data () {
     return {
       items: [{
@@ -109,11 +104,13 @@ export default {
         { text: 'H', value: 'h' },
         { text: 'I', value: 'i' },
         { text: 'J', value: 'j' }
-      ]
+      ],
+      page_jump: false
     }
   },
   methods: {
     to_detail: function () {
+      this.page_jump = true
       this.$router.push({ name: 'LogDetail',
         query: {
           admin_id: this.admin_id,
@@ -128,24 +125,8 @@ export default {
 </script>
 
 <style scoped>
-  .html {
-    height: 100%;
-  }
-
-  #navbar {
-    min-width: 686.4px;
-  }
-
-  #body {
-    display: flex;
-    justify-content: space-between;
-    min-width: 500px;
-    height: calc(100% - 70px);
-  }
-
-  #management {
-    flex-basis: 100%;
-    padding: 0;
+  .my-basic {
+    min-width: 700px;
   }
 
   h1,
