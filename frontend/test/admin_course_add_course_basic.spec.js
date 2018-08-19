@@ -1,29 +1,14 @@
 /* eslint-disable no-undef */
 
 import { shallowMount } from '@vue/test-utils'
-import AddCourse from '@/adminviews/course/add_course.vue'
-import AdminNavbar from '@/adminviews/components/navbar.vue'
-import Menu from '@/adminviews/components/menu'
-import BreadCrumb from '@/components/breadCrumb'
-import UploadSource from '@/adminviews/course/upload_source'
+import AddCourseBasic from '@/adminviews/course/components/add_course_basic.vue'
+import UploadSource from '@/adminviews/course/components/upload_source'
 
 describe('新增课程页面单元测验', () => {
-  const wrapper = shallowMount(AddCourse)
+  const wrapper = shallowMount(AddCourseBasic)
 
   it('标题是"新增课程"', () => {
     expect(wrapper.find('h2').text()).toEqual('新增课程')
-  })
-
-  it('包含导航栏', () => {
-    expect(wrapper.contains(AdminNavbar)).toBe(true)
-  })
-
-  it('包含侧栏菜单', () => {
-    expect(wrapper.contains(Menu)).toBe(true)
-  })
-
-  it('包含面包屑', () => {
-    expect(wrapper.contains(BreadCrumb)).toBe(true)
   })
 
   it('包含上传资源组件', () => {
