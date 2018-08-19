@@ -98,7 +98,7 @@ export default new Router({
       component: () => import('@/adminviews/message/management')
     },
     {
-      path: '/admin/message/detail:message',
+      path: '/admin/message/detail',
       name: 'MessageDetail',
       component: () => import('@/adminviews/message/detail')
     },
