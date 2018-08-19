@@ -95,25 +95,22 @@ export default {
         'change_time': '2018-08-13',
         'authority': 'askcnkj'
       },
-      admin_id: 0
+      admin_id: -1,
+      test_router: -1
     }
   },
   created () {
-    if (typeof (this.$route.query.admin_id) === 'undefined') {
-      this.$router.push({name: 'BurnedCourse'})
-    } else {
+    if (typeof (this.$route.query.admin_id) === 'number') {
       this.admin_id = this.$route.query.admin_id
     }
   },
   methods: {
     jump: function (id) {
-      switch (id) {
-        case 1:
-          this.$router.push({name: 'DistributeAuthority'})
-          break
-        case 2:
-          this.$router.push({name: 'ChangeCode'})
-          break
+      this.test_router = id
+      if (id === 1) {
+        this.$router.push({name: 'DistributeAuthority'})
+      } else if (id === 2) {
+        this.$router.push({name: 'ChangeCode'})
       }
     }
   }

@@ -124,12 +124,14 @@ export default {
     return {
       admin: {
         ID: 'DingQuan'
-      }
+      },
+      auth_text: []
     }
   },
   methods: {
     chooseA: function () {
       this.$refs.check_a.setAttribute('checked', true)
+      this.auth_text.push('a')
     }
   }
 }
