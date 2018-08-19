@@ -1,136 +1,131 @@
 <template>
-  <div class="html">
-    <AdminNavbar id="navbar"/>
-    <div id="body">
-      <Menu/>
-      <div id="management">
-        <BreadCrumb :items="items"/>
-        <h1>留言列表</h1>
-        <div class="table-div">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <td
-                  v-for="title in titles"
-                  :key="title.id">
-                  {{ title.label }}
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr align="center">
-                <td class="xs-td">
-                  <div class="input-group-sm">
-                    <input
-                      v-model="date"
-                      type="text"
-                      class="form-control"
-                      placeholder="">
-                  </div>
-                </td>
-                <td class="xs-td">
-                  <div class="input-group-sm">
-                    <input
-                      v-model="user"
-                      type="text"
-                      class="form-control"
-                      placeholder="">
-                  </div>
-                </td>
-                <td class="xs-td">
-                  <div class="input-group-sm">
-                    <input
-                      v-model="course_code"
-                      type="text"
-                      class="form-control"
-                      placeholder="">
-                  </div>
-                </td>
-                <td class="xs-td">
-                  <div class="input-group-sm">
-                    <input
-                      v-model="course_name"
-                      type="text"
-                      class="form-control"
-                      placeholder="">
-                  </div>
-                </td>
-                <td class="lg-td"/>
-                <td class="s-td">
-                  <div>
-                    <select
-                      v-model="state"
-                      class="selectpicker">
-                      <option value="whole">全部</option>
-                      <option value="reserved">未删除</option>
-                      <option value="deleted">已删除</option>
-                    </select>
-                  </div>
-                </td>
-                <td class="md-td"/>
-              </tr>
-              <tr
-                v-for="message in messages"
-                :key="message.id">
-                <td>{{ message.data }}</td>
-                <td>{{ message.user }}</td>
-                <td>{{ message.course_code }}</td>
-                <td>{{ message.course_name }}</td>
-                <td>{{ message.message }}</td>
-                <td> {{ message.state }} </td>
-                <td class="buttons">
-                  <button
-                    type="button"
-                    class="btn btn-xs"
-                    @click="to_detail(message.id)">
-                    详情
-                  </button>
-                  <button
-                    v-b-modal.reply
-                    type="button"
-                    class="btn">
-                    回复
-                  </button>
-                  <button
-                    v-b-modal.delete
-                    type="button"
-                    class="btn">
-                    删除
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <InputModal
-          id="reply"
-          :input="reply"
-          title="回复留言"
-          placeholder="请输入你要回复的内容"/>
-        <ConfirmModal
-          id="delete"
-          title="确认删除"
-          text="您确定要删除此条留言吗？"/>
-        <Pagination :rows="rows"/>
+  <Basic
+    :items="items"
+    class="my-basic">
+    <div>
+      <h1>留言列表</h1>
+      <div class="table-div">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <td
+                v-for="title in titles"
+                :key="title.id">
+                {{ title.label }}
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr align="center">
+              <td class="xs-td">
+                <div class="input-group-sm">
+                  <input
+                    v-model="date"
+                    type="text"
+                    class="form-control"
+                    placeholder="">
+                </div>
+              </td>
+              <td class="xs-td">
+                <div class="input-group-sm">
+                  <input
+                    v-model="user"
+                    type="text"
+                    class="form-control"
+                    placeholder="">
+                </div>
+              </td>
+              <td class="xs-td">
+                <div class="input-group-sm">
+                  <input
+                    v-model="course_code"
+                    type="text"
+                    class="form-control"
+                    placeholder="">
+                </div>
+              </td>
+              <td class="xs-td">
+                <div class="input-group-sm">
+                  <input
+                    v-model="course_name"
+                    type="text"
+                    class="form-control"
+                    placeholder="">
+                </div>
+              </td>
+              <td class="lg-td"/>
+              <td class="s-td">
+                <div>
+                  <select
+                    v-model="state"
+                    class="selectpicker">
+                    <option value="whole">全部</option>
+                    <option value="reserved">未删除</option>
+                    <option value="deleted">已删除</option>
+                  </select>
+                </div>
+              </td>
+              <td class="md-td"/>
+            </tr>
+            <tr
+              v-for="message in messages"
+              :key="message.id">
+              <td>{{ message.data }}</td>
+              <td>{{ message.user }}</td>
+              <td>{{ message.course_code }}</td>
+              <td>{{ message.course_name }}</td>
+              <td>{{ message.message }}</td>
+              <td> {{ message.state }} </td>
+              <td class="buttons">
+                <button
+                  type="button"
+                  class="btn btn-xs"
+                  @click="to_detail(message.id)">
+                  详情
+                </button>
+                <button
+                  v-b-modal.reply
+                  type="button"
+                  class="btn">
+                  回复
+                </button>
+                <button
+                  v-b-modal.delete
+                  type="button"
+                  class="btn">
+                  删除
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
+      <InputModal
+        id="reply"
+        :input="reply"
+        title="回复留言"
+        placeholder="请输入你要回复的内容"/>
+      <ConfirmModal
+        id="delete"
+        title="确认删除"
+        text="您确定要删除此条留言吗？"/>
+      <Pagination :rows="rows"/>
     </div>
-  </div>
+  </Basic>
 </template>
 
 <script>
-import AdminNavbar from '../components/navbar'
-import BreadCrumb from '../../components/breadCrumb'
 import Pagination from '../../components/pagination'
-import Menu from '../components/menu'
 import ConfirmModal from '../components/ConfirmModal'
 import InputModal from '../components/InputModal'
+import Basic from '../basic/basic'
 let messages = [
   { data: '2018-08-10', user: '小红', course_code: 'SOFT1', course_name: '计算机', message: '很好', state: '已删除', id: '1001' },
   { data: '2018-08-11', user: '小明', course_code: 'English2', course_name: '口语', message: '还不错', state: '未删除', id: '1002' }
 ]
 export default {
   name: 'MessageManagement',
-  components: { InputModal, ConfirmModal, Menu, AdminNavbar, BreadCrumb, Pagination },
+  components: { Basic, InputModal, ConfirmModal, Pagination },
   data () {
     return {
       items: [{
@@ -168,10 +163,6 @@ export default {
 </script>
 
 <style scoped>
-  #navbar {
-    min-width: 1300px;
-  }
-
   h1 {
     padding-left: 15px;
     margin-top: 25px;
@@ -193,18 +184,6 @@ export default {
     vertical-align: middle;
   }
 
-  #body {
-    display: flex;
-    justify-content: space-between;
-    min-width: 1300px;
-    height: calc(100% - 70px);
-  }
-
-  #management {
-    flex-basis: 100%;
-    padding: 0;
-  }
-
   td button {
     margin-right: 7px;
     margin-left: 7px;
@@ -222,10 +201,6 @@ export default {
 
   option {
     font-size: 18px;
-  }
-
-  .html {
-    height: 100%;
   }
 
   .table-div {

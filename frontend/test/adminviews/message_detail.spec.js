@@ -2,9 +2,7 @@
 
 import {shallowMount} from '@vue/test-utils'
 import MessageDetail from '@/adminviews/message/detail'
-import AdminNavbar from '@/adminviews/components/navbar'
-import Menu from '@/adminviews/components/menu'
-import BreadCrumb from '@/components/breadCrumb'
+import Basic from '@/adminviews/basic/basic'
 import BootstrapVue from 'bootstrap-vue'
 import Vue from 'vue'
 
@@ -26,16 +24,8 @@ describe('留言详情页面单元测试', () => {
     expect(wrapper.exists()).toBe(true)
   })
 
-  it('包含导航栏', () => {
-    expect(wrapper.contains(AdminNavbar)).toBe(true)
-  })
-
-  it('包含侧栏菜单', () => {
-    expect(wrapper.contains(Menu)).toBe(true)
-  })
-
-  it('包含面包屑', () => {
-    expect(wrapper.contains(BreadCrumb)).toBe(true)
+  it('包含Basic组件', () => {
+    expect(wrapper.contains(Basic)).toBe(true)
   })
 
   it('测试按钮渲染数量', () => {
