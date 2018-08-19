@@ -22,6 +22,7 @@
                 <td class="small-td">
                   <div class="input-group-sm">
                     <input
+                      v-model="order_code"
                       type="text"
                       class="form-control"
                       placeholder="">
@@ -30,6 +31,7 @@
                 <td class="small-td">
                   <div class="input-group-sm">
                     <input
+                      v-model="course_code"
                       type="text"
                       class="form-control"
                       placeholder="">
@@ -38,6 +40,7 @@
                 <td class="small-td">
                   <div class="input-group-sm">
                     <input
+                      v-model="course_name"
                       type="text"
                       class="form-control"
                       placeholder="">
@@ -46,6 +49,7 @@
                 <td class="small-td">
                   <div class="input-group-sm">
                     <input
+                      v-model="user"
                       type="text"
                       class="form-control"
                       placeholder="">
@@ -133,6 +137,10 @@ export default {
           state: '已退款' }
       ],
       rows: 2,
+      order_code: '',
+      course_code: '',
+      course_name: '',
+      user: '',
       state: null
     }
   },
