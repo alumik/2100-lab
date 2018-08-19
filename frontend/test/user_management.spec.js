@@ -7,7 +7,7 @@ import Menu from '@/adminviews/components/menu'
 import BreadCrumb from '@/components/breadCrumb'
 import Pagination from '@/components/pagination'
 
-describe('留言管理页面单元测试', () => {
+describe('用户管理页面单元测试', () => {
   const wrapper = shallowMount(UserManagement)
 
   it('用户管理组件存在', () => {
