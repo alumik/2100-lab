@@ -59,6 +59,10 @@ describe('课程详情页单元测试', () => {
     expect(wrapper.contains('#study-popup')).toBe(true)
   })
 
+  it('课程简介渲染', () => {
+    expect(wrapper.contains('#introduction')).toBe(true)
+  })
+
   it('点击分享按钮弹出模态框', () => {
     wrapper.find('#pay-button').trigger('click')
     expect(wrapper.contains('#pay-popup')).toBe(true)

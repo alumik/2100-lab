@@ -32,16 +32,22 @@
       </div>
       <div role="tablist">
         <b-card>
-          <div class="text-left-style">
+          <div
+            id="introduction"
+            class="text-left-style">
             <label class="delete-margin">
               <h5>{{ course.name }}{{ this.$route.query.course_id }}</h5>
               &emsp;&emsp;{{ text_show }}</label>
-            <label v-if="brandFold === false">{{ text_hide }}</label>
+            <label
+              v-if="brandFold === false"
+              id="hide-text">{{ text_hide }}</label>
           </div>
           <div
             class="text-right-style"
             @click="changeFoldState">
-            <label class="look-all">{{ brandFold ? '﹀展开':'︿收起' }}</label>
+            <label
+              id="watch-all"
+              class="look-all">{{ brandFold ? '﹀展开':'︿收起' }}</label>
           </div>
         </b-card>
         <b-card
@@ -54,6 +60,7 @@
           </b-card-header>
           <b-card-body>
             <p
+              id="message-board"
               class="card-text width-style">
               <MessageBoard/>
             </p>
@@ -127,7 +134,7 @@ export default {
     if (typeof (this.$route.query.course_id) === 'undefined') {
       this.$router.push({name: 'BurnedCourse'})
     } else {
-      this.course_id = this.$route.params.course_id
+      this.course_id = this.$route.query.course_id
     }
   },
   mounted () {
