@@ -1,12 +1,9 @@
 <template>
-  <div>
-    <AdminNavbar id="navbar"/>
-    <div id="body">
-      <div>
-        <Menu/>
-      </div>
-      <div id="detail">
-        <BreadCrumb :items="items"/>
+  <Basic
+    :items="items"
+    class="my-basic">
+    <div>
+      <div class="title">
         <h1>订单详情</h1>
         <div class="buttons">
           <button
@@ -20,47 +17,12 @@
             title="确认退款"
             text="您确定要进行退款操作吗？"/>
         </div>
-        <div class="table-div">
-          <table class="table table-bordered">
-            <tbody class="w-100">
-              <tr class="row mx-0">
-                <td class="col-2">订单编号</td>
-                <td class="col-10">{{ order.order_code }}</td>
-              </tr>
-              <tr class="row mx-0">
-                <td class="col-2">课程代码</td>
-                <td class="col-10">{{ order.course_code }}</td>
-              </tr>
-              <tr class="row mx-0">
-                <td class="col-2">课程名</td>
-                <td class="col-10">{{ order.course_name }}</td>
-              </tr>
-              <tr class="row mx-0">
-                <td class="col-2">用户名</td>
-                <td class="col-10">{{ order.user }}</td>
-              </tr>
-              <tr class="row mx-0">
-                <td class="col-2">成交时间</td>
-                <td class="col-10">{{ order.deal }}</td>
-              </tr>
-              <tr class="row mx-0">
-                <td class="col-2">退款时间</td>
-                <td class="col-10">{{ order.refund }}</td>
-              </tr>
-              <tr class="row mx-0">
-                <td class="col-2">金额</td>
-                <td class="col-10">{{ order.charge }}</td>
-              </tr>
-              <tr class="row mx-0">
-                <td class="col-2">状态</td>
-                <td class="col-10">{{ order.state }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
+      <DetailTable
+        :titles="titles"
+        :data="order"/>
     </div>
-  </div>
+  </Basic>
 </template>
 
 <script>
@@ -68,9 +30,11 @@ import BreadCrumb from '../../components/breadCrumb'
 import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
 import ConfirmModal from '../components/ConfirmModal'
+import Basic from '../basic/basic'
+import DetailTable from '../components/detail_table'
 export default {
   name: 'OrderDetail',
-  components: {ConfirmModal, AdminNavbar, BreadCrumb, Menu},
+  components: {DetailTable, Basic, ConfirmModal, AdminNavbar, BreadCrumb, Menu},
   data () {
     return {
       items: [{
@@ -83,48 +47,36 @@ export default {
         text: this.$route.query.order_id,
         active: true
       }],
-      order: { order_code: '1001',
-        course_code: 'SOFT1',
-        course_name: '计算机',
-        user: '小红',
-        charge: '100.00',
-        deal: '2018-01-01',
-        refund: null,
-        state: '已完成' }
+      order: [ '1001', 'SOFT1', '计算机', '小红', '2018-01-01', null, '100.00', '已完成' ],
+      titles: [ '订单编号', '课程代码', '课程名', '用户名', '成交时间', '退款时间', '金额', '状态' ]
     }
   }
 }
 </script>
 
 <style scoped>
-  #navbar {
+  .my-basic {
     min-width: 1000px;
+  }
+
+  .title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 15px;
+    margin-top: 25px;
+    margin-bottom: 25px;
   }
 
   h1 {
     padding-left: 15px;
-    margin-top: 25px;
-    margin-bottom: 25px;
     text-align: left;
   }
 
   .buttons {
     display: flex;
     justify-content: flex-end;
-    padding-right: 15px;
-    padding-bottom: 15px;
     text-align: right;
-  }
-
-  #body {
-    display: flex;
-    justify-content: space-between;
-    min-width: 1000px;
-  }
-
-  #detail {
-    flex-basis: 100%;
-    padding: 0;
   }
 
   table {
@@ -144,20 +96,5 @@ export default {
   .btn:hover,
   .btn:active {
     background-color: #5e0057;
-  }
-
-  .table-div {
-    padding-right: 15px;
-    padding-left: 15px;
-  }
-
-  .col-2 {
-    font-weight: bold;
-    color: white;
-    background-color: #6c757d;
-  }
-
-  .col-10 {
-    background-color: rgba(0, 0, 0, 0.05);
   }
 </style>

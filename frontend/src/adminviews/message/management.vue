@@ -151,11 +151,13 @@ export default {
       course_code: '',
       course_name: '',
       state: null,
-      reply: '123'
+      reply: '123',
+      page_jump: false
     }
   },
   methods: {
     to_detail: function (val) {
+      this.page_jump = true
       this.$router.push({ name: 'MessageDetail', query: {message_id: val} })
     }
   }
