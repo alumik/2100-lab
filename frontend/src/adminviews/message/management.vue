@@ -82,7 +82,7 @@
                   <button
                     type="button"
                     class="btn btn-xs"
-                    @click="to_detail(message)">
+                    @click="to_detail(message.id)">
                     详情
                   </button>
                   <button
@@ -125,8 +125,8 @@ import Menu from '../components/menu'
 import ConfirmModal from '../components/ConfirmModal'
 import InputModal from '../components/InputModal'
 let messages = [
-  { data: '2018-08-10', user: '小红', course_code: 'SOFT1', course_name: '计算机', message: '很好', state: '已删除' },
-  { data: '2018-08-11', user: '小明', course_code: 'English2', course_name: '口语', message: '还不错', state: '未删除' }
+  { data: '2018-08-10', user: '小红', course_code: 'SOFT1', course_name: '计算机', message: '很好', state: '已删除', id: '1001' },
+  { data: '2018-08-11', user: '小明', course_code: 'English2', course_name: '口语', message: '还不错', state: '未删除', id: '1002' }
 ]
 export default {
   name: 'MessageManagement',
@@ -161,7 +161,7 @@ export default {
   },
   methods: {
     to_detail: function (val) {
-      this.$router.push({ name: 'MessageDetail', params: {message: val} })
+      this.$router.push({ name: 'MessageDetail', query: {message_id: val} })
     }
   }
 }

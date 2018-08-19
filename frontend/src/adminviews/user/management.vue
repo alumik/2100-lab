@@ -70,7 +70,7 @@
                   <button
                     type="button"
                     class="btn"
-                    @click="to_detail">
+                    @click="to_detail(user.user_id)">
                     详情
                   </button>
                 </td>
@@ -120,8 +120,8 @@ export default {
     }
   },
   methods: {
-    to_detail: function () {
-      this.$router.push('/admin/user/detail')
+    to_detail: function (val) {
+      this.$router.push({ name: 'UserDetail', query: { user_id: val } })
     }
   }
 }

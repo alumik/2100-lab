@@ -87,14 +87,10 @@ export default {
         text: '留言管理',
         href: '/admin/message'
       }, {
-        text: '留言详情',
+        text: this.$route.query.message_id,
         active: true
-      }]
-    }
-  },
-  computed: {
-    message: function () {
-      return this.$route.params.message
+      }],
+      message: { data: '2018-08-10', user: '小红', course_code: 'SOFT1', course_name: '计算机', message: '很好', state: '已删除' }
     }
   }
 }

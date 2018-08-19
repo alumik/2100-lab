@@ -1,15 +1,24 @@
 /* eslint-disable no-undef */
 
 import {shallowMount} from '@vue/test-utils'
-import UserDetail from '@/adminviews/user/detail'
+import MessageDetail from '@/adminviews/message/detail'
 import AdminNavbar from '@/adminviews/components/navbar'
 import Menu from '@/adminviews/components/menu'
 import BreadCrumb from '@/components/breadCrumb'
 
-describe('用户详情页面单元测试', () => {
-  const wrapper = shallowMount(UserDetail)
+const $route = {
+  path: '/admin/message/detail',
+  query: {'message_id': 1001}
+}
 
-  it('用户详情组件存在', () => {
+describe('留言详情页面单元测试', () => {
+  const wrapper = shallowMount(MessageDetail, {
+    mocks: {
+      $route
+    }
+  })
+
+  it('留言详情组件存在', () => {
     expect(wrapper.exists()).toBe(true)
   })
 
@@ -26,13 +35,6 @@ describe('用户详情页面单元测试', () => {
   })
 
   it('测试按钮渲染数量', () => {
-    expect(wrapper.findAll('button').length).toEqual(5)
-  })
-
-  it('测试按钮文本改变', () => {
-    wrapper.vm.is_banned = true
-    expect(wrapper.findAll('button').at(1).text()).toBe('取消禁言')
-    wrapper.findAll('button').at(1).trigger('click')
-    expect(wrapper.findAll('button').at(1).text()).toBe('禁言用户')
+    expect(wrapper.findAll('button').length).toEqual(2)
   })
 })

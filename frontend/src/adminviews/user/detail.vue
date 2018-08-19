@@ -188,7 +188,7 @@ export default {
         text: '用户管理',
         href: '/admin/user'
       }, {
-        text: '用户详情',
+        text: this.$route.query.user_id,
         active: true
       }],
       order_titles: [
@@ -221,10 +221,10 @@ export default {
       this.is_banned = !this.is_banned
     },
     to_course () {
-      this.$router.push('/admin/user/detail/course')
+      this.$router.push({ name: 'Course', query: { user_id: this.$route.query.user_id } })
     },
     to_order () {
-      this.$router.push('/admin/user/detail/order')
+      this.$router.push({ name: 'Order', query: { user_id: this.$route.query.user_id } })
     }
   }
 }

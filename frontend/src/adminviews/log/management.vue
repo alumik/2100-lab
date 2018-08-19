@@ -27,14 +27,14 @@
                 <td>
                   <div class="col-md-6">
                     <date-picker
-                      v-model="date"
+                      v-model="begin_date"
                       :config="options"/>
                   </div>
                 </td>
                 <td>
                   <div class="col-md-6">
                     <date-picker
-                      v-model="date"
+                      v-model="end_date"
                       :config="options"/>
                   </div>
                 </td>
@@ -43,112 +43,22 @@
           </table>
         </div>
         <h4>查询项目</h4>
-        <div class="checkbox-div">
-          <form>
-            <div class="custom-control custom-checkbox custom-control-inline form-group">
-              <input
-                id="check-a"
-                type="checkbox"
-                class="custom-control-input form-control"
-                name="a">
-              <label
-                class="custom-control-label form-check-label"
-                for="check-a">A</label>
-            </div>
-            <div class="custom-control custom-checkbox custom-control-inline form-group">
-              <input
-                id="check-b"
-                type="checkbox"
-                class="custom-control-input form-control"
-                name="b">
-              <label
-                class="custom-control-label form-check-label"
-                for="check-b">B</label>
-            </div>
-            <div class="custom-control custom-checkbox custom-control-inline form-group">
-              <input
-                id="check-c"
-                type="checkbox"
-                class="custom-control-input form-control"
-                name="c">
-              <label
-                class="custom-control-label form-check-label"
-                for="check-c">C</label>
-            </div>
-            <div class="custom-control custom-checkbox custom-control-inline form-group">
-              <input
-                id="check-d"
-                type="checkbox"
-                class="custom-control-input form-control"
-                name="d">
-              <label
-                class="custom-control-label form-check-label"
-                for="check-d">D</label>
-            </div>
-            <div class="custom-control custom-checkbox custom-control-inline form-group">
-              <input
-                id="check-e"
-                type="checkbox"
-                class="custom-control-input form-control"
-                name="e">
-              <label
-                class="custom-control-label form-check-label"
-                for="check-e">E</label>
-            </div>
-            <br>
-            <div class="custom-control custom-checkbox custom-control-inline form-group">
-              <input
-                id="check-f"
-                type="checkbox"
-                class="custom-control-input form-control"
-                name="f">
-              <label
-                class="custom-control-label form-check-label"
-                for="check-f">F</label>
-            </div>
-            <div class="custom-control custom-checkbox custom-control-inline form-group">
-              <input
-                id="check-g"
-                type="checkbox"
-                class="custom-control-input form-control"
-                name="g">
-              <label
-                class="custom-control-label form-check-label"
-                for="check-g">G</label>
-            </div>
-            <div class="custom-control custom-checkbox custom-control-inline form-group">
-              <input
-                id="check-h"
-                type="checkbox"
-                class="custom-control-input form-control"
-                name="h">
-              <label
-                class="custom-control-label form-check-label"
-                for="check-h">H</label>
-            </div>
-            <div class="custom-control custom-checkbox custom-control-inline form-group">
-              <input
-                id="check-i"
-                type="checkbox"
-                class="custom-control-input form-control"
-                name="h">
-              <label
-                class="custom-control-label form-check-label"
-                for="check-i">I</label>
-            </div>
-            <div class="custom-control custom-checkbox custom-control-inline form-group">
-              <input
-                id="check-j"
-                type="checkbox"
-                class="custom-control-input form-control"
-                name="h">
-              <label
-                class="custom-control-label form-check-label"
-                for="check-j">J</label>
-            </div>
-            <br>
-          </form>
-        </div>
+        <form class="checkbox-div">
+          <b-form-group>
+            <b-form-checkbox-group
+              id="row1"
+              v-model="select1"
+              :options="options1"
+              name="row1"/>
+          </b-form-group>
+          <b-form-group>
+            <b-form-checkbox-group
+              id="row2"
+              v-model="select2"
+              :options="options2"
+              name="row2"/>
+          </b-form-group>
+        </form>
         <div class="button-group">
           <button
             type="submit"
@@ -177,17 +87,41 @@ export default {
         text: '日志查询',
         active: true
       }],
-      date: new Date(),
+      begin_date: new Date(),
+      end_date: new Date(),
       options: {
         format: 'YYYY/MM/DD h:mm:ss',
         useCurrent: true
       },
-      admin_id: ''
+      admin_id: '',
+      select1: '',
+      options1: [
+        { text: 'A', value: 'a' },
+        { text: 'B', value: 'b' },
+        { text: 'C', value: 'c' },
+        { text: 'D', value: 'd' },
+        { text: 'E', value: 'e' }
+      ],
+      select2: '',
+      options2: [
+        { text: 'F', value: 'f' },
+        { text: 'G', value: 'g' },
+        { text: 'H', value: 'h' },
+        { text: 'I', value: 'i' },
+        { text: 'J', value: 'j' }
+      ]
     }
   },
   methods: {
     to_detail: function () {
-      this.$router.push('/admin/log/detail')
+      this.$router.push({ name: 'LogDetail',
+        query: {
+          admin_id: this.admin_id,
+          begin_date: Date.parse(this.begin_date) / 1000,
+          end_date: Date.parse(this.end_date) / 1000,
+          select: this.select1 + ',' + this.select2
+        }
+      })
     }
   }
 }
@@ -248,9 +182,8 @@ export default {
   }
 
   .checkbox-div {
-    display: flex;
-    justify-content: flex-start;
     padding-left: 20px;
+    text-align: left;
   }
 
   .button-group {
