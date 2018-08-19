@@ -22,6 +22,7 @@
                 <td class="xs-td">
                   <div class="input-group-sm">
                     <input
+                      v-model="date"
                       type="text"
                       class="form-control"
                       placeholder="">
@@ -30,6 +31,7 @@
                 <td class="xs-td">
                   <div class="input-group-sm">
                     <input
+                      v-model="user"
                       type="text"
                       class="form-control"
                       placeholder="">
@@ -38,6 +40,7 @@
                 <td class="xs-td">
                   <div class="input-group-sm">
                     <input
+                      v-model="course_code"
                       type="text"
                       class="form-control"
                       placeholder="">
@@ -46,6 +49,7 @@
                 <td class="xs-td">
                   <div class="input-group-sm">
                     <input
+                      v-model="course_name"
                       type="text"
                       class="form-control"
                       placeholder="">
@@ -147,6 +151,10 @@ export default {
         { label: '状态' },
         { label: '操作' }
       ],
+      date: '',
+      user: '',
+      course_code: '',
+      course_name: '',
       state: null,
       reply: '123'
     }
