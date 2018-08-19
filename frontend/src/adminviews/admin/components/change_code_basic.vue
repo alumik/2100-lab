@@ -8,6 +8,7 @@
           for="newpassword">新密码</label>
         <input
           id="newpassword"
+          v-model="new_password"
           class="input form-control col-lg-3"
           type="text">
       </div>
@@ -17,6 +18,7 @@
           for="newpasswordagain">重新输入密码</label>
         <input
           id="newpasswordagain"
+          v-model="new_password_again"
           class="form-control col-lg-3"
           type="password">
       </div>
@@ -30,7 +32,13 @@
 
 <script>
 export default {
-  name: 'ChangeCodeBasic'
+  name: 'ChangeCodeBasic',
+  data: function () {
+    return {
+      new_password: null,
+      new_password_again: null
+    }
+  }
 }
 </script>
 

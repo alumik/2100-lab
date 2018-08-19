@@ -1,9 +1,9 @@
 /* eslint-disable no-undef */
 
-import Vue from 'vue'
 import MessageBoard from '@/userviews/components/messageboard'
 import {shallowMount} from '@vue/test-utils'
 import BootstrapVue from 'bootstrap-vue'
+import Vue from 'vue'
 
 Vue.use(BootstrapVue)
 

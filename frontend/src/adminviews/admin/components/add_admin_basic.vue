@@ -2,8 +2,7 @@
   <div>
     <h2>新增管理员</h2>
     <form
-      method="post"
-      @submit="checkForm">
+      method="post">
       <div class="form-group">
         <label
           class="form-check-label"
@@ -51,24 +50,9 @@ export default {
       admin: {
         telephone: null,
         password: null,
-        password_again: null,
-        error_messages: []
-      }
-    }
-  },
-  methods: {
-    checkForm: function (e) {
-      if (!this.admin.telephone) {
-        this.errorMessage.push('请输入手机号')
-      } else if (!this.admin.password) {
-        this.errorMessage.push('请输入密码')
-      } else if (!this.admin.password_again) {
-        this.errorMessage.push('请输入重复密码')
-      } else if (!this.admin.password !== this.admin.password_again) {
-        this.error_messages.push('两次输入密码不一致，请重试')
-      } else if (this.admin.telephone && this.admin.password === this.admin.password_again) {
-      }
-      e.preventDefault()
+        password_again: null
+      },
+      error_messages: []
     }
   }
 }

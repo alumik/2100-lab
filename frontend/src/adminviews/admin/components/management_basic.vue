@@ -7,7 +7,7 @@
       class="btn btn-sm"
       @click="jump(-1)"
     >新增管理员</button>
-    <div class="table_div">
+    <div class="table-div">
       <table class="table table-striped table-hover">
         <thead>
           <tr>
@@ -21,6 +21,7 @@
             <td>
               <div class="input-group">
                 <input
+                  v-model="query_input[0]"
                   type="text"
                   class="form-control col-xs-2"
                   placeholder="">
@@ -28,17 +29,13 @@
             <td>
               <div class="input-group">
                 <input
+                  v-model="query_input[1]"
                   type="text"
                   class="form-control col-xs-2"
                   placeholder="">
               </div>
             </td><td>
-              <div class="input-group">
-                <input
-                  type="text"
-                  class="form-control col-xs-2"
-                  placeholder="">
-            </div></td>
+            <div class="input-group"/></td>
           </tr>
           <tr
             v-for="admin in admins"
@@ -75,15 +72,20 @@ export default {
         {'id': 6, 'ID': '000000', 'name': 'DingQuan6'},
         {'id': 7, 'ID': '000001', 'name': 'DingQuan7'}
       ],
-      rows: 20
+      rows: 20,
+      query_input: [],
+      query_id: -1,
+      test_add_admin: false
     }
   },
   methods: {
     jump: function (id) {
       if (id === -1) {
+        this.test_add_admin = true
         this.$router.push({name: 'AddAdmin'})
       } else {
-        this.$router.push({name: 'AdminDetail', query: {'admin_id': id}})
+        this.query_id = id
+        this.$router.push({name: 'AdminDetail', query: {'admin_id': this.query_id}})
       }
     }
   }
@@ -100,6 +102,10 @@ export default {
   .inner-btn {
     margin-top: 2%;
     margin-left: 50%;
+  }
+
+  .table-div {
+    text-align: center;
   }
 
   .table {
