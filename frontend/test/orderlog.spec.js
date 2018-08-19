@@ -1,10 +1,13 @@
 /* eslint-disable no-undef */
 
 import { shallowMount } from '@vue/test-utils'
-import StudyLog from '@/userviews/personal/log/studyLog.vue'
+import OrderLog from '@/userviews/personal/log/orderLog.vue'
 
-describe('个人学习记录页面单元测试', () => {
-  const wrapper = shallowMount(StudyLog)
+describe('个人订单记录页面单元测试', () => {
+  const wrapper = shallowMount(OrderLog)
+  it('包含整个页面', () => {
+    expect(wrapper.contains('#page')).toBe(true)
+  })
   it('包含顶部导航栏', () => {
     expect(wrapper.contains('#nav')).toBe(true)
   })
