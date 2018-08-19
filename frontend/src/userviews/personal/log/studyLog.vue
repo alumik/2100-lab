@@ -3,10 +3,13 @@
     <UserNavbar @hide="hide"/>
     <div id="main">
       <UserMenu
+        id="menu"
         :list="list"
         :hidden="hidden"/>
       <div id="info">
-        <BreadCrumb :items="crumbs"/>
+        <BreadCrumb
+          id="breadcrumb"
+          :items="crumbs"/>
         <div class="content">
           <b-table
             :items="items"
