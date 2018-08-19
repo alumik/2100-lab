@@ -1,5 +1,6 @@
 <template>
   <AllCourseList
+    id="all-paid"
     :page_title="page_title"
     :course_list="course_list"/>
 </template>
@@ -14,7 +15,7 @@ export default {
   },
   data () {
     return {
-      page_title: '付费课程列表',
+      page_title: '付费课程',
       course_list: [
         {
           id: 4,
