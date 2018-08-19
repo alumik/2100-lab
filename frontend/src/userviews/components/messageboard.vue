@@ -7,7 +7,7 @@
           v-for="msg in message_list"
           :key="msg.id"
           class="piece-of-message">
-          <div id="message">
+          <div id="piece-of-message">
             {{ msg.username }}
             <label class="time-style">&emsp;{{ msg.time_to_comment }}个月前</label>
             <p style="margin-bottom: 5px;">{{ msg.message_content }}</p>
@@ -16,11 +16,13 @@
             id="operator">
             {{ msg.num_of_praise }}
             <img
+              id="praise-button"
               src="../../assets/praise.png"
               class="vote-style "
               @click="msg.num_of_praise+=1">
             &emsp; &emsp;{{ msg.num_of_detest }}
             <img
+              id="detest-button"
               src="../../assets/detest.png"
               class="vote-style "
               @click="msg.num_of_detest+=1">
@@ -30,6 +32,7 @@
     </div>
     <div>
       <textarea
+        id="input-message"
         v-model="newMsg"
         autofocus
         class="textarea-style"
