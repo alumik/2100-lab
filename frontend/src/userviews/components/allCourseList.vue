@@ -1,7 +1,9 @@
 <template>
   <div>
     <UserNavbar/>
-    <div class="title-style">
+    <div
+      id="page-title"
+      class="title-style">
       <h2>{{ page_title }}</h2>
     </div>
     <div
@@ -21,6 +23,7 @@
           <div class="card-content">
             <div class="course-img-style">
               <b-img
+                id="course-img"
                 :src="course.src"
                 fluid
                 thumbnail
@@ -38,6 +41,7 @@
     </div>
     <div class="pagination-style">
       <Pagination
+        id="pagination"
         :rows="rows"
         :perpage="perpage"/>
     </div>
