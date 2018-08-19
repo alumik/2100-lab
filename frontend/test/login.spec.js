@@ -1,20 +1,13 @@
 /* eslint-disable no-undef */
 
-import { shallowMount } from '@vue/test-utils'
-import PersonalCenter from '@/userviews/personal/personalCenter.vue'
+import { mount } from '@vue/test-utils'
+import login from '@/userviews/personal/login.vue'
 
-describe('个人中心单元测试', () => {
-  const wrapper = shallowMount(PersonalCenter)
-  const button = wrapper.find('#change')
-  it('点击个人中心的"修改"按钮后按钮文本变为"保存"', () => {
+describe('登录页面单元测试', () => {
+  const wrapper = mount(login)
+  const button = wrapper.find('#send')
+  it('点击登录页面的"获取验证码"按钮后按钮不可再被点击', () => {
     button.trigger('click')
-    expect(wrapper.vm.status).toEqual('保存')
-  })
-  it('昵称输入框文本可以编辑', () => {
-    expect(wrapper.vm.disabled).toEqual(false)
-  })
-  it('点击"保存"按钮后按钮文本变为"修改"', () => {
-    button.trigger('click')
-    expect(wrapper.vm.status).toBe('修改')
+    expect(wrapper.vm.disabled).toBe(true)
   })
 })

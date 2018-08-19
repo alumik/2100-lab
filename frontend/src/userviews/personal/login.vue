@@ -13,6 +13,7 @@
         <b-form-input type="text"/>
         <b-input-group-append>
           <b-btn
+            id="send"
             :disabled="disabled"
             variant="outline-success"
             @click="send">{{ status }}{{ second }}</b-btn>
