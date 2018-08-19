@@ -1,97 +1,92 @@
 <template>
-  <div class="div1">
-    <AdminNavbar id="navbar"/>
-    <div id="body">
-      <Menu/>
-      <div id="management">
-        <BreadCrumb :items="items"/>
-        <h1>用户列表</h1>
-        <div class="table-div">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <td
-                  v-for="title in titles"
-                  :key="title.id">
-                  {{ title.label }}
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr align="center">
-                <td id="id-td">
-                  <div class="input-group-sm">
-                    <input
-                      v-model="user_id"
-                      type="text"
-                      class="form-control"
-                      placeholder="">
-                  </div>
-                </td>
-                <td id="name-td">
-                  <div class="input-group-sm">
-                    <input
-                      v-model="user_name"
-                      type="text"
-                      class="form-control"
-                      placeholder="">
-                  </div>
-                </td>
-                <td id="phone-td">
-                  <div class="input-group-sm">
-                    <input
-                      v-model="phone"
-                      type="text"
-                      class="form-control"
-                      placeholder="">
-                  </div>
-                </td>
-                <td id="state-td">
-                  <div>
-                    <select
-                      v-model="state"
-                      class="selectpicker">
-                      <option value="whole">全部</option>
-                      <option value="reserved">未删除</option>
-                      <option value="deleted">已删除</option>
-                    </select>
-                  </div>
-                </td>
-                <td id="operation-td"/>
-              </tr>
-              <tr
-                v-for="user in users"
-                :key="user.id">
-                <td>{{ user.user_id }}</td>
-                <td>{{ user.user_name }}</td>
-                <td>{{ user.phone }}</td>
-                <td>{{ user.state }}</td>
-                <td>
-                  <button
-                    type="button"
-                    class="btn"
-                    @click="to_detail(user.user_id)">
-                    详情
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <Pagination :rows="rows"/>
+  <Basic
+    :items="items"
+    class="my-basic">
+    <div>
+      <h1>用户列表</h1>
+      <div class="table-div">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <td
+                v-for="title in titles"
+                :key="title.id">
+                {{ title.label }}
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr align="center">
+              <td id="id-td">
+                <div class="input-group-sm">
+                  <input
+                    v-model="user_id"
+                    type="text"
+                    class="form-control"
+                    placeholder="">
+                </div>
+              </td>
+              <td id="name-td">
+                <div class="input-group-sm">
+                  <input
+                    v-model="user_name"
+                    type="text"
+                    class="form-control"
+                    placeholder="">
+                </div>
+              </td>
+              <td id="phone-td">
+                <div class="input-group-sm">
+                  <input
+                    v-model="phone"
+                    type="text"
+                    class="form-control"
+                    placeholder="">
+                </div>
+              </td>
+              <td id="state-td">
+                <div>
+                  <select
+                    v-model="state"
+                    class="selectpicker">
+                    <option value="whole">全部</option>
+                    <option value="reserved">未删除</option>
+                    <option value="deleted">已删除</option>
+                  </select>
+                </div>
+              </td>
+              <td id="operation-td"/>
+            </tr>
+            <tr
+              v-for="user in users"
+              :key="user.id">
+              <td>{{ user.user_id }}</td>
+              <td>{{ user.user_name }}</td>
+              <td>{{ user.phone }}</td>
+              <td>{{ user.state }}</td>
+              <td>
+                <button
+                  type="button"
+                  class="btn"
+                  @click="to_detail(user.user_id)">
+                  详情
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
+      <Pagination :rows="rows"/>
     </div>
-  </div>
+  </Basic>
 </template>
 
 <script>
-import AdminNavbar from '../components/navbar'
-import Menu from '../components/menu'
-import BreadCrumb from '../../components/breadCrumb'
 import Pagination from '../../components/pagination'
+import Basic from '../basic/basic'
 export default {
   name: 'UserManagement',
-  components: {BreadCrumb, Menu, AdminNavbar, Pagination},
+  components: { Basic, Pagination },
   data () {
     return {
       items: [{
@@ -116,11 +111,13 @@ export default {
       user_id: '',
       user_name: '',
       phone: '',
-      state: ''
+      state: '',
+      page_jump: false
     }
   },
   methods: {
     to_detail: function (val) {
+      this.page_jump = true
       this.$router.push({ name: 'UserDetail', query: { user_id: val } })
     }
   }
@@ -128,7 +125,7 @@ export default {
 </script>
 
 <style scoped>
-  #navbar {
+  .my-basic {
     min-width: 800px;
   }
 
@@ -148,18 +145,6 @@ export default {
     font-size: 1.2em;
     text-align: center;
     border: 1px solid #d3d9df;
-  }
-
-  #body {
-    display: flex;
-    justify-content: space-between;
-    min-width: 800px;
-    height: calc(100% - 70px);
-  }
-
-  #management {
-    flex-basis: 100%;
-    padding: 0;
   }
 
   .btn {
@@ -185,10 +170,6 @@ export default {
 
   option {
     font-size: 18px;
-  }
-
-  .div1 {
-    height: 100%;
   }
 
   thead tr {

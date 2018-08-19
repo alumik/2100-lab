@@ -1,51 +1,44 @@
 <template>
-  <div>
-    <AdminNavbar id="navbar"/>
-    <div id="body">
-      <div>
-        <Menu/>
+  <Basic
+    :items="items"
+    class="my-basic">
+    <div>
+      <h1>相关课程</h1>
+      <div class="table-div">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <td
+                v-for="title in titles"
+                :key="title.id">
+                {{ title.label }}
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="log in logs"
+              :key="log.id">
+              <td>{{ log.course_code }}</td>
+              <td>{{ log.course_name }}</td>
+              <td>{{ log.progress }}</td>
+              <td>{{ log.time }}</td>
+              <td>{{ log.state }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div id="study">
-        <BreadCrumb :items="items"/>
-        <h1>相关课程</h1>
-        <div class="table-div">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <td
-                  v-for="title in titles"
-                  :key="title.id">
-                  {{ title.label }}
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="log in logs"
-                :key="log.id">
-                <td>{{ log.course_code }}</td>
-                <td>{{ log.course_name }}</td>
-                <td>{{ log.progress }}</td>
-                <td>{{ log.time }}</td>
-                <td>{{ log.state }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <Pagination :rows="rows"/>
-        </div>
-      </div>
+      <Pagination :rows="rows"/>
     </div>
-  </div>
+  </Basic>
 </template>
 
 <script>
-import AdminNavbar from '../components/navbar'
-import Menu from '../components/menu'
-import BreadCrumb from '../../components/breadCrumb'
 import Pagination from '../../components/pagination'
+import Basic from '../basic/basic'
 export default {
   name: 'Course',
-  components: {Menu, AdminNavbar, BreadCrumb, Pagination},
+  components: { Basic, Pagination },
   data () {
     return {
       items: [{
@@ -80,7 +73,7 @@ export default {
 </script>
 
 <style scoped>
-  #navbar {
+  .my-basic {
     min-width: 1000px;
   }
 
@@ -89,17 +82,6 @@ export default {
     margin-top: 25px;
     margin-bottom: 25px;
     text-align: left;
-  }
-
-  #body {
-    display: flex;
-    justify-content: space-between;
-    min-width: 1000px;
-  }
-
-  #study {
-    flex-basis: 100%;
-    padding: 0;
   }
 
   table {

@@ -2,16 +2,14 @@
 
 import {shallowMount} from '@vue/test-utils'
 import UserDetail from '@/adminviews/user/detail'
-import AdminNavbar from '@/adminviews/components/navbar'
-import Menu from '@/adminviews/components/menu'
-import BreadCrumb from '@/components/breadCrumb'
+import Basic from '@/adminviews/basic/basic'
 import BootstrapVue from 'bootstrap-vue'
 import Vue from 'vue'
 
 Vue.use(BootstrapVue)
 
 const $route = {
-  path: '/admin/message/detail',
+  path: '/admin/user/detail',
   query: {'user_id': '001'}
 }
 
@@ -26,16 +24,8 @@ describe('用户详情页面单元测试', () => {
     expect(wrapper.exists()).toBe(true)
   })
 
-  it('包含导航栏', () => {
-    expect(wrapper.contains(AdminNavbar)).toBe(true)
-  })
-
-  it('包含侧栏菜单', () => {
-    expect(wrapper.contains(Menu)).toBe(true)
-  })
-
-  it('包含面包屑', () => {
-    expect(wrapper.contains(BreadCrumb)).toBe(true)
+  it('包含Basic组件', () => {
+    expect(wrapper.contains(Basic)).toBe(true)
   })
 
   it('测试按钮渲染数量', () => {
@@ -47,5 +37,14 @@ describe('用户详情页面单元测试', () => {
     expect(wrapper.findAll('button').at(1).text()).toBe('取消禁言')
     wrapper.findAll('button').at(1).trigger('click')
     expect(wrapper.findAll('button').at(1).text()).toBe('禁言用户')
+  })
+
+  it('测试是否能够正确跳转到相关页面', () => {
+    expect(wrapper.vm.page_jump_course).toBe(false)
+    wrapper.findAll('button').at(4).trigger('click')
+    expect(wrapper.vm.page_jump_course).toBe(true)
+    expect(wrapper.vm.page_jump_order).toBe(false)
+    wrapper.findAll('button').at(3).trigger('click')
+    expect(wrapper.vm.page_jump_order).toBe(true)
   })
 })
