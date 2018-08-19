@@ -34,6 +34,7 @@
                 :disabled="disabled"/>
               <b-input-group-append>
                 <b-btn
+                  id="change"
                   variant="outline-success"
                   @click="editable">{{ status }}</b-btn>
               </b-input-group-append>
