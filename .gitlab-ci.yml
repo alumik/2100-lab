@@ -9,6 +9,8 @@ backendtest:
     - pip3 install -r requirements.txt
     - python3 -m coverage run --source="." manage.py test --noinput
     - python3 -m coverage report
+  tags:
+    - txy
 
 backendlint:
   stage: backend
@@ -16,6 +18,8 @@ backendlint:
     - cd backend
     - pylint --rcfile=.pylintrc ./**/*.py || exit $((35 & $?))
   allow_failure: false
+  tags:
+    - txy2
 
 frontendtest:
   stage: frontend
@@ -24,6 +28,8 @@ frontendtest:
     - npm install
     - npm run test
   allow_failure: false
+  tags:
+    - txy
 
 frontendlint:
   stage: frontend
@@ -33,3 +39,5 @@ frontendlint:
     - npm run eslint
     - npm run stylelint
   allow_failure: false
+  tags:
+    - txy2
