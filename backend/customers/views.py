@@ -1,5 +1,6 @@
 import re
 import random
+import time
 
 from django.conf import settings
 from django.contrib.auth import get_user_model, login
@@ -17,8 +18,16 @@ def get_verification_code(request):
         verification_code = str(random.randint(0, 999999)).zfill(6)
         request.session['prev_phone_number'] = phone_number
         request.session['verification_code'] = verification_code
+        request.session['generate_time'] = round(time.time())
         return JsonResponse({'verification_code': verification_code})
     return JsonResponse({'message': 'Not a valid phone number.'}, status=400)
+
+
+def get_generate_time(request):
+    json_data = {'generate_time': ''}
+    if 'generate_time' in request.session:
+        json_data['generate_time'] = request.session['generate_time']
+    return JsonResponse(json_data)
 
 
 def authenticate_customer(request):
