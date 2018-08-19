@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="my-nav">
+    <div class="container-fluid my-nav">
       <AdminNavbar/>
     </div>
     <div class="my-menu">
@@ -36,6 +36,7 @@ export default {
 <style scoped>
   .my-nav {
     min-width: 500px;
+    padding: 0;
   }
 
   .my-menu {

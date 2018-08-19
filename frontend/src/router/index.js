@@ -83,11 +83,6 @@ export default new Router({
       component: () => import('@/adminviews/course/edit_course')
     },
     {
-      path: '/admin/course/upload',
-      name: 'UploadSource',
-      component: () => import('@/adminviews/course/upload_source')
-    },
-    {
       path: '/admin/course/sync',
       name: 'SyncPicture',
       component: () => import('@/adminviews/course/synchronization')
