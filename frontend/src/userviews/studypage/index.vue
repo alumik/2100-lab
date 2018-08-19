@@ -34,7 +34,7 @@
         <b-card>
           <div class="text-left-style">
             <label class="delete-margin">
-              <h5>{{ course.name }}</h5>
+              <h5>{{ course.name }}{{ this.$route.query.course_id }}</h5>
               &emsp;&emsp;{{ text_show }}</label>
             <label v-if="brandFold === false">{{ text_hide }}</label>
           </div>
@@ -76,7 +76,7 @@ export default {
   },
   data () {
     return {
-      course_id: 0,
+      course_id: 1,
       now_picture: '',
       now_index: 0,
       time_num: 0,
@@ -124,7 +124,7 @@ export default {
     }
   },
   created () {
-    if (typeof (this.$route.params.course_id) === 'undefined') {
+    if (typeof (this.$route.query.course_id) === 'undefined') {
       this.$router.push({name: 'BurnedCourse'})
     } else {
       this.course_id = this.$route.params.course_id
@@ -156,9 +156,6 @@ export default {
       const self = this
       self.ctime = parseInt(self.$refs.player.currentTime)
     }
-  },
-  beforeDestroyed () {
-    this.removeEventListeners()
   }
 }
 </script>

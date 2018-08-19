@@ -68,7 +68,7 @@ export default {
       this.$emit('handleSetLineChartData', type)
     },
     open_detail_page: function (id) {
-      this.$router.push({name: 'CourseDetail', params: {course_id: id}})
+      this.$router.push({name: 'CourseDetail', query: {course_id: id}})
     }
   }
 }
