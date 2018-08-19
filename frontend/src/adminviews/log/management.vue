@@ -20,6 +20,7 @@
                 <td>
                   <input
                     id="admin"
+                    v-model="admin_id"
                     type="text"
                     class="form-control">
                 </td>
@@ -133,7 +134,7 @@
                 name="h">
               <label
                 class="custom-control-label form-check-label"
-                for="check-h">I</label>
+                for="check-i">I</label>
             </div>
             <div class="custom-control custom-checkbox custom-control-inline form-group">
               <input
@@ -143,7 +144,7 @@
                 name="h">
               <label
                 class="custom-control-label form-check-label"
-                for="check-h">J</label>
+                for="check-j">J</label>
             </div>
             <br>
           </form>
@@ -180,7 +181,8 @@ export default {
       options: {
         format: 'YYYY/MM/DD h:mm:ss',
         useCurrent: true
-      }
+      },
+      admin_id: ''
     }
   },
   methods: {
