@@ -3,7 +3,7 @@
     class="width-style">
     <UserNavbar/>
     <div class="content-style">
-      <h5>{{ course.name }}</h5>
+      <h5>{{ course.name }}{{ this.$route.query.course_id }}</h5>
     </div>
     <div>
       <b-modal
@@ -198,7 +198,7 @@ export default{
           '，自然情不能自已。情郁于中，自然要发之于外；家庭琐屑便往往触他之怒。' +
           '他待我渐渐不同往日。但最近两年不见，他终于忘却我的不好，只是惦记着我，' +
           '惦记着他的儿子。我北来后，他写了一信给我，信中说道：“我身体平安，' +
-          '惟膀子疼痛厉害，举箸14提笔，诸多不便，大约大去之期15不远矣。”我读到此处，' +
+          '惟膀子疼痛厉害，举箸提笔，诸多不便，大约大去之期不远矣。”我读到此处，' +
           '在晶莹的泪光中，又看见那肥胖的、青布棉袍黑布马褂的背影。唉！' +
           '我不知何时再能与他相见！',
         src: 'https://picsum.photos/1024/480/?image=54',
@@ -213,10 +213,10 @@ export default{
     }
   },
   created () {
-    if (typeof (this.$route.params.course_id) === 'undefined') {
+    if (typeof (this.$route.query.course_id) === 'undefined') {
       this.$router.push({name: 'BurnedCourse'})
     } else {
-      this.course_id = this.$route.params.course_id
+      this.course_id = this.$route.query.course_id
     }
   },
   methods: {
@@ -234,7 +234,7 @@ export default{
       this.is_paid = true
     },
     open_study_page: function (id) {
-      this.$router.push({name: 'StudyPage', params: {course_id: id}})
+      this.$router.push({name: 'StudyPage', query: {course_id: id}})
     }
   }
 }
