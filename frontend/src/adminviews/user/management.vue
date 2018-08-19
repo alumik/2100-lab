@@ -22,6 +22,7 @@
                 <td id="id-td">
                   <div class="input-group-sm">
                     <input
+                      v-model="user_id"
                       type="text"
                       class="form-control"
                       placeholder="">
@@ -30,6 +31,7 @@
                 <td id="name-td">
                   <div class="input-group-sm">
                     <input
+                      v-model="user_name"
                       type="text"
                       class="form-control"
                       placeholder="">
@@ -38,6 +40,7 @@
                 <td id="phone-td">
                   <div class="input-group-sm">
                     <input
+                      v-model="phone"
                       type="text"
                       class="form-control"
                       placeholder="">
@@ -110,6 +113,9 @@ export default {
         { user_id: '002', user_name: '小明', phone: '13102250002', state: '未禁言' }
       ],
       rows: 20,
+      user_id: '',
+      user_name: '',
+      phone: '',
       state: ''
     }
   },
