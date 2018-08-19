@@ -1,11 +1,9 @@
 stages:
-  - backendtest
-  - backendlint
-  - frontendtest
-  - frontendlint
+  - backend
+  - frontend
 
 backendtest:
-  stage: backendtest
+  stage: backend
   script:
     - cd backend
     - pip3 install -r requirements.txt
@@ -13,14 +11,14 @@ backendtest:
     - python3 -m coverage report
 
 backendlint:
-  stage: backendlint
+  stage: backend
   script:
     - cd backend
     - pylint --rcfile=.pylintrc ./**/*.py || exit $((35 & $?))
   allow_failure: false
 
 frontendtest:
-  stage: frontendtest
+  stage: frontend
   script:
     - cd frontend
     - npm install
@@ -28,7 +26,7 @@ frontendtest:
   allow_failure: false
 
 frontendlint:
-  stage: frontendlint
+  stage: frontend
   script:
     - cd frontend
     - npm install
