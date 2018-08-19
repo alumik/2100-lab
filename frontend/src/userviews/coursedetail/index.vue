@@ -3,7 +3,7 @@
     class="width-style">
     <UserNavbar/>
     <div class="content-style">
-      <h5>{{ course.name }}{{ this.$route.query.course_id }}</h5>
+      <h5>{{ course.name }}</h5>
     </div>
     <div>
       <b-modal
@@ -109,6 +109,7 @@
             <div v-show="course.value === 0 || is_paid === true">
               <b-button
                 v-b-modal.study-popup
+                id="study-button"
                 size="lg"
                 variant="primary"
                 class="my-btn">
@@ -118,6 +119,7 @@
             <div v-show="course.value !== 0 && is_paid === false">
               <b-button
                 v-b-modal.pay-popup
+                id="pay-button"
                 size="lg"
                 variant="primary"
                 class="my-btn">
@@ -126,10 +128,10 @@
               <div/>
             </div>
           </div>
-          <div
-            id="sharebutton">
+          <div>
             <b-button
               v-b-modal.share-popup
+              id="share-button"
               size="lg"
               variant="primary"
               class="my-btn"
@@ -151,10 +153,11 @@
             <label>!</label>
           </b-badge>
           <b-button
+            id="praise-button"
             size="lg"
             variant="primary"
             class="my-btn"
-            @click="course.num_of_praise+=1">
+            @click="add_praise">
             {{ course.num_of_praise }} 赞
           </b-button>
         </div>
@@ -220,6 +223,9 @@ export default{
     }
   },
   methods: {
+    add_praise () {
+      this.course.num_of_praise += 1
+    },
     hide_share_popup () {
       this.$root.$emit('bv::hide::modal', 'share-popup')
     },
