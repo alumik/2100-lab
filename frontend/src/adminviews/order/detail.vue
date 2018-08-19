@@ -80,7 +80,7 @@ export default {
         text: '订单管理',
         href: '/admin/order'
       }, {
-        text: '订单详情',
+        text: this.$route.query.order_id,
         active: true
       }],
       order: { order_code: '1001',

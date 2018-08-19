@@ -55,7 +55,7 @@ export default {
         text: '用户管理',
         href: '/admin/user'
       }, {
-        text: '用户详情',
+        text: this.$route.query.user_id,
         href: '/admin/user/detail'
       }, {
         text: '相关订单',

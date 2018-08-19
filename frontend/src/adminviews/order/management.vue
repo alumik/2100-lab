@@ -82,7 +82,7 @@
                   <button
                     type="button"
                     class="btn"
-                    @click="to_detail">
+                    @click="to_detail(order.id)">
                     详情
                   </button>
                 </td>
@@ -123,13 +123,15 @@ export default {
         { label: '操作' }
       ],
       orders: [
-        { order_code: '1001',
+        { id: '001',
+          order_code: '1001',
           course_code: 'SOFT1',
           course_name: '计算机',
           user: '小红',
           charge: '100.00',
           state: '已完成' },
-        { order_code: '1002',
+        { id: '003',
+          order_code: '1002',
           course_code: 'ENGLISH2',
           course_name: '口语',
           user: '小明',
@@ -145,8 +147,8 @@ export default {
     }
   },
   methods: {
-    to_detail: function () {
-      this.$router.push({ path: '/admin/order/detail' })
+    to_detail: function (val) {
+      this.$router.push({ name: 'OrderDetail', query: { order_id: val } })
     }
   }
 }

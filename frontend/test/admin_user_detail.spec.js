@@ -6,8 +6,17 @@ import AdminNavbar from '@/adminviews/components/navbar'
 import Menu from '@/adminviews/components/menu'
 import BreadCrumb from '@/components/breadCrumb'
 
+const $route = {
+  path: '/admin/message/detail',
+  query: {'user_id': '001'}
+}
+
 describe('用户详情页面单元测试', () => {
-  const wrapper = shallowMount(UserDetail)
+  const wrapper = shallowMount(UserDetail, {
+    mocks: {
+      $route
+    }
+  })
 
   it('用户详情组件存在', () => {
     expect(wrapper.exists()).toBe(true)
