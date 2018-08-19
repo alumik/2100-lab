@@ -409,7 +409,8 @@ class PlayPageTests(TestCase):
 
         course = Course.objects.get(codename='c3')
         response = self.client.get(
-            reverse('api:courses:get-course-assets') + '?course_id=' + str(course.id)
+            reverse('api:courses:get-course-assets'),
+            {'course_id': str(course.id)}
         )
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(
