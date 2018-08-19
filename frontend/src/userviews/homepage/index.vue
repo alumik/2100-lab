@@ -4,7 +4,7 @@
     <div id="hompepage">
       <div>
         <b-carousel
-          id="carousel1"
+          id="carousel"
           :interval="2000"
           controls
           indicators
@@ -15,21 +15,25 @@
           <b-carousel-slide
             class="height-change"
             caption="First slide"
+            name="carousel-pic-1"
             text="Nulla vitae elit libero, a pharetra augue mollis interdum."
             img-src="https://picsum.photos/1024/480/?image=52"/>
           <b-carousel-slide
             class="height-change"
             caption="First slide"
+            name="carousel-pic-2"
             text="Nulla vitae elit libero, a pharetra augue mollis interdum."
             img-src="https://picsum.photos/1024/480/?image=54"/>
           <b-carousel-slide
             class="height-change"
             caption="First slide"
+            name="carousel-pic-3"
             text="Nulla vitae elit libero, a pharetra augue mollis interdum."
             img-src="https://picsum.photos/1024/480/?image=58"/>
           <b-carousel-slide
             class="height-change"
             caption="First slide"
+            name="carousel-pic-4"
             text="Nulla vitae elit libero, a pharetra augue mollis interdum."
             img-src="https://picsum.photos/1024/480/?image=55"/>
         </b-carousel>

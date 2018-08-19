@@ -2,10 +2,12 @@
   <body class="container-style">
     <div class="list-title">
       <div class="title-style">
-        <label>{{ list_title }}</label>
+        <label id="list-title">{{ list_title }}</label>
       </div>
       <div class="watch-more">
-        <label @click="watch_more">更多</label>
+        <label
+          id="watch-more"
+          @click="watch_more">更多</label>
       </div>
     </div>
     <div class="course-list-style">
