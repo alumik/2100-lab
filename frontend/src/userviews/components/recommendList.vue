@@ -23,14 +23,19 @@
             @click="handleSetLineChartData('skys')">
             <div class="card-panel-icon-wrapper icon-sky">
               <img
+                id="course-img"
                 :src="course.src"
                 class="card-panel-icon"
                 @click="open_detail_page(course.id)"
               >
             </div>
             <div class="card-panel-description">
-              <div class="card-panel-text">{{ course.name }}</div>
-              <div class="card-panel-text card-panel-course-description">
+              <div
+                id="course-name"
+                class="card-panel-text">{{ course.name }}</div>
+              <div
+                id="course-introduction"
+                class="card-panel-text card-panel-course-description">
                 {{ course.introduction }}
               </div>
             </div>
@@ -43,7 +48,7 @@
 
 <script>
 export default {
-  name: 'FreeRecommendList',
+  name: 'RecommendList',
   props: {
     list_title: {
       type: String,
