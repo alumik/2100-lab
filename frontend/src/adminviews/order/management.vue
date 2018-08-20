@@ -1,109 +1,104 @@
 <template>
-  <div class="html">
-    <AdminNavbar id="navbar"/>
-    <div id="body">
-      <Menu/>
-      <div id="management">
-        <BreadCrumb :items="items"/>
-        <h1>订单列表</h1>
-        <div class="table-div">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <td
-                  v-for="title in titles"
-                  :key="title.id">
-                  {{ title.label }}
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr align="center">
-                <td class="small-td">
-                  <div class="input-group-sm">
-                    <input
-                      v-model="order_code"
-                      type="text"
-                      class="form-control"
-                      placeholder="">
-                  </div>
-                </td>
-                <td class="small-td">
-                  <div class="input-group-sm">
-                    <input
-                      v-model="course_code"
-                      type="text"
-                      class="form-control"
-                      placeholder="">
-                  </div>
-                </td>
-                <td class="small-td">
-                  <div class="input-group-sm">
-                    <input
-                      v-model="course_name"
-                      type="text"
-                      class="form-control"
-                      placeholder="">
-                  </div>
-                </td>
-                <td class="small-td">
-                  <div class="input-group-sm">
-                    <input
-                      v-model="user"
-                      type="text"
-                      class="form-control"
-                      placeholder="">
-                  </div>
-                </td>
-                <td/>
-                <td class="big-td">
-                  <div>
-                    <select
-                      v-model="state"
-                      class="selectpicker">
-                      <option value="whole">全部</option>
-                      <option value="finished">已完成</option>
-                      <option value="refunded">已退款</option>
-                    </select>
-                  </div>
-                </td>
-                <td/>
-              </tr>
-              <tr
-                v-for="order in orders"
-                :key="order.id">
-                <td>{{ order.order_code }}</td>
-                <td>{{ order.course_code }}</td>
-                <td>{{ order.course_name }}</td>
-                <td>{{ order.user }}</td>
-                <td>{{ order.charge }}</td>
-                <td> {{ order.state }} </td>
-                <td>
-                  <button
-                    type="button"
-                    class="btn"
-                    @click="to_detail(order.id)">
-                    详情
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <Pagination :rows="rows"/>
+  <Basic
+    :items="items"
+    class="my-basic">
+    <div>
+      <h1>订单列表</h1>
+      <div class="table-div">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <td
+                v-for="title in titles"
+                :key="title.id">
+                {{ title.label }}
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr align="center">
+              <td class="small-td">
+                <div class="input-group-sm">
+                  <input
+                    v-model="order_code"
+                    type="text"
+                    class="form-control"
+                    placeholder="">
+                </div>
+              </td>
+              <td class="small-td">
+                <div class="input-group-sm">
+                  <input
+                    v-model="course_code"
+                    type="text"
+                    class="form-control"
+                    placeholder="">
+                </div>
+              </td>
+              <td class="small-td">
+                <div class="input-group-sm">
+                  <input
+                    v-model="course_name"
+                    type="text"
+                    class="form-control"
+                    placeholder="">
+                </div>
+              </td>
+              <td class="small-td">
+                <div class="input-group-sm">
+                  <input
+                    v-model="user"
+                    type="text"
+                    class="form-control"
+                    placeholder="">
+                </div>
+              </td>
+              <td/>
+              <td class="big-td">
+                <div>
+                  <select
+                    v-model="state"
+                    class="selectpicker">
+                    <option value="whole">全部</option>
+                    <option value="finished">已完成</option>
+                    <option value="refunded">已退款</option>
+                  </select>
+                </div>
+              </td>
+              <td/>
+            </tr>
+            <tr
+              v-for="order in orders"
+              :key="order.id">
+              <td>{{ order.order_code }}</td>
+              <td>{{ order.course_code }}</td>
+              <td>{{ order.course_name }}</td>
+              <td>{{ order.user }}</td>
+              <td>{{ order.charge }}</td>
+              <td> {{ order.state }} </td>
+              <td>
+                <button
+                  type="button"
+                  class="btn"
+                  @click="to_detail(order.id)">
+                  详情
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
+      <Pagination :rows="rows"/>
     </div>
-  </div>
+  </Basic>
 </template>
 
 <script>
-import AdminNavbar from '../components/navbar'
-import BreadCrumb from '../../components/breadCrumb'
 import Pagination from '../../components/pagination'
-import Menu from '../components/menu'
+import Basic from '../basic/basic'
 export default {
   name: 'OrderManagement',
-  components: { Menu, AdminNavbar, BreadCrumb, Pagination },
+  components: { Basic, Pagination },
   data () {
     return {
       items: [{
@@ -143,11 +138,13 @@ export default {
       course_code: '',
       course_name: '',
       user: '',
-      state: null
+      state: null,
+      page_jump: false
     }
   },
   methods: {
     to_detail: function (val) {
+      this.page_jump = true
       this.$router.push({ name: 'OrderDetail', query: { order_id: val } })
     }
   }
@@ -155,7 +152,7 @@ export default {
 </script>
 
 <style scoped>
-  #navbar {
+  .my-basic {
     min-width: 1300px;
   }
 
@@ -169,18 +166,6 @@ export default {
   table {
     font-size: 1.2em;
     border: 1px solid #d3d9df;
-  }
-
-  #body {
-    display: flex;
-    justify-content: space-between;
-    min-width: 1300px;
-    height: calc(100% - 70px);
-  }
-
-  #management {
-    flex-basis: 100%;
-    padding: 0;
   }
 
   .btn {
@@ -206,10 +191,6 @@ export default {
 
   option {
     font-size: 18px;
-  }
-
-  .html {
-    height: 100%;
   }
 
   .table-div {
