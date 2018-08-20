@@ -55,6 +55,7 @@
 import Basic from '../components/basic'
 import UserNavbar from '../components/navbar'
 import RecommendList from '../components/recommendList'
+import axios from 'axios'
 
 export default {
   name: 'Homepage',
@@ -140,6 +141,14 @@ export default {
         }
       ]
     }
+  },
+  created: function () {
+    axios.get('http://localhost:8000/api/v1/courses/course/get-recent-courses')
+      .then(function (response) {
+        // console.log(response)
+      }).catch(function (error) {
+        alert(error)
+      })
   }
 }
 </script>
