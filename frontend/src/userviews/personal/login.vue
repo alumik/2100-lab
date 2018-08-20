@@ -7,13 +7,19 @@
       <b-input-group prepend="手机号">
         <b-form-input
           v-model="phone"
+          :state="phoneState"
           type="text"/>
+        <b-form-invalid-feedback id="inputLiveFeedback">
+          手机号码不正确！
+        </b-form-invalid-feedback>
       </b-input-group>
       <br>
       <b-input-group prepend="验证码">
         <b-form-input
           v-model="code"
-          type="text"/>
+          :state="codeState"
+          type="text"
+          aria-describedby="inputLiveFeedback"/>
         <b-input-group-append>
           <b-btn
             id="send"
@@ -21,13 +27,17 @@
             variant="outline-success"
             @click="send">{{ status }}{{ second }}</b-btn>
         </b-input-group-append>
+        <b-form-invalid-feedback id="inputLiveFeedback">
+          验证码不正确！
+        </b-form-invalid-feedback>
       </b-input-group>
       <br>
       <b-button
         id="btn"
         type="submit"
         variant="success"
-        @click="login">登录</b-button>
+        @click="login">登录
+      </b-button>
       <b-modal
         v-model="modalShow"
         :ok-disabled="okDisabled"
@@ -53,7 +63,7 @@
 <script>
 import Basic from '../components/basic'
 import axios from 'axios'
-
+import qs from 'qs'
 export default {
   name: 'Login',
   components: {
@@ -63,7 +73,10 @@ export default {
     return {
       phone: '',
       code: '',
+      correct_code: '',
       status: '获取验证码',
+      codeState: true,
+      phoneState: true,
       seconds: 61,
       disabled: false,
       okDisabled: true,
@@ -145,23 +158,48 @@ export default {
       if (o === 'accepted') {
         this.okDisabled = false
       }
+    },
+    phone: function (n) {
+      if (n.length > 11) {
+        this.phoneState = false
+      } else {
+        this.phoneState = true
+      }
+    },
+    code: function (n) {
+      if (n.length > 6) {
+        this.codeState = false
+      } else {
+        this.codeState = true
+      }
     }
   },
   methods: {
     send () {
-      axios.post('localhost:8000/api/vi/customers/forestage?')
-      this.status = '再次发送 '
       let that = this
-      that.seconds = that.seconds - 1
-      this.disabled = true
-      let t = setInterval(function () {
+      axios.post('http://localhost:8000/api/v1/customers/forestage/auth/get-verification-code/',
+        qs.stringify({
+          phone_number: this.phone.toString()
+        }), {withCredentials: true}).then((response) => {
+        // console.log(response.data.verification_code)
+        this.status = '再次发送 '
+        let that = this
         that.seconds = that.seconds - 1
-        if (that.seconds === -1) {
-          that.disabled = false
-          that.seconds = 61
-          clearInterval(t)
+        this.disabled = true
+        let t = setInterval(function () {
+          that.seconds = that.seconds - 1
+          if (that.seconds === -1) {
+            that.disabled = false
+            that.seconds = 61
+            clearInterval(t)
+          }
+        }, 1000)
+      }).catch(error => {
+        // console.log(error.response.data.message)
+        if (error) {
+          that.phoneState = false
         }
-      }, 1000)
+      })
     },
     handleOk (evt) {
       if (this.accept === 'accepted') {
@@ -170,12 +208,22 @@ export default {
       evt.preventDefault()
     },
     login () {
-      axios.post('localhost:8000/api/vi/customers/forestage?', {
-        phone_number: this.phone,
-        verification_code: this.code
-      }).then((response) => {
-        if (response) {
+      let that = this
+      axios.post('http://localhost:8000/api/v1/customers/forestage/auth/authenticate-customer/',
+        qs.stringify({
+          phone_number: this.phone.toString(),
+          verification_code: this.code.toString()
+        }), {withCredentials: true}).then((response) => {
+        // console.log(response.data)
+        // console.log(response.data.is_new_customer)
+        if (response.data.is_new_customer) {
           this.modalShow = !this.modalShow
+        }
+      }).catch(error => {
+        if (error.response.data.message === 'Different phone number.') {
+          that.phoneState = false
+        } else if (error.response.data.message === 'Wrong verification code.') {
+          this.codeState = false
         }
       })
     }
