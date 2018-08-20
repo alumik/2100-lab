@@ -120,10 +120,11 @@ export default {
       }, false)
     },
     openInput () {
-      document.getElementById(this.inputId).click()
+      this.$refs.input.click()
     },
     deleteImg (index) {
       this.imageDataList.splice(index, 1)
+      this.errorText = ''
       this.countText = `${this.imageDataList.length}张图片`
     },
     handleFile (files) {
@@ -135,6 +136,7 @@ export default {
         let file = files[i]
         let size = Math.floor(file.size / 1024)
         if (size > this.maxSize) {
+          this.countText = ''
           this.errorText = `文件大小不能超过${this.sizeFormatted}`
           return false
         }
@@ -142,6 +144,7 @@ export default {
       }
 
       if (files && files.length > 0) {
+        this.errorText = ''
         this.countText = `${files.length}张图片`
       }
       this.onChange && this.onChange(files)
