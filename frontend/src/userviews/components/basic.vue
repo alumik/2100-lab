@@ -15,10 +15,3 @@ export default {
   }
 }
 </script>
-
-<style>
-  .my-nav {
-    min-width: 500px;
-    padding: 0;
-  }
-</style>
