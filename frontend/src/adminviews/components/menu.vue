@@ -20,7 +20,7 @@
         <a @click="jump('/admin/adminmanagement')">管理员管理</a>
       </li>
       <li>
-        <a @click="jump('/admin/date')">数据分析</a>
+        <a @click="jump('/admin/data')">数据分析</a>
       </li>
       <li>
         <a @click="jump('/admin/log')">日志查询</a>

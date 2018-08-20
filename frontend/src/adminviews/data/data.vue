@@ -5,22 +5,22 @@
       <div>
         <Menu class="menu"/>
       </div>
-      <div id="date">
+      <div id="data">
         <BreadCrumb :items="items"/>
         <h1>数据分析</h1>
-        <div class="date-div">
+        <div class="data-div">
           <button @click="change_type">切换图表的类型</button>
           <ve-chart
-            :data="date1"
+            :data="data1"
             :settings="settings1"/>
-          <ve-line :data="date2"/>
-          <ve-histogram :data="date1"/>
+          <ve-line :data="data2"/>
+          <ve-histogram :data="data1"/>
           <ve-histogram
-            :data="date2"
+            :data="data2"
             :settings="settings2"/>
-          <ve-bar :data="date2"/>
-          <ve-pie :data="date1"/>
-          <ve-scatter :data="date2"/>
+          <ve-bar :data="data2"/>
+          <ve-pie :data="data1"/>
+          <ve-scatter :data="data2"/>
         </div>
       </div>
     </div>
@@ -32,7 +32,7 @@ import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
 import BreadCrumb from '../../components/breadCrumb'
 export default {
-  name: 'Date',
+  name: 'Data',
   components: {BreadCrumb, Menu, AdminNavbar},
   data () {
     this.type = ['line', 'histogram']
@@ -48,7 +48,7 @@ export default {
         text: '数据分析',
         active: true
       }],
-      date1: {
+      data1: {
         columns: ['日期', '购买量'],
         rows: [
           {'日期': '1月1日', '购买量': 123},
@@ -60,7 +60,7 @@ export default {
         ]
       },
       settings1: {type: this.type[this.index]},
-      date2: {
+      data2: {
         columns: ['日期', '课程1购买量', '课程2购买量'],
         rows: [
           {'日期': '8月13日', '课程1购买量': 1350, '课程2购买量': 1455},
@@ -106,13 +106,13 @@ export default {
     position: fixed;
   }
 
-  #date {
+  #data {
     flex-basis: 100%;
     padding: 0;
     margin-left: 200px;
   }
 
-  .date-div {
+  .data-div {
     padding-right: 15px;
     padding-left: 15px;
   }
