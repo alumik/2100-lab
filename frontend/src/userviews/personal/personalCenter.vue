@@ -187,10 +187,10 @@ export default {
   }
 
   .input-group-text {
-    background-color: #efeedd;
+    background-color: white;
   }
 
   .money .input-group-text {
-    background-color: #efe54b;
+    background-color: #ffeaa4;
   }
 </style>
