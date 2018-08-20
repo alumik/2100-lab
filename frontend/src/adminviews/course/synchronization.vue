@@ -17,7 +17,7 @@ export default {
       items: [
         {
           text: '主页',
-          href: '/admin'
+          href: '/admin/main'
         }, {
           text: '课程管理',
           href: '/admin/course'

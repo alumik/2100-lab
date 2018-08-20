@@ -43,7 +43,7 @@ export default {
     return {
       items: [{
         text: '主页',
-        href: '/admin'
+        href: '/admin/main'
       }, {
         text: '数据分析',
         active: true
