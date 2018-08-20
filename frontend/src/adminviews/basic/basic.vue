@@ -62,7 +62,7 @@ export default {
   }
 
   .my-container {
-    margin-left: 200px;
     padding: 0;
+    margin-left: 200px;
   }
 </style>

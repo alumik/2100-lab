@@ -150,9 +150,9 @@ export default {
   }
 
   .content {
-    margin-left: 40px;
     max-width: 600px;
     padding: 20px;
+    margin-left: 40px;
   }
 
   .row {
