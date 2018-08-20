@@ -26,7 +26,7 @@ export default {
         {id: 3, text: '用户管理', isActive: false, path: '/admin/user'},
         {id: 4, text: '订单管理', isActive: false, path: '/admin/order'},
         {id: 5, text: '管理员管理', isActive: false, path: '/admin/adminmanagement'},
-        {id: 6, text: '数据分析', isActive: false, path: '/admin/date'},
+        {id: 6, text: '数据分析', isActive: false, path: '/admin/data'},
         {id: 7, text: '日志查询', isActive: false, path: '/admin/log'}
       ]
     }
