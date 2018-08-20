@@ -37,8 +37,9 @@ class Course(SoftDeletionModel):
             'description': self.description
         }
     
-    def as_back_stage_dict(self):
+    def as_backstage_dict(self):
         return {
+            'course_id': self.id,
             'codename': self.codename,
             'title': self.title,
             'price': self.price,

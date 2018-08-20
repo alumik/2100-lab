@@ -33,7 +33,7 @@ def get_back_stage_page(request, items):
     except (PageNotAnInteger, EmptyPage):
         item_page = paginator.page(1)
     item_list = list(
-        map(lambda item: item.as_back_stage_dict(), list(item_page))
+        map(lambda item: item.as_backstage_dict(), list(item_page))
     )
     return {
         'count': count,

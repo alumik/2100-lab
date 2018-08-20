@@ -12,4 +12,9 @@ urlpatterns = [
         views_backstage.get_course_list,
         name='get-course-list'
     ),
+    path(
+        'course-management/get-course-detail/',
+        views_backstage.get_course_detail,
+        name='get-course-detail'
+    ),
 ]
