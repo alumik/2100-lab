@@ -25,7 +25,7 @@ describe('用户管理页面单元测试', () => {
   })
 
   it('测试下拉菜单输入框数量', () => {
-    expect(wrapper.findAll('select').length).toEqual(1)
+    expect(wrapper.findAll('select').length).toEqual(2)
   })
 
   it('测试按钮渲染数量', () => {
@@ -33,9 +33,14 @@ describe('用户管理页面单元测试', () => {
     expect(wrapper.findAll('button').length).toEqual(length - 2)
   })
 
-  it('测试改变下拉菜单选项绑定数据是否改变', () => {
+  it('测试改变用户类型菜单选项绑定数据是否改变', () => {
     wrapper.findAll('option').at(0).setSelected()
-    expect(wrapper.vm.state).toBe('whole')
+    expect(wrapper.vm.type).toBe('whole')
+  })
+
+  it('测试改变状态菜单选项绑定数据是否改变', () => {
+    wrapper.findAll('option').at(4).setSelected()
+    expect(wrapper.vm.state).toBe('is_banned')
   })
 
   it('测试文本框输入是否正确', () => {
