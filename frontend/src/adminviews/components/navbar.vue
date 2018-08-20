@@ -50,13 +50,6 @@ export default {
     height: 35px;
   }
 
-  .navbar {
-    min-width: 350px;
-    padding: 15px 10px;
-    background-color: #6f5499 !important;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-  }
-
   .navbar-dark .navbar-nav .nav-link {
     color: #999;
   }
