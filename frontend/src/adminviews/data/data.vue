@@ -116,4 +116,10 @@ export default {
     padding-right: 15px;
     padding-left: 15px;
   }
+
+  @media (max-width: 768px) {
+    #data {
+      margin-left: 0;
+    }
+  }
 </style>
