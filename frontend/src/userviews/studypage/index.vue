@@ -40,21 +40,36 @@
       <div role="tablist">
         <b-card>
           <div
-            id="introduction"
-            class="text-left-style">
-            <label class="delete-margin">
-              <h5>{{ course.name }}{{ this.$route.query.course_id }}</h5>
-              &emsp;&emsp;{{ text_show }}</label>
+            id="introduction">
+            <b-row>
+              <b-col class="delete-margin text-left-style">
+                <h5>
+                  {{ course.name }}
+                </h5>
+              </b-col>
+              <b-col class="vote-style">
+                {{ course.course_up_votes }}
+                <img
+                  id="praise-button"
+                  src="../../assets/praise.png"
+                  class="vote-style"
+                  @click="up_vote_course">
+              </b-col>
+            </b-row>
+            <div class="delete-margin text-left-style">
+              &emsp;&emsp;{{ text_show }}
+            </div>
             <label
               v-if="brandFold === false"
-              id="hide-text">{{ text_hide }}</label>
-          </div>
-          <div
-            class="text-right-style"
-            @click="changeFoldState">
-            <label
-              id="watch-all"
-              class="look-all">{{ brandFold ? '﹀展开':'︿收起' }}</label>
+              id="hide-text">{{ text_hide }}
+            </label>
+            <div
+              class="text-right-style"
+              @click="changeFoldState">
+              <label
+                id="watch-all"
+                class="look-all">{{ brandFold ? '﹀展开':'︿收起' }}</label>
+            </div>
           </div>
         </b-card>
         <b-card
@@ -116,7 +131,8 @@ export default {
           '混着青草味儿，还有各种花的香，都在微微润湿的空气里酝酿。鸟儿将巢安在繁花嫩叶当中，' +
           '高兴起来了，呼朋引伴地卖弄清脆的喉咙，唱出宛转的曲子，与轻风流水应和着。' +
           '牛背上牧童的短笛，这时候也成天嘹亮地响着。',
-        name: '我们是坠胖的'
+        name: '我们是坠胖的',
+        course_up_votes: 100
       }
     }
   },
@@ -162,6 +178,7 @@ export default {
     this.addEventListeners()
   },
   methods: {
+    up_vote_course () {},
     changeFoldState () {
       this.brandFold = !this.brandFold
     },
@@ -241,5 +258,10 @@ export default {
 
   .width-style {
     width: 100%;
+  }
+
+  .vote-style {
+    height: 25px;
+    text-align: right;
   }
 </style>
