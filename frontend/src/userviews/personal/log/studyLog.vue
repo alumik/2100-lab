@@ -5,9 +5,9 @@
       @hide="hide"/>
     <div id="main">
       <UserMenu
-        id="menu"
         :list="list"
-        :hidden="hidden"/>
+        :hidden="hidden"
+        class="menu"/>
       <div id="info">
         <BreadCrumb
           id="breadcrumb"
@@ -57,7 +57,7 @@ export default {
       fields: {
         last_name: {
           label: '课程代号',
-          sortable: true
+          sortable: false
         },
         first_name: {
           label: '课程名'
