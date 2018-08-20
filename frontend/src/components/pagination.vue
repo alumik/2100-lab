@@ -2,10 +2,11 @@
   <div>
     <b-pagination
       :total-rows="rows"
-      v-model="currentPage"
       :per-page="perpage"
+      v-model="page"
       align="center"
-      size="md"/>
+      size="md"
+      @input="change_page"/>
   </div>
 </template>
 
@@ -24,7 +25,12 @@ export default {
   },
   data () {
     return {
-      currentPage: 1
+      page: 1
+    }
+  },
+  methods: {
+    change_page: function () {
+      this.$emit('change', this.page)
     }
   }
 }

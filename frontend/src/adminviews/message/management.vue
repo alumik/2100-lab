@@ -114,7 +114,9 @@
         id="delete"
         title="确认删除"
         text="您确定要删除此条留言吗？"/>
-      <Pagination :rows="rows"/>
+      <Pagination
+        :rows="rows"
+        @change="change_page"/>
     </div>
   </Basic>
 </template>
@@ -160,7 +162,8 @@ export default {
       state: '',
       reply: '',
       page_jump: false,
-      per_page: 10
+      per_page: 10,
+      page: 1
     }
   },
   created () {
@@ -205,6 +208,9 @@ export default {
         .catch(function (error) {
           alert('传递信息失败' + error)
         })
+    },
+    change_page: function (page) {
+      this.page = page
     }
   }
 }

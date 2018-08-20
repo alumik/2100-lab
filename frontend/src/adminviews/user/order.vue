@@ -28,7 +28,9 @@
           </tbody>
         </table>
       </div>
-      <Pagination :rows="rows"/>
+      <Pagination
+        :rows="rows"
+        @change="change_page"/>
     </div>
   </Basic>
 </template>
@@ -66,7 +68,13 @@ export default {
         { order_code: '0010', course_code: 'ENGLISH2', course_name: '口语', charge: '120.00', state: '已退款' },
         { order_code: '0020', course_code: 'PHYSICS5', course_name: '小孔成像', charge: '100.00', state: '已完成' }
       ],
-      rows: 10
+      rows: 10,
+      page: 1
+    }
+  },
+  methods: {
+    change_page: function (page) {
+      this.page = page
     }
   }
 }

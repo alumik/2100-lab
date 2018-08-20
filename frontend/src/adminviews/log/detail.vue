@@ -26,15 +26,19 @@
           </tbody>
         </table>
       </div>
+      <Pagination
+        :rows="rows"
+        @change="change_page"/>
     </div>
   </Basic>
 </template>
 
 <script>
 import Basic from '../basic/basic'
+import Pagination from '../../components/pagination'
 export default {
   name: 'LogDetail',
-  components: { Basic },
+  components: { Pagination, Basic },
   data () {
     return {
       items: [{
@@ -56,7 +60,14 @@ export default {
         { time: '2018-08-15 14:15:28', account: '1001', content: '1001删除了ID为3的留言' },
         { time: '2018-08-15 15:20:10', account: '1010', content: '1010回复了ID为4的留言' },
         { time: '2018-08-17 18:15:25', account: '1025', content: '1025删除了ID为5的留言' }
-      ]
+      ],
+      rows: 20,
+      page: 1
+    }
+  },
+  methods: {
+    change_page: function (page) {
+      this.page = page
     }
   }
 }

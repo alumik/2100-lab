@@ -88,7 +88,9 @@
           </tbody>
         </table>
       </div>
-      <Pagination :rows="rows"/>
+      <Pagination
+        :rows="rows"
+        @change="change_page"/>
     </div>
   </Basic>
 </template>
@@ -126,13 +128,17 @@ export default {
       phone: '',
       type: '',
       state: '',
-      page_jump: false
+      page_jump: false,
+      page: 1
     }
   },
   methods: {
     to_detail: function (val) {
       this.page_jump = true
       this.$router.push({ name: 'UserDetail', query: { user_id: val } })
+    },
+    change_page: function (page) {
+      this.page = page
     }
   }
 }
