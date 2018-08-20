@@ -10,17 +10,20 @@ import VueQrcode from '@xkeshi/vue-qrcode'
 import datePicker from 'vue-bootstrap-datetimepicker'
 import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css'
 import VCharts from 'v-charts'
+import axios from 'axios'
 
 Vue.component(VueQrcode.name, VueQrcode)
 Vue.use(BootstrapVue)
 Vue.use(datePicker)
 Vue.use(VCharts)
 Vue.config.productionTip = false
+Vue.prototype.$http = axios
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  axios,
   components: { App },
   template: '<App/>'
 })
