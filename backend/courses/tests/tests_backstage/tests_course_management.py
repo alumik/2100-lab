@@ -38,10 +38,14 @@ class CourseListTests(TestCase):
     def test_course_list_access_denied(self):
         self.client.login(phone_number='14412345678', password='123456')
 
-        response = self.client.post(
-            reverse('api:courses:backstage:get-course-list')
-            + '?codename=&title=&page=1',
-            {'page_limit': 1}
+        response = self.client.get(
+            reverse('api:courses:backstage:get-course-list'),
+            {
+                'codename': '',
+                'title': '',
+                'page': 1,
+                'page_limit': 1
+            }
         )
         self.assertEqual(response.status_code, 302)
 
@@ -49,10 +53,14 @@ class CourseListTests(TestCase):
         self.client.login(phone_number='13312345678', password='123456')
         course = Course.objects.get(codename='SCIENCE2')
 
-        response = self.client.post(
-            reverse('api:courses:backstage:get-course-list')
-            + '?codename=&title=&page=2',
-            {'page_limit': 1}
+        response = self.client.get(
+            reverse('api:courses:backstage:get-course-list'),
+            {
+                'codename': '',
+                'title': '',
+                'page': 2,
+                'page_limit': 1
+            }
         )
         self.assertEqual(response.status_code, 200)
         response_json_data = json.loads(response.content)
@@ -62,6 +70,8 @@ class CourseListTests(TestCase):
                 'codename': '',
                 'title': '',
                 'count': 3,
+                'page': 2,
+                'num_pages': 3,
                 'content': [
                     {
                         'codename': 'SCIENCE2',
@@ -77,10 +87,14 @@ class CourseListTests(TestCase):
         self.client.login(phone_number='13312345678', password='123456')
         course = Course.objects.get(codename='SOFT1')
 
-        response = self.client.post(
-            reverse('api:courses:backstage:get-course-list')
-            + '?codename=SOFT&title=&page=2',
-            {'page_limit': 1}
+        response = self.client.get(
+            reverse('api:courses:backstage:get-course-list'),
+            {
+                'codename': 'SOFT',
+                'title': '',
+                'page': 2,
+                'page_limit': 1
+            }
         )
         self.assertEqual(response.status_code, 200)
         response_json_data = json.loads(response.content)
@@ -90,6 +104,8 @@ class CourseListTests(TestCase):
                 'codename': 'SOFT',
                 'title': '',
                 'count': 2,
+                'page': 2,
+                'num_pages': 2,
                 'content': [
                     {
                         'codename': 'SOFT1',
@@ -102,13 +118,18 @@ class CourseListTests(TestCase):
         )
 
     def test_course_list_two_filter(self):
+        self.maxDiff = None
         self.client.login(phone_number='13312345678', password='123456')
         course = Course.objects.get(codename='SOFT1')
 
-        response = self.client.post(
-            reverse('api:courses:backstage:get-course-list')
-            + '?codename=SOFT&title=1&page=2',
-            {'page_limit': 1}
+        response = self.client.get(
+            reverse('api:courses:backstage:get-course-list'),
+            {
+                'codename': 'SOFT',
+                'title': '1',
+                'page': 1,
+                'page_limit': 1
+            }
         )
         self.assertEqual(response.status_code, 200)
         response_json_data = json.loads(response.content)
@@ -118,6 +139,8 @@ class CourseListTests(TestCase):
                 'codename': 'SOFT',
                 'title': '1',
                 'count': 1,
+                'page': 1,
+                'num_pages': 1,
                 'content': [
                     {
                         'codename': 'SOFT1',

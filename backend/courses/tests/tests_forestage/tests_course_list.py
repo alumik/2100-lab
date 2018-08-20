@@ -37,9 +37,13 @@ class CourseListTests(TestCase):
         )
 
     def test_get_free_course_list(self):
-        response = self.client.post(
-            reverse('api:courses:forestage:get-course-list') + '?course_type=free&page=1',
-            {'page_limit': 1}
+        response = self.client.get(
+            reverse('api:courses:forestage:get-course-list'),
+            {
+                'course_type': 'free',
+                'page': 1,
+                'page_limit': 1
+            }
         )
         self.assertEqual(response.status_code, 200)
         response_json_data = json.loads(response.content)
@@ -48,9 +52,13 @@ class CourseListTests(TestCase):
         self.assertEqual(response_json_data['content'][0]['title'], 't4')
         self.assertEqual(response_json_data['content'][0]['description'], 'd4')
 
-        response = self.client.post(
-            reverse('api:courses:forestage:get-course-list') + '?course_type=free&page=3',
-            {'page_limit': 1}
+        response = self.client.get(
+            reverse('api:courses:forestage:get-course-list'),
+            {
+                'course_type': 'free',
+                'page': 3,
+                'page_limit': 1
+            }
         )
         self.assertEqual(response.status_code, 200)
         response_json_data = json.loads(response.content)
@@ -60,9 +68,13 @@ class CourseListTests(TestCase):
         self.assertEqual(response_json_data['content'][0]['description'], 'd1')
 
     def test_get_paid_course_list(self):
-        response = self.client.post(
-            reverse('api:courses:forestage:get-course-list') + '?course_type=paid&page=1',
-            {'page_limit': 1}
+        response = self.client.get(
+            reverse('api:courses:forestage:get-course-list'),
+            {
+                'course_type': 'paid',
+                'page': 1,
+                'page_limit': 1
+            }
         )
         self.assertEqual(response.status_code, 200)
         response_json_data = json.loads(response.content)

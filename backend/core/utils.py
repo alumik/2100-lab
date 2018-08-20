@@ -5,7 +5,7 @@ from django.http import JsonResponse
 def get_page(request, items):
     count = items.count()
     page = request.GET.get('page')
-    paginator = Paginator(items, request.POST.get('page_limit'))
+    paginator = Paginator(items, request.GET.get('page_limit', 10))
     try:
         item_page = paginator.page(page)
     except (PageNotAnInteger, EmptyPage):
@@ -16,6 +16,8 @@ def get_page(request, items):
     return JsonResponse(
         {
             'count': count,
+            'page': item_page.number,
+            'num_pages': paginator.num_pages,
             'content': item_list
         },
         safe=False
@@ -25,7 +27,7 @@ def get_page(request, items):
 def get_back_stage_page(request, items):
     count = items.count()
     page = request.GET.get('page')
-    paginator = Paginator(items, request.POST.get('page_limit'))
+    paginator = Paginator(items, request.GET.get('page_limit', 10))
     try:
         item_page = paginator.page(page)
     except (PageNotAnInteger, EmptyPage):
@@ -35,5 +37,7 @@ def get_back_stage_page(request, items):
     )
     return {
         'count': count,
+        'page': item_page.number,
+        'num_pages': paginator.num_pages,
         'content': item_list
     }

@@ -50,9 +50,12 @@ class PersonalCenterLogTests(TestCase):
     def test_get_learning_log(self):
         self.client.force_login(get_user_model().objects.get(phone_number='13312345678'))
 
-        response = self.client.post(
-            reverse('api:customers:forestage:get-learning-logs') + '?page=1',
-            {'page_limit': 1}
+        response = self.client.get(
+            reverse('api:customers:forestage:get-learning-logs'),
+            {
+                'page': 1,
+                'page_limit': 1
+            }
         )
         self.assertEqual(response.status_code, 200)
         response_json_data = json.loads(response.content)
@@ -61,9 +64,12 @@ class PersonalCenterLogTests(TestCase):
         self.assertEqual(response_json_data['content'][0]['course_title'], 't2')
         self.assertEqual(response_json_data['content'][0]['expire_time'], None)
 
-        response = self.client.post(
-            reverse('api:customers:forestage:get-learning-logs') + '?page=2',
-            {'page_limit': 1}
+        response = self.client.get(
+            reverse('api:customers:forestage:get-learning-logs'),
+            {
+                'page': 2,
+                'page_limit': 1
+            }
         )
         self.assertEqual(response.status_code, 200)
         response_json_data = json.loads(response.content)
@@ -75,9 +81,12 @@ class PersonalCenterLogTests(TestCase):
     def test_get_order_log(self):
         self.client.force_login(get_user_model().objects.get(phone_number='13312345678'))
 
-        response = self.client.post(
-            reverse('api:customers:forestage:get-order-logs') + '?page=1',
-            {'page_limit': 1}
+        response = self.client.get(
+            reverse('api:customers:forestage:get-order-logs'),
+            {
+                'page': 1,
+                'page_limit': 1
+            }
         )
         self.assertEqual(response.status_code, 200)
         response_json_data = json.loads(response.content)
@@ -88,9 +97,12 @@ class PersonalCenterLogTests(TestCase):
         self.assertEqual(response_json_data['content'][0]['money'], '100.00')
         self.assertTrue(response_json_data['content'][0]['refunded'])
 
-        response = self.client.post(
-            reverse('api:customers:forestage:get-order-logs') + '?page=2',
-            {'page_limit': 1}
+        response = self.client.get(
+            reverse('api:customers:forestage:get-order-logs'),
+            {
+                'page': 2,
+                'page_limit': 1
+            }
         )
         self.assertEqual(response.status_code, 200)
         response_json_data = json.loads(response.content)
