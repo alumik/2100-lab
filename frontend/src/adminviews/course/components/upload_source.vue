@@ -19,13 +19,21 @@
             id="audio-row">
             <b-col cols="2"><h5>音频资料</h5></b-col>
             <b-col cols="8"><input
+              v-model="fileNameList"
               type="text"
               class="text-left audio-input"
             ></b-col>
             <b-col
-              id="upload-btn"
               cols="2">
-            <b-button>上传</b-button></b-col>
+              <b-button @click="openEntrance">打开</b-button>
+            </b-col>
+            <input
+              id="upload-file"
+              ref="input"
+              type="file"
+              accept="audio/mp3"
+              multiple="multiple"
+              @change="handleFileChange">
           </b-row>
           <b-row
             align-v="center">
@@ -64,7 +72,44 @@ import UploadPicture from './upload_picture'
 export default {
   name: 'UploadSource',
   components: {UploadPicture},
+  data () {
+    return {
+      inputId: '',
+      audioDataList: [],
+      fileNameList: [],
+      errorText: '',
+      countText: ''
+    }
+  },
   methods: {
+    openEntrance () {
+      this.$refs.input.click()
+    },
+    handleFileChange () {
+      let input = this.$refs.input
+      let files = input.files
+      this.handleFile(files)
+    },
+    handleFile (files) {
+      if (files && files.length > 0) {
+        this.fileNameList.length = 0
+        this.audioDataList.length = 0
+      }
+      for (let i = 0; i < files.length; i++) {
+        let file = files[i]
+        this.fileNameList.push(file.name)
+      }
+      if (files && files.length > 0) {
+        this.countText = `${files.length}条音频`
+      }
+      this.preview(files)
+    },
+    preview (files) {
+      let _this = this
+      if (!files || !window.FileReader) return
+
+      _this.audioDataList.push(files)
+    },
     showModal () {
       this.$refs.upload_source.show()
     },
@@ -94,6 +139,10 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: right;
+  }
+
+  #upload-file {
+    display: none;
   }
 
   #sync-btn {
