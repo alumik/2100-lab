@@ -23,7 +23,8 @@
                     v-model="date"
                     type="text"
                     class="form-control"
-                    placeholder="">
+                    placeholder=""
+                    @keyup.enter="search">
                 </div>
               </td>
               <td class="xs-td">
@@ -32,7 +33,8 @@
                     v-model="user"
                     type="text"
                     class="form-control"
-                    placeholder="">
+                    placeholder=""
+                    @keyup.enter="search">
                 </div>
               </td>
               <td class="xs-td">
@@ -41,7 +43,8 @@
                     v-model="course_code"
                     type="text"
                     class="form-control"
-                    placeholder="">
+                    placeholder=""
+                    @keyup.enter="search">
                 </div>
               </td>
               <td class="xs-td">
@@ -50,7 +53,8 @@
                     v-model="course_name"
                     type="text"
                     class="form-control"
-                    placeholder="">
+                    placeholder=""
+                    @keyup.enter="search">
                 </div>
               </td>
               <td class="lg-td"/>
@@ -58,7 +62,8 @@
                 <div>
                   <select
                     v-model="state"
-                    class="selectpicker">
+                    class="selectpicker"
+                    @change="search">
                     <option value="whole">全部</option>
                     <option value="reserved">未删除</option>
                     <option value="deleted">已删除</option>
@@ -119,6 +124,8 @@ import Pagination from '../../components/pagination'
 import ConfirmModal from '../components/ConfirmModal'
 import InputModal from '../components/InputModal'
 import Basic from '../basic/basic'
+import axios from 'axios'
+import qs from 'qs'
 let messages = [
   { data: '2018-08-10', user: '小红', course_code: 'SOFT1', course_name: '计算机', message: '很好', state: '已删除', id: '1001' },
   { data: '2018-08-11', user: '小明', course_code: 'English2', course_name: '口语', message: '还不错', state: '未删除', id: '1002' }
@@ -150,21 +157,64 @@ export default {
       user: '',
       course_code: '',
       course_name: '',
-      state: null,
-      reply: '123',
-      page_jump: false
+      state: '',
+      reply: '',
+      page_jump: false,
+      per_page: 10
     }
+  },
+  created () {
+    axios.post('', qs.stringify({
+      page_limit: this.per_page,
+      page: 1
+    }))
+      .then(function (response) {
+        this.messages = response.data.content
+        this.rows = response.data.count
+      })
+      .catch(function (error) {
+        alert('传递信息失败' + error)
+      })
   },
   methods: {
     to_detail: function (val) {
       this.page_jump = true
       this.$router.push({ name: 'MessageDetail', query: {message_id: val} })
+    },
+    get_date: function () {
+      let date = new Date(this.date.replace(/-/g, '/'))
+      return date.getTime() / 1000
+    },
+    search: function () {
+      // alert('search')
+      let date = this.get_date()
+      // console.log(date + this.user + this.course_code + this.course_name + this.state)
+      axios.post('', qs.stringify({
+        date: date,
+        user: this.user,
+        course_code: this.course_code,
+        course_name: this.course_name,
+        state: this.state,
+        page_limit: this.per_page,
+        page: 1
+      }))
+        .then(function (response) {
+          this.messages = response.data.content
+          this.rows = response.data.count
+        })
+        .catch(function (error) {
+          alert('传递信息失败' + error)
+        })
     }
   }
 }
 </script>
 
 <style scoped>
+  .my-basic {
+    min-width: 1300px;
+  }
+
   h1 {
     padding-left: 15px;
     margin-top: 25px;
