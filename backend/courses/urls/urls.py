@@ -6,4 +6,5 @@ app_name = 'courses'
 
 urlpatterns = [
     path('forestage/', include('courses.urls.urls_forestage', namespace='forestage')),
+    path('backstage/', include('courses.urls.urls_backstage', namespace='backstage')),
 ]

@@ -33,10 +33,7 @@ def get_back_stage_page(request, items):
     item_list = list(
         map(lambda item: item.as_back_stage_dict(), list(item_page))
     )
-    return JsonResponse(
-        {
-            'count': count,
-            'content': item_list
-        },
-        safe=False
-    )
+    return {
+        'count': count,
+        'content': item_list
+    }
