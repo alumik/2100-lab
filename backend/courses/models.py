@@ -95,6 +95,17 @@ class Comment(SoftDeletionModel):
             'created_at': self.created_at
         }
 
+    def as_backstage_dict(self):
+        return {
+            'comment_id': self.id,
+            'created_at': self.created_at,
+            'username': self.user.username,
+            'course_codename': self.course.codename,
+            'course_title': self.course.title,
+            'content': self.content,
+            'is_deleted': True if self.deleted_at is not None else False
+        }
+
 
 class Hero(models.Model):
     image = models.ImageField(upload_to='uploads/common/heroes/')

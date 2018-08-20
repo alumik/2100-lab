@@ -17,4 +17,9 @@ urlpatterns = [
         views_backstage.get_course_detail,
         name='get-course-detail'
     ),
+    path(
+        'comment-management/get-comment-list/',
+        views_backstage.get_comment_list,
+        name='get-comment-list'
+    )
 ]
