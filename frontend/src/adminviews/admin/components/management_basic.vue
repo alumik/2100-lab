@@ -101,7 +101,7 @@ export default {
 
   .inner-btn {
     margin-top: 2%;
-    margin-left: 50%;
+    margin-left: 38%;
   }
 
   .table-div {
@@ -110,6 +110,10 @@ export default {
 
   .table {
     border: 1px solid #d3d9df;
+  }
+
+  th {
+    min-width: 100px;
   }
 
   thead tr {

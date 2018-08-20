@@ -44,12 +44,7 @@
                   placeholder="">
               </div>
             </td><td>
-              <div class="input-group my-short-input">
-                <input
-                  type="text"
-                  class="form-control col-5"
-                  placeholder="">
-            </div></td>
+            <div/></td>
             <td class="my-td">
             <div/></td>
           </tr>
