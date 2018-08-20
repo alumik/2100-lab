@@ -24,7 +24,7 @@ def get_page(request, items):
     )
 
 
-def get_back_stage_page(request, items):
+def get_backstage_page(request, items):
     count = items.count()
     page = request.GET.get('page')
     paginator = Paginator(items, request.GET.get('page_limit', 10))
