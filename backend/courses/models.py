@@ -41,6 +41,7 @@ class Course(SoftDeletionModel):
         return {
             'codename': self.codename,
             'title': self.title,
+            'price': self.price,
             'updated_at': self.updated_at
         }
 
