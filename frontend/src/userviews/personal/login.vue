@@ -5,11 +5,15 @@
       <h2>2100实验室</h2>
       <br>
       <b-input-group prepend="手机号">
-        <b-form-input type="text"/>
+        <b-form-input
+          v-model="phone"
+          type="text"/>
       </b-input-group>
       <br>
       <b-input-group prepend="验证码">
-        <b-form-input type="text"/>
+        <b-form-input
+          v-model="code"
+          type="text"/>
         <b-input-group-append>
           <b-btn
             id="send"
@@ -48,6 +52,8 @@
 
 <script>
 import Basic from '../components/basic'
+import axios from 'axios'
+
 export default {
   name: 'Login',
   components: {
@@ -55,6 +61,8 @@ export default {
   },
   data () {
     return {
+      phone: '',
+      code: '',
       status: '获取验证码',
       seconds: 61,
       disabled: false,
@@ -141,6 +149,7 @@ export default {
   },
   methods: {
     send () {
+      axios.post('localhost:8000/api/vi/customers/forestage?')
       this.status = '再次发送 '
       let that = this
       that.seconds = that.seconds - 1
@@ -161,7 +170,14 @@ export default {
       evt.preventDefault()
     },
     login () {
-      this.modalShow = !this.modalShow
+      axios.post('localhost:8000/api/vi/customers/forestage?', {
+        phone_number: this.phone,
+        verification_code: this.code
+      }).then((response) => {
+        if (response) {
+          this.modalShow = !this.modalShow
+        }
+      })
     }
   }
 }

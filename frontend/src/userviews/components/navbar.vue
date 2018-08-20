@@ -25,7 +25,7 @@
           href="/personal">
           <img
             id="userimg"
-            src="../../assets/logo.png">用户一
+            src="../../assets/logo.png">{{ user ? user.name : '' }}
         </b-nav-item>
         <b-nav-item
           id="logout"
@@ -39,7 +39,17 @@
 
 <script>
 export default {
-  name: 'UserNavbar'
+  name: 'UserNavbar',
+  props: {
+    user: {
+      type: Object,
+      default: () => {
+        return {
+          name: '默认用户'
+        }
+      }
+    }
+  }
 }
 </script>
 
