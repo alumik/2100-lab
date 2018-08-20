@@ -63,31 +63,31 @@ export default {
     return {
       chooseImageDataList: [
         {
-          data: require('../../../userviews/components/image/1.jpg'),
+          data: require('../../userviews/components/image/1.jpg'),
           index: 1
         },
         {
-          data: require('../../../userviews/components/image/2.jpg'),
+          data: require('../../userviews/components/image/2.jpg'),
           index: 2
         },
         {
-          data: require('../../../userviews/components/image/3.jpg'),
+          data: require('../../userviews/components/image/3.jpg'),
           index: 3
         },
         {
-          data: require('../../../userviews/components/image/4.jpg'),
+          data: require('../../userviews/components/image/4.jpg'),
           index: 4
         },
         {
-          data: require('../../../userviews/components/image/5.jpg'),
+          data: require('../../userviews/components/image/5.jpg'),
           index: 5
         },
         {
-          data: require('../../../userviews/components/image/6.jpg'),
+          data: require('../../userviews/components/image/6.jpg'),
           index: 6
         },
         {
-          data: require('../../../userviews/components/image/7.jpg'),
+          data: require('../../userviews/components/image/7.jpg'),
           index: 7
         }
       ],

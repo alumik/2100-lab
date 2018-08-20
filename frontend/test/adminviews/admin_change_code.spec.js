@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 
 import { shallowMount } from '@vue/test-utils'
-import ChangeCodeBasic from '@/adminviews/admin/components/change_code_basic.vue'
+import ChangeCodeBasic from '@/adminviews/admin/change_code.vue'
 
 describe('修改密码模块单元测验', () => {
   const wrapper = shallowMount(ChangeCodeBasic)

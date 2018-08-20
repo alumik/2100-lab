@@ -9,7 +9,7 @@
         <img :src="data">
       </div>
       <img
-        src="../../../assets/logo.png"
+        src="../../assets/logo.png"
         class="img-uploader-delete-btn">
     </div>
     <div
@@ -38,7 +38,7 @@
               @click="openInput()">{{ fileNameList[index] }}</p>
           </div>
           <img
-            src="../../../assets/logo.png"
+            src="../../assets/logo.png"
             class="img-uploader-delete-btn"
             @click="deleteImg(index)">
         </div>
