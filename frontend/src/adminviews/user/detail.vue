@@ -1,168 +1,163 @@
 <template>
-  <div>
-    <AdminNavbar id="navbar"/>
-    <div id="body">
-      <div>
-        <Menu/>
+  <Basic
+    :items="items"
+    class="my-basic">
+    <div>
+      <div class="title">
+        <h1>用户详情</h1>
+        <div class="buttons">
+          <button
+            v-b-modal.authenticate
+            type="button"
+            class="btn btn-lg">
+            认证用户
+          </button>
+          <ConfirmModal
+            id="authenticate"
+            title="确认认证"
+            text="您确定要认证此用户吗？"/>
+          <button
+            v-if="is_banned"
+            type="button"
+            class="btn btn-lg"
+            @click="change_banned">
+            取消禁言
+          </button>
+          <button
+            v-b-modal.ban
+            v-else
+            type="button"
+            class="btn btn-lg">
+            禁言用户
+          </button>
+          <b-modal
+            id="ban"
+            ref="modal"
+            title="确认禁言"
+            centered
+            ok-title="确定"
+            cancel-title="取消"
+            @ok="change_banned">
+            <p id="ban-confirm">您确定要禁言此用户吗？</p>
+          </b-modal>
+          <button
+            v-b-modal.delete
+            type="button"
+            class="btn btn-lg">
+            删除用户
+          </button>
+          <ConfirmModal
+            id="delete"
+            title="确认删除"
+            text="您确定要删除此用户吗？"/>
+        </div>
       </div>
-      <div id="detail">
-        <BreadCrumb :items="items"/>
-        <div class="title">
-          <h1>用户详情</h1>
-          <div class="buttons">
-            <button
-              v-b-modal.authenticate
-              type="button"
-              class="btn btn-lg">
-              认证用户
-            </button>
-            <ConfirmModal
-              id="authenticate"
-              title="确认认证"
-              text="您确定要认证此用户吗？"/>
-            <button
-              v-if="is_banned"
-              type="button"
-              class="btn btn-lg"
-              @click="change_banned">
-              取消禁言
-            </button>
-            <button
-              v-b-modal.ban
-              v-else
-              type="button"
-              class="btn btn-lg">
-              禁言用户
-            </button>
-            <b-modal
-              id="ban"
-              ref="modal"
-              title="确认禁言"
-              centered
-              ok-title="确定"
-              cancel-title="取消"
-              @ok="change_banned">
-              <p id="ban-confirm">您确定要禁言此用户吗？</p>
-            </b-modal>
-            <button
-              v-b-modal.delete
-              type="button"
-              class="btn btn-lg">
-              删除用户
-            </button>
-            <ConfirmModal
-              id="delete"
-              title="确认删除"
-              text="您确定要删除此用户吗？"/>
-          </div>
-        </div>
-        <div class="table-div">
-          <table class="table table-bordered">
-            <tbody class="w-100">
-              <tr class="row mx-0">
-                <td class="col-2">头像</td>
-                <td class="col-10">
-                  <img :src="user.img">
-                </td>
-              </tr>
-              <tr class="row mx-0">
-                <td class="col-2">用户名</td>
-                <td class="col-10">{{ user.name }}</td>
-              </tr>
-              <tr class="row mx-0">
-                <td class="col-2">手机号码</td>
-                <td class="col-10">{{ user.phone }}</td>
-              </tr>
-              <tr class="row mx-0">
-                <td class="col-2">奖励金</td>
-                <td class="col-10">{{ user.balance }}</td>
-              </tr>
-              <tr class="row mx-0">
-                <td class="col-2">注册时间</td>
-                <td class="col-10">{{ user.register_time }}</td>
-              </tr>
-              <tr class="row mx-0">
-                <td class="col-2">修改时间</td>
-                <td class="col-10">{{ user.change_time }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="title">
-          <h2>相关订单</h2>
+      <div class="table-div">
+        <table class="table table-bordered">
+          <tbody class="w-100">
+            <tr class="row mx-0">
+              <td class="col-2">头像</td>
+              <td class="col-10">
+                <img :src="user.img">
+              </td>
+            </tr>
+            <tr class="row mx-0">
+              <td class="col-2">用户名</td>
+              <td class="col-10">{{ user.name }}</td>
+            </tr>
+            <tr class="row mx-0">
+              <td class="col-2">手机号码</td>
+              <td class="col-10">{{ user.phone }}</td>
+            </tr>
+            <tr class="row mx-0">
+              <td class="col-2">奖励金</td>
+              <td class="col-10">{{ user.balance }}</td>
+            </tr>
+            <tr class="row mx-0">
+              <td class="col-2">注册时间</td>
+              <td class="col-10">{{ user.register_time }}</td>
+            </tr>
+            <tr class="row mx-0">
+              <td class="col-2">修改时间</td>
+              <td class="col-10">{{ user.change_time }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="title">
+        <h2>相关订单</h2>
+        <button
+          type="button"
+          class="btn"
+          @click="to_order">
+          查看更多
+        </button>
+      </div>
+      <div class="table-div">
+        <table
+          id="order-table"
+          class="table table-striped table">
+          <thead>
+            <tr>
+              <td
+                v-for="order_title in order_titles"
+                :key="order_title.id">
+                {{ order_title.label }}
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="order in orders"
+              :key="order.id">
+              <td>{{ order.order_code }}</td>
+              <td>{{ order.course_code }}</td>
+              <td>{{ order.course_name }}</td>
+              <td>{{ order.charge }}</td>
+              <td>{{ order.state }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="title">
+        <h2>相关课程</h2>
+        <div class="buttons">
           <button
             type="button"
             class="btn"
-            @click="to_order">
+            @click="to_course">
             查看更多
           </button>
         </div>
-        <div class="table-div">
-          <table
-            id="order-table"
-            class="table table-striped table">
-            <thead>
-              <tr>
-                <td
-                  v-for="order_title in order_titles"
-                  :key="order_title.id">
-                  {{ order_title.label }}
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="order in orders"
-                :key="order.id">
-                <td>{{ order.order_code }}</td>
-                <td>{{ order.course_code }}</td>
-                <td>{{ order.course_name }}</td>
-                <td>{{ order.charge }}</td>
-                <td>{{ order.state }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="title">
-          <h2>相关课程</h2>
-          <div class="buttons">
-            <button
-              type="button"
-              class="btn"
-              @click="to_course">
-              查看更多
-            </button>
-          </div>
-        </div>
-        <div class="table-div">
-          <table
-            id="study-table"
-            class="table table-striped">
-            <thead>
-              <tr>
-                <td
-                  v-for="course_title in course_titles"
-                  :key="course_title.id">
-                  {{ course_title.label }}
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="course_log in course_logs"
-                :key="course_log.id">
-                <td>{{ course_log.course_code }}</td>
-                <td>{{ course_log.course_name }}</td>
-                <td>{{ course_log.progress }}</td>
-                <td>{{ course_log.time }}</td>
-                <td>{{ course_log.state }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      </div>
+      <div class="table-div">
+        <table
+          id="study-table"
+          class="table table-striped">
+          <thead>
+            <tr>
+              <td
+                v-for="course_title in course_titles"
+                :key="course_title.id">
+                {{ course_title.label }}
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="course_log in course_logs"
+              :key="course_log.id">
+              <td>{{ course_log.course_code }}</td>
+              <td>{{ course_log.course_name }}</td>
+              <td>{{ course_log.progress }}</td>
+              <td>{{ course_log.time }}</td>
+              <td>{{ course_log.state }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-  </div>
+  </Basic>
 </template>
 
 <script>
@@ -170,9 +165,10 @@ import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
 import BreadCrumb from '../../components/breadCrumb'
 import ConfirmModal from '../components/ConfirmModal'
+import Basic from '../basic/basic'
 export default {
   name: 'UserDetail',
-  components: {ConfirmModal, BreadCrumb, AdminNavbar, Menu},
+  components: {Basic, ConfirmModal, BreadCrumb, AdminNavbar, Menu},
   data () {
     return {
       user: { img: require('../../assets/logo.png'),
@@ -213,7 +209,9 @@ export default {
         { course_code: 'SOFT1', course_name: '计算机', progress: '01:22', time: '2018-08-14', state: '已焚毁' },
         { course_code: 'ENGLISH3', course_name: '英语写作', progress: '15:00', time: '2018-05-14', state: '未焚毁' }
       ],
-      is_banned: true
+      is_banned: true,
+      page_jump_course: false,
+      page_jump_order: false
     }
   },
   methods: {
@@ -221,9 +219,11 @@ export default {
       this.is_banned = !this.is_banned
     },
     to_course () {
+      this.page_jump_course = true
       this.$router.push({ name: 'Course', query: { user_id: this.$route.query.user_id } })
     },
     to_order () {
+      this.page_jump_order = true
       this.$router.push({ name: 'Order', query: { user_id: this.$route.query.user_id } })
     }
   }
@@ -231,7 +231,7 @@ export default {
 </script>
 
 <style scoped>
-  #navbar {
+  .my-basic {
     min-width: 1000px;
   }
 
@@ -245,17 +245,6 @@ export default {
     display: flex;
     justify-content: flex-end;
     text-align: right;
-  }
-
-  #body {
-    display: flex;
-    justify-content: space-between;
-    min-width: 1000px;
-  }
-
-  #detail {
-    flex-basis: 100%;
-    padding: 0;
   }
 
   table {

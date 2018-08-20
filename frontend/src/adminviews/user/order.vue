@@ -1,51 +1,44 @@
 <template>
-  <div>
-    <AdminNavbar id="navbar"/>
-    <div id="body">
-      <div>
-        <Menu/>
+  <Basic
+    :items="items"
+    class="my-basic">
+    <div>
+      <h1>相关订单</h1>
+      <div class="table-div">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <td
+                v-for="title in titles"
+                :key="title.id">
+                {{ title.label }}
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="order in orders"
+              :key="order.id">
+              <td>{{ order.order_code }}</td>
+              <td>{{ order.course_code }}</td>
+              <td>{{ order.course_name }}</td>
+              <td>{{ order.charge }}</td>
+              <td>{{ order.state }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div id="study">
-        <BreadCrumb :items="items"/>
-        <h1>相关订单</h1>
-        <div class="table-div">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <td
-                  v-for="title in titles"
-                  :key="title.id">
-                  {{ title.label }}
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="order in orders"
-                :key="order.id">
-                <td>{{ order.order_code }}</td>
-                <td>{{ order.course_code }}</td>
-                <td>{{ order.course_name }}</td>
-                <td>{{ order.charge }}</td>
-                <td>{{ order.state }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <Pagination :rows="rows"/>
-        </div>
-      </div>
+      <Pagination :rows="rows"/>
     </div>
-  </div>
+  </Basic>
 </template>
 
 <script>
-import AdminNavbar from '../components/navbar'
-import Menu from '../components/menu'
-import BreadCrumb from '../../components/breadCrumb'
 import Pagination from '../../components/pagination'
+import Basic from '../basic/basic'
 export default {
   name: 'Order',
-  components: {Menu, AdminNavbar, BreadCrumb, Pagination},
+  components: { Basic, Pagination },
   data () {
     return {
       items: [{
@@ -80,7 +73,7 @@ export default {
 </script>
 
 <style scoped>
-  #navbar {
+  .my-basic {
     min-width: 1000px;
   }
 
@@ -89,17 +82,6 @@ export default {
     margin-top: 25px;
     margin-bottom: 25px;
     text-align: left;
-  }
-
-  #body {
-    display: flex;
-    justify-content: space-between;
-    min-width: 1000px;
-  }
-
-  #study {
-    flex-basis: 100%;
-    padding: 0;
   }
 
   table {
