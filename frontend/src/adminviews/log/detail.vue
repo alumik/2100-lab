@@ -1,45 +1,40 @@
 <template>
-  <div class="html">
-    <AdminNavbar id="navbar"/>
-    <div id="body">
-      <Menu/>
-      <div id="detail">
-        <BreadCrumb :items="items"/>
-        <h1>日志列表</h1>
-        <div class="table-div">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <td
-                  v-for="title in titles"
-                  :key="title.id">
-                  {{ title.label }}
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="log in logs"
-                :key="log.id">
-                <td class="sm-td">{{ log.time }}</td>
-                <td class="sm-td">{{ log.account }}</td>
-                <td class="lg-td">{{ log.content }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+  <Basic
+    :items="items"
+    class="my-basic">
+    <div>
+      <h1>日志列表</h1>
+      <div class="table-div">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <td
+                v-for="title in titles"
+                :key="title.id">
+                {{ title.label }}
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="log in logs"
+              :key="log.id">
+              <td class="sm-td">{{ log.time }}</td>
+              <td class="sm-td">{{ log.account }}</td>
+              <td class="lg-td">{{ log.content }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-  </div>
+  </Basic>
 </template>
 
 <script>
-import AdminNavbar from '../components/navbar'
-import Menu from '../components/menu'
-import BreadCrumb from '../../components/breadCrumb'
+import Basic from '../basic/basic'
 export default {
   name: 'LogDetail',
-  components: {BreadCrumb, Menu, AdminNavbar},
+  components: { Basic },
   data () {
     return {
       items: [{
@@ -68,24 +63,8 @@ export default {
 </script>
 
 <style scoped>
-  .html {
-    height: 100%;
-  }
-
-  #navbar {
+  .my-basic {
     min-width: 800px;
-  }
-
-  #body {
-    display: flex;
-    justify-content: space-between;
-    min-width: 800px;
-    height: calc(100% - 70px);
-  }
-
-  #detail {
-    flex-basis: 100%;
-    padding: 0;
   }
 
   h1 {
