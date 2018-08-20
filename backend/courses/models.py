@@ -36,6 +36,13 @@ class Course(SoftDeletionModel):
             'title': self.title,
             'description': self.description
         }
+    
+    def as_back_stage_dict(self):
+        return {
+            'codename': self.codename,
+            'title': self.title,
+            'updated_at': self.updated_at
+        }
 
     def is_free(self):
         return self.price == 0

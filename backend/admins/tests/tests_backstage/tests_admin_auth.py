@@ -19,7 +19,7 @@ class AdminAuthTests(TestCase):
 
     def test_admin_login_wrong_password(self):
         response = self.client.post(
-            reverse('api:admins:authenticate-admin'),
+            reverse('api:admins:backstage:authenticate-admin'),
             {
                 'phone_number': '13312345678',
                 'password': '123456'
@@ -32,7 +32,7 @@ class AdminAuthTests(TestCase):
         self.client.login(phone_number='13312345678', password='nkcs1612')
 
         response = self.client.post(
-            reverse('api:admins:authenticate-admin'),
+            reverse('api:admins:backstage:authenticate-admin'),
             {
                 'phone_number': '13312345678',
                 'password': 'nkcs1612'
@@ -47,7 +47,7 @@ class AdminAuthTests(TestCase):
         admin = get_user_model().objects.get(phone_number='13312345678')
 
         response = self.client.post(
-            reverse('api:admins:authenticate-admin'),
+            reverse('api:admins:backstage:authenticate-admin'),
             {
                 'phone_number': '13312345678',
                 'password': 'nkcs1612'
@@ -68,7 +68,7 @@ class AdminAuthTests(TestCase):
 
     def test_admin_login_permission_denied(self):
         response = self.client.post(
-            reverse('api:admins:authenticate-admin'),
+            reverse('api:admins:backstage:authenticate-admin'),
             {
                 'phone_number': '14412345678',
                 'password': 'nkcs1612'

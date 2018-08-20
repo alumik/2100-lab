@@ -1,5 +1,5 @@
 from django.contrib import admin
 
-from .models import AdminLog
+from admins.models import AdminLog
 
 admin.site.register(AdminLog)

@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
 from core.utils import get_page
-from .models import LearningLog, OrderLog
+from customers.models import LearningLog, OrderLog
 
 
 def get_verification_code(request):
@@ -64,7 +64,7 @@ def get_eula(request):
 
 
 @login_required
-def personal_center_change_username(request):
+def change_username(request):
     user = request.user
     username = request.POST.get('username')
     try:
@@ -79,17 +79,17 @@ def personal_center_change_username(request):
 
 
 @login_required
-def personal_center_get_customer_detail(request):
+def get_customer_detail(request):
     return JsonResponse(request.user.as_dict())
 
 
 @login_required
-def personal_center_get_learning_logs(request):
+def get_learning_logs(request):
     learning_logs = LearningLog.objects.filter(customer=request.user).order_by('-latest_learn')
     return get_page(request, learning_logs)
 
 
 @login_required
-def personal_center_get_order_logs(request):
+def get_order_logs(request):
     order_logs = OrderLog.objects.filter(customer=request.user).order_by('-created_at')
     return get_page(request, order_logs)
