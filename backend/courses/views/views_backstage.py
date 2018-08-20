@@ -15,3 +15,28 @@ def get_course_list(request):
     page['title'] = title
     page['codename'] = codename
     return JsonResponse(page, safe=False)
+
+
+@permission_required('courses.view_course')
+def get_course_detail(request):
+    course_id = request.GET.get('course_id')
+
+    try:
+        course = Course.objects.get(id=course_id)
+    except Course.DoesNotExist:
+        return JsonResponse({'message': 'Course not found.'}, status=404)
+
+    return JsonResponse(
+        {
+            'course_id': course.id,
+            'codename': course.codename,
+            'title': course.title,
+            'up_votes': course.up_votes.count(),
+            'expire_duration': course.expire_duration,
+            'price': course.price,
+            'reward_percent': course.reward_percent,
+            'created_at': course.created_at,
+            'updated_at': course.updated_at,
+            'description': course.description
+        }
+    )

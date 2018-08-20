@@ -74,6 +74,7 @@ class CourseListTests(TestCase):
                 'num_pages': 3,
                 'content': [
                     {
+                        'course_id': course.id,
                         'codename': 'SCIENCE2',
                         'title': 't2',
                         'price': '100.00',
@@ -108,6 +109,7 @@ class CourseListTests(TestCase):
                 'num_pages': 2,
                 'content': [
                     {
+                        'course_id': course.id,
                         'codename': 'SOFT1',
                         'title': 't1',
                         'price': '0.00',
@@ -143,11 +145,51 @@ class CourseListTests(TestCase):
                 'num_pages': 1,
                 'content': [
                     {
+                        'course_id': course.id,
                         'codename': 'SOFT1',
                         'title': 't1',
                         'price': '0.00',
                         'updated_at': response_json_data['content'][0]['updated_at']
                     }
                 ]
+            }
+        )
+
+
+class CourseDetailTests(TestCase):
+    def test_get_course_detail(self):
+        admin = get_user_model().objects.create_user(phone_number='13312345678', password='123456')
+        permission = Permission.objects.get(codename='view_course')
+        admin_group = Group.objects.create(name='course_admin')
+        admin_group.permissions.add(permission)
+        admin_group.save()
+        admin.groups.add(admin_group)
+        admin.save()
+        course = Course.objects.create(
+            title='t1',
+            description='d1',
+            codename='SOFT1'
+        )
+        self.client.login(phone_number='13312345678', password='123456')
+
+        response = self.client.get(
+            reverse('api:courses:backstage:get-course-detail'),
+            {'course_id': course.id}
+        )
+        self.assertEqual(response.status_code, 200)
+        response_json_data = json.loads(response.content)
+        self.assertJSONEqual(
+            str(response.content, encoding='utf8'),
+            {
+                'course_id': course.id,
+                'codename': 'SOFT1',
+                'title': 't1',
+                'up_votes': course.up_votes.count(),
+                'expire_duration': 'P0DT00H00M00S',
+                'price': '0.00',
+                'reward_percent': '0.00',
+                'created_at': response_json_data['created_at'],
+                'updated_at': response_json_data['updated_at'],
+                'description': 'd1'
             }
         )
