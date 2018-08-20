@@ -1,61 +1,65 @@
 <template>
-  <Basic>
-    <div id="hompepage">
-      <div>
+  <body>
+    <div class="navbar-style">
+      <UserNavbar/>
+    </div>
+    <div class="homepage-container">
+      <div class="carousel-container">
         <b-carousel
           id="carousel"
           :interval="2000"
           controls
           indicators
+          img-responsive
           background="#ababab"
-          img-width="1024"
-          img-height="480"
         >
           <b-carousel-slide
             class="height-change"
             caption="First slide"
             name="carousel-pic-1"
             text="Nulla vitae elit libero, a pharetra augue mollis interdum."
-            img-src="https://picsum.photos/1024/480/?image=52"/>
+            img-src="https://picsum.photos/1024/300/?image=30"/>
           <b-carousel-slide
             class="height-change"
             caption="First slide"
             name="carousel-pic-2"
             text="Nulla vitae elit libero, a pharetra augue mollis interdum."
-            img-src="https://picsum.photos/1024/480/?image=54"/>
+            img-src="https://picsum.photos/1024/300/?image=31"/>
           <b-carousel-slide
             class="height-change"
             caption="First slide"
             name="carousel-pic-3"
             text="Nulla vitae elit libero, a pharetra augue mollis interdum."
-            img-src="https://picsum.photos/1024/480/?image=58"/>
+            img-src="https://picsum.photos/1024/300/?image=32"/>
           <b-carousel-slide
             class="height-change"
             caption="First slide"
             name="carousel-pic-4"
             text="Nulla vitae elit libero, a pharetra augue mollis interdum."
-            img-src="https://picsum.photos/1024/480/?image=55"/>
+            img-src="https://picsum.photos/1024/300/?image=33"/>
         </b-carousel>
       </div>
+      <div class="recommend-list">
+        <RecommendList
+          :courselist="freecourselist"
+          list_title="免费课程"/>
+        <RecommendList
+          :courselist="paidcourselist"
+          list_title="付费课程"/>
+      </div>
     </div>
-    <div class="recommend-list">
-      <RecommendList
-        :courselist="freecourselist"
-        list_title="免费课程"/>
-      <RecommendList
-        :courselist="paidcourselist"
-        list_title="付费课程"/>
-    </div>
-  </Basic>
+  </body>
 </template>
 
 <script>
 import Basic from '../components/basic'
+import UserNavbar from '../components/navbar'
 import RecommendList from '../components/recommendList'
 
 export default {
   name: 'Homepage',
   components: {
+    UserNavbar,
     Basic,
     RecommendList
   },
@@ -141,12 +145,21 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  .height-change {
-    height: 400px;
+  .homepage-container {
+    margin-right: 0;
+    margin-left: 0;
+    border-width: 0.2rem;
+  }
+
+  .navbar-style {
+    position: fixed;
+    z-index: 999;
+    width: 100%;
   }
 
   .recommend-list {
     width: 100%;
+    padding: 1rem;
     margin: 0;
   }
 </style>

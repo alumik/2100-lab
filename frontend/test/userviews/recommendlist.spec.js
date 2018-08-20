@@ -51,11 +51,7 @@ describe('推荐列表单元测试', () => {
     expect(wrapper.contains('#watch-more')).toBe(true)
   })
 
-  it('课程图片渲染', () => {
-    expect(wrapper.findAll('#course-img').length).toEqual(wrapper.vm.courselist.length)
-  })
-
-  it('课程名称渲染', () => {
-    expect(wrapper.findAll('#course-name').length).toEqual(wrapper.vm.courselist.length)
+  it('课程卡片渲染', () => {
+    expect(wrapper.findAll('#course-card').length).toEqual(wrapper.vm.courselist.length)
   })
 })
