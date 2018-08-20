@@ -38,8 +38,8 @@ export default {
   data () {
     return {
       items: [{
-        text: '首页',
-        href: '/admin'
+        text: '主页',
+        href: '/admin/main'
       }, {
         text: '日志查询',
         href: '/admin/log'

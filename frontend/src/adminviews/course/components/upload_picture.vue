@@ -197,7 +197,6 @@ export default {
         reader.onload = function (e) {
           resizeImage(e.target.result, 150, 150, function (result) {
             _this.imageDataList.push(result)
-            console.log(_this.imageDataList[0])
           })
         }
         reader.readAsDataURL(file)

@@ -137,7 +137,7 @@ export default {
     return {
       items: [{
         text: '主页',
-        href: '/admin'
+        href: '/admin/main'
       }, {
         text: '留言管理',
         active: true

@@ -59,6 +59,11 @@ export default new Router({
     },
     {
       path: '/admin',
+      name: 'AdminLogin',
+      component: () => import('@/adminviews/login')
+    },
+    {
+      path: '/admin/main',
       name: 'Main',
       component: () => import('@/adminviews/main')
     },

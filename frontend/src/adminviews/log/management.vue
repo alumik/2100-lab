@@ -77,7 +77,7 @@ export default {
     return {
       items: [{
         text: '主页',
-        href: '/admin'
+        href: '/admin/main'
       }, {
         text: '日志查询',
         active: true
