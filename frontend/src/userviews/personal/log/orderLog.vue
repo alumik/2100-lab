@@ -5,7 +5,6 @@
       @hide="hide"/>
     <div id="main">
       <UserMenu
-        id="menu"
         :list="list"
         :hidden="hidden"/>
       <div id="info">
@@ -83,22 +82,22 @@ export default {
       responsive: 'lg',
       fields: {
         last_name: {
-          label: 'Person last name',
+          label: '订单号',
           sortable: true
         },
         first_name: {
-          label: 'Person first name'
+          label: '课程编号'
         },
         foo: {
           key: 'age',
-          label: 'Person age',
+          label: '课程名',
           sortable: true
         },
         city: {
-          key: 'address.city'
+          key: '时间'
         },
         'address.country': {
-          label: 'Country'
+          label: '金额'
         }
       },
       crumbs: [

@@ -101,7 +101,7 @@ export default {
         href: '/personal'
       }
       ],
-      thumbnail: require('../../assets/404.gif'),
+      thumbnail: require('../../assets/logo.png'),
       file: null,
       value: '我们是坠胖的',
       disabled: true,
@@ -150,14 +150,14 @@ export default {
   }
 
   .content {
-    display: inline-block;
+    margin-left: 40px;
+    max-width: 600px;
     padding: 20px;
   }
 
   .row {
     align-items: flex-end;
     padding: 10px 0;
-    border-bottom: 2px solid #dec1e3;
   }
 
   img {
@@ -187,10 +187,10 @@ export default {
   }
 
   .input-group-text {
-    background-color: #efe4eb;
+    background-color: #efeedd;
   }
 
   .money .input-group-text {
-    background-color: #efe67f;
+    background-color: #efe54b;
   }
 </style>

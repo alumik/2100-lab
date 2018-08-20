@@ -12,7 +12,7 @@ describe('个人订单记录页面单元测试', () => {
     expect(wrapper.contains('#nav')).toBe(true)
   })
   it('包含左侧菜单栏', () => {
-    expect(wrapper.contains('#menu')).toBe(true)
+    expect(wrapper.contains('.menu')).toBe(true)
   })
   it('包含顶部面包屑', () => {
     expect(wrapper.contains('#breadcrumb')).toBe(true)
