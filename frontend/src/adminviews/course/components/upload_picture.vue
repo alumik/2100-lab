@@ -1,37 +1,67 @@
 <!--suppress ALL -->
 <template>
-  <div
-    ref="uploader"
-    class="img-uploader"
-    @drop="handleDrop">
-    <p
-      v-if="!hasImages"
-      class="img-uploader-placeholder">{{ placeholder }}</p>
+  <div>
     <div
-      v-if="hasImages"
-      class="img-uploader-preview-list">
-      <div
-        v-for="(data,index) in imageDataList"
-        :key="index"
-        class="img-uploader-preview">
-
-        <div class="preview-img">
-          <img :src="data">
-        </div>
-        <div
-          v-if="hasImages"
-          class="img-uploader-mask">
-          <p
-            class="img-uploader-file-name"
-            @click="openInput()">{{ fileNameList[index] }}</p>
-        </div>
-        <img
-          src="../../../assets/logo.png"
-          class="img-uploader-delete-btn"
-          @click="deleteImg(index)">
+      v-for="(data,index) in originImageList"
+      :key="index"
+      class="img-uploader-preview">
+      <div class="preview-img">
+        <img :src="data">
       </div>
+      <img
+        src="../../../assets/logo.png"
+        class="img-uploader-delete-btn">
     </div>
+    <div
+      ref="uploader"
+      class="img-uploader"
+      @drop="handleDrop">
+      <p
+        v-if="!hasImages"
+        class="img-uploader-placeholder">{{ placeholder }}</p>
+      <div
+        v-if="hasImages"
+        class="img-uploader-preview-list">
+        <div
+          v-for="(data,index) in imageDataList"
+          :key="index"
+          class="img-uploader-preview">
 
+          <div class="preview-img">
+            <img :src="data">
+          </div>
+          <div
+            v-if="hasImages"
+            class="img-uploader-mask">
+            <p
+              class="img-uploader-file-name"
+              @click="openInput()">{{ fileNameList[index] }}</p>
+          </div>
+          <img
+            src="../../../assets/logo.png"
+            class="img-uploader-delete-btn"
+            @click="deleteImg(index)">
+        </div>
+      </div>
+      <label
+        v-if="!hasImages"
+        :for="inputId"
+        class="img-uploader-label"/>
+      <input
+        ref="input"
+        :id="inputId"
+        type="file"
+        class="hidden-input"
+        accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
+        multiple="multiple"
+        @change="handleFileChange">
+      <div
+        v-if="errorText.length"
+        class="img-uploader-error">{{ errorText }}</div>
+      <div
+        v-if="countText.length"
+        class="img-uploader-count">{{ countText }}</div>
+    </div>
     <label
       v-if="!hasImages"
       :for="inputId"
@@ -63,21 +93,26 @@ export default {
       default: '点击上传图片',
       type: String
     },
-    onChange: {
+    on_change: {
       default: (files) => {
         if (files) {
         }
       },
       type: Function
     },
-    maxSize: {
+    max_size: {
       default: 3072,
       type: Number
+    },
+    upload_category: {
+      default: '',
+      type: String
     }
   },
   data () {
     return {
       inputId: '',
+      originImageList: ['../../../assets/logo.png'],
       imageDataList: [],
       fileNameList: [],
       errorText: '',
@@ -162,6 +197,7 @@ export default {
         reader.onload = function (e) {
           resizeImage(e.target.result, 150, 150, function (result) {
             _this.imageDataList.push(result)
+            console.log(_this.imageDataList[0])
           })
         }
         reader.readAsDataURL(file)
@@ -172,6 +208,21 @@ export default {
 </script>
 
 <style scoped>
+  .card-picture {
+    width: 90%;
+    min-width: 200px;
+    height: 300px;
+    min-height: 300px;
+    overflow: hidden;
+  }
+
+  .card-pic {
+    width: 100%;
+    min-width: 250px;
+    height: 100px;
+    max-height: 100px;
+  }
+
   .hidden-input {
     display: none;
   }

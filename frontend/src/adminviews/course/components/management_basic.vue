@@ -15,6 +15,29 @@
           class="row btn btn-sm my-in-btn"
           @click="jump(-1)"
         >更换首页图片</button>
+        <b-modal
+          ref="upload_picture"
+          size="lg"
+          centered
+          no-close-on-esc>
+          <div slot="modal-header">
+            <h3 class="float-left">更换首页图片</h3>
+          </div>
+          <b-container>
+            <b-row
+              align-v="center">
+              <b-col>
+                <h5 class="text-left">
+                  图片资料
+                </h5>
+              </b-col>
+            </b-row>
+            <b-row>
+              <UploadPicture
+                upload_category="upload home cover pictures"/>
+            </b-row>
+          </b-container>
+        </b-modal>
       </div>
     </div>
     <div class="my-table">
@@ -78,9 +101,10 @@
 
 <script>
 import Pagination from '../../../components/pagination'
+import UploadPicture from './upload_picture'
 export default {
   name: 'CourseManagementBasic',
-  components: {Pagination},
+  components: {UploadPicture, Pagination},
   data: function () {
     return {
       courses: [
@@ -99,7 +123,7 @@ export default {
       if (id === 0) {
         this.$router.push({name: 'AddCourse'})
       } else if (id === -1) {
-        this.$router.push({name: ''})
+        this.$refs.upload_picture.show()
       } else if (id > 0) {
         this.$router.push({name: 'BackendCourseDetail'})
       } else if (id < 0) {
