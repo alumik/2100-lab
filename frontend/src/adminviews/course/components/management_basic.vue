@@ -44,9 +44,7 @@
                   placeholder="">
               </div>
             </td><td>
-              <div>
-
-            </div></td>
+            <div/></td>
             <td class="my-td">
             <div/></td>
           </tr>
