@@ -21,9 +21,17 @@
       <br>
       <b-button
         id="btn"
-        href="/personal"
         type="submit"
-        variant="success">登录</b-button>
+        variant="success"
+        @click="login">登录</b-button>
+      <b-modal
+        v-model="modalShow"
+        size="lg"
+        title="用户协议"
+        centered>
+        北京陌陌科技有限公司（以下简称“陌陌科技”）在此特别提醒您（用户）在注册成为用户之前，请认真阅读本《用户协议》（以下简称“协议”），确保您充分理解本协议中各条款。
+        请您审慎阅读并选择接受或不接受本协议。除非您接受本协议所有条款，否则您无权注册、登录或使用本协议所涉服务。 您的注册、登录、使用等行为将视为对本协议的接受，并同意接受本协议各项条款的约束。
+      </b-modal>
     </div>
   </Basic>
 </template>
@@ -39,7 +47,8 @@ export default {
     return {
       status: '获取验证码',
       seconds: 61,
-      disabled: false
+      disabled: false,
+      modalShow: false
     }
   },
   computed: {
@@ -64,6 +73,9 @@ export default {
           clearInterval(t)
         }
       }, 1000)
+    },
+    login () {
+      this.modalShow = !this.modalShow
     }
   }
 }
