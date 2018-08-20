@@ -3,8 +3,8 @@ from django.http import JsonResponse
 
 from core.utils import get_page
 from customers.models import LearningLog
-from .models import Hero, Course, Image, Comment
-from .utils import get_courses, can_access, check_learning_log
+from courses.models import Hero, Course, Image, Comment
+from courses.utils import get_courses, can_access, check_learning_log
 
 
 def get_heroes(request):
@@ -38,7 +38,7 @@ def get_course_list(request):
     return get_page(request, courses)
 
 
-def get_customer_course_detail(request):
+def get_course_detail(request):
     course_id = request.GET.get('course_id')
     request.session['referer_id'] = request.GET.get('referer_id', '')
 

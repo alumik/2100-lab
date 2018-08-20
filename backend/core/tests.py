@@ -29,13 +29,13 @@ class CoreModuleTests(TestCase):
         self.assertEqual(json.loads(response.content)['message'], 'User deleted.')
 
         response = self.client.post(
-            reverse('api:customers:get-verification-code'),
+            reverse('api:customers:forestage:get-verification-code'),
             {'phone_number': '14412345678'}
         )
         verification_code = json.loads(response.content)['verification_code']
 
         response = self.client.post(
-            reverse('api:customers:authenticate-customer'),
+            reverse('api:customers:forestage:authenticate-customer'),
             {'phone_number': '14412345678', 'verification_code': verification_code}
         )
         self.assertEqual(response.status_code, 200)
@@ -52,13 +52,13 @@ class CoreModuleTests(TestCase):
         self.assertEqual(json.loads(response.content)['message'], 'User deleted.')
 
         response = self.client.post(
-            reverse('api:customers:get-verification-code'),
+            reverse('api:customers:forestage:get-verification-code'),
             {'phone_number': '14412345678'}
         )
         verification_code = json.loads(response.content)['verification_code']
 
         response = self.client.post(
-            reverse('api:customers:authenticate-customer'),
+            reverse('api:customers:forestage:authenticate-customer'),
             {'phone_number': '14412345678', 'verification_code': verification_code}
         )
         self.assertEqual(response.status_code, 200)
