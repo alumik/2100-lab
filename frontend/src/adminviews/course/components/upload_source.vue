@@ -11,7 +11,7 @@
       <div
         slot="modal-header"
         class="w-100">
-        <h3 class="float-left">课程资料</h3>
+        <h3 class="float-left">上传课程资料</h3>
       </div>
       <form>
         <b-container>
@@ -40,7 +40,7 @@
             <b-col><h5 class="text-left">图片资料</h5></b-col>
           </b-row>
           <b-row>
-            <UploadPicture/>
+            <UploadPicture upload_category="upload course pictures"/>
           </b-row>
         </b-container>
       </form>
