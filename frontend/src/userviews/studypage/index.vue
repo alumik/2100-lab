@@ -1,8 +1,7 @@
 <template>
-  <div
+  <Basic
     id="studypage"
     class="width-style">
-    <UserNavbar/>
     <div
       id="content"
       class="width-style">
@@ -68,17 +67,17 @@
         </b-card>
       </div>
     </div>
-  </div>
+  </Basic>
 </template>
 
 <script>
-import UserNavbar from '../components/navbar'
+import Basic from '../components/basic'
 import MessageBoard from '../components/messageboard'
 
 export default {
   name: 'StudyPage',
   components: {
-    UserNavbar,
+    Basic,
     MessageBoard
   },
   data () {

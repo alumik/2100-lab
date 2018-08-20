@@ -1,6 +1,5 @@
 <template>
   <div>
-    <UserNavbar/>
     <div
       id="page-title"
       class="title-style">
@@ -49,13 +48,11 @@
 </template>
 
 <script>
-import UserNavbar from './navbar'
 import Pagination from '../../components/pagination'
 
 export default {
   name: 'AllCourseList',
   components: {
-    UserNavbar,
     Pagination
   },
   props: {

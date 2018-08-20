@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import CourseDetail from '@/userviews/coursedetail/index'
-import UserNavbar from '@/userviews/components/navbar'
+import Basic from '@/userviews/components/basic'
 import {shallowMount} from '@vue/test-utils'
 
 Vue.use(BootstrapVue)
@@ -25,11 +25,7 @@ describe('课程详情页单元测试', () => {
   })
 
   it('包含导航栏', () => {
-    expect(wrapper.contains(UserNavbar)).toBe(true)
-  })
-
-  it('包含课程介绍图片', () => {
-    expect(wrapper.contains('#image')).toBe(true)
+    expect(wrapper.contains(Basic)).toBe(true)
   })
 
   it('测试按钮数量', () => {

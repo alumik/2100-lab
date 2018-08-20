@@ -107,9 +107,11 @@ export default {
 
   .textarea-style {
     width: 100%;
-    height: 100%;
+    height: 30%;
     padding: 0;
-    border-color: #d6d8db;
+    resize: none;
+    border: solid 2px #ddd;
+    border-radius: 20px;
   }
 
   .commit-button-style {

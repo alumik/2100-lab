@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <UserNavbar/>
+  <Basic>
     <div class="container">
       <img src="../../assets/logo.png">
       <h2>2100实验室</h2>
@@ -26,15 +25,15 @@
         type="submit"
         variant="success">登录</b-button>
     </div>
-  </div>
+  </Basic>
 </template>
 
 <script>
-import UserNavbar from '../components/navbar'
+import Basic from '../components/basic'
 export default {
   name: 'Login',
   components: {
-    UserNavbar
+    Basic
   },
   data () {
     return {

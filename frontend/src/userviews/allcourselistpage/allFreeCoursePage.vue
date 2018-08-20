@@ -1,17 +1,21 @@
 <template>
-  <AllCourseList
-    id="all-free"
-    :page_title="page_title"
-    :course_list="course_list"/>
+  <Basic>
+    <AllCourseList
+      id="all-free"
+      :page_title="page_title"
+      :course_list="course_list"/>
+  </Basic>
 </template>
 
 <script>
 import AllCourseList from '../components/allCourseList'
+import Basic from '../components/basic'
 
 export default {
   name: 'AllFreeCoursePage',
   components: {
-    AllCourseList
+    AllCourseList,
+    Basic
   },
   data () {
     return {

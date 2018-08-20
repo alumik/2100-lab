@@ -1,7 +1,5 @@
 <template>
-  <body
-    class="width-style">
-    <UserNavbar/>
+  <Basic>
     <div class="content-style">
       <h5>{{ course.name }}</h5>
     </div>
@@ -169,16 +167,16 @@
       <h5>课程简介</h5>
       <p>&emsp; &emsp;{{ course.introduction }}</p>
     </div>
-  </body>
+  </Basic>
 </template>
 
 <script>
-import UserNavbar from '../components/navbar'
+import Basic from '../components/basic'
 
 export default{
   name: 'CourseDetail',
   components: {
-    UserNavbar
+    Basic
   },
   data () {
     return {
@@ -250,6 +248,7 @@ export default{
   .profile-style {
     height: 300px;
     margin: 50px;
+    text-align: left;
     opacity: 0.9;
   }
 
@@ -260,10 +259,6 @@ export default{
   .modal-style {
     margin-top: 20px;
     text-align: right;
-  }
-
-  .width-style {
-    width: 100%;
   }
 
   .content-style {
@@ -313,7 +308,7 @@ export default{
   }
 
   .qrcode-style {
-    margin-left: 130px;
+    margin-left: 20px;
   }
 
   .btn-row-style {

@@ -2,7 +2,7 @@
 
 import { shallowMount } from '@vue/test-utils'
 import RecommendList from '@/userviews/components/recommendList.vue'
-import UserNavbar from '@/userviews/components/navbar.vue'
+import Basic from '@/userviews/components/basic.vue'
 import Homepage from '@/userviews/homepage/index'
 
 describe('用户首页单元测验', () => {
@@ -13,7 +13,7 @@ describe('用户首页单元测验', () => {
   })
 
   it('包含导航栏', () => {
-    expect(wrapper.contains(UserNavbar)).toBe(true)
+    expect(wrapper.contains(Basic)).toBe(true)
   })
 
   it('测试推荐列表渲染数量', () => {

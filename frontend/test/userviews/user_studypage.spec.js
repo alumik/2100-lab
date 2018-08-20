@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 
 import { shallowMount } from '@vue/test-utils'
-import UserNavbar from '@/userviews/components/navbar.vue'
+import Basic from '@/userviews/components/basic.vue'
 import StudyPage from '@/userviews/studypage/index.vue'
 
 const $route = {
@@ -17,7 +17,7 @@ describe('学习页面单元测验', () => {
   })
 
   it('包含导航栏', () => {
-    expect(wrapper.contains(UserNavbar)).toBe(true)
+    expect(wrapper.contains(Basic)).toBe(true)
   })
 
   it('包含图片播放区', () => {

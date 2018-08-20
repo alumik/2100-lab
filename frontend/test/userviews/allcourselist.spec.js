@@ -2,7 +2,6 @@
 
 import Vue from 'vue'
 import AllCourseList from '@/userviews/components/allCourseList'
-import UserNavbar from '@/userviews/components/navbar.vue'
 import {shallowMount} from '@vue/test-utils'
 import BootstrapVue from 'bootstrap-vue'
 
@@ -59,9 +58,5 @@ describe('全部课程单元测试', () => {
 
   it('分页渲染', () => {
     expect(wrapper.contains('#pagination')).toBe(true)
-  })
-
-  it('包含导航栏', () => {
-    expect(wrapper.contains(UserNavbar)).toBe(true)
   })
 })

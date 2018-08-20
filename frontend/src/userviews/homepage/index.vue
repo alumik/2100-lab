@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <UserNavbar/>
+  <Basic>
     <div id="hompepage">
       <div>
         <b-carousel
@@ -47,18 +46,17 @@
         :courselist="paidcourselist"
         list_title="付费课程"/>
     </div>
-  </div>
-
+  </Basic>
 </template>
 
 <script>
-import UserNavbar from '../components/navbar'
+import Basic from '../components/basic'
 import RecommendList from '../components/recommendList'
 
 export default {
   name: 'Homepage',
   components: {
-    UserNavbar,
+    Basic,
     RecommendList
   },
   data () {
