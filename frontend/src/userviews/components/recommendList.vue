@@ -1,29 +1,34 @@
 <template>
   <body>
     <hr>
-    <div style="display: flex; flex-direction: row; color: #999;">
-      <div style="width: 95%;">
-        <label id="list-title">{{ list_title }}</label>
-      </div>
-      <div style="width: 5%;">
-        <label
-          id="watch-more"
-          @click="watch_more">更多</label>
-      </div>
-    </div>
+    <b-container class="text-color">
+      <b-row>
+        <b-col
+          cols="8"
+          class="text-align-left">
+          <label id="list-title">{{ list_title }}</label>
+        </b-col>
+        <b-col
+          class="text-align-right">
+          <label
+            id="watch-more"
+            @click="watch_more">更多</label>
+        </b-col>
+      </b-row>
+    </b-container>
     <b-container class="bv-example-row">
       <b-row>
         <b-col
           v-for="i in [0, 1, 2, 3]"
-          :key="i">
+          :key="i"
+          class="col-style">
           <b-card
             :img-src="courselist[i].src"
             :title="courselist[i].name"
             img-alt="Image"
             img-top
             tag="article"
-            style="max-width: 20rem;"
-            class="mb-2"
+            class="mb-2 width-style"
             @click="open_detail_page(courselist[i].id)">
             <p class="card-text">
               {{ courselist[i].introduction }}
@@ -42,8 +47,7 @@
             img-alt="Image"
             img-top
             tag="article"
-            style="max-width: 20rem;"
-            class="mb-2"
+            class="mb-2 width-style"
             @click="open_detail_page(courselist[i].id)">
             <p class="card-text">
               {{ courselist[i].introduction }}
@@ -86,3 +90,26 @@ export default {
   }
 }
 </script>
+
+<style>
+  .col-style {
+    margin-bottom: 20px;
+  }
+
+  .text-align-right {
+    text-align: right;
+  }
+
+  .text-align-left {
+    text-align: left;
+  }
+
+  .text-color {
+    color: #999;
+  }
+
+  .width-style {
+    min-width: 10rem;
+    max-width: 20rem;
+  }
+</style>
