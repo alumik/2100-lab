@@ -2,8 +2,6 @@ export default function resizeImage (url, width, height, callback) {
   var sourceImage = new Image()
 
   sourceImage.onload = function (evt) {
-    console.info('resizeImage width:' + sourceImage.width)
-    console.info('resizeImage height:' + sourceImage.height)
     var canvas = document.createElement('canvas')
     canvas.width = width
     canvas.height = height
