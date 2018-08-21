@@ -284,7 +284,7 @@ class CommentOperationTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         response_json_data = json.loads(response.content)
-        self.assertEqual(response_json_data['message'], 'Comment deleted.')
+        self.assertEqual(response_json_data['message'], 'Object deleted.')
 
         response = self.client.get(
             reverse('api:courses:backstage:get-comment-list'),
