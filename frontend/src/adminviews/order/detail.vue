@@ -15,9 +15,28 @@
           <ConfirmModal
             id="refund"
             title="确认退款"
-            text="您确定要进行退款操作吗？"/>
+            text="您确定要进行退款操作吗？"
+            @click="refund"/>
         </div>
       </div>
+      <b-alert
+        :show="wrong_count_down"
+        class="my-alert"
+        variant="danger"
+        dismissible
+        @dismissed="wrong_count_down=0"
+        @dismiss_count_down="count_down_changed(wrong_count_down)">
+        {{ wrong }}
+      </b-alert>
+      <b-alert
+        :show="success_count_down"
+        class="my-alert"
+        variant="success"
+        dismissible
+        @dismissed="success_count_down=0"
+        @dismiss_count_down="count_down_changed(success_count_down)">
+        {{ success }}
+      </b-alert>
       <DetailTable
         :titles="titles"
         :data="order"/>
@@ -32,6 +51,7 @@ import Menu from '../components/menu'
 import ConfirmModal from '../components/ConfirmModal'
 import Basic from '../basic/basic'
 import DetailTable from '../components/detail_table'
+import axios from 'axios'
 export default {
   name: 'OrderDetail',
   components: {DetailTable, Basic, ConfirmModal, AdminNavbar, BreadCrumb, Menu},
@@ -47,8 +67,70 @@ export default {
         text: this.$route.query.order_id,
         active: true
       }],
-      order: [ '1001', 'SOFT1', '计算机', '小红', '2018-01-01', null, '100.00', '已完成' ],
-      titles: [ '订单编号', '课程代码', '课程名', '用户名', '成交时间', '退款时间', '金额', '状态' ]
+      // order: [ '1001', 'SOFT1', '计算机', '小红', '2018-01-01', null, '100.00', '已完成' ],
+      order: [],
+      titles: [ '订单编号', '课程代码', '课程名', '用户名', '成交时间', '退款时间', '金额', '状态' ],
+      dismiss_second: 5,
+      wrong_count_down: 0,
+      wrong: '',
+      success_count_down: 0,
+      success: ''
+    }
+  },
+  computed_order: function (val) {
+    let temp = new Array(8)
+    temp[0] = val.order_codename
+    temp[1] = val.course_codename
+    temp[2] = val.course_title
+    temp[3] = val.username
+    temp[4] = (val.created_at + '').slice(0, 10)
+    if (val.deleted_at === null) {
+      temp[6] = ''
+    } else {
+      temp[6] = (val.deleted_at + '').slice(0, 10)
+    }
+    temp[7] = val.spend
+    if (val.is_refunded) {
+      temp[8] = '已退款'
+    } else {
+      temp[8] = '已完成'
+    }
+  },
+  created () {
+    const that = this
+    axios.get('',
+      {params: {
+        order_id: that.$route.query.order_id
+      }})
+      .then(function (response) {
+        that.order = that.computed_order(response.data)
+      })
+      .catch(function (error) {
+        that.wrong = '获取订单详情失败！' + error
+        that.wrong_count_down = that.dismiss_second
+      })
+  },
+  methods: {
+    refund: function () {
+      const that = this
+      axios.get('',
+        {params: {
+          order_id: that.$route.query.order_id
+        }})
+        .then(function (response) {
+          if (response.data.message === 'Object deleted.') {
+            that.success = '您已经成功退款。'
+            that.success_count_down = that.dismiss_second
+          } else {
+            that.wrong = '你所要退款的留言不存在，删除失败！'
+            that.wrong_count_down = that.dismiss_second
+          }
+        })
+        .catch(function (error) {
+          that.wrong = '退款失败！' + error
+          that.wrong_count_down = that.dismiss_second
+        })
+      this.search()
     }
   }
 }
@@ -96,5 +178,10 @@ export default {
   .btn:hover,
   .btn:active {
     background-color: #5e0057;
+  }
+
+  .my-alert {
+    padding-right: 15px;
+    padding-left: 15px;
   }
 </style>

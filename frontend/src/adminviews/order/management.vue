@@ -5,6 +5,14 @@
     <div>
       <h1>订单列表</h1>
       <div class="table-div">
+        <b-alert
+          :show="wrong_count_down"
+          variant="danger"
+          dismissible
+          @dismissed="wrong_count_down=0"
+          @dismiss_count_down="count_down_changed(wrong_count_down)">
+          {{ wrong }}
+        </b-alert>
         <table class="table table-striped">
           <thead>
             <tr>
@@ -23,7 +31,8 @@
                     v-model="order_code"
                     type="text"
                     class="form-control"
-                    placeholder="">
+                    placeholder=""
+                    @keyup.enter="search">
                 </div>
               </td>
               <td class="small-td">
@@ -32,7 +41,8 @@
                     v-model="course_code"
                     type="text"
                     class="form-control"
-                    placeholder="">
+                    placeholder=""
+                    @keyup.enter="search">
                 </div>
               </td>
               <td class="small-td">
@@ -41,7 +51,8 @@
                     v-model="course_name"
                     type="text"
                     class="form-control"
-                    placeholder="">
+                    placeholder=""
+                    @keyup.enter="search">
                 </div>
               </td>
               <td class="small-td">
@@ -50,7 +61,8 @@
                     v-model="user"
                     type="text"
                     class="form-control"
-                    placeholder="">
+                    placeholder=""
+                    @keyup.enter="search">
                 </div>
               </td>
               <td/>
@@ -58,7 +70,8 @@
                 <div>
                   <select
                     v-model="state"
-                    class="selectpicker">
+                    class="selectpicker"
+                    @change="search">
                     <option value="whole">全部</option>
                     <option value="finished">已完成</option>
                     <option value="refunded">已退款</option>
@@ -98,6 +111,7 @@
 <script>
 import Pagination from '../../components/pagination'
 import Basic from '../basic/basic'
+import axios from 'axios'
 export default {
   name: 'OrderManagement',
   components: { Basic, Pagination },
@@ -135,23 +149,79 @@ export default {
           charge: '120.00',
           state: '已退款' }
       ],
-      rows: 2,
+      rows: 6,
       order_code: '',
       course_code: '',
       course_name: '',
       user: '',
       state: null,
       page_jump: false,
-      page: 1
+      page: 1,
+      per_page: 2,
+      dismiss_second: 5,
+      wrong_count_down: 0,
+      wrong: ''
     }
   },
+  created () {
+    const that = this
+    axios.get('', { params: {
+      page_limit: that.per_page,
+      page: that.page
+    }})
+      .then(function (response) {
+        that.orders = response.data.content
+        that.rows = response.data.count
+      })
+      .catch(function (error) {
+        that.wrong = '加载订单失败！' + error
+        that.wrong_count_down = that.dismiss_second
+      })
+  },
   methods: {
+    search: function () {
+      const that = this
+      let state
+      if (that.state === 'whole' || that.state === '') {
+        state = '0'
+      } else if (that.state === 'finished') {
+        state = '1'
+      } else {
+        state = '2'
+      }
+      axios.get('',
+        {params: {
+          order_codename: that.order_code,
+          course_codename: that.course_code,
+          course_title: that.course_name,
+          username: that.user,
+          state: state
+        }})
+        .then(function (response) {
+          that.orders = response.data.content
+          that.rows = response.data.count
+        })
+        .catch(function (error) {
+          that.wrong = '查询订单失败！' + error
+          that.wrong_count_down = that.dismiss_second
+        })
+    },
     to_detail: function (val) {
       this.page_jump = true
       this.$router.push({ name: 'OrderDetail', query: { order_id: val } })
     },
     change_page: function (page) {
       this.page = page
+      this.search()
+    },
+    count_down_changed: function (val) {
+      const that = this
+      let t = setInterval(function () {
+        val -= 1
+        if (that.val === 0) {
+          clearInterval(t)
+        }
+      }, 1000)
     }
   }
 }
