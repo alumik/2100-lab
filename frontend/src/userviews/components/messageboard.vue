@@ -16,11 +16,18 @@
           :key="msg.id"
           class="piece-of-message">
           <div id="piece-of-message">
-            <img
-              id="userimg"
-              src="../../assets/logo.png">
-            {{ msg.username }}
-            <label class="time-style">&emsp;{{ msg.created_at }}评论</label>
+            <b-row>
+              <b-col class="text-align-left">
+                <img
+                  id="userimg"
+                  src="../../assets/logo.png">
+                {{ msg.username }}
+                <label class="time-style">&emsp;{{ msg.created_at }}评论</label>
+              </b-col>
+              <b-col class="delete-comment">
+                ×
+              </b-col>
+            </b-row>
             <p style="margin-bottom: 5px;">{{ msg.content }}</p>
           </div>
           <div
@@ -68,7 +75,15 @@ export default {
     return {
       username: '谢逊',
       newMsg: '',
-      message_list: [],
+      message_list: [
+        {
+          username: 'zhangxing',
+          content: 'I love you.',
+          up_votes: 20,
+          down_votes: 10,
+          created_at: 123
+        }
+      ],
       test: false,
       error_msg: ''
     }
@@ -122,7 +137,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .time-style {
     color: #adb5bd;
   }
@@ -175,5 +190,14 @@ export default {
     margin-right: 20px;
     border-radius: 50%;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .text-align-left {
+    text-align: left;
+  }
+
+  .delete-comment {
+    color: #f00;
+    text-align: right;
   }
 </style>
