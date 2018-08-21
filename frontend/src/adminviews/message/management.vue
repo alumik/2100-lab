@@ -6,17 +6,19 @@
       <h1>留言列表</h1>
       <div class="table-div">
         <b-alert
-          :show="show_wrong"
+          :show="wrong_count_down"
           variant="danger"
           dismissible
-          @dismissed="show_wrong=false">
+          @dismissed="wrong_count_down=0"
+          @dismiss_count_down="count_down_changed(wrong_count_down)">
           {{ wrong }}
         </b-alert>
         <b-alert
-          :show="show_success"
+          :show="success_count_down"
           variant="success"
           dismissible
-          @dismissed="show_success=false">
+          @dismissed="success_count_down=0"
+          @dismiss_count_down="count_down_changed(success_count_down)">
           {{ success }}
         </b-alert>
         <table class="table table-striped">
@@ -138,10 +140,6 @@ import InputModal from '../components/InputModal'
 import Basic from '../basic/basic'
 import axios from 'axios'
 import qs from 'qs'
-// let messages = [
-//   { data: '2018-08-10', user: '小红', course_code: 'SOFT1', course_name: '计算机', message: '很好', state: '已删除', id: '1001' },
-//   { data: '2018-08-11', user: '小明', course_code: 'English2', course_name: '口语', message: '还不错', state: '未删除', id: '1002' }
-// ]
 export default {
   name: 'MessageManagement',
   components: { Basic, InputModal, ConfirmModal, Pagination },
@@ -171,12 +169,13 @@ export default {
       state: '',
       reply: '',
       page_jump: false,
-      per_page: 1,
+      per_page: 2,
       page: 1,
-      show_wrong: false,
-      wrong: '传递数据失败',
-      show_success: false,
+      wrong: '',
       success: '',
+      dismiss_second: 5,
+      wrong_count_down: 0,
+      success_count_down: 0,
       delete_id: '',
       reply_id: ''
     }
@@ -188,14 +187,12 @@ export default {
       page: that.page
     }})
       .then(function (response) {
-        // console.log(response.data)
         that.messages = response.data.content
         that.rows = response.data.count
-        // console.log('this.messages: ' + that.messages + 'this.rows: ' + that.rows)
       })
       .catch(function (error) {
-        that.wrong += error
-        that.show_wrong = true
+        that.wrong = '加载留言失败！' + error
+        that.wrong_count_down = that.dismiss_second
       })
   },
   methods: {
@@ -214,9 +211,6 @@ export default {
       }
     },
     search: function () {
-      // alert('search')
-      // let date = this.get_date()
-      // console.log(date + this.user + this.course_code + this.course_name + this.state)
       const that = this
       let state
       if (that.state === 'whole' || that.state === '') {
@@ -226,81 +220,79 @@ export default {
       } else {
         state = '2'
       }
-      // console.log(that.user)
-      // console.log(that.course_code)
-      // console.log(that.course_name)
-      // console.log(state)
-      // console.log(that.per_page)
-      // console.log(that.page)
-      axios.get('http://localhost:8000/api/v1/courses/backstage/comment-management/get-comment-list/', {params: {
-        username: that.user,
-        course_codename: that.course_code,
-        course_title: that.course_name,
-        is_deleted: state,
-        page_limit: that.per_page,
-        page: that.page
-      }})
+      axios.get('http://localhost:8000/api/v1/courses/backstage/comment-management/get-comment-list/',
+        {params: {
+          username: that.user,
+          course_codename: that.course_code,
+          course_title: that.course_name,
+          is_deleted: state,
+          page_limit: that.per_page,
+          page: that.page
+        }})
         .then(function (response) {
-          // console.log(response.data)
           that.messages = response.data.content
           that.rows = response.data.count
         })
         .catch(function (error) {
-          that.wrong += error
-          that.show_wrong = true
+          that.wrong = '查询留言失败！' + error
+          that.wrong_count_down = that.dismiss_second
         })
     },
     change_page: function (page) {
       this.page = page
-      // console.log('per_page: ' + this.per_page + 'page: ' + this.page)
-      const that = this
-      axios.get('http://localhost:8000/api/v1/courses/backstage/comment-management/get-comment-list/', {params: {
-        page_limit: that.per_page,
-        page: that.page
-      }})
-        .then(function (response) {
-          // console.log(that.page)
-          that.messages = response.data.content
-          that.rows = response.data.count
-        })
-        .catch(function (error) {
-          that.wrong += error
-          that.show_wrong = true
-        })
+      this.search()
     },
     delete_message: function () {
-      // console.log(this.delete_id)
       const that = this
-      axios.get('http://localhost:8000/api/v1/courses/backstage/comment-management/delete-comment/', {params: {
-        comment_id: that.delete_id
-      }})
+      axios.get('http://localhost:8000/api/v1/courses/backstage/comment-management/delete-comment/',
+        {params: {
+          comment_id: that.delete_id
+        }})
         .then(function (response) {
-          // console.log(that.page)
-          that.success = response.data.message
-          that.show_success = true
+          if (response.data.message === 'Comment deleted.') {
+            that.success = '您已经成功删除此留言。'
+            that.success_count_down = that.dismiss_second
+          } else {
+            that.wrong = '你所删除的留言不存在，删除失败！'
+            that.wrong_count_down = that.dismiss_second
+          }
         })
         .catch(function (error) {
-          that.wrong += error
-          that.show_wrong = true
+          that.wrong = '删除失败！' + error
+          that.wrong_count_down = that.dismiss_second
         })
+      this.search()
     },
     reply_message: function (val) {
-      // console.log(this.reply_id)
-      // console.log(val)
       const that = this
-      axios.post('http://localhost:8000/api/v1/courses/backstage/comment-management/add-comment/', qs.stringify({
-        course_codename: that.reply_id,
-        comment_content: val
-      }))
+      axios.post('http://localhost:8000/api/v1/courses/backstage/comment-management/add-comment/',
+        qs.stringify({
+          course_codename: that.reply_id,
+          comment_content: val
+        }))
         .then(function (response) {
-          // console.log(that.page)
-          that.success = response.data.message
-          that.show_success = true
+          if (response.data.message === 'Success.') {
+            that.success = '您已经成功回复此留言。'
+            that.success_count_down = that.dismiss_second
+          } else {
+            that.wrong = '您所回复留言的课程不存在，回复失败！'
+            that.wrong_count_down = that.dismiss_second
+          }
         })
         .catch(function (error) {
-          that.wrong += error
-          that.show_wrong = true
+          that.wrong = '回复失败！' + error
+          that.wrong_count_down = that.dismiss_second
         })
+      this.search()
+    },
+    count_down_changed: function (val) {
+      const that = this
+      let t = setInterval(function () {
+        val -= 1
+        if (that.val === 0) {
+          clearInterval(t)
+        }
+      }, 1000)
     }
   }
 }
