@@ -73,6 +73,7 @@
 <script>
 import Basic from '../components/basic'
 import MessageBoard from '../components/messageboard'
+import axios from 'axios'
 
 export default {
   name: 'StudyPage',
@@ -129,18 +130,23 @@ export default {
       }
     }
   },
-  created () {
+  created: function () {
     if (typeof (this.$route.query.course_id) === 'undefined') {
       this.$router.push({name: 'BurnedCourse'})
     } else {
       this.course_id = this.$route.query.course_id
     }
+    axios.get('http://localhost:8000/api/v1/courses/forestage/play/get-course-assets?course_id=1')
+      .then(function (response) {
+      }).catch(function (error) {
+        alert(error)
+      })
   },
   mounted () {
     this.ctime = this.$refs.player.currentTime
     this.time_num = this.course.time_list.length
-    this.text_show = this.course.introduction.substring(0, 154)
-    this.text_hide = this.course.introduction.substring(154)
+    this.text_show = this.course.introduction.substring(0, 138)
+    this.text_hide = this.course.introduction.substring(138)
     this.addEventListeners()
   },
   methods: {
