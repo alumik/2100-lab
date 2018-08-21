@@ -7,7 +7,7 @@
       variant="danger"
       dismissible
       fade
-      @dismissed="showDismissibleAlert=false">
+      @dismissed="test=false">
       {{ error_msg }}
     </b-alert>
     <div
