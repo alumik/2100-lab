@@ -113,6 +113,11 @@ export default new Router({
       component: () => import('@/adminviews/admin/change_code')
     },
     {
+      path: '/admin/adminmanagement/changename',
+      name: 'ChangeName',
+      component: () => import('@/adminviews/admin/change_name')
+    },
+    {
       path: '/admin/adminmanagement/distribution',
       name: 'DistributeAuthority',
       component: () => import('@/adminviews/admin/distribute_authority')

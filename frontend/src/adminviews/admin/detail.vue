@@ -14,6 +14,11 @@
           @click="jump(2)"
         >修改密码</button>
         <button
+          type="button"
+          class="row btn btn-sm"
+          @click="jump(3)"
+        >修改管理员名</button>
+        <button
           v-b-modal.delete
           type="button"
           class="row btn btn-sm"
@@ -38,7 +43,7 @@
             </tr>
             <tr>
               <td class="head-td">
-                管理员ID
+                管理员名称
               </td>
               <td class="content-td">
                 {{ admin.ID }}
@@ -118,11 +123,12 @@ export default {
   },
   methods: {
     jump: function (id) {
-      this.test_router = id
       if (id === 1) {
         this.$router.push({name: 'DistributeAuthority'})
       } else if (id === 2) {
         this.$router.push({name: 'ChangeCode'})
+      } else if (id === 3) {
+        this.$router.push({name: 'ChangeName'})
       }
     }
   }
