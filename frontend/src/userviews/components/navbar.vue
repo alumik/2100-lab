@@ -30,7 +30,7 @@
         <b-nav-item
           id="logout"
           href="/login">
-          dl
+          注销
         </b-nav-item>
       </b-navbar-nav>
     </b-collapse>
@@ -56,7 +56,6 @@ export default {
   created () {
     // let that = this
     axios.get('http://localhost:8000/api/v1/core/auth/is-authenticated/').then((res) => {
-      // console.log(res.data.is_authenticated)
     })
   }
 }

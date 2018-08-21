@@ -181,7 +181,6 @@ export default {
         qs.stringify({
           phone_number: this.phone.toString()
         }), {withCredentials: true}).then((response) => {
-        // console.log(response.data.verification_code)
         this.status = '再次发送 '
         let that = this
         that.seconds = that.seconds - 1
@@ -195,7 +194,6 @@ export default {
           }
         }, 1000)
       }).catch(error => {
-        // console.log(error.response.data.message)
         if (error) {
           that.phoneState = false
         }
@@ -214,8 +212,6 @@ export default {
           phone_number: this.phone.toString(),
           verification_code: this.code.toString()
         }), {withCredentials: true}).then((response) => {
-        // console.log(response.data)
-        // console.log(response.data.is_new_customer)
         // if (response.data.is_new_customer) {
         //   this.modalShow = !this.modalShow
         // } else {
