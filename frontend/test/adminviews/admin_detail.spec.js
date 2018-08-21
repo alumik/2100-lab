@@ -33,4 +33,28 @@ describe('管理员详情模块单元测验', () => {
     wrapper.findAll('[type=button]').at(2).trigger('click')
     expect(wrapper.contains('#delete')).toBe(true)
   })
+
+  const wrappers = shallowMount(AdminDetail, {
+    mocks: {
+      $route
+    }
+  })
+
+  it('分配权限跳转测试', () => {
+    expect(wrappers.vm.test_router).toEqual(-1)
+    wrappers.findAll('[type=button]').at(0).trigger('click')
+    expect(wrappers.vm.test_router).toEqual(1)
+  })
+
+  it('修改密码跳转测试', () => {
+    expect(wrappers.vm.test_router).toEqual(1)
+    wrappers.findAll('[type=button]').at(1).trigger('click')
+    expect(wrappers.vm.test_router).toEqual(2)
+  })
+
+  it('修改管理员名跳转测试', () => {
+    expect(wrappers.vm.test_router).toEqual(2)
+    wrappers.findAll('[type=button]').at(2).trigger('click')
+    expect(wrappers.vm.test_router).toEqual(3)
+  })
 })

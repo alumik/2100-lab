@@ -1,17 +1,17 @@
 <template>
   <Basic :items="items">
     <div class="my-content">
-      <h2>修改用户名</h2>
+      <h2>修改管理员名</h2>
       <form>
         <div class="form-group">
           <label
             class="form-check-label"
-            for="newname">原用户名：{{ old_name }}</label>
+            for="newname">原管理员名：{{ old_name }}</label>
         </div>
         <div class="form-group">
           <label
             class="form-check-label"
-            for="newname">新用户名</label>
+            for="newname">新管理员名</label>
           <input
             id="newname"
             v-model="new_name"
