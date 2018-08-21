@@ -140,3 +140,26 @@ def delete_admin(request):
 
     admin.delete()
     return JsonResponse({'message': INFO['object_deleted']})
+
+
+@login_required
+def add_admin(request):
+    phone_number = request.POST.get('phone_number')
+    password = request.POST.get('password')
+
+    if not re.search(r'^1\d{10}$', phone_number):
+        return JsonResponse({'message': ERROR['invalid_phone_number']}, status=400)
+
+    if password == '':
+        return JsonResponse({'message': ERROR['invalid_password']}, status=400)
+
+    try:
+        get_user_model().objects.get(phone_number=phone_number)
+        return JsonResponse({'message': ERROR['admin_already_registered']}, status=400)
+    except get_user_model().DoesNotExist:
+        new_admin = get_user_model().objects.create_user(
+            phone_number=phone_number,
+            password=password,
+            is_staff=True
+        )
+    return JsonResponse({'new_admin_id': new_admin.id})

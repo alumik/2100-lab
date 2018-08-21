@@ -37,4 +37,9 @@ urlpatterns = [
         views_backstage.delete_admin,
         name='delete-admin'
     ),
+    path(
+        'admin-management/add-admin/',
+        views_backstage.add_admin,
+        name='add-admin'
+    ),
 ]

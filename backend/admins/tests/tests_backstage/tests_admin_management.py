@@ -194,3 +194,56 @@ class AdminOperationsTests(TestCase):
         self.assertEqual(json.loads(response.content)['message'], 'Object deleted.')
         login_state = self.client.login(phone_number='16600000000', password='123456')
         self.assertFalse(login_state)
+
+    def test_add_admin_conflict(self):
+        self.client.login(phone_number='15500000000', password='123456')
+
+        response = self.client.post(
+            reverse('api:admins:backstage:add-admin'),
+            {
+                'phone_number': '15500000000',
+                'password': '123456'
+            }
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(json.loads(response.content)['message'], 'Admin is already registered.')
+
+    def test_add_admin_invalid_phone_number(self):
+        self.client.login(phone_number='15500000000', password='123456')
+
+        response = self.client.post(
+            reverse('api:admins:backstage:add-admin'),
+            {
+                'phone_number': 'apple',
+                'password': '123456'
+            }
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(json.loads(response.content)['message'], 'Not a valid phone number.')
+
+    def test_add_admin_invalid_password(self):
+        self.client.login(phone_number='15500000000', password='123456')
+
+        response = self.client.post(
+            reverse('api:admins:backstage:add-admin'),
+            {
+                'phone_number': '17712345678',
+                'password': ''
+            }
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(json.loads(response.content)['message'], 'Invalid password.')
+
+    def test_add_admin_success(self):
+        self.client.login(phone_number='15500000000', password='123456')
+
+        response = self.client.post(
+            reverse('api:admins:backstage:add-admin'),
+            {
+                'phone_number': '17700000000',
+                'password': '123456'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        new_admin = get_user_model().objects.get(phone_number='17700000000')
+        self.assertEqual(json.loads(response.content)['new_admin_id'], new_admin.id)
