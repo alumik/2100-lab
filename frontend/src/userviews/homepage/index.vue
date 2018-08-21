@@ -2,6 +2,13 @@
   <body>
     <div class="navbar-style">
       <UserNavbar/>
+      <b-alert
+        :show="test"
+        variant="danger"
+        dismissible
+        @dismissed="test = false">
+        This alert means the connection has passed.
+      </b-alert>
     </div>
     <div class="homepage-container">
       <div class="carousel-container">
@@ -66,6 +73,8 @@ export default {
   },
   data () {
     return {
+      test: false,
+      err_msg: '',
       freecourselist: [
         {
           id: 1,
@@ -143,11 +152,13 @@ export default {
     }
   },
   created: function () {
+    let that = this
     axios.get('http://localhost:8000/api/v1/courses/course/get-recent-courses')
       .then(function (response) {
         // console.log(response)
       }).catch(function (error) {
-        alert(error)
+        that.test = true
+        that.err_msg = error
       })
   }
 }
