@@ -61,7 +61,7 @@ a[aria-expanded="true"] {
     MEDIAQUERIES
 ----------------------------------------------------- */
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   #sidebar {
     margin-left: -200px;
   }
