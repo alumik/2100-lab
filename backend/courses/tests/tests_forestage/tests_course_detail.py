@@ -17,7 +17,8 @@ class CourseDetailTests(TestCase):
             title='t1',
             description='d1',
             codename='c1',
-            price='100.00'
+            price='100.00',
+            reward_percent='0.10'
         )
         Course.objects.create(
             title='t2',
@@ -137,6 +138,7 @@ class CourseDetailTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(self.client.session['referer_id'], '1234')
+        self.assertEqual(json.loads(response.content)['reward_percent'], '0.10')
         self.assertTrue(json.loads(response.content)['can_access'])
 
         self.client.logout()

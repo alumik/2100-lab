@@ -1,7 +1,9 @@
 from django.utils import timezone
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.http import JsonResponse
 
 from customers.models import LearningLog, OrderLog
-from .models import Course
+from courses.models import Course
 
 
 def get_courses(course_type, limit=None):
@@ -38,3 +40,25 @@ def check_learning_log(course, customer):
             expire_time=course.expire_duration + timezone.now()
         )
     return learning_log.progress
+
+
+def get_comment_page(request, items):
+    count = items.count()
+    page = request.GET.get('page')
+    paginator = Paginator(items, request.GET.get('page_limit', 10))
+    try:
+        item_page = paginator.page(page)
+    except (PageNotAnInteger, EmptyPage):
+        item_page = paginator.page(1)
+    item_list = list(
+        map(lambda item: item.as_dict(customer=request.user), list(item_page))
+    )
+    return JsonResponse(
+        {
+            'count': count,
+            'page': item_page.number,
+            'num_pages': paginator.num_pages,
+            'content': item_list
+        },
+        safe=False
+    )

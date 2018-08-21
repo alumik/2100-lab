@@ -95,6 +95,11 @@ def get_customer_detail(request):
 
 
 @login_required
+def get_reward_coin(request):
+    return JsonResponse({'reward_coin': request.user.reward_coin})
+
+
+@login_required
 def get_learning_logs(request):
     learning_logs = LearningLog.objects.filter(customer=request.user).order_by('-latest_learn')
     return get_page(request, learning_logs)
