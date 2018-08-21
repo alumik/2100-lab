@@ -2,6 +2,7 @@
   <Basic :items="items">
     <div class="my-content">
       <h2>课程列表</h2>
+      {{ error_message }}
       <div>
         <div class="head-btn">
           <button
@@ -56,16 +57,20 @@
               <td>
                 <div class="input-group my-short-input">
                   <input
+                    v-model="codename"
                     type="text"
                     class="form-control col-5"
-                    placeholder="">
+                    placeholder=""
+                    @keyup.enter="change">
               </div></td>
               <td>
                 <div class="input-group my-long-input">
                   <input
+                    v-model="title"
                     type="text"
                     class="form-control col-6"
-                    placeholder="">
+                    placeholder=""
+                    @keyup.enter="change">
                 </div>
               </td><td>
               <div/></td>
@@ -96,12 +101,16 @@
           </tbody>
         </table>
       </div>
-      <Pagination :rows="rows"/>
+      <Pagination
+        :rows="rows"
+        :perpage="per_limit"
+        @change="changePage"/>
     </div>
   </Basic>
 </template>
 
 <script>
+import axios from 'axios'
 import Basic from '../basic/basic'
 import UploadPicture from './upload_picture'
 import Pagination from '../../components/pagination'
@@ -117,16 +126,37 @@ export default {
         text: '课程管理',
         active: true
       }],
-      courses: [
-        {'id': 0, 'ID': '000001', 'name': 'ABCDE', 'change_time': '2018-08-12'},
-        {'id': 1, 'ID': '000001', 'name': 'ABCDE', 'change_time': '2018-08-12'},
-        {'id': 2, 'ID': '000001', 'name': 'ABCDE', 'change_time': '2018-08-12'},
-        {'id': 3, 'ID': '000001', 'name': 'ABCDE', 'change_time': '2018-08-12'},
-        {'id': 4, 'ID': '000001', 'name': 'ABCDE', 'change_time': '2018-08-12'},
-        {'id': 5, 'ID': '000001', 'name': 'ABCDE', 'change_time': '2018-08-12'}
-      ],
-      rows: 20
+      courses: [],
+      codename: '',
+      title: '',
+      rows: 0,
+      error_message: '',
+      per_limit: 8,
+      page: 1
     }
+  },
+  created: function () {
+    axios.get('http://localhost:8000/api/v1/courses/backstage/course-management/get-course-list', {
+      params: {
+        codename: '',
+        title: '',
+        page_limit: this.per_limit,
+        page: 1
+      }
+    }).then(
+      response => {
+        console.log(response.data.count)
+        this.rows = response.data.count
+        let _course = []
+        for (let data of response.data.content) {
+          _course.push({'id': data['course_id'], 'ID': data['codename'], 'name': data['title'], 'change_time': data['updated_at'].substring(0, 10)})
+        }
+        this.courses = _course
+      }).catch(
+      error => {
+        this.error_message = '读取数据出错' + error
+      }
+    )
   },
   methods: {
     jump: function (id) {
@@ -139,6 +169,38 @@ export default {
       } else if (id < 0) {
         this.$router.push({name: 'EditCourse'})
       }
+    },
+    change: function () {
+      axios.get('http://localhost:8000/api/v1/courses/backstage/course-management/get-course-list', {
+        params: {
+          codename: this.codename,
+          title: this.title,
+          page_limit: this.per_limit,
+          page: this.page
+        }
+      }).then(
+        response => {
+          console.log(response.data.count)
+          this.rows = response.data.count
+          let _course = []
+          for (let data of response.data.content) {
+            _course.push({
+              'id': data['course_id'],
+              'ID': data['codename'],
+              'name': data['title'],
+              'change_time': data['updated_at'].substring(0, 10)
+            })
+          }
+          this.courses = _course
+        }).catch(
+        error => {
+          this.error_message = '读取数据出错' + error
+        }
+      )
+    },
+    changePage: function (currentpage) {
+      this.page = currentpage
+      this.change()
     }
   }
 }

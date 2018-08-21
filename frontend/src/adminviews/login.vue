@@ -52,8 +52,6 @@
 <script>
 import axios from 'axios'
 import qs from 'qs'
-axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN'
-axios.defaults.xsrfCookieName = 'csrftoken'
 export default {
   name: 'AdminLogin',
   data: function () {
@@ -75,7 +73,7 @@ export default {
           qs.stringify({
             phone_number: this.phone_number,
             password: this.password
-          }), {withCredentials: true}
+          }),
         ).then(
           response => {
             if (this.phone_number === response.data.username) {
@@ -84,8 +82,7 @@ export default {
             } else {
               this.error_message = '数据库错误'
             }
-          }
-        ).catch(
+          }).catch(
           error => {
             let errorMessage = error.response.data.message
             if (errorMessage === 'User is already authenticated.') {
@@ -95,8 +92,7 @@ export default {
             } else if (errorMessage === 'Permission denied.') {
               this.error_message = '该用户不是管理员'
             }
-          }
-        )
+          })
       }
       evt.preventDefault()
     }
