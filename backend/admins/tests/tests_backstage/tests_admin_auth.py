@@ -74,5 +74,5 @@ class AdminAuthTests(TestCase):
                 'password': 'nkcs1612'
             }
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(json.loads(response.content)['message'], 'Access denied.')

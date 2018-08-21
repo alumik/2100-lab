@@ -126,7 +126,7 @@ class AdminOperationsTests(TestCase):
                 'new_username': '15500000000'
             }
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.content)['message'], 'This username is already taken.')
 
     def test_change_admin_username_invalid(self):
@@ -140,7 +140,7 @@ class AdminOperationsTests(TestCase):
                 'new_username': 'hello_deleted_'
             }
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.content)['message'], 'Invalid username.')
 
     def test_change_admin_success(self):

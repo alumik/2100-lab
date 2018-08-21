@@ -21,7 +21,7 @@ def authenticate_admin(request):
         return JsonResponse({'message': ERROR['invalid_phone_number_or_password']}, status=400)
 
     if not admin.is_staff:
-        return JsonResponse({'message': ERROR['access_denied']}, status=400)
+        return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
     login(request, admin)
     json_data = {
@@ -99,10 +99,10 @@ def change_admin_username(request):
 
     try:
         get_user_model().objects.get(username=new_username)
-        return JsonResponse({'message': ERROR['username_already_taken']}, status=403)
+        return JsonResponse({'message': ERROR['username_already_taken']}, status=400)
     except get_user_model().DoesNotExist:
         if re.match(r'^.*_deleted_.*$', new_username):
-            return JsonResponse({'message': ERROR['invalid_username']}, status=403)
+            return JsonResponse({'message': ERROR['invalid_username']}, status=400)
         admin.username = new_username
         admin.save()
         return JsonResponse({'new_username': new_username})

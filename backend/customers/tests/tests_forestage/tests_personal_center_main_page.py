@@ -45,14 +45,14 @@ class PersonalCenterMainPageTests(TestCase):
             reverse('api:customers:forestage:change-username'),
             {'username': '13312345678_deleted_2'}
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.content)['message'], 'Invalid username.')
 
         response = self.client.post(
             reverse('api:customers:forestage:change-username'),
             {'username': '14412345678'}
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.content)['message'], 'This username is already taken.')
 
     def test_get_reward_coin(self):

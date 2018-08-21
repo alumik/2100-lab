@@ -58,14 +58,14 @@ class CustomerAuthTests(TestCase):
             reverse('api:customers:forestage:authenticate-customer'),
             {'phone_number': '13312345679', 'verification_code': verification_code}
         )
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.content)['message'], 'Different phone number.')
 
         response = self.client.post(
             reverse('api:customers:forestage:authenticate-customer'),
             {'phone_number': '13312345678', 'verification_code': '0'}
         )
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.content)['message'], 'Wrong verification code.')
 
         response = self.client.post(
@@ -96,14 +96,14 @@ class CustomerAuthTests(TestCase):
             reverse('api:customers:forestage:authenticate-customer'),
             {'phone_number': '14412345679', 'verification_code': verification_code}
         )
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.content)['message'], 'Different phone number.')
 
         response = self.client.post(
             reverse('api:customers:forestage:authenticate-customer'),
             {'phone_number': '14412345678', 'verification_code': '0'}
         )
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.content)['message'], 'Wrong verification code.')
 
         response = self.client.post(
