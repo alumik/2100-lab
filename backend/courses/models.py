@@ -87,6 +87,7 @@ class Comment(SoftDeletionModel):
         return {
             'comment_id': self.id,
             'username': self.user.username,
+            'user_id': customer.id,
             'avatar': str(self.user.avatar),
             'course_id': self.course.id,
             'content': self.content,
