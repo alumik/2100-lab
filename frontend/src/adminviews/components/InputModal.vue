@@ -57,6 +57,7 @@ export default {
         evt.preventDefault()
         alert('请输入内容后提交')
       } else {
+        this.$emit('click', this.input)
         this.handle_submit()
       }
     },
