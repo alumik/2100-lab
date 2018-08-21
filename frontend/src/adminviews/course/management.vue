@@ -79,22 +79,22 @@
             </tr>
             <tr
               v-for="course in courses"
-              :key="course.id">
-              <td>{{ course.ID }}</td>
-              <td>{{ course.name }}</td>
-              <td>{{ course.change_time }}</td>
+              :key="course.course_id">
+              <td>{{ course.codename }}</td>
+              <td>{{ course.title }}</td>
+              <td>{{ course.updated_at }}</td>
               <div class="my-in-for-btn">
                 <button
                   id="content"
                   type="button"
                   class="in-btn row btn-sm"
-                  @click="jump(course.id + 1)"
+                  @click="jump(course.course_id + 1)"
                 >详情</button>
                 <button
                   id="edit"
                   type="button"
                   class="in-btn row btn-sm"
-                  @click="jump(course.id * (-1) - 2)"
+                  @click="jump(course.course_id * (-1) - 2)"
                 >修改</button>
               </div>
             </tr>
@@ -149,7 +149,7 @@ export default {
         this.rows = response.data.count
         let _course = []
         for (let data of response.data.content) {
-          _course.push({'id': data['course_id'], 'ID': data['codename'], 'name': data['title'], 'change_time': data['updated_at'].substring(0, 10)})
+          _course.push({'course_id': data['course_id'], 'codename': data['codename'], 'title': data['title'], 'updated_at': data['updated_at'].substring(0, 10)})
         }
         this.courses = _course
       }).catch(
@@ -165,7 +165,7 @@ export default {
       } else if (id === -1) {
         this.$refs.upload_picture.show()
       } else if (id > 0) {
-        this.$router.push({name: 'BackendCourseDetail'})
+        this.$router.push({name: 'BackendCourseDetail', query: {course_id: id - 1}})
       } else if (id < 0) {
         this.$router.push({name: 'EditCourse'})
       }
@@ -185,10 +185,10 @@ export default {
           let _course = []
           for (let data of response.data.content) {
             _course.push({
-              'id': data['course_id'],
-              'ID': data['codename'],
-              'name': data['title'],
-              'change_time': data['updated_at'].substring(0, 10)
+              'course_id': data['course_id'],
+              'codename': data['codename'],
+              'title': data['title'],
+              'updated_at': data['updated_at'].substring(0, 10)
             })
           }
           this.courses = _course

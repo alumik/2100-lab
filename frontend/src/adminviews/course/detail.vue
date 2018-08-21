@@ -1,7 +1,9 @@
+<!--suppress ALL -->
 <template>
   <Basic :items="items">
     <div class="my-content">
       <h2>课程详情</h2>
+      {{ error_message }}
       <div>
         <div class="head-btn">
           <button
@@ -32,7 +34,7 @@
                 课程代码
               </td>
               <td class="content-td">
-                {{ course.ID }}
+                {{ course.codename }}
               </td>
             </tr>
             <tr>
@@ -40,7 +42,7 @@
                 课程名
               </td>
               <td class="content-td">
-                {{ course.name }}
+                {{ course.title }}
               </td>
             </tr>
             <tr>
@@ -48,7 +50,7 @@
                 阅后即焚时间
               </td>
               <td class="content-td">
-                {{ course.time }}
+                {{ course.expire_duration }}
               </td>
             </tr>
             <tr>
@@ -63,7 +65,7 @@
                 分销金比例
               </td>
               <td class="content-td">
-                {{ course.percent }}
+                {{ course.reward_percent }}
               </td>
             </tr>
             <tr>
@@ -71,7 +73,7 @@
                 添加时间
               </td>
               <td class="content-td">
-                {{ course.add_time }}
+                {{ course.created_at }}
               </td>
             </tr>
             <tr>
@@ -79,7 +81,7 @@
                 修改时间
               </td>
               <td class="content-td">
-                {{ course.change_time }}
+                {{ course.updated_at }}
               </td>
             </tr>
           </tbody>
@@ -87,7 +89,7 @@
       </div>
       <div class="my-intro">
         <h3 class="text-left">课程简介</h3>
-        <p class="text-justify">{{ course.introduction }}</p>
+        <h2 class="text-left">{{ course.description }}</h2>
       </div>
     </div>
   </Basic>
@@ -96,6 +98,7 @@
 <script>
 import Basic from '../basic/basic'
 import ConfirmModal from '../components/ConfirmModal'
+import axios from 'axios'
 export default {
   name: 'BackendCourseDetail',
   components: {ConfirmModal, Basic},
@@ -111,17 +114,40 @@ export default {
         text: '课程详情',
         active: true
       }],
+      error_message: '',
       course: {
-        'ID': '123456',
-        'name': 'ascmk',
-        'time': 'akscnk',
-        'price': 'ascmk',
-        'percent': 'aslcm',
-        'add_time': 'aslcmklamlc',
-        'change_time': 'ak njksdjvksnjk',
-        'introduction': 'sncklsndkjvbweuiaciusDnmcksndkjcshndovi;jpaoerjvoigeahngvuihwroigrioahnvhios '
+        'codename': '',
+        'name': '',
+        'time': '',
+        'price': '',
+        'reward_percent': '',
+        'created_at': '',
+        'updated_at': '',
+        'description': ''
       }
     }
+  },
+  created: function () {
+    axios.get('http://localhost:8000/api/v1/courses/backstage/course-management/get-course-detail', {
+      params: {
+        course_id: this.$route.query.course_id
+      }
+    }).then(
+      response => {
+        console.log(response.data)
+        this.course.codename = response.data.codename
+        this.course.title = response.data.title
+        this.course.expire_duration = response.data.expire_duration.replace('P', '').replace('DT', '天').replace('H', '小时').replace('M', '分钟').replace('S', '秒钟')
+        this.course.price = response.data.price
+        this.course.reward_percent = response.data.reward_percent
+        this.course.created_at = response.data.created_at.replace('T', ' ').substring(0, 19)
+        this.course.updated_at = response.data.updated_at.replace('T', ' ').substring(0, 19)
+        this.course.description = response.data.description
+      }).catch(
+      error => {
+        this.error_message = '读取数据出错' + error
+      }
+    )
   },
   methods: {
     jump: function (id) {
