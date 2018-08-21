@@ -326,5 +326,3 @@ class CommentOperationTests(TestCase):
         self.assertEqual(response.status_code, 200)
         response_json_data = json.loads(response.content)
         self.assertEqual(response_json_data['count'], 0)
-
-
