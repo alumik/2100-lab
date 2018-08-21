@@ -28,6 +28,15 @@
             text="您确定要删除此条留言吗？"/>
         </div>
       </div>
+      <b-alert
+        :show="wrong_count_down"
+        class="my-alert"
+        variant="danger"
+        dismissible
+        @dismissed="wrong_count_down=0"
+        @dismiss_count_down="count_down_changed(wrong_count_down)">
+        {{ wrong }}
+      </b-alert>
       <DetailTable
         :titles="titles"
         :data="message"/>
@@ -40,6 +49,7 @@ import ConfirmModal from '../components/ConfirmModal'
 import InputModal from '../components/InputModal'
 import Basic from '../basic/basic'
 import DetailTable from '../components/detail_table'
+import axios from 'axios'
 export default {
   name: 'MessageDetail',
   components: { DetailTable, Basic, InputModal, ConfirmModal },
@@ -55,8 +65,64 @@ export default {
         text: this.$route.query.message_id,
         active: true
       }],
-      titles: ['留言日期', '用户', '课程代码', '课程名', '状态', '内容'],
-      message: [ '2018-08-10', '小红', 'SOFT1', '计算机', '已删除', '很好' ]
+      titles: ['留言日期', '用户', '课程代码', '课程名', '点赞数', '点踩数', '状态', '删除日期', '内容'],
+      message: [],
+      dismiss_second: 5,
+      wrong_count_down: 0,
+      wrong: ''
+    }
+  },
+  created () {
+    const that = this
+    axios.get('http://localhost:8000/api/v1/courses/backstage/comment-management/get-comment-detail/',
+      {params: {
+        comment_id: that.$route.query.message_id
+      }})
+      .then(function (response) {
+        that.message = that.computed_message(response.data)
+      })
+      .catch(function (error) {
+        that.wrong = '获取留言详情失败！' + error
+        that.wrong_count_down = that.dismiss_second
+      })
+  },
+  methods: {
+    compute_state: function (deleted) {
+      if (deleted) {
+        return '已删除'
+      } else {
+        return '未删除'
+      }
+    },
+    count_down_changed: function (val) {
+      const that = this
+      let t = setInterval(function () {
+        val -= 1
+        if (that.val === 0) {
+          clearInterval(t)
+        }
+      }, 1000)
+    },
+    computed_message: function (val) {
+      let temp = new Array(9)
+      temp[0] = (val.created_at + '').slice(0, 10)
+      temp[1] = val.username
+      temp[2] = val.course_codename
+      temp[3] = val.course_title
+      temp[4] = val.up_votes
+      temp[5] = val.down_votes
+      if (val.is_deleted) {
+        temp[6] = '已删除'
+      } else {
+        temp[6] = '未删除'
+      }
+      if (val.deleted_at === null) {
+        temp[7] = ''
+      } else {
+        temp[7] = (val.deleted_at + '').slice(0, 10)
+      }
+      temp[8] = val.content
+      return temp
     }
   }
 }
@@ -104,5 +170,10 @@ export default {
   .btn:hover,
   .btn:active {
     background-color: #5e0057;
+  }
+
+  .my-alert {
+    padding-right: 15px;
+    padding-left: 15px;
   }
 </style>
