@@ -11,7 +11,8 @@
       <span class="navbar-toggler-icon"/>
     </button>
     <b-navbar-brand
-      class="logo">
+      class="logo"
+      @click="home">
       <img
         id="logoimg"
         src="../../assets/2100logo.png">
@@ -25,12 +26,12 @@
           @click="personal">
           <img
             id="userimg"
-            src="../../assets/logo.png">{{ status ? $store.state.user.name : '' }}
+            src="../../assets/logo.png">{{ $store.state.status ? $store.state.user.username : '' }}
         </b-nav-item>
         <b-nav-item
           id="logout"
           @click="log">
-          {{ status ? '注销' : '登录' }}
+          {{ $store.state.status ? '注销' : '登录' }}
         </b-nav-item>
       </b-navbar-nav>
     </b-collapse>
@@ -60,11 +61,15 @@ export default {
     axios.post('http://localhost:8000/api/v1/core/auth/is-authenticated/').then((res) => {
       console.log('登录状态：' + res.data.is_authenticated)
       if (res.data.is_authenticated) {
-        that.status = true
+        that.$store.state.status = true
+        console.log(that.$store.state)
       }
     })
   },
   methods: {
+    home () {
+      this.$router.push({path: '/'})
+    },
     personal () {
       axios.post('http://localhost:8000/api/v1/core/auth/is-authenticated/').then((res) => {
         if (res.data.is_authenticated) {
@@ -73,11 +78,12 @@ export default {
       })
     },
     log () {
-      // let that = this
-      if (this.status) {
+      let that = this
+      if (that.$store.state.status) {
         axios.post('http://localhost:8000/api/v1/core/auth/logout/').then(res => {
           console.log(res.data.message)
-          this.$router.push({path: '/'})
+          that.$store.commit('logout')
+          that.$router.push({path: '/'})
         }).catch(error => {
           console.log(error.message)
         })

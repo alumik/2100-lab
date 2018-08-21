@@ -23,6 +23,7 @@ Vue.prototype.$http = axios
 axios.defaults.withCredentials = true
 const store = new Vuex.Store({
   state: {
+    status: false,
     user: {
       'is_new_customer': null,
       'customer_id': null,
@@ -33,6 +34,12 @@ const store = new Vuex.Store({
   mutations: {
     user (state, data) {
       state.user = data
+    },
+    new_customer (state, status) {
+      state.user.is_new_customer = status
+    },
+    logout (state) {
+      state.status = false
     }
   }
 })
