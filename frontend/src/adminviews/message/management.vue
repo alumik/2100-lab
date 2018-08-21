@@ -249,7 +249,7 @@ export default {
           comment_id: that.delete_id
         }})
         .then(function (response) {
-          if (response.data.message === 'Comment deleted.') {
+          if (response.data.message === 'Object deleted.') {
             that.success = '您已经成功删除此留言。'
             that.success_count_down = that.dismiss_second
           } else {
