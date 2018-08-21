@@ -25,6 +25,7 @@ class CustomerAuthTests(TestCase):
                 re.match(r'^\d{6}$', json.loads(response.content)['verification_code'])
             )
         )
+        self.assertFalse(json.loads(response.content)['is_new_customer'])
 
         generate_time = self.client.session['generate_time']
         response = self.client.get(reverse('api:customers:forestage:get-generate-time'))
@@ -49,6 +50,8 @@ class CustomerAuthTests(TestCase):
             reverse('api:customers:forestage:get-verification-code'),
             {'phone_number': '13312345678'}
         )
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(json.loads(response.content)['is_new_customer'])
         verification_code = json.loads(response.content)['verification_code']
 
         response = self.client.post(
@@ -85,6 +88,8 @@ class CustomerAuthTests(TestCase):
             reverse('api:customers:forestage:get-verification-code'),
             {'phone_number': '14412345678'}
         )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(json.loads(response.content)['is_new_customer'])
         verification_code = json.loads(response.content)['verification_code']
 
         response = self.client.post(
