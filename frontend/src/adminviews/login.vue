@@ -73,7 +73,7 @@ export default {
           qs.stringify({
             phone_number: this.phone_number,
             password: this.password
-          }),
+          })
         ).then(
           response => {
             if (this.phone_number === response.data.username) {
