@@ -40,31 +40,27 @@
 
 <script>
 import axios from 'axios'
-// import qs from 'qs'
 
 export default {
   name: 'UserNavbar',
-  data () {
-    return {
-      status: false
+  created () {
+    if (sessionStorage.getItem('status') === 'true') {
+      // console.log('created')
+      this.$store.commit('status')
+      // console.log(sessionStorage.getItem('user'))
+      this.$store.commit('user', JSON.parse(sessionStorage.getItem('user')))
     }
-  },
-  // created () {
-  //   // let that = this
-  //   axios.get('http://localhost:8000/api/v1/core/auth/is-authenticated/').then((res) => {
-  //     console.log('登录状态：' + res.data.is_authenticated)
-  //     console.log(this.$store.state.user)
-  //   })
-  // },
-  mounted () {
     let that = this
     axios.post('http://localhost:8000/api/v1/core/auth/is-authenticated/').then((res) => {
       // console.log('登录状态：' + res.data.is_authenticated)
       if (res.data.is_authenticated) {
-        that.$store.state.status = true
+        that.$store.commit('status')
         // console.log(that.$store.state)
       }
     })
+  },
+  mounted () {
+
   },
   methods: {
     home () {

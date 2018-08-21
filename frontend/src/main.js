@@ -25,21 +25,27 @@ const store = new Vuex.Store({
   state: {
     status: false,
     user: {
-      'is_new_customer': null,
-      'customer_id': null,
-      'username': null,
-      'avatar': null
+      is_new_customer: null,
+      customer_id: '',
+      username: '',
+      avatar: null
     }
   },
   mutations: {
+    status (state) {
+      state.status = true
+      sessionStorage.setItem('status', 'true')
+    },
     user (state, data) {
       state.user = data
+      sessionStorage.setItem('user', JSON.stringify(data))
     },
     new_customer (state, status) {
       state.user.is_new_customer = status
     },
     logout (state) {
       state.status = false
+      sessionStorage.setItem('status', 'false')
     }
   }
 })
