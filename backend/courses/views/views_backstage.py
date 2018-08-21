@@ -80,6 +80,7 @@ def get_comment_detail(request):
     return JsonResponse(
         {
             'comment_id': comment.id,
+            'created_at': comment.created_at,
             'username': comment.user.username,
             'course_codename': comment.course.codename,
             'course_title': comment.course.title,
