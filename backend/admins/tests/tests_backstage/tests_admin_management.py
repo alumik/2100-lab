@@ -98,3 +98,79 @@ class AdminDetailTests(TestCase):
                 ]
             }
         )
+
+
+class AdminOperationsTests(TestCase):
+    def setUp(self):
+        get_user_model().objects.create_user(
+            phone_number='14400000000',
+            password='123456',
+            is_staff=True,
+            is_superuser=True
+        )
+        get_user_model().objects.create_user(
+            phone_number='15500000000',
+            password='123456',
+            is_staff=True,
+            is_superuser=True
+        )
+
+    def test_change_admin_username_conflict(self):
+        self.client.login(phone_number='15500000000', password='123456')
+        admin = get_user_model().objects.get(phone_number='14400000000')
+
+        response = self.client.post(
+            reverse('api:admins:backstage:change-admin-username'),
+            {
+                'admin_id': admin.id,
+                'new_username': '15500000000'
+            }
+        )
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(json.loads(response.content)['message'], 'This username is already taken.')
+
+    def test_change_admin_username_invalid(self):
+        self.client.login(phone_number='15500000000', password='123456')
+        admin = get_user_model().objects.get(phone_number='14400000000')
+
+        response = self.client.post(
+            reverse('api:admins:backstage:change-admin-username'),
+            {
+                'admin_id': admin.id,
+                'new_username': 'hello_deleted_'
+            }
+        )
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(json.loads(response.content)['message'], 'Invalid username.')
+
+    def test_change_admin_success(self):
+        self.client.login(phone_number='15500000000', password='123456')
+        admin = get_user_model().objects.get(phone_number='14400000000')
+
+        response = self.client.post(
+            reverse('api:admins:backstage:change-admin-username'),
+            {
+                'admin_id': admin.id,
+                'new_username': 'hello'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content)['new_username'], 'hello')
+        admin = get_user_model().objects.get(phone_number='14400000000')
+        self.assertEqual(admin.username, 'hello')
+
+    def test_change_admin_password(self):
+        self.client.login(phone_number='15500000000', password='123456')
+        admin = get_user_model().objects.get(phone_number='14400000000')
+
+        response = self.client.post(
+            reverse('api:admins:backstage:change-admin-password'),
+            {
+                'admin_id': admin.id,
+                'new_password': '100000'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content)['message'], 'Success.')
+        login_state = self.client.login(phone_number='14400000000', password='100000')
+        self.assertTrue(login_state)

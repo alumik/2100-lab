@@ -1,8 +1,10 @@
+import re
+
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, get_user_model
-from django.contrib.auth.decorators import permission_required, login_required
+from django.contrib.auth.decorators import login_required
 
-from core.messages import ERROR
+from core.messages import ERROR, INFO
 from admins.utils import get_admin_page
 
 
@@ -56,6 +58,9 @@ def get_admin_list(request):
 
 @login_required
 def get_admin_detail(request):
+    if not request.user.is_superuser:
+        return JsonResponse({'message': ERROR['access_denied']}, status=403)
+
     admin_id = request.GET.get('admin_id')
 
     try:
@@ -77,3 +82,45 @@ def get_admin_detail(request):
         json_data['roles'].append('super_admin')
 
     return JsonResponse(json_data)
+
+
+@login_required
+def change_admin_username(request):
+    if not request.user.is_superuser:
+        return JsonResponse({'message': ERROR['access_denied']}, status=403)
+
+    admin_id = request.POST.get('admin_id')
+    new_username = request.POST.get('new_username')
+
+    try:
+        admin = get_user_model().objects.get(id=admin_id, is_staff=True)
+    except get_user_model().DoesNotExist:
+        return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+
+    try:
+        get_user_model().objects.get(username=new_username)
+        return JsonResponse({'message': ERROR['username_already_taken']}, status=403)
+    except get_user_model().DoesNotExist:
+        if re.match(r'^.*_deleted_.*$', new_username):
+            return JsonResponse({'message': ERROR['invalid_username']}, status=403)
+        admin.username = new_username
+        admin.save()
+        return JsonResponse({'new_username': new_username})
+
+
+@login_required
+def change_admin_password(request):
+    if not request.user.is_superuser:
+        return JsonResponse({'message': ERROR['access_denied']}, status=403)
+
+    admin_id = request.POST.get('admin_id')
+    new_password = request.POST.get('new_password')
+
+    try:
+        admin = get_user_model().objects.get(id=admin_id, is_staff=True)
+    except get_user_model().DoesNotExist:
+        return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+
+    admin.set_password(new_password)
+    admin.save()
+    return JsonResponse({'message': INFO['success']})

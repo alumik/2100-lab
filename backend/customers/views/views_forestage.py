@@ -3,12 +3,12 @@ import random
 import time
 
 from django.conf import settings
-from django.contrib.auth import get_user_model, login
+from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
 from core.utils import get_page
-from core.messages import ERROR
+from core.messages import ERROR, INFO
 from customers.models import LearningLog, OrderLog
 # from customers.utils import tencent_cloud_message
 
@@ -112,3 +112,14 @@ def get_learning_logs(request):
 def get_order_logs(request):
     order_logs = OrderLog.objects.filter(customer=request.user).order_by('-created_at')
     return get_page(request, order_logs)
+
+
+@login_required
+def delete_customer(request):
+    user = request.user
+    logout(request)
+    user.phone_number += '_deleted_' + str(int(round(time.time() * 1000)))
+    user.username = user.phone_number
+    user.save()
+    user.delete()
+    return JsonResponse({'message': INFO['object_deleted']})

@@ -22,4 +22,14 @@ urlpatterns = [
         views_backstage.get_admin_detail,
         name='get-admin-detail'
     ),
+    path(
+        'admin-management/change-admin-username/',
+        views_backstage.change_admin_username,
+        name='change-admin-username'
+    ),
+    path(
+        'admin-management/change-admin-password/',
+        views_backstage.change_admin_password,
+        name='change-admin-password'
+    ),
 ]

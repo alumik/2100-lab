@@ -61,3 +61,57 @@ class PersonalCenterMainPageTests(TestCase):
         response = self.client.get(reverse('api:customers:forestage:get-reward-coin'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content)['reward_coin'], '100.00')
+
+    def test_delete_customer(self):
+        get_user_model().objects.create_user(phone_number='19912345678')
+        first_user = get_user_model().objects.get(phone_number='19912345678')
+        first_user_id = first_user.id
+        self.client.force_login(first_user)
+
+        response = self.client.delete(reverse('api:customers:forestage:delete-customer'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content)['message'], 'Object deleted.')
+
+        response = self.client.post(
+            reverse('api:customers:forestage:get-verification-code'),
+            {'phone_number': '19912345678'}
+        )
+        verification_code = json.loads(response.content)['verification_code']
+
+        response = self.client.post(
+            reverse('api:customers:forestage:authenticate-customer'),
+            {'phone_number': '19912345678', 'verification_code': verification_code}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(json.loads(response.content)['is_new_customer'])
+        second_user_id = get_user_model().objects.get(phone_number='19912345678').id
+        self.assertNotEqual(second_user_id, first_user_id)
+
+        response = self.client.get(reverse('api:core:is-authenticated'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(json.loads(response.content)['is_authenticated'])
+
+        response = self.client.delete(reverse('api:customers:forestage:delete-customer'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content)['message'], 'Object deleted.')
+
+        response = self.client.post(
+            reverse('api:customers:forestage:get-verification-code'),
+            {'phone_number': '19912345678'}
+        )
+        verification_code = json.loads(response.content)['verification_code']
+
+        response = self.client.post(
+            reverse('api:customers:forestage:authenticate-customer'),
+            {'phone_number': '19912345678', 'verification_code': verification_code}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(json.loads(response.content)['is_new_customer'])
+        third_user_id = get_user_model().objects.get(phone_number='19912345678').id
+        self.assertNotEqual(third_user_id, second_user_id)
+
+        response = self.client.get(reverse('api:core:is-authenticated'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(json.loads(response.content)['is_authenticated'])
+
+        self.client.logout()
