@@ -83,7 +83,7 @@ class Comment(SoftDeletionModel):
             return self.content
         return self.content[:50] + '...'
 
-    def as_dict(self):
+    def as_dict(self, customer):
         return {
             'comment_id': self.id,
             'username': self.user.username,
@@ -92,6 +92,8 @@ class Comment(SoftDeletionModel):
             'content': self.content,
             'up_votes': self.up_votes.count(),
             'down_votes': self.down_votes.count(),
+            'up_voted': True if customer in self.up_votes.all() else False,
+            'down_voted': True if customer in self.down_votes.all() else False,
             'created_at': self.created_at
         }
 

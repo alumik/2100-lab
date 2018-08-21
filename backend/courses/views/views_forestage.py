@@ -5,7 +5,7 @@ from core.utils import get_page
 from core.messages import ERROR, INFO
 from customers.models import LearningLog
 from courses.models import Hero, Course, Image, Comment
-from courses.utils import get_courses, can_access, check_learning_log
+from courses.utils import get_courses, can_access, check_learning_log, get_comment_page
 
 
 def get_heroes(request):
@@ -152,7 +152,7 @@ def get_course_comments(request):
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
     comments = Comment.objects.filter(course=course).order_by('-created_at')
-    return get_page(request, comments)
+    return get_comment_page(request, comments)
 
 
 @login_required
