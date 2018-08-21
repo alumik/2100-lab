@@ -5,6 +5,20 @@
     <div>
       <h1>留言列表</h1>
       <div class="table-div">
+        <b-alert
+          :show="show_wrong"
+          variant="danger"
+          dismissible
+          @dismissed="show_wrong=false">
+          {{ wrong }}
+        </b-alert>
+        <b-alert
+          :show="show_success"
+          variant="success"
+          dismissible
+          @dismissed="show_success=false">
+          {{ success }}
+        </b-alert>
         <table class="table table-striped">
           <thead>
             <tr>
@@ -17,16 +31,7 @@
           </thead>
           <tbody>
             <tr align="center">
-              <td class="xs-td">
-                <div class="input-group-sm">
-                  <input
-                    v-model="date"
-                    type="text"
-                    class="form-control"
-                    placeholder=""
-                    @keyup.enter="search">
-                </div>
-              </td>
+              <td/>
               <td class="xs-td">
                 <div class="input-group-sm">
                   <input
@@ -75,29 +80,31 @@
             <tr
               v-for="message in messages"
               :key="message.id">
-              <td>{{ message.data }}</td>
-              <td>{{ message.user }}</td>
-              <td>{{ message.course_code }}</td>
-              <td>{{ message.course_name }}</td>
-              <td>{{ message.message }}</td>
-              <td> {{ message.state }} </td>
+              <td>{{ compute_date(message.created_at) }}</td>
+              <td>{{ message.username }}</td>
+              <td>{{ message.course_codename }}</td>
+              <td>{{ message.course_title }}</td>
+              <td>{{ message.content }}</td>
+              <td> {{ compute_state(message.is_deleted) }} </td>
               <td class="buttons">
                 <button
                   type="button"
                   class="btn btn-xs"
-                  @click="to_detail(message.id)">
+                  @click="to_detail(message.comment_id + '')">
                   详情
                 </button>
                 <button
                   v-b-modal.reply
                   type="button"
-                  class="btn">
+                  class="btn"
+                  @click="reply_id=message.course_codename">
                   回复
                 </button>
                 <button
                   v-b-modal.delete
                   type="button"
-                  class="btn">
+                  class="btn"
+                  @click="delete_id=message.comment_id">
                   删除
                 </button>
               </td>
@@ -109,13 +116,16 @@
         id="reply"
         :input="reply"
         title="回复留言"
-        placeholder="请输入你要回复的内容"/>
+        placeholder="请输入你要回复的内容"
+        @click="reply_message"/>
       <ConfirmModal
         id="delete"
         title="确认删除"
-        text="您确定要删除此条留言吗？"/>
+        text="您确定要删除此条留言吗？"
+        @click="delete_message"/>
       <Pagination
         :rows="rows"
+        :perpage="per_page"
         @change="change_page"/>
     </div>
   </Basic>
@@ -128,10 +138,10 @@ import InputModal from '../components/InputModal'
 import Basic from '../basic/basic'
 import axios from 'axios'
 import qs from 'qs'
-let messages = [
-  { data: '2018-08-10', user: '小红', course_code: 'SOFT1', course_name: '计算机', message: '很好', state: '已删除', id: '1001' },
-  { data: '2018-08-11', user: '小明', course_code: 'English2', course_name: '口语', message: '还不错', state: '未删除', id: '1002' }
-]
+// let messages = [
+//   { data: '2018-08-10', user: '小红', course_code: 'SOFT1', course_name: '计算机', message: '很好', state: '已删除', id: '1001' },
+//   { data: '2018-08-11', user: '小明', course_code: 'English2', course_name: '口语', message: '还不错', state: '未删除', id: '1002' }
+// ]
 export default {
   name: 'MessageManagement',
   components: { Basic, InputModal, ConfirmModal, Pagination },
@@ -144,8 +154,8 @@ export default {
         text: '留言管理',
         active: true
       }],
-      rows: 20,
-      messages: messages,
+      rows: 0,
+      messages: null,
       titles: [
         { label: '日期' },
         { label: '用户' },
@@ -155,28 +165,37 @@ export default {
         { label: '状态' },
         { label: '操作' }
       ],
-      date: '',
       user: '',
       course_code: '',
       course_name: '',
       state: '',
       reply: '',
       page_jump: false,
-      per_page: 10,
-      page: 1
+      per_page: 1,
+      page: 1,
+      show_wrong: false,
+      wrong: '传递数据失败',
+      show_success: false,
+      success: '',
+      delete_id: '',
+      reply_id: ''
     }
   },
   created () {
-    axios.post('', qs.stringify({
-      page_limit: this.per_page,
-      page: 1
-    }))
+    const that = this
+    axios.get('http://localhost:8000/api/v1/courses/backstage/comment-management/get-comment-list/', { params: {
+      page_limit: that.per_page,
+      page: that.page
+    }})
       .then(function (response) {
-        this.messages = response.data.content
-        this.rows = response.data.count
+        // console.log(response.data)
+        that.messages = response.data.content
+        that.rows = response.data.count
+        // console.log('this.messages: ' + that.messages + 'this.rows: ' + that.rows)
       })
       .catch(function (error) {
-        alert('传递信息失败' + error)
+        that.wrong += error
+        that.show_wrong = true
       })
   },
   methods: {
@@ -184,33 +203,104 @@ export default {
       this.page_jump = true
       this.$router.push({ name: 'MessageDetail', query: {message_id: val} })
     },
-    get_date: function () {
-      let date = new Date(this.date.replace(/-/g, '/'))
-      return date.getTime() / 1000
+    compute_date: function (date) {
+      return date.slice(0, 10)
+    },
+    compute_state: function (deleted) {
+      if (deleted) {
+        return '已删除'
+      } else {
+        return '未删除'
+      }
     },
     search: function () {
       // alert('search')
-      let date = this.get_date()
+      // let date = this.get_date()
       // console.log(date + this.user + this.course_code + this.course_name + this.state)
-      axios.post('', qs.stringify({
-        date: date,
-        user: this.user,
-        course_code: this.course_code,
-        course_name: this.course_name,
-        state: this.state,
-        page_limit: this.per_page,
-        page: 1
-      }))
+      const that = this
+      let state
+      if (that.state === 'whole' || that.state === '') {
+        state = '0'
+      } else if (that.state === 'reserved') {
+        state = '1'
+      } else {
+        state = '2'
+      }
+      // console.log(that.user)
+      // console.log(that.course_code)
+      // console.log(that.course_name)
+      // console.log(state)
+      // console.log(that.per_page)
+      // console.log(that.page)
+      axios.get('http://localhost:8000/api/v1/courses/backstage/comment-management/get-comment-list/', {params: {
+        username: that.user,
+        course_codename: that.course_code,
+        course_title: that.course_name,
+        is_deleted: state,
+        page_limit: that.per_page,
+        page: that.page
+      }})
         .then(function (response) {
-          this.messages = response.data.content
-          this.rows = response.data.count
+          // console.log(response.data)
+          that.messages = response.data.content
+          that.rows = response.data.count
         })
         .catch(function (error) {
-          alert('传递信息失败' + error)
+          that.wrong += error
+          that.show_wrong = true
         })
     },
     change_page: function (page) {
       this.page = page
+      // console.log('per_page: ' + this.per_page + 'page: ' + this.page)
+      const that = this
+      axios.get('http://localhost:8000/api/v1/courses/backstage/comment-management/get-comment-list/', {params: {
+        page_limit: that.per_page,
+        page: that.page
+      }})
+        .then(function (response) {
+          // console.log(that.page)
+          that.messages = response.data.content
+          that.rows = response.data.count
+        })
+        .catch(function (error) {
+          that.wrong += error
+          that.show_wrong = true
+        })
+    },
+    delete_message: function () {
+      // console.log(this.delete_id)
+      const that = this
+      axios.get('http://localhost:8000/api/v1/courses/backstage/comment-management/delete-comment/', {params: {
+        comment_id: that.delete_id
+      }})
+        .then(function (response) {
+          // console.log(that.page)
+          that.success = response.data.message
+          that.show_success = true
+        })
+        .catch(function (error) {
+          that.wrong += error
+          that.show_wrong = true
+        })
+    },
+    reply_message: function (val) {
+      // console.log(this.reply_id)
+      // console.log(val)
+      const that = this
+      axios.post('http://localhost:8000/api/v1/courses/backstage/comment-management/add-comment/', qs.stringify({
+        course_codename: that.reply_id,
+        comment_content: val
+      }))
+        .then(function (response) {
+          // console.log(that.page)
+          that.success = response.data.message
+          that.show_success = true
+        })
+        .catch(function (error) {
+          that.wrong += error
+          that.show_wrong = true
+        })
     }
   }
 }

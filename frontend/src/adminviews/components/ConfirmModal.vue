@@ -5,7 +5,8 @@
     :title="title"
     :ok-title="ok_title"
     :cancel-title="cancel_title"
-    centered>
+    centered
+    @ok="click_ok">
     <p>{{ text }}</p>
   </b-modal>
 </template>
@@ -33,6 +34,12 @@ export default {
     text: {
       type: String,
       default: ''
+    }
+  },
+  methods: {
+    click_ok: function () {
+      this.$emit('click')
+      this.$refs.modal.hide()
     }
   }
 }

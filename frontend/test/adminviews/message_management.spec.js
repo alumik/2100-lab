@@ -25,7 +25,7 @@ describe('留言管理页面单元测试', () => {
   })
 
   it('测试输入框渲染数量', () => {
-    expect(wrapper.findAll("[type = 'text']").length).toEqual(4)
+    expect(wrapper.findAll("[type = 'text']").length).toEqual(3)
   })
 
   it('测试下拉菜单输入框数量', () => {
@@ -45,23 +45,20 @@ describe('留言管理页面单元测试', () => {
   it('测试文本框输入是否正确', () => {
     const inputs = wrapper.findAll("[type='text']")
     const input0 = inputs.at(0)
-    input0.setValue('2018-08-19')
-    expect(wrapper.vm.date).toBe('2018-08-19')
-    const input1 = inputs.at(1)
-    input1.setValue('小红')
+    input0.setValue('小红')
     expect(wrapper.vm.user).toBe('小红')
-    const input2 = inputs.at(2)
-    input2.setValue('SOFT1')
+    const input1 = inputs.at(1)
+    input1.setValue('SOFT1')
     expect(wrapper.vm.course_code).toBe('SOFT1')
-    const input3 = inputs.at(3)
-    input3.setValue('计算机')
+    const input2 = inputs.at(2)
+    input2.setValue('计算机')
     expect(wrapper.vm.course_name).toBe('计算机')
   })
-
-  it('测试是否进入留言详情页面', () => {
-    const button = wrapper.find('button')
-    expect(wrapper.vm.page_jump).toBe(false)
-    button.trigger('click')
-    expect(wrapper.vm.page_jump).toBe(true)
-  })
+  //
+  // it('测试是否进入留言详情页面', () => {
+  //   const button = wrapper.find('button')
+  //   expect(wrapper.vm.page_jump).toBe(false)
+  //   button.trigger('click')
+  //   expect(wrapper.vm.page_jump).toBe(true)
+  // })
 })

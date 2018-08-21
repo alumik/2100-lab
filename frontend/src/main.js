@@ -18,7 +18,7 @@ Vue.use(datePicker)
 Vue.use(VCharts)
 Vue.config.productionTip = false
 Vue.prototype.$http = axios
-
+axios.defaults.withCredentials = true
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

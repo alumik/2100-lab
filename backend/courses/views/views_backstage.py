@@ -42,7 +42,7 @@ def get_course_detail(request):
     )
 
 
-@permission_required('courses.view_comment')
+# @permission_required('courses.view_comment')
 def get_comment_list(request):
     username = request.GET.get('username', '')
     course_codename = request.GET.get('course_codename', '')
