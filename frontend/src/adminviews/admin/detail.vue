@@ -113,7 +113,8 @@ export default {
         'change_time': '2018-08-13',
         'authority': 'askcnkj'
       },
-      admin_id: -1
+      admin_id: -1,
+      test_router: -1
     }
   },
   created () {
@@ -124,10 +125,13 @@ export default {
   methods: {
     jump: function (id) {
       if (id === 1) {
+        this.test_router = 1
         this.$router.push({name: 'DistributeAuthority'})
       } else if (id === 2) {
+        this.test_router = 2
         this.$router.push({name: 'ChangeCode'})
       } else if (id === 3) {
+        this.test_router = 3
         this.$router.push({name: 'ChangeName'})
       }
     }

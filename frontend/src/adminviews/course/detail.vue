@@ -9,7 +9,7 @@
           <button
             type="button"
             class="row btn btn-sm my-in-btn"
-            @click="jump(0)"
+            @click="jump(1)"
           >修改课程</button>
         </div>
         <div class="head-btn">
@@ -114,6 +114,7 @@ export default {
         text: '课程详情',
         active: true
       }],
+      test_router: -1,
       error_message: '',
       course: {
         'codename': '',
@@ -151,11 +152,8 @@ export default {
   },
   methods: {
     jump: function (id) {
-      if (id === 0) {
-        this.$router.push({name: 'EditCourse'})
-      } else {
-        this.$router.push({name: ''})
-      }
+      this.test_router = id
+      this.$router.push({name: 'EditCourse'})
     }
   }
 }
