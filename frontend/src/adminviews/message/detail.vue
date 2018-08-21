@@ -15,7 +15,8 @@
           <InputModal
             id="reply"
             title="回复留言"
-            placeholder="请输入你要回复的内容"/>
+            placeholder="请输入你要回复的内容"
+            @click="reply_message"/>
           <button
             v-b-modal.delete
             type="button"
@@ -25,7 +26,8 @@
           <ConfirmModal
             id="delete"
             title="确认删除"
-            text="您确定要删除此条留言吗？"/>
+            text="您确定要删除此条留言吗？"
+            @click="delete_message"/>
         </div>
       </div>
       <b-alert
@@ -36,6 +38,15 @@
         @dismissed="wrong_count_down=0"
         @dismiss_count_down="count_down_changed(wrong_count_down)">
         {{ wrong }}
+      </b-alert>
+      <b-alert
+        :show="success_count_down"
+        class="my-alert"
+        variant="success"
+        dismissible
+        @dismissed="success_count_down=0"
+        @dismiss_count_down="count_down_changed(success_count_down)">
+        {{ success }}
       </b-alert>
       <DetailTable
         :titles="titles"
@@ -50,6 +61,7 @@ import InputModal from '../components/InputModal'
 import Basic from '../basic/basic'
 import DetailTable from '../components/detail_table'
 import axios from 'axios'
+import qs from 'qs'
 export default {
   name: 'MessageDetail',
   components: { DetailTable, Basic, InputModal, ConfirmModal },
@@ -69,7 +81,9 @@ export default {
       message: [],
       dismiss_second: 5,
       wrong_count_down: 0,
-      wrong: ''
+      wrong: '',
+      success_count_down: 0,
+      success: ''
     }
   },
   created () {
@@ -87,6 +101,20 @@ export default {
       })
   },
   methods: {
+    search: function () {
+      const that = this
+      axios.get('http://localhost:8000/api/v1/courses/backstage/comment-management/get-comment-detail/',
+        {params: {
+          comment_id: that.$route.query.message_id
+        }})
+        .then(function (response) {
+          that.message = that.computed_message(response.data)
+        })
+        .catch(function (error) {
+          that.wrong = '获取留言详情失败！' + error
+          that.wrong_count_down = that.dismiss_second
+        })
+    },
     compute_state: function (deleted) {
       if (deleted) {
         return '已删除'
@@ -123,6 +151,48 @@ export default {
       }
       temp[8] = val.content
       return temp
+    },
+    delete_message: function () {
+      const that = this
+      axios.get('http://localhost:8000/api/v1/courses/backstage/comment-management/delete-comment/',
+        {params: {
+          comment_id: that.$route.query.message_id
+        }})
+        .then(function (response) {
+          if (response.data.message === 'Object deleted.') {
+            that.success = '您已经成功删除此留言。'
+            that.success_count_down = that.dismiss_second
+          } else {
+            that.wrong = '你所删除的留言不存在，删除失败！'
+            that.wrong_count_down = that.dismiss_second
+          }
+        })
+        .catch(function (error) {
+          that.wrong = '删除失败！' + error
+          that.wrong_count_down = that.dismiss_second
+        })
+      this.search()
+    },
+    reply_message: function (val) {
+      const that = this
+      axios.post('http://localhost:8000/api/v1/courses/backstage/comment-management/add-comment/',
+        qs.stringify({
+          course_codename: that.message[2],
+          comment_content: val
+        }))
+        .then(function (response) {
+          if (response.data.message === 'Success.') {
+            that.success = '您已经成功回复此留言。'
+            that.success_count_down = that.dismiss_second
+          } else {
+            that.wrong = '您所回复留言的课程不存在，回复失败！'
+            that.wrong_count_down = that.dismiss_second
+          }
+        })
+        .catch(function (error) {
+          that.wrong = '回复失败！' + error
+          that.wrong_count_down = that.dismiss_second
+        })
     }
   }
 }
