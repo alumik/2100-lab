@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from core.utils import get_page
 from core.messages import ERROR
 from customers.models import LearningLog, OrderLog
-from customers.utils import tencent_cloud_message
+# from customers.utils import tencent_cloud_message
 
 
 def get_verification_code(request):
@@ -18,7 +18,7 @@ def get_verification_code(request):
     match = re.search(r'^1\d{10}$', phone_number)
     if match:
         verification_code = str(random.randint(0, 999999)).zfill(6)
-        tencent_cloud_message(phone_number, verification_code)
+        # tencent_cloud_message(phone_number, verification_code)
         request.session['prev_phone_number'] = phone_number
         request.session['verification_code'] = verification_code
         request.session['generate_time'] = round(time.time())
@@ -29,6 +29,7 @@ def get_verification_code(request):
             new_customer = True
         return JsonResponse(
             {
+                # debug only
                 'verification_code': verification_code,
                 'is_new_customer': new_customer
             }

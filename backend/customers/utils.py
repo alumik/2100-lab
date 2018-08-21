@@ -1,8 +1,10 @@
+# pylint: disable=E0401
+
 from qcloudsms_py import SmsSingleSender
 from qcloudsms_py.httpclient import HTTPError
 
 def tencent_cloud_message(phone_number, verification_code):
-    appid = 1400131309  # SDK AppID是1400开头
+    appid = 1400131309
     appkey = "7901df2b3113f98f1a9ad266ca07c9db"
     phone_numbers = phone_number
     template_id = 178579
@@ -13,9 +15,9 @@ def tencent_cloud_message(phone_number, verification_code):
         result = ssender.send_with_param(86, phone_numbers,
                                          template_id, params, sign=sms_sign, extend="",
                                          ext="")
-    except HTTPError as e:
-        print(e)
-    except Exception as e:
-        print(e)
+    except HTTPError as error:
+        print(error)
+    except Exception as error:
+        print(error)
 
     print(result)
