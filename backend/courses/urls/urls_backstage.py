@@ -27,4 +27,9 @@ urlpatterns = [
         views_backstage.add_comment,
         name='add-comment'
     ),
+    path(
+        'comment-management/delete-comment/',
+        views_backstage.delete_comment,
+        name='delete-comment'
+    ),
 ]

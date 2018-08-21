@@ -194,6 +194,8 @@ class CommentOperationTests(TestCase):
         admin_group.permissions.add(permission)
         permission = Permission.objects.get(codename='add_comment')
         admin_group.permissions.add(permission)
+        permission = Permission.objects.get(codename='delete_comment')
+        admin_group.permissions.add(permission)
         admin_group.save()
         admin.groups.add(admin_group)
         admin.save()
@@ -256,3 +258,47 @@ class CommentOperationTests(TestCase):
                 ]
             }
         )
+
+    def test_delete_comment(self):
+        self.client.login(phone_number='13312345678', password='123456')
+        comment = Comment.objects.get(content='1234')
+
+        response = self.client.get(
+            reverse('api:courses:backstage:get-comment-list'),
+            {
+                'username': '',
+                'course_codename': '',
+                'course_title': '',
+                'is_deleted': '1',
+                'page': 1,
+                'page_limit': 1
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        response_json_data = json.loads(response.content)
+        self.assertEqual(response_json_data['count'], 1)
+
+        response = self.client.get(
+            reverse('api:courses:backstage:delete-comment'),
+            {'comment_id': comment.id}
+        )
+        self.assertEqual(response.status_code, 200)
+        response_json_data = json.loads(response.content)
+        self.assertEqual(response_json_data['message'], 'Comment deleted.')
+
+        response = self.client.get(
+            reverse('api:courses:backstage:get-comment-list'),
+            {
+                'username': '',
+                'course_codename': '',
+                'course_title': '',
+                'is_deleted': '1',
+                'page': 1,
+                'page_limit': 1
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        response_json_data = json.loads(response.content)
+        self.assertEqual(response_json_data['count'], 0)
+
+

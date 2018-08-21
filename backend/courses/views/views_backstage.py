@@ -83,3 +83,16 @@ def add_comment(request):
         content=comment_content
     )
     return JsonResponse({'message': 'Success.'})
+
+
+@permission_required('courses.delete_comment')
+def delete_comment(request):
+    comment_id = request.GET.get('comment_id')
+
+    try:
+        comment = Comment.objects.get(id=comment_id)
+    except Course.DoesNotExist:
+        return JsonResponse({'message': 'Comment not found.'}, status=404)
+
+    comment.delete()
+    return JsonResponse({'message': 'Comment deleted.'})
