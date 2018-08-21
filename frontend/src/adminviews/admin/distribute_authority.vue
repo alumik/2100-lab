@@ -92,13 +92,13 @@ export default {
   }
 
   .btn {
+    margin-top: 250px;
     color: white;
     background-color: #8d4e91;
     border-color: #8d6592;
     border-radius: 10px;
     outline: none;
     box-shadow: #8d6592 inset;
-    margin-top: 250px;
   }
 
   .btn:hover,
