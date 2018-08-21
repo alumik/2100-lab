@@ -3,6 +3,7 @@ import re
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
 
 from core.messages import ERROR, INFO
 from admins.utils import get_admin_page
@@ -144,6 +145,9 @@ def delete_admin(request):
 
 @login_required
 def add_admin(request):
+    if not request.user.is_superuser:
+        return JsonResponse({'message': ERROR['access_denied']}, status=403)
+
     phone_number = request.POST.get('phone_number')
     password = request.POST.get('password')
 
@@ -163,3 +167,26 @@ def add_admin(request):
             is_staff=True
         )
     return JsonResponse({'new_admin_id': new_admin.id})
+
+
+@login_required
+def change_admin_groups(request):
+    if not request.user.is_superuser:
+        return JsonResponse({'message': ERROR['access_denied']}, status=403)
+
+    new_admin_groups = request.POST.getlist('new_admin_groups', [])
+    admin_id = request.POST.get('admin_id')
+
+    try:
+        admin = get_user_model().objects.get(id=admin_id, is_staff=True)
+    except get_user_model().DoesNotExist:
+        return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+
+    admin.groups.clear()
+    for admin_group in new_admin_groups:
+        if admin_group != 'super_admin':
+            admin.groups.add(Group.objects.get(name=admin_group))
+    if 'super_admin' in new_admin_groups:
+        admin.is_superuser = True
+    admin.save()
+    return JsonResponse({'message': INFO['success']})

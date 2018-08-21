@@ -3,6 +3,7 @@ import json
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group, Permission
 
 
 class AdminListTests(TestCase):
@@ -247,3 +248,82 @@ class AdminOperationsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         new_admin = get_user_model().objects.get(phone_number='17700000000')
         self.assertEqual(json.loads(response.content)['new_admin_id'], new_admin.id)
+
+
+class AdminGroupsTests(TestCase):
+    def setUp(self):
+        get_user_model().objects.create_user(
+            phone_number='15500000000',
+            password='123456',
+            is_staff=True,
+            is_superuser=True
+        )
+
+        course_admin = Group.objects.create(name='course_admin')
+        comment_admin = Group.objects.create(name='comment_admin')
+        customer_admin = Group.objects.create(name='customer_admin')
+        order_admin = Group.objects.create(name='order_admin')
+        log_admin = Group.objects.create(name='log_admin')
+
+        course_admin.permissions.add(*list(Permission.objects.filter(codename__contains='course')))
+        course_admin.permissions.add(*list(Permission.objects.filter(codename__contains='hero')))
+        course_admin.permissions.add(*list(Permission.objects.filter(codename__contains='image')))
+
+        comment_admin.permissions.add(*list(Permission.objects.filter(codename__contains='comment')))
+
+        customer_admin.permissions.add(*list(Permission.objects.filter(codename__contains='customuser')))
+        customer_admin.permissions.add(*list(Permission.objects.filter(codename__contains='learninglog')))
+
+        order_admin.permissions.add(*list(Permission.objects.filter(codename__contains='orderlog')))
+
+        log_admin.permissions.add(*list(Permission.objects.filter(codename__contains='adminlog')))
+
+        course_admin.save()
+        comment_admin.save()
+        customer_admin.save()
+        order_admin.save()
+        log_admin.save()
+
+    def test_change_permission(self):
+        self.client.login(phone_number='15500000000', password='123456')
+        admin = get_user_model().objects.create_user(
+            phone_number='14400000000',
+            password='123456',
+            is_staff=True
+        )
+        admin.groups.add(Group.objects.get(name='course_admin'))
+        admin.save()
+
+        response = self.client.post(
+            reverse('api:admins:backstage:change-admin-groups'),
+            {
+                'admin_id': admin.id,
+                'new_admin_groups': [
+                    'log_admin',
+                    'customer_admin'
+                ]
+            }
+        )
+        admin = get_user_model().objects.get(phone_number='14400000000')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(Group.objects.get(name='log_admin') in admin.groups.all())
+        self.assertTrue(Group.objects.get(name='customer_admin') in admin.groups.all())
+        self.assertFalse(Group.objects.get(name='course_admin') in admin.groups.all())
+        self.assertFalse(admin.is_superuser)
+
+        response = self.client.post(
+            reverse('api:admins:backstage:change-admin-groups'),
+            {
+                'admin_id': admin.id,
+                'new_admin_groups': [
+                    'course_admin',
+                    'super_admin'
+                ]
+            }
+        )
+        admin = get_user_model().objects.get(phone_number='14400000000')
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(Group.objects.get(name='log_admin') in admin.groups.all())
+        self.assertFalse(Group.objects.get(name='customer_admin') in admin.groups.all())
+        self.assertTrue(Group.objects.get(name='course_admin') in admin.groups.all())
+        self.assertTrue(admin.is_superuser)

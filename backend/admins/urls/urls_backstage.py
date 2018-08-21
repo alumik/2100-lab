@@ -42,4 +42,9 @@ urlpatterns = [
         views_backstage.add_admin,
         name='add-admin'
     ),
+    path(
+        'admin-management/change-admin-groups/',
+        views_backstage.change_admin_groups,
+        name='change-admin-groups'
+    )
 ]
