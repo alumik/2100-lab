@@ -12,7 +12,7 @@
         <table class="table table-striped table-hover">
           <thead>
             <tr>
-              <th scope="col">管理员ID</th>
+              <th scope="col">管理员名称</th>
               <th scope="col">管理员手机号</th>
               <th scope="col">操作</th>
             </tr>
