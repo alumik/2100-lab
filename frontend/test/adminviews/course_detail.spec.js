@@ -26,15 +26,15 @@ describe('课程详情模块单元测验', () => {
     expect(wrapper.contains('#delete')).toBe(true)
   })
 
-  const wrapper_2 = shallowMount(BackendCourseDetail, {
+  const wrappers = shallowMount(BackendCourseDetail, {
     mocks: {
       $route
     }
   })
 
   it('修改课程跳转测试', () => {
-    expect(wrapper_2.vm.test_router).toEqual(-1)
-    wrapper_2.findAll('[type=button]').at(0).trigger('click')
-    expect(wrapper_2.vm.test_router).toEqual(1)
+    expect(wrappers.vm.test_router).toEqual(-1)
+    wrappers.findAll('[type=button]').at(0).trigger('click')
+    expect(wrappers.vm.test_router).toEqual(1)
   })
 })
