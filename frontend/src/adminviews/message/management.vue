@@ -249,7 +249,6 @@ export default {
           comment_id: that.delete_id
         }})
         .then(function (response) {
-          console.log(response.data.messages)
           if (response.data.message === 'Comment deleted.') {
             that.success = '您已经成功删除此留言。'
             that.success_count_down = that.dismiss_second
