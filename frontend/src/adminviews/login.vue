@@ -52,6 +52,8 @@
 <script>
 import axios from 'axios'
 import qs from 'qs'
+axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN'
+axios.defaults.xsrfCookieName = 'csrftoken'
 export default {
   name: 'AdminLogin',
   data: function () {
@@ -86,15 +88,12 @@ export default {
         ).catch(
           error => {
             let errorMessage = error.response.data.message
-            switch (errorMessage) {
-              case 'User is already authenticated.':
-                this.error_message = '用户已登录'
-                break
-              case 'Wrong phone number or password.':
-                this.error_message = '用户输入密码错误，请重新输入'
-                break
-              case 'Permission denied.':
-                this.error_message = '该用户不是管理员'
+            if (errorMessage === 'User is already authenticated.') {
+              this.error_message = '用户已登录'
+            } else if (errorMessage === 'Wrong phone number or password.') {
+              this.error_message = '用户输入密码错误，请重新输入'
+            } else if (errorMessage === 'Permission denied.') {
+              this.error_message = '该用户不是管理员'
             }
           }
         )
