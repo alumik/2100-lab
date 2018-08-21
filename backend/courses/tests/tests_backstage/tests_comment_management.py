@@ -184,6 +184,31 @@ class CommentListTests(TestCase):
             }
         )
 
+    def test_comment_detail(self):
+        self.client.login(phone_number='13312345678', password='123456')
+        comment = Comment.all_objects.get(content='1234')
+
+        response = self.client.get(
+            reverse('api:courses:backstage:get-comment-detail'),
+            {'comment_id': comment.id}
+        )
+        self.assertEqual(response.status_code, 200)
+        response_json_data = json.loads(response.content)
+        self.assertJSONEqual(
+            str(response.content, encoding='utf8'),
+            {
+                'comment_id': comment.id,
+                'username': comment.user.username,
+                'course_codename': comment.course.codename,
+                'course_title': comment.course.title,
+                'is_deleted': True if comment.deleted_at is not None else False,
+                'deleted_at': response_json_data['deleted_at'],
+                'up_votes': comment.up_votes.count(),
+                'down_votes': comment.down_votes.count(),
+                'content': comment.content
+            }
+        )
+
 
 class CommentOperationTests(TestCase):
     def setUp(self):
