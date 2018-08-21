@@ -2,6 +2,14 @@
   <Basic
     id="studypage"
     class="width-style">
+    <b-alert
+      :show="test"
+      variant="danger"
+      dismissible
+      fade
+      @dismissed="showDismissibleAlert=false">
+      {{ error_msg }}
+    </b-alert>
     <div
       id="content"
       class="width-style">
@@ -83,6 +91,8 @@ export default {
   },
   data () {
     return {
+      test: false,
+      error_msg: '',
       course_id: 1,
       now_picture: '',
       now_index: 0,
@@ -131,15 +141,17 @@ export default {
     }
   },
   created: function () {
+    let that = this
     if (typeof (this.$route.query.course_id) === 'undefined') {
       this.$router.push({name: 'BurnedCourse'})
     } else {
-      this.course_id = this.$route.query.course_id
+      that.course_id = this.$route.query.course_id
     }
     axios.get('http://localhost:8000/api/v1/courses/forestage/play/get-course-assets?course_id=1')
       .then(function (response) {
       }).catch(function (error) {
-        alert(error)
+        that.test = true
+        this.error_msg = error
       })
   },
   mounted () {

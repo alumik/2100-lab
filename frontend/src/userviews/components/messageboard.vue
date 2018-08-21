@@ -2,6 +2,14 @@
   <div
     id="message-board">
     <div>
+      <b-alert
+        :show="test"
+        variant="danger"
+        dismissible
+        fade
+        @dismissed="showDismissibleAlert=false">
+        {{ error_msg }}
+      </b-alert>
       <div class="form-style">
         <div
           v-for="msg in message_list"
@@ -60,7 +68,9 @@ export default {
     return {
       username: '谢逊',
       newMsg: '',
-      message_list: []
+      message_list: [],
+      test: false,
+      error_msg: ''
     }
   },
   created: function () {
@@ -69,7 +79,8 @@ export default {
       .then(function (response) {
         that.message_list = response.data.content
       }).catch(function (error) {
-        alert(error)
+        that.test = true
+        this.error_msg = error
       })
   },
   methods: {
@@ -85,7 +96,8 @@ export default {
         .then(function (response) {
           // console.log(response)
         }).catch(function (error) {
-          alert(error)
+          this.test = true
+          this.error_msg = error
         })
     },
     up_vote: function () {
@@ -93,7 +105,8 @@ export default {
         .then(function (response) {
           // console.log(response)
         }).catch(function (error) {
-          alert(error)
+          this.test = true
+          error.msg = error
         })
     },
     down_vote: function () {
@@ -101,7 +114,8 @@ export default {
         .then(function (response) {
           // console.log(response)
         }).catch(function (error) {
-          alert(error)
+          this.test = true
+          this.error_msg = error
         })
     }
   }
