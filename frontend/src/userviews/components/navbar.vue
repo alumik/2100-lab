@@ -84,9 +84,10 @@ export default {
           // console.log(res.data.message)
           that.$store.commit('logout')
           that.$router.push({path: '/'})
-        }).catch(error => {
-          // console.log(error.message)
         })
+        //   .catch(error => {
+        //   console.log(error.message)
+        // })
       } else {
         this.$router.push({path: '/login'})
       }
