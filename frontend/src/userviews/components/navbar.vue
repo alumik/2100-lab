@@ -25,7 +25,7 @@
           href="/personal">
           <img
             id="userimg"
-            src="../../assets/logo.png">用户一
+            src="../../assets/logo.png">{{ user ? user.name : '' }}
         </b-nav-item>
         <b-nav-item
           id="logout"
@@ -38,8 +38,26 @@
 </template>
 
 <script>
+import axios from 'axios'
+// import qs from 'qs'
+
 export default {
-  name: 'UserNavbar'
+  name: 'UserNavbar',
+  props: {
+    user: {
+      type: Object,
+      default: () => {
+        return {
+          name: '默认用户'
+        }
+      }
+    }
+  },
+  created () {
+    // let that = this
+    axios.get('http://localhost:8000/api/v1/core/auth/is-authenticated/').then((res) => {
+    })
+  }
 }
 </script>
 
