@@ -181,10 +181,12 @@ export default {
         qs.stringify({
           phone_number: this.phone.toString()
         }), {withCredentials: true}).then((response) => {
-        this.status = '再次发送 '
-        let that = this
+        // console.log(response.data.verification_code)
+        alert(response.data.verification_code)
+        that.$store.commit('new_customer', response.data.is_customer)
+        that.status = '再次发送 '
         that.seconds = that.seconds - 1
-        this.disabled = true
+        that.disabled = true
         let t = setInterval(function () {
           that.seconds = that.seconds - 1
           if (that.seconds === -1) {
@@ -212,9 +214,11 @@ export default {
           phone_number: this.phone.toString(),
           verification_code: this.code.toString()
         }), {withCredentials: true}).then((response) => {
+        // console.log('新用户：' + response.data.is_new_customer)
         // if (response.data.is_new_customer) {
         //   this.modalShow = !this.modalShow
         // } else {
+        this.$store.commit('user', response.data)
         this.$router.push({path: '/personal'})
         // }
       }).catch(error => {

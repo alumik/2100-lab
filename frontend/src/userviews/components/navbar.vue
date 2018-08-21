@@ -11,7 +11,8 @@
       <span class="navbar-toggler-icon"/>
     </button>
     <b-navbar-brand
-      class="logo">
+      class="logo"
+      @click="home">
       <img
         id="logoimg"
         src="../../assets/2100logo.png">
@@ -22,15 +23,15 @@
       is-nav>
       <b-navbar-nav class="ml-auto">
         <b-nav-item
-          href="/personal">
+          @click="personal">
           <img
             id="userimg"
-            src="../../assets/logo.png">{{ user ? user.name : '' }}
+            src="../../assets/logo.png">{{ $store.state.status ? $store.state.user.username : '' }}
         </b-nav-item>
         <b-nav-item
           id="logout"
-          href="/login">
-          注销
+          @click="log">
+          {{ $store.state.status ? '注销' : '登录' }}
         </b-nav-item>
       </b-navbar-nav>
     </b-collapse>
@@ -43,20 +44,54 @@ import axios from 'axios'
 
 export default {
   name: 'UserNavbar',
-  props: {
-    user: {
-      type: Object,
-      default: () => {
-        return {
-          name: '默认用户'
-        }
-      }
+  data () {
+    return {
+      status: false
     }
   },
-  created () {
-    // let that = this
-    axios.get('http://localhost:8000/api/v1/core/auth/is-authenticated/').then((res) => {
+  // created () {
+  //   // let that = this
+  //   axios.get('http://localhost:8000/api/v1/core/auth/is-authenticated/').then((res) => {
+  //     console.log('登录状态：' + res.data.is_authenticated)
+  //     console.log(this.$store.state.user)
+  //   })
+  // },
+  mounted () {
+    let that = this
+    axios.post('http://localhost:8000/api/v1/core/auth/is-authenticated/').then((res) => {
+      // console.log('登录状态：' + res.data.is_authenticated)
+      if (res.data.is_authenticated) {
+        that.$store.state.status = true
+        // console.log(that.$store.state)
+      }
     })
+  },
+  methods: {
+    home () {
+      this.$router.push({path: '/'})
+    },
+    personal () {
+      axios.post('http://localhost:8000/api/v1/core/auth/is-authenticated/').then((res) => {
+        if (res.data.is_authenticated) {
+          this.$router.push({path: '/personal'})
+        }
+      })
+    },
+    log () {
+      let that = this
+      if (that.$store.state.status) {
+        axios.post('http://localhost:8000/api/v1/core/auth/logout/').then(res => {
+          // console.log(res.data.message)
+          that.$store.commit('logout')
+          that.$router.push({path: '/'})
+        })
+        //   .catch(error => {
+        //   console.log(error.message)
+        // })
+      } else {
+        this.$router.push({path: '/login'})
+      }
+    }
   }
 }
 </script>
