@@ -5,22 +5,26 @@
     <div>
       <h1>留言列表</h1>
       <div class="table-div">
-        <b-alert
-          :show="wrong_count_down"
-          variant="danger"
-          dismissible
-          @dismissed="wrong_count_down=0"
-          @dismiss_count_down="count_down_changed(wrong_count_down)">
-          {{ wrong }}
-        </b-alert>
-        <b-alert
-          :show="success_count_down"
-          variant="success"
-          dismissible
-          @dismissed="success_count_down=0"
-          @dismiss_count_down="count_down_changed(success_count_down)">
-          {{ success }}
-        </b-alert>
+        <div class="alert-div">
+          <b-alert
+            :show="wrong_count_down"
+            class="my-alert"
+            variant="danger"
+            dismissible
+            @dismissed="wrong_count_down=0"
+            @dismiss_count_down="count_down_changed(wrong_count_down)">
+            {{ wrong }}
+          </b-alert>
+          <b-alert
+            :show="success_count_down"
+            class="my-alert"
+            variant="success"
+            dismissible
+            @dismissed="success_count_down=0"
+            @dismiss_count_down="count_down_changed(success_count_down)">
+            {{ success }}
+          </b-alert>
+        </div>
         <table class="table table-striped">
           <thead>
             <tr>
@@ -33,7 +37,7 @@
           </thead>
           <tbody>
             <tr align="center">
-              <td/>
+              <td class="s-td"/>
               <td class="xs-td">
                 <div class="input-group-sm">
                   <input
@@ -312,6 +316,8 @@ export default {
 
   .buttons {
     display: flex;
+    padding-top: 20px;
+    padding-bottom: 20px;
     padding-left: 30px;
   }
 
@@ -382,5 +388,15 @@ export default {
 
   .lg-td {
     width: 350px;
+  }
+
+  .alert-div {
+    padding-right: 350px;
+    padding-left: 350px;
+  }
+
+  .my-alert {
+    min-width: 400px;
+    max-width: 1000px;
   }
 </style>
