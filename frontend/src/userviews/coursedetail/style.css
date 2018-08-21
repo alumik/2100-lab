@@ -1,0 +1,83 @@
+.profile-style {
+  height: 300px;
+  margin: 50px 10px;
+  text-align: left;
+  opacity: 0.9;
+}
+
+#course-introduction .profile-style {
+  height: 250px;
+}
+
+.content-style {
+  margin: 40px 60px;
+  text-align: center;
+}
+
+.share-margin {
+  margin-right: 5px;
+}
+
+.modal-style {
+  text-align: right;
+}
+
+.my-btn {
+  font-size: 16px;
+}
+
+.course-img-style {
+  width: 45%;
+  height: 100%;
+  margin-right: 10px;
+}
+
+.button-row {
+  height: 50%;
+  vertical-align: bottom;
+}
+
+.introduction-style {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  height: 100%;
+  margin-left: 20px;
+  vertical-align: bottom;
+}
+
+.origin-value {
+  text-decoration: line-through;
+}
+
+.reminder {
+  width: 15px;
+  height: 15px;
+  margin-top: 5px;
+  font-size: 10px;
+}
+
+.reminder-style {
+  height: 50%;
+}
+
+.qrcode-margin-style {
+  margin-left: 20px;
+}
+
+.alipay-title {
+  margin-left: 100px;
+}
+
+.wxpay-title {
+  margin-left: 180px;
+}
+
+.qrcode-style {
+  margin-left: 20px;
+}
+
+.modal-input {
+  width: 100%;
+  border: none;
+}
