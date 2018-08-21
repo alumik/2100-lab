@@ -33,6 +33,11 @@ urlpatterns = [
         name='change-username'
     ),
     path(
+        'personal-center/delete-customer/',
+        views_forestage.delete_customer,
+        name='delete-customer'
+    ),
+    path(
         'auth/get-eula/',
         views_forestage.get_eula,
         name='get-eula'

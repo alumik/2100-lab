@@ -58,9 +58,9 @@ class AdminAuthTests(TestCase):
         self.assertJSONEqual(
             str(response.content, encoding='utf8'),
             {
-                'permissions': [],
                 'admin_id': admin.id,
-                'username': admin.username
+                'username': admin.username,
+                'roles': []
             }
         )
 
@@ -74,5 +74,5 @@ class AdminAuthTests(TestCase):
                 'password': 'nkcs1612'
             }
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(json.loads(response.content)['message'], 'Access denied.')

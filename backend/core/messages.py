@@ -11,7 +11,9 @@ ERROR = {
     'invalid_phone_number': 'Not a valid phone number.',
     'invalid_username': 'Invalid username.',
     'invalid_verification_code': 'Wrong verification code.',
+    'invalid_password': 'Invalid password.',
     'username_already_taken': 'This username is already taken.',
     'user_is_already_authenticated': 'User is already authenticated.',
     'invalid_phone_number_or_password': 'Invalid phone number or password.',
+    'admin_already_registered': 'Admin is already registered.',
 }
