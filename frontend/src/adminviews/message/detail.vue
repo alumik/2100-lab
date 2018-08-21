@@ -30,24 +30,26 @@
             @click="delete_message"/>
         </div>
       </div>
-      <b-alert
-        :show="wrong_count_down"
-        class="my-alert"
-        variant="danger"
-        dismissible
-        @dismissed="wrong_count_down=0"
-        @dismiss_count_down="count_down_changed(wrong_count_down)">
-        {{ wrong }}
-      </b-alert>
-      <b-alert
-        :show="success_count_down"
-        class="my-alert"
-        variant="success"
-        dismissible
-        @dismissed="success_count_down=0"
-        @dismiss_count_down="count_down_changed(success_count_down)">
-        {{ success }}
-      </b-alert>
+      <div class="alert-div">
+        <b-alert
+          :show="wrong_count_down"
+          class="my-alert"
+          variant="danger"
+          dismissible
+          @dismissed="wrong_count_down=0"
+          @dismiss_count_down="count_down_changed(wrong_count_down)">
+          {{ wrong }}
+        </b-alert>
+        <b-alert
+          :show="success_count_down"
+          class="my-alert"
+          variant="success"
+          dismissible
+          @dismissed="success_count_down=0"
+          @dismiss_count_down="count_down_changed(success_count_down)">
+          {{ success }}
+        </b-alert>
+      </div>
       <DetailTable
         :titles="titles"
         :data="message"/>
@@ -242,8 +244,13 @@ export default {
     background-color: #5e0057;
   }
 
+  .alert-div {
+    padding-right: 350px;
+    padding-left: 350px;
+  }
+
   .my-alert {
-    padding-right: 15px;
-    padding-left: 15px;
+    min-width: 400px;
+    max-width: 1000px;
   }
 </style>
