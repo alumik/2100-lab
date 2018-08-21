@@ -68,6 +68,30 @@ def get_comment_list(request):
     return JsonResponse(page, safe=False)
 
 
+@permission_required('courses.view_comment')
+def get_comment_detail(request):
+    comment_id = request.GET.get('comment_id')
+
+    try:
+        comment = Comment.all_objects.get(id=comment_id)
+    except Comment.DoesNotExist:
+        return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+
+    return JsonResponse(
+        {
+            'comment_id': comment.id,
+            'username': comment.user.username,
+            'course_codename': comment.course.codename,
+            'course_title': comment.course.title,
+            'is_deleted': True if comment.deleted_at is not None else False,
+            'deleted_at': comment.deleted_at,
+            'up_votes': comment.up_votes.count(),
+            'down_votes': comment.down_votes.count(),
+            'content': comment.content
+        }
+    )
+
+
 @permission_required('courses.add_comment')
 def add_comment(request):
     comment_content = request.POST.get('comment_content')
