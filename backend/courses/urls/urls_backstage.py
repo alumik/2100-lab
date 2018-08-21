@@ -21,5 +21,10 @@ urlpatterns = [
         'comment-management/get-comment-list/',
         views_backstage.get_comment_list,
         name='get-comment-list'
-    )
+    ),
+    path(
+        'comment-management/add-comment/',
+        views_backstage.add_comment,
+        name='add-comment'
+    ),
 ]
