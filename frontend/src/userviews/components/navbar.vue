@@ -59,10 +59,10 @@ export default {
   mounted () {
     let that = this
     axios.post('http://localhost:8000/api/v1/core/auth/is-authenticated/').then((res) => {
-      console.log('登录状态：' + res.data.is_authenticated)
+      // console.log('登录状态：' + res.data.is_authenticated)
       if (res.data.is_authenticated) {
         that.$store.state.status = true
-        console.log(that.$store.state)
+        // console.log(that.$store.state)
       }
     })
   },
@@ -81,11 +81,11 @@ export default {
       let that = this
       if (that.$store.state.status) {
         axios.post('http://localhost:8000/api/v1/core/auth/logout/').then(res => {
-          console.log(res.data.message)
+          // console.log(res.data.message)
           that.$store.commit('logout')
           that.$router.push({path: '/'})
         }).catch(error => {
-          console.log(error.message)
+          // console.log(error.message)
         })
       } else {
         this.$router.push({path: '/login'})
