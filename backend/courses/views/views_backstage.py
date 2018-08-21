@@ -65,3 +65,34 @@ def get_comment_list(request):
     page['course_title'] = course_title
     page['is_deleted'] = is_deleted
     return JsonResponse(page, safe=False)
+
+
+@permission_required('courses.add_comment')
+def add_comment(request):
+    comment_content = request.POST.get('comment_content')
+    course_codename = request.POST.get('course_codename')
+
+    try:
+        course = Course.objects.get(codename=course_codename)
+    except Course.DoesNotExist:
+        return JsonResponse({'message': 'Course not found.'}, status=404)
+
+    Comment.objects.create(
+        user=request.user,
+        course=course,
+        content=comment_content
+    )
+    return JsonResponse({'message': 'Success.'})
+
+
+@permission_required('courses.delete_comment')
+def delete_comment(request):
+    comment_id = request.GET.get('comment_id')
+
+    try:
+        comment = Comment.objects.get(id=comment_id)
+    except Course.DoesNotExist:
+        return JsonResponse({'message': 'Comment not found.'}, status=404)
+
+    comment.delete()
+    return JsonResponse({'message': 'Comment deleted.'})

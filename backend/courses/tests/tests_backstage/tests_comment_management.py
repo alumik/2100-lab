@@ -183,3 +183,122 @@ class CommentListTests(TestCase):
                 ]
             }
         )
+
+
+class CommentOperationTests(TestCase):
+    def setUp(self):
+        user = get_user_model().objects.create_user(phone_number='14412345678', password='123456')
+        admin = get_user_model().objects.create_user(phone_number='13312345678', password='123456')
+        admin_group = Group.objects.create(name='comment_admin')
+        permission = Permission.objects.get(codename='view_comment')
+        admin_group.permissions.add(permission)
+        permission = Permission.objects.get(codename='add_comment')
+        admin_group.permissions.add(permission)
+        permission = Permission.objects.get(codename='delete_comment')
+        admin_group.permissions.add(permission)
+        admin_group.save()
+        admin.groups.add(admin_group)
+        admin.save()
+        course = Course.objects.create(
+            title='t1',
+            description='d1',
+            codename='SOFT1'
+        )
+        Comment.objects.create(
+            user=user,
+            course=course,
+            content='1234'
+        )
+
+    def test_add_comment(self):
+        self.client.login(phone_number='13312345678', password='123456')
+
+        response = self.client.post(
+            reverse('api:courses:backstage:add-comment'),
+            {
+                'course_codename': 'SOFT1',
+                'comment_content': '12345678'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(
+            reverse('api:courses:backstage:get-comment-list'),
+            {
+                'username': '',
+                'course_codename': '',
+                'course_title': '',
+                'is_deleted': '0',
+                'page': 1,
+                'page_limit': 1
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        response_json_data = json.loads(response.content)
+        self.assertJSONEqual(
+            str(response.content, encoding='utf8'),
+            {
+                'username': '',
+                'course_codename': '',
+                'course_title': '',
+                'is_deleted': '0',
+                'count': 2,
+                'page': 1,
+                'num_pages': 2,
+                'content': [
+                    {
+                        'comment_id': response_json_data['content'][0]['comment_id'],
+                        'created_at': response_json_data['content'][0]['created_at'],
+                        'username': '13312345678',
+                        'course_codename': 'SOFT1',
+                        'course_title': 't1',
+                        'content': '12345678',
+                        'is_deleted': False
+                    }
+                ]
+            }
+        )
+
+    def test_delete_comment(self):
+        self.client.login(phone_number='13312345678', password='123456')
+        comment = Comment.objects.get(content='1234')
+
+        response = self.client.get(
+            reverse('api:courses:backstage:get-comment-list'),
+            {
+                'username': '',
+                'course_codename': '',
+                'course_title': '',
+                'is_deleted': '1',
+                'page': 1,
+                'page_limit': 1
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        response_json_data = json.loads(response.content)
+        self.assertEqual(response_json_data['count'], 1)
+
+        response = self.client.get(
+            reverse('api:courses:backstage:delete-comment'),
+            {'comment_id': comment.id}
+        )
+        self.assertEqual(response.status_code, 200)
+        response_json_data = json.loads(response.content)
+        self.assertEqual(response_json_data['message'], 'Comment deleted.')
+
+        response = self.client.get(
+            reverse('api:courses:backstage:get-comment-list'),
+            {
+                'username': '',
+                'course_codename': '',
+                'course_title': '',
+                'is_deleted': '1',
+                'page': 1,
+                'page_limit': 1
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        response_json_data = json.loads(response.content)
+        self.assertEqual(response_json_data['count'], 0)
+
+
