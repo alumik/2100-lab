@@ -1,5 +1,3 @@
-# pylint: disable=E0401
-
 from qcloudsms_py import SmsSingleSender
 from qcloudsms_py.httpclient import HTTPError
 
