@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import permission_required
 from django.http import JsonResponse
 
 from core.utils import get_backstage_page
+from core.messages import ERROR, INFO
 from courses.models import Course, Comment
 
 
@@ -24,7 +25,7 @@ def get_course_detail(request):
     try:
         course = Course.objects.get(id=course_id)
     except Course.DoesNotExist:
-        return JsonResponse({'message': 'Course not found.'}, status=404)
+        return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
     return JsonResponse(
         {
@@ -75,14 +76,14 @@ def add_comment(request):
     try:
         course = Course.objects.get(codename=course_codename)
     except Course.DoesNotExist:
-        return JsonResponse({'message': 'Course not found.'}, status=404)
+        return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
     Comment.objects.create(
         user=request.user,
         course=course,
         content=comment_content
     )
-    return JsonResponse({'message': 'Success.'})
+    return JsonResponse({'message': INFO['success']})
 
 
 @permission_required('courses.delete_comment')
@@ -92,7 +93,7 @@ def delete_comment(request):
     try:
         comment = Comment.objects.get(id=comment_id)
     except Course.DoesNotExist:
-        return JsonResponse({'message': 'Comment not found.'}, status=404)
+        return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
     comment.delete()
-    return JsonResponse({'message': 'Comment deleted.'})
+    return JsonResponse({'message': INFO['object_deleted']})

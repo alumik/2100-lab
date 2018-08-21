@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
 from core.utils import get_page
+from core.messages import ERROR
 from customers.models import LearningLog, OrderLog
 
 
@@ -30,7 +31,7 @@ def get_verification_code(request):
                 'is_new_customer': new_customer
             }
         )
-    return JsonResponse({'message': 'Not a valid phone number.'}, status=400)
+    return JsonResponse({'message': ERROR['invalid_phone_number']}, status=400)
 
 
 def get_generate_time(request):
@@ -45,10 +46,10 @@ def authenticate_customer(request):
     verification_code = request.POST.get('verification_code')
 
     if phone_number != request.session['prev_phone_number']:
-        return JsonResponse({'message': 'Different phone number.'}, status=401)
+        return JsonResponse({'message': ERROR['different_phone_number']}, status=401)
 
     if verification_code != request.session['verification_code']:
-        return JsonResponse({'message': 'Wrong verification code.'}, status=401)
+        return JsonResponse({'message': ERROR['invalid_verification_code']}, status=401)
 
     try:
         user = get_user_model().objects.get(phone_number=phone_number)
@@ -79,10 +80,10 @@ def change_username(request):
     username = request.POST.get('username')
     try:
         get_user_model().objects.get(username=username)
-        return JsonResponse({'message': 'This username is already taken.'}, status=403)
+        return JsonResponse({'message': ERROR['username_already_taken']}, status=403)
     except get_user_model().DoesNotExist:
         if re.match(r'^.*_deleted_.*$', username):
-            return JsonResponse({'message': 'Invalid username.'}, status=403)
+            return JsonResponse({'message': ERROR['invalid_username']}, status=403)
         user.username = username
         user.save()
         return JsonResponse({'new_username': username})

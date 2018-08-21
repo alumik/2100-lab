@@ -26,7 +26,7 @@ class CoreModuleTests(TestCase):
 
         response = self.client.delete(reverse('api:core:delete-user'))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content)['message'], 'User deleted.')
+        self.assertEqual(json.loads(response.content)['message'], 'Object deleted.')
 
         response = self.client.post(
             reverse('api:customers:forestage:get-verification-code'),
@@ -49,7 +49,7 @@ class CoreModuleTests(TestCase):
 
         response = self.client.delete(reverse('api:core:delete-user'))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content)['message'], 'User deleted.')
+        self.assertEqual(json.loads(response.content)['message'], 'Object deleted.')
 
         response = self.client.post(
             reverse('api:customers:forestage:get-verification-code'),

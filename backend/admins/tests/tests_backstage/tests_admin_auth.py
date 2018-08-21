@@ -26,7 +26,7 @@ class AdminAuthTests(TestCase):
             }
         )
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(json.loads(response.content)['message'], 'Wrong phone number or password.')
+        self.assertEqual(json.loads(response.content)['message'], 'Invalid phone number or password.')
 
     def test_admin_login_already_logged_in(self):
         self.client.login(phone_number='13312345678', password='nkcs1612')
@@ -75,4 +75,4 @@ class AdminAuthTests(TestCase):
             }
         )
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(json.loads(response.content)['message'], 'Permission denied.')
+        self.assertEqual(json.loads(response.content)['message'], 'Access denied.')
