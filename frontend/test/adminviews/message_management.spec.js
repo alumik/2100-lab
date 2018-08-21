@@ -6,11 +6,15 @@ import Basic from '@/adminviews/basic/basic'
 import Pagination from '@/components/pagination'
 import BootstrapVue from 'bootstrap-vue'
 import Vue from 'vue'
+import VueI18n from 'vue-i18n'
+Vue.use(VueI18n)
+
+const i18n = new VueI18n({})
 
 Vue.use(BootstrapVue)
 
 describe('留言管理页面单元测试', () => {
-  const wrapper = shallowMount(MessageManagement)
+  const wrapper = shallowMount(MessageManagement, {i18n})
 
   it('留言管理组件存在', () => {
     expect(wrapper.exists()).toBe(true)
@@ -54,9 +58,9 @@ describe('留言管理页面单元测试', () => {
     input2.setValue('计算机')
     expect(wrapper.vm.course_name).toBe('计算机')
   })
-  //
+
   // it('测试是否进入留言详情页面', () => {
-  //   const button = wrapper.find('button')
+  //   const button = wrapper.findAll(".btn").at(0)
   //   expect(wrapper.vm.page_jump).toBe(false)
   //   button.trigger('click')
   //   expect(wrapper.vm.page_jump).toBe(true)

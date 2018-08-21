@@ -12,12 +12,14 @@ import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css'
 import VCharts from 'v-charts'
 import axios from 'axios'
 import Vuex from 'vuex'
+import VueI18n from 'vue-i18n'
 
 Vue.component(VueQrcode.name, VueQrcode)
 Vue.use(BootstrapVue)
 Vue.use(datePicker)
 Vue.use(VCharts)
 Vue.use(Vuex)
+Vue.use(VueI18n)
 Vue.config.productionTip = false
 Vue.prototype.$http = axios
 axios.defaults.withCredentials = true
@@ -49,12 +51,22 @@ const store = new Vuex.Store({
     }
   }
 })
+
+const i18n = new VueI18n({
+  locale: 'zh',
+  messages: {
+    'zh': require('./lang/zh/zh'),
+    'en': require('./lang/en/en')
+  }
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   axios,
   store,
+  i18n,
   components: { App },
   template: '<App/>'
-})
+}).$mount('#app')

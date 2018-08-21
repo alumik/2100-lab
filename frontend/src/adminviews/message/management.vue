@@ -3,7 +3,7 @@
     :items="items"
     class="my-basic">
     <div>
-      <h1>留言列表</h1>
+      <h1>{{ $t("message.title") }}</h1>
       <div class="table-div">
         <div class="alert-div">
           <b-alert
@@ -75,9 +75,9 @@
                     v-model="state"
                     class="selectpicker"
                     @change="search">
-                    <option value="whole">全部</option>
-                    <option value="reserved">未删除</option>
-                    <option value="deleted">已删除</option>
+                    <option value="whole">{{ $t('message.state1') }}</option>
+                    <option value="reserved">{{ $t('message.state2') }}</option>
+                    <option value="deleted">{{ $t('message.state3') }}</option>
                   </select>
                 </div>
               </td>
@@ -97,21 +97,21 @@
                   type="button"
                   class="btn btn-xs"
                   @click="to_detail(message.comment_id + '')">
-                  详情
+                  {{ $t('message.detail') }}
                 </button>
                 <button
                   v-b-modal.reply
                   type="button"
                   class="btn"
                   @click="reply_id=message.course_codename">
-                  回复
+                  {{ $t('message.reply') }}
                 </button>
                 <button
                   v-b-modal.delete
                   type="button"
                   class="btn"
                   @click="delete_id=message.comment_id">
-                  删除
+                  {{ $t('message.delete') }}
                 </button>
               </td>
             </tr>
@@ -150,22 +150,22 @@ export default {
   data () {
     return {
       items: [{
-        text: '主页',
+        text: this.$t('message.breadcrumb1'),
         href: '/admin/main'
       }, {
-        text: '留言管理',
+        text: this.$t('message.breadcrumb2'),
         active: true
       }],
       rows: 0,
       messages: null,
       titles: [
-        { label: '日期' },
-        { label: '用户' },
-        { label: '课程代码' },
-        { label: '课程名' },
-        { label: '留言' },
-        { label: '状态' },
-        { label: '操作' }
+        { label: this.$t('message.header1') },
+        { label: this.$t('message.header2') },
+        { label: this.$t('message.header3') },
+        { label: this.$t('message.header4') },
+        { label: this.$t('message.header5') },
+        { label: this.$t('message.header6') },
+        { label: this.$t('message.header7') }
       ],
       user: '',
       course_code: '',
@@ -209,9 +209,9 @@ export default {
     },
     compute_state: function (deleted) {
       if (deleted) {
-        return '已删除'
+        return this.$t('message.state3')
       } else {
-        return '未删除'
+        return this.$t('message.state2')
       }
     },
     search: function () {
