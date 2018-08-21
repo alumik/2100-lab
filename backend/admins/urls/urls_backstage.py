@@ -17,4 +17,9 @@ urlpatterns = [
         views_backstage.get_admin_list,
         name='get-admin-list'
     ),
+    path(
+        'admin-management/get-admin-detail/',
+        views_backstage.get_admin_detail,
+        name='get-admin-detail'
+    ),
 ]

@@ -52,3 +52,28 @@ def get_admin_list(request):
     page['username'] = username
     page['phone_number'] = phone_number
     return JsonResponse(page, safe=False)
+
+
+@login_required
+def get_admin_detail(request):
+    admin_id = request.GET.get('admin_id')
+
+    try:
+        admin = get_user_model().objects.get(id=admin_id, is_staff=True)
+    except get_user_model().DoesNotExist:
+        return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+
+    json_data = {
+        'admin_id': admin.id,
+        'username': admin.username,
+        'phone_number': admin.phone_number,
+        'date_joined': admin.date_joined,
+        'updated_at': admin.updated_at,
+        'roles': []
+    }
+    for group in admin.groups.all():
+        json_data['roles'].append(group.name)
+    if admin.is_superuser:
+        json_data['roles'].append('super_admin')
+
+    return JsonResponse(json_data)
