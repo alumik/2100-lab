@@ -94,7 +94,7 @@ class AdminDetailTests(TestCase):
                 'phone_number': admin.phone_number,
                 'date_joined': response_json_data['date_joined'],
                 'updated_at': response_json_data['updated_at'],
-                'roles': [
+                'admin_groups': [
                     'super_admin'
                 ]
             }

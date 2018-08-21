@@ -28,12 +28,12 @@ def authenticate_admin(request):
     json_data = {
         'admin_id': admin.id,
         'username': admin.username,
-        'roles': []
+        'admin_groups': []
     }
     for group in admin.groups.all():
-        json_data['roles'].append(group.name)
+        json_data['admin_groups'].append(group.name)
     if admin.is_superuser:
-        json_data['roles'].append('super_admin')
+        json_data['admin_groups'].append('super_admin')
 
     return JsonResponse(json_data)
 
@@ -75,12 +75,12 @@ def get_admin_detail(request):
         'phone_number': admin.phone_number,
         'date_joined': admin.date_joined,
         'updated_at': admin.updated_at,
-        'roles': []
+        'admin_groups': []
     }
     for group in admin.groups.all():
-        json_data['roles'].append(group.name)
+        json_data['admin_groups'].append(group.name)
     if admin.is_superuser:
-        json_data['roles'].append('super_admin')
+        json_data['admin_groups'].append('super_admin')
 
     return JsonResponse(json_data)
 
