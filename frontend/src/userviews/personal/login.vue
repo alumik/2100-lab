@@ -216,11 +216,11 @@ export default {
         }), {withCredentials: true}).then((response) => {
         // console.log(response.data)
         // console.log(response.data.is_new_customer)
-        if (response.data.is_new_customer) {
-          this.modalShow = !this.modalShow
-        } else {
-          this.$router.push({path: '/personal'})
-        }
+        // if (response.data.is_new_customer) {
+        //   this.modalShow = !this.modalShow
+        // } else {
+        this.$router.push({path: '/personal'})
+        // }
       }).catch(error => {
         if (error.response.data.message === 'Different phone number.') {
           that.phoneState = false
