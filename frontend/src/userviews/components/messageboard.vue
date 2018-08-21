@@ -2,30 +2,41 @@
   <div
     id="message-board">
     <div>
+      <b-alert
+        :show="test"
+        variant="danger"
+        dismissible
+        fade
+        @dismissed="showDismissibleAlert=false">
+        {{ error_msg }}
+      </b-alert>
       <div class="form-style">
         <div
           v-for="msg in message_list"
           :key="msg.id"
           class="piece-of-message">
           <div id="piece-of-message">
+            <img
+              id="userimg"
+              src="../../assets/logo.png">
             {{ msg.username }}
-            <label class="time-style">&emsp;{{ msg.time_to_comment }}个月前</label>
-            <p style="margin-bottom: 5px;">{{ msg.message_content }}</p>
+            <label class="time-style">&emsp;{{ msg.created_at }}评论</label>
+            <p style="margin-bottom: 5px;">{{ msg.content }}</p>
           </div>
           <div
             id="operator">
-            {{ msg.num_of_praise }}
+            {{ msg.up_votes }}
             <img
               id="praise-button"
               src="../../assets/praise.png"
               class="vote-style "
-              @click="msg.num_of_praise+=1">
-            &emsp; &emsp;{{ msg.num_of_detest }}
+              @click="up_vote">
+            &emsp; &emsp;{{ msg.down_votes }}
             <img
               id="detest-button"
               src="../../assets/detest.png"
               class="vote-style "
-              @click="msg.num_of_detest+=1">
+              @click="down_vote">
           </div>
         </div>
       </div>
@@ -34,7 +45,6 @@
       <textarea
         id="input-message"
         v-model="newMsg"
-        autofocus
         class="textarea-style"
         placeholder="请输入留言"
         @keyup.enter="addmessage"/>
@@ -50,41 +60,28 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'MessageBoard',
   data () {
     return {
       username: '谢逊',
       newMsg: '',
-      message_list: [
-        {
-          id: 1,
-          username: '张三丰',
-          message_content: '不是谁家的粉 但觉得真的还挺好听的呀 ' +
-            '毕竟是翻唱演绎 肯定会和之前不太一样的 不然就没有看点了嘛﻿',
-          num_of_praise: 50,
-          num_of_detest: 60,
-          time_to_comment: 3
-        },
-        {
-          id: 2,
-          username: '张无忌',
-          message_content: 'Gitlab服务器炸了，你们知道吗？',
-          num_of_praise: 60,
-          num_of_detest: 70,
-          time_to_comment: 3
-        },
-        {
-          id: 3,
-          username: '周芷若',
-          message_content: '這次鄧紫棋唱出自己的特色，' +
-            '她在某幾個調轉了另一種唱法，讓這首歌有着另一種感覺，所以真的不應一直衹唱高音﻿',
-          num_of_praise: 20,
-          num_of_detest: 10,
-          time_to_comment: 3
-        }
-      ]
+      message_list: [],
+      test: false,
+      error_msg: ''
     }
+  },
+  created: function () {
+    let that = this
+    axios.get('http://localhost:8000/api/v1/courses/forestage/play/get-course-comments?course_id=1')
+      .then(function (response) {
+        that.message_list = response.data.content
+      }).catch(function (error) {
+        that.test = true
+        this.error_msg = error
+      })
   },
   methods: {
     addmessage: function () {
@@ -95,6 +92,31 @@ export default {
         num_of_praise: 0,
         num_of_detest: 0})
       this.newMsg = ''
+      axios.get('http://localhost:8000/api/v1/courses/forestage/play/add-comment?course_id=1')
+        .then(function (response) {
+          // console.log(response)
+        }).catch(function (error) {
+          this.test = true
+          this.error_msg = error
+        })
+    },
+    up_vote: function () {
+      axios.get('http://localhost:8000/api/v1/courses/forestage/play/up-vote-comment?comment_id=1')
+        .then(function (response) {
+          // console.log(response)
+        }).catch(function (error) {
+          this.test = true
+          error.msg = error
+        })
+    },
+    down_vote: function () {
+      axios.get('http://localhost:8000/api/v1/courses/forestage/play/down-vote-comment?comment_id=1')
+        .then(function (response) {
+          // console.log(response)
+        }).catch(function (error) {
+          this.test = true
+          this.error_msg = error
+        })
     }
   }
 }
@@ -111,7 +133,10 @@ export default {
     padding: 0;
     resize: none;
     border: solid 2px #ddd;
-    border-radius: 20px;
+  }
+
+  .textarea-style:focus {
+    border: solid 2px #cce5ff;
   }
 
   .commit-button-style {
@@ -142,5 +167,13 @@ export default {
 
   .vote-style:hover {
     filter: brightness(110%);
+  }
+
+  #userimg {
+    width: 40px;
+    height: 40px;
+    margin-right: 20px;
+    border-radius: 50%;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
   }
 </style>
