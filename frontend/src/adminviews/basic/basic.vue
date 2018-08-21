@@ -52,11 +52,6 @@ export default {
 </script>
 
 <style scoped>
-  .my-nav {
-    min-width: 500px;
-    padding: 0;
-  }
-
   .my-menu {
     display: flex;
   }
