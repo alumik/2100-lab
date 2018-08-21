@@ -3,17 +3,57 @@
     id="message-board">
     <div>
       <b-alert
-        :show="test"
+        :show="created_test"
         variant="danger"
         dismissible
         fade
-        @dismissed="showDismissibleAlert=false">
-        {{ error_msg }}
+        @dismissed="created_test=false">
+        {{ created_error_msg }}
+      </b-alert>
+      <b-alert
+        :show="getallmessage_test"
+        variant="danger"
+        dismissible
+        fade
+        @dismissed="getallmessage_test=false">
+        {{ getallmessage_error_msg }}
+      </b-alert>
+      <b-alert
+        :show="up_vote_test"
+        variant="danger"
+        dismissible
+        fade
+        @dismissed="up_vote_test=false">
+        {{ up_vote_error_msg }}
+      </b-alert>
+      <b-alert
+        :show="down_vote_test"
+        variant="danger"
+        dismissible
+        fade
+        @dismissed="down_vote_test=false">
+        {{ down_vote_error_msg }}
+      </b-alert>
+      <b-alert
+        :show="delete_message_test"
+        variant="danger"
+        dismissible
+        fade
+        @dismissed="delete_message_test=false">
+        {{ delete_message_error_msg }}
+      </b-alert>
+      <b-alert
+        :show="add_message_test"
+        variant="danger"
+        dismissible
+        fade
+        @dismissed="add_message_test=false">
+        {{ add_message_error_msg }}
       </b-alert>
       <div class="form-style">
         <div
-          v-for="msg in message_list"
-          :key="msg.id"
+          v-for="index in message_list.length"
+          :key="index"
           class="piece-of-message">
           <div id="piece-of-message">
             <b-row>
@@ -21,29 +61,32 @@
                 <img
                   id="userimg"
                   src="../../assets/logo.png">
-                {{ msg.username }}
-                <label class="time-style">&emsp;{{ msg.created_at }}评论</label>
+                {{ message_list[index-1].username }}
+                <label class="time-style">&emsp;{{ message_list[index-1].created_at }}评论</label>
               </b-col>
-              <b-col class="delete-comment">
+              <b-col
+                v-if="message_list[index-1].username === username"
+                class="delete-comment"
+                @click="delete_comment(message_list[index-1].comment_id)">
                 ×
               </b-col>
             </b-row>
-            <p style="margin-bottom: 5px;">{{ msg.content }}</p>
+            <p class="message-content">{{ message_list[index-1].content }}</p>
           </div>
           <div
             id="operator">
-            {{ msg.up_votes }}
+            {{ message_list[index-1].up_votes }}
             <img
               id="praise-button"
               src="../../assets/praise.png"
               class="vote-style "
-              @click="up_vote">
-            &emsp; &emsp;{{ msg.down_votes }}
+              @click="up_vote(index-1,msg.comment_id)">
+            &emsp; &emsp;{{ message_list[index-1].down_votes }}
             <img
               id="detest-button"
               src="../../assets/detest.png"
               class="vote-style "
-              @click="down_vote">
+              @click="down_vote(index-1,msg.comment_id)">
           </div>
         </div>
       </div>
@@ -51,16 +94,16 @@
     <div>
       <textarea
         id="input-message"
-        v-model="newMsg"
+        v-model="new_msg"
         class="textarea-style"
         placeholder="请输入留言"
-        @keyup.enter="addmessage"/>
+        @keyup.enter="add_comment"/>
       <br>
       <div
         id="commit-button"
         class="commit-button-style">
         <b-button
-          @click="addmessage">评论</b-button>
+          @click="add_comment">评论</b-button>
       </div>
     </div>
   </div>
@@ -68,70 +111,116 @@
 
 <script>
 import axios from 'axios'
+import qs from 'qs'
 
 export default {
   name: 'MessageBoard',
+  pros: {
+    course_id: {
+      type: Number,
+      default: 0
+    }
+  },
   data () {
     return {
-      username: '谢逊',
-      newMsg: '',
+      username: '小可爱',
+      new_msg: '',
       message_list: [
-        {
-          username: 'zhangxing',
-          content: 'I love you.',
-          up_votes: 20,
-          down_votes: 10,
-          created_at: 123
-        }
       ],
-      test: false,
-      error_msg: ''
+      created_test: false,
+      created_error_msg: '',
+      getallmessage_test: false,
+      getallmessage_error_msg: '',
+      up_vote_test: false,
+      up_vote_error_msg: '',
+      down_vote_test: false,
+      down_vote_error_msg: '',
+      add_message_test: false,
+      add_message_error_msg: '',
+      delete_message_test: false,
+      delete_message_error_msg: ''
     }
   },
   created: function () {
     let that = this
-    axios.get('http://localhost:8000/api/v1/courses/forestage/play/get-course-comments?course_id=1')
+    axios.get('http://localhost:8000/api/v1/courses/forestage/play/get-course-comments?' +
+      'course_id=1')
       .then(function (response) {
-        that.message_list = response.data.content
+        that.message_list = response.content.data
       }).catch(function (error) {
-        that.test = true
-        this.error_msg = error
+        that.created_test = true
+        that.created_error_msg = error
       })
   },
   methods: {
-    addmessage: function () {
-      var value = this.newMsg && this.newMsg.trim()
-      this.message_list.push({
-        username: this.username,
-        message_content: value,
-        num_of_praise: 0,
-        num_of_detest: 0})
-      this.newMsg = ''
-      axios.get('http://localhost:8000/api/v1/courses/forestage/play/add-comment?course_id=1')
+    getallmessage: function () {
+      axios.get('http://localhost:8000/api/v1/courses/forestage/play/get-course-comments?' +
+        'course_id=?' + this.course_id)
         .then(function (response) {
-          // console.log(response)
+          this.message_list = response.content.data
         }).catch(function (error) {
-          this.test = true
-          this.error_msg = error
+          this.getallmessage_test = true
+          this.getallmessage_error_msg = error
         })
     },
-    up_vote: function () {
-      axios.get('http://localhost:8000/api/v1/courses/forestage/play/up-vote-comment?comment_id=1')
+    up_vote: function (index, msgCommentId) {
+      axios.get('http://localhost:8000/api/v1/courses/forestage/play/up-vote-comment?' +
+        'comment_id=' + msgCommentId)
         .then(function (response) {
-          // console.log(response)
+          if (response.up_voted === true) {
+            this.message_list[index].up_votes = response.up_votes
+          }
         }).catch(function (error) {
-          this.test = true
-          error.msg = error
+          this.up_vote_test = true
+          this.up_vote_error_msg = error
         })
     },
-    down_vote: function () {
-      axios.get('http://localhost:8000/api/v1/courses/forestage/play/down-vote-comment?comment_id=1')
+    down_vote: function (index, msgCommentId) {
+      axios.get('http://localhost:8000/api/v1/courses/forestage/play/down-vote-comment?' +
+        'comment_id=' + msgCommentId)
         .then(function (response) {
-          // console.log(response)
+          if (response.down_voted === true) {
+            this.message_list[index].down_votes = response.down_votes
+          }
         }).catch(function (error) {
-          this.test = true
-          this.error_msg = error
+          this.down_vote_test = true
+          this.down_vote_error_msg = error
         })
+    },
+    delete_comment: function (commentId) {
+      axios.get('http://localhost:8000/api/v1/courses/forestage/play/delete-comment?' +
+        'comment_id=' + commentId)
+        .then(function (response) {
+          if (response.message === 'Object deleted') {
+            this.getallmessage()
+          } else {
+            alert(response.message)
+          }
+        }).catch(function (error) {
+          this.delete_message_test = true
+          this.delete_message_error_msg = error
+        })
+    },
+    add_comment: function () {
+      const value = this.new_msg && this.new_msg.trim()
+      if (!value) {
+        return
+      }
+      axios.post('http://localhost:8000/api/v1/courses/forestage/play/add-comment?' +
+        'course=' + this.course_id,
+      qs.stringify({
+        content: value
+      })).then(function (response) {
+        if (response.message === 'Object deleted') {
+          this.getallmessage()
+        } else {
+          alert(response.message)
+        }
+      }).catch(function (error) {
+        this.add_message_test = true
+        this.add_message_error_msg = error
+      })
+      this.new_msg = ''
     }
   }
 }
@@ -163,6 +252,10 @@ export default {
     width: 100%;
     padding: 0;
     text-align: center;
+  }
+
+  .message-content {
+    margin-bottom: 5px;
   }
 
   .piece-of-message {

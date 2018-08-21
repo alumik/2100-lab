@@ -3,12 +3,20 @@
     id="studypage"
     class="width-style">
     <b-alert
-      :show="test"
+      :show="assets_test"
       variant="danger"
       dismissible
       fade
-      @dismissed="test=false">
-      {{ error_msg }}
+      @dismissed="assets_test=false">
+      {{ assets_error_msg }}
+    </b-alert>
+    <b-alert
+      :show="detail_test"
+      variant="danger"
+      dismissible
+      fade
+      @dismissed="detail_test=false">
+      {{ detail_error_msg }}
     </b-alert>
     <div
       id="content"
@@ -44,11 +52,11 @@
             <b-row>
               <b-col class="delete-margin text-left-style">
                 <h5>
-                  {{ course.name }}
+                  {{ course.title }}
                 </h5>
               </b-col>
               <b-col class="vote-style">
-                {{ course.course_up_votes }}
+                {{ course.up_votes }}
                 <img
                   id="praise-button"
                   src="../../assets/praise.png"
@@ -57,18 +65,18 @@
               </b-col>
             </b-row>
             <div class="delete-margin text-left-style">
-              &emsp;&emsp;{{ text_show }}
+              &emsp;&emsp;{{ introduction_text_show }}
             </div>
             <label
-              v-if="brandFold === false"
-              id="hide-text">{{ text_hide }}
+              v-if="introduction_brandFold === false"
+              id="hide-text">{{ introduction_text_hide }}
             </label>
             <div
               class="text-right-style"
               @click="changeFoldState">
               <label
                 id="watch-all"
-                class="look-all">{{ brandFold ? '﹀展开':'︿收起' }}</label>
+                class="look-all">{{ introduction_brandFold ? '﹀展开':'︿收起' }}</label>
             </div>
           </div>
         </b-card>
@@ -84,7 +92,7 @@
             <p
               id="message-board"
               class="card-text width-style">
-              <MessageBoard/>
+              <MessageBoard :course_id="course_id"/>
             </p>
           </b-card-body>
         </b-card>
@@ -106,50 +114,47 @@ export default {
   },
   data () {
     return {
-      test: false,
-      error_msg: '',
       course_id: 1,
+      assets_test: false,
+      assets_error_msg: '',
+      detail_test: false,
+      detail_error_msg: '',
+      up_vote_test: false,
+      up_vote_error_msg: '',
+      current_course_id: 1,
       now_picture: '',
-      now_index: 0,
-      time_num: 0,
-      ctime: null,
-      dtime: null,
-      brandFold: true,
-      text_show: '',
-      text_hide: '',
+      now_picture_index: 0,
+      audio_current_time: null,
+      audio_duration: null,
+      introduction_brandFold: true,
+      introduction_text_show: '',
+      introduction_text_hide: '',
       course: {
-        time_list: [0, 10, 20, 30],
-        image: [
-          'https://picsum.photos/1024/480/?image=58'
-        ],
+        title: '小猪佩奇',
+        course_id: 1,
+        description: '',
         audio: '',
-        introduction: '桃树、杏树、梨树，你不让我，我不让你，都开满了花赶趟儿。' +
-          '红的像火，粉的像霞，白的像雪。花里带着甜味儿；闭了眼，树上仿佛已经满是' +
-          '桃儿、杏儿、梨儿。花下成千成百的蜜蜂嗡嗡地闹着，大小的蝴蝶飞来飞去。野花' +
-          '遍地是：杂样儿，有名字的，没名字的，散在草丛里，像眼睛，像星星，还眨呀眨的。\n' +
-          '“吹面不寒杨柳风”，不错的，像母亲的手抚摸着你。风里带来些新翻的泥土的气息，' +
-          '混着青草味儿，还有各种花的香，都在微微润湿的空气里酝酿。鸟儿将巢安在繁花嫩叶当中，' +
-          '高兴起来了，呼朋引伴地卖弄清脆的喉咙，唱出宛转的曲子，与轻风流水应和着。' +
-          '牛背上牧童的短笛，这时候也成天嘹亮地响着。',
-        name: '我们是坠胖的',
-        course_up_votes: 100
-      }
+        images: [],
+        progress: 0,
+        up_votes: 5
+      },
+      audio_piece_num: 0
     }
   },
   watch: {
-    ctime: function () {
-      if (this.ctime === 0) {
-        this.now_index = 0
+    audio_current_time: function () {
+      if (this.audio_current_time === 0) {
+        this.now_picture_index = 0
         this.change_picture()
-      } else if (this.ctime >= this.course.time_list[this.time_num - 1]) {
-        this.now_index = this.time_num - 1
+      } else if (this.audio_current_time >= this.course.images[this.audio_piece_num].load_time) {
+        this.now_picture_index = this.audio_piece_num - 1
         this.change_picture()
       } else {
-        for (var i = 1; i < this.time_num; i++) {
-          var first = this.course.time_list[i - 1]
-          var second = this.course.time_list[i]
-          if (this.ctime >= first && this.ctime < second) {
-            this.now_index = i - 1
+        for (var i = 1; i < this.audio_piece_num; i++) {
+          var first = this.course.images[i - 1].load_time
+          var second = this.course.images[i].load_time
+          if (this.audio_current_time >= first && this.audio_current_time < second) {
+            this.now_picture_index = i - 1
             this.change_picture()
           }
         }
@@ -158,32 +163,55 @@ export default {
   },
   created: function () {
     let that = this
-    if (typeof (this.$route.query.course_id) === 'undefined') {
-      this.$router.push({name: 'BurnedCourse'})
-    } else {
-      that.course_id = this.$route.query.course_id
-    }
-    axios.get('http://localhost:8000/api/v1/courses/forestage/play/get-course-assets?course_id=1')
+    // if (typeof (this.$route.query.course_id) === 'undefined') {
+    //   this.$router.push({name: 'BurnedCourse'})
+    // } else {
+    //   that.course_id = this.$route.query.course_id
+    // }
+    axios.get('http://localhost:8000/api/v1/courses/forestage/play/get-course-assets?' +
+      'course_id=1')
       .then(function (response) {
+        console.log(response.data)
+        that.course = response.data
+        console.log(that.course)
       }).catch(function (error) {
-        that.test = true
-        this.error_msg = error
+        that.assets_test = true
+        this.assets_error_msg = error
+      })
+    axios.get('http://localhost:8000/api/v1/courses/forestage/course/get-course-detail?' +
+      'course_id=1')
+      .then(function (response) {
+        var data = response.data
+        that.course.up_votes = data.up_votes
+      }).catch(function (error) {
+        that.detail_test = true
+        this.detail_error_msg = error
       })
   },
   mounted () {
-    this.ctime = this.$refs.player.currentTime
-    this.time_num = this.course.time_list.length
-    this.text_show = this.course.introduction.substring(0, 138)
-    this.text_hide = this.course.introduction.substring(138)
+    this.audio_current_time = this.$refs.player.currentTime
+    this.audio_piece_num = this.course.images.length
+    this.introduction_text_show = this.course.description.substring(0, 2)
+    this.introduction_text_hide = this.course.description.substring(2)
     this.addEventListeners()
   },
   methods: {
-    up_vote_course () {},
+    up_vote_course () {
+      axios.get('http://localhost:8000/api/v1/courses/forestage/course/up-vote-course?course_id=1')
+        .then(function (response) {
+          if (response.up_voted) {
+            this.course.up_votes = response.up_votes
+          }
+        }).catch(function (error) {
+          this.up_vote_test = true
+          this.up_vote_error_msg = error
+        })
+    },
     changeFoldState () {
-      this.brandFold = !this.brandFold
+      this.introduction_brandFold = !this.introduction_brandFold
     },
     change_picture: function () {
-      this.now_picture = this.course.image[this.now_index]
+      this.now_picture = this.course.images[this.now_picture_index].image_path
     },
     addEventListeners: function () {
       const self = this
