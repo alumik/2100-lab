@@ -1,17 +1,26 @@
 <template>
   <Basic>
+    <b-alert
+      :show="test"
+      variant="danger"
+      dismissible
+      fade
+      @dismissed="test = false">
+      This alert means that you have connectioned to backend.
+    </b-alert>
     <div class="content-style">
-      <h5>{{ course.name }}</h5>
+      <h5>{{ course.title }}</h5>
     </div>
     <div>
       <b-modal
         id="share-popup"
         hide-footer
         title="分享二维码">
-        <p
-          v-if="course.value!=0"
-          class="my-4">&emsp; &emsp;分享该课程的二维码，如果小伙伴点击
-          你分享的链接购买课程，你就将获得奖励金哦！</p>
+        <textarea
+          v-if="course.price!=0"
+          :value="share_reminder"
+          readonly
+          class="my-4 modal-input"/>
         <p
           v-else
           class="my-4">&emsp; &emsp;分享该课程的二维码，和小伙伴一起学习吧~</p>
@@ -61,7 +70,7 @@
         <input
           :value="reminder"
           readonly
-          style="border:none; width: 100%;">
+          class="modal-input">
         <div class="modal-style">
           <b-btn @click="hide_study_popup">取消</b-btn>
           <b-btn
@@ -77,7 +86,7 @@
         id="image"
         style="height: 100%; width: 50%;">
         <b-img
-          :src="course.src"
+          :src="course_src"
           fluid
           thumbnail
           alt="Responsive image Thumbnail"
@@ -88,23 +97,23 @@
         class="introduction-style">
         <div class="reminder-style">
           <div
-            v-if="course.value!=0 && is_paid === false"
+            v-if="course.price!=0 && is_paid === false"
             class="row row-style">
-            <h6>现价 ￥{{ course.value-user_balance }}  ￥</h6>
-            <h6 class="origin-value">{{ course.value }}</h6>
+            <h6>现价 ￥{{ course.price-user_balance }}  ￥</h6>
+            <h6 class="origin-value">{{ course.price }}</h6>
           </div>
           <div
             class="row time-style">
-            <h6>课程时效 {{ course.validate_time }} h</h6>
+            <h6>课程时效 {{ course.expire_duration }} h</h6>
           </div>
           <div
             class="row time-style">
-            <h6>距离失效还有 {{ course.time_to_end }} h</h6>
+            <h6>距离失效还有 {{ course.expire_time - now_time }} h</h6>
           </div>
         </div>
         <div class="row btn-row-style">
           <div>
-            <div v-show="course.value === 0 || is_paid === true">
+            <div v-show="course.price === 0 || is_paid === true">
               <b-button
                 v-b-modal.study-popup
                 id="study-button"
@@ -114,7 +123,7 @@
                 开始学习
               </b-button>
             </div>
-            <div v-show="course.value !== 0 && is_paid === false">
+            <div v-show="course.price !== 0 && is_paid === false">
               <b-button
                 v-b-modal.pay-popup
                 id="pay-button"
@@ -156,7 +165,7 @@
             variant="primary"
             class="my-btn"
             @click="add_praise">
-            {{ course.num_of_praise }} 赞
+            {{ course.up_votes }} 赞
           </b-button>
         </div>
       </div>
@@ -165,13 +174,14 @@
       id="course-introduction"
       class="profile-style">
       <h5>课程简介</h5>
-      <p>&emsp; &emsp;{{ course.introduction }}</p>
+      <p>&emsp; &emsp;{{ course.description }}</p>
     </div>
   </Basic>
 </template>
 
 <script>
 import Basic from '../components/basic'
+import axios from 'axios'
 
 export default{
   name: 'CourseDetail',
@@ -180,6 +190,10 @@ export default{
   },
   data () {
     return {
+      test: false,
+      err_msg: '',
+      now_time: 0,
+      course_src: 'https://picsum.photos/1024/480/?image=54',
       is_paid: false,
       course_id: 0,
       share_url: 'http://www.baidu.com',
@@ -191,26 +205,28 @@ export default{
         '他/她购买该课程，你将会获得奖励金哦~奖励金可以用来购买' +
         '其他有趣的实验课程呢，所以赶紧拿起你的手机进行分享吧(*^▽^*)',
       course: {
-        name: '小孔成像',
-        value: 100,
-        num_of_praise: 100,
-        introduction: '近几年来，父亲和我都是东奔西走，家中光景是一日不如一日。' +
-          '他少年出外谋生，独力支持，做了许多大事。哪知老境却如此颓唐！他触目伤怀' +
-          '，自然情不能自已。情郁于中，自然要发之于外；家庭琐屑便往往触他之怒。' +
-          '他待我渐渐不同往日。但最近两年不见，他终于忘却我的不好，只是惦记着我，' +
-          '惦记着他的儿子。我北来后，他写了一信给我，信中说道：“我身体平安，' +
-          '惟膀子疼痛厉害，举箸提笔，诸多不便，大约大去之期不远矣。”我读到此处，' +
-          '在晶莹的泪光中，又看见那肥胖的、青布棉袍黑布马褂的背影。唉！' +
-          '我不知何时再能与他相见！',
-        src: 'https://picsum.photos/1024/480/?image=54',
-        validate_time: 25,
-        time_to_end: 24
+        id: 0,
+        price: 100,
+        title: '小孔成像',
+        reward_percent: 0.2,
+        up_votes: 100,
+        introduction: '',
+        src: '',
+        expire_duration: 0,
+        expire_time: 0
       }
     }
   },
   computed: {
     reminder: function () {
-      return '  该课程将于初次点开' + this.course.validate_time + '小时后不可再观看'
+      let that = this
+      return '  该课程将于初次点开' + that.course.expire_duration + '小时后不可再观看'
+    },
+    share_reminder: function () {
+      let that = this
+      return '分享该课程的二维码，如果小伙伴点击你分享的链接购买课程,\n你就将获得' +
+        that.course.price * that.course.reward_percent +
+        '奖励金哦！'
     }
   },
   created () {
@@ -219,10 +235,21 @@ export default{
     } else {
       this.course_id = this.$route.query.course_id
     }
+    let that = this
+    axios.get('http://localhost:8000/api/v1/courses/forestage/course/get-course-detail?course_id=1')
+      .then(function (response) {
+        console.log(response.data)
+        that.course = response.data
+      })
+  },
+  mounted: function () {
   },
   methods: {
     add_praise () {
-      this.course.num_of_praise += 1
+      axios.get('http://localhost:8000/api/v1/courses/forestage/course/up-vote-course/?course_id=1')
+        .then(function (response) {
+          // console.log(reponse)
+        })
     },
     hide_share_popup () {
       this.$root.$emit('bv::hide::modal', 'share-popup')
@@ -317,5 +344,10 @@ export default{
     width: 100%;
     padding: 3px;
     margin-top: 30px;
+  }
+
+  .modal-input {
+    width: 100%;
+    border: none;
   }
 </style>
