@@ -60,7 +60,7 @@ CORS_ORIGIN_WHITELIST = (
     'localhost:8080',
 )
 
-# CSRF_COOKIE_NAME = "csrftoken"
+CSRF_COOKIE_NAME = "csrftoken"
 
 CORS_ALLOW_CREDENTIALS = True
 
