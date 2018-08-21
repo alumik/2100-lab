@@ -19,7 +19,17 @@ def get_verification_code(request):
         request.session['prev_phone_number'] = phone_number
         request.session['verification_code'] = verification_code
         request.session['generate_time'] = round(time.time())
-        return JsonResponse({'verification_code': verification_code})
+        try:
+            get_user_model().objects.get(phone_number=phone_number)
+            new_customer = False
+        except get_user_model().DoesNotExist:
+            new_customer = True
+        return JsonResponse(
+            {
+                'verification_code': verification_code,
+                'is_new_customer': new_customer
+            }
+        )
     return JsonResponse({'message': 'Not a valid phone number.'}, status=400)
 
 
