@@ -198,6 +198,7 @@ class CommentListTests(TestCase):
             str(response.content, encoding='utf8'),
             {
                 'comment_id': comment.id,
+                'created_at': response_json_data['created_at'],
                 'username': comment.user.username,
                 'course_codename': comment.course.codename,
                 'course_title': comment.course.title,
