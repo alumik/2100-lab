@@ -7,7 +7,7 @@ from django.urls import reverse
 
 class PersonalCenterMainPageTests(TestCase):
     def setUp(self):
-        get_user_model().objects.create_user(phone_number='13312345678')
+        get_user_model().objects.create_user(phone_number='13312345678', reward_coin='100.00')
         get_user_model().objects.create_user(phone_number='14412345678')
 
     def test_main_page_logged_in(self):
@@ -19,7 +19,7 @@ class PersonalCenterMainPageTests(TestCase):
         self.assertTrue('avatar' in response_json_data)
         self.assertEqual(response_json_data['username'], '13312345678')
         self.assertEqual(response_json_data['phone_number'], '13312345678')
-        self.assertEqual(response_json_data['reward_coin'], '0.00')
+        self.assertEqual(response_json_data['reward_coin'], '100.00')
         self.assertTrue('date_joined' in response_json_data)
 
         self.client.logout()
@@ -54,3 +54,10 @@ class PersonalCenterMainPageTests(TestCase):
         )
         self.assertEqual(response.status_code, 403)
         self.assertEqual(json.loads(response.content)['message'], 'This username is already taken.')
+
+    def test_get_reward_coin(self):
+        self.client.force_login(get_user_model().objects.get(phone_number='13312345678'))
+
+        response = self.client.get(reverse('api:customers:forestage:get-reward-coin'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content)['reward_coin'], '100.00')

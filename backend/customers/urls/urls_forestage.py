@@ -13,6 +13,11 @@ urlpatterns = [
         name='get-customer-detail'
     ),
     path(
+        'personal-center/get-reward-coin/',
+        views_forestage.get_reward_coin,
+        name='get-reward-coin'
+    ),
+    path(
         'personal-center/get-learning-logs/',
         views_forestage.get_learning_logs,
         name='get-learning-logs'
