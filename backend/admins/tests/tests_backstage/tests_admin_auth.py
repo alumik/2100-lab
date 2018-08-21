@@ -60,7 +60,7 @@ class AdminAuthTests(TestCase):
             {
                 'admin_id': admin.id,
                 'username': admin.username,
-                'roles': []
+                'admin_groups': []
             }
         )
 

@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+# from qcloudsms_py.httpclient import HTTPError
 
 from core.utils import get_page
 from core.messages import ERROR, INFO
@@ -18,7 +19,12 @@ def get_verification_code(request):
     match = re.search(r'^1\d{10}$', phone_number)
     if match:
         verification_code = str(random.randint(0, 999999)).zfill(6)
-        # tencent_cloud_message(phone_number, verification_code)
+
+        # try:
+        #     tencent_cloud_message(phone_number, verification_code)
+        # except (HTTPError, Exception):
+        #     return JsonResponse({'message': ERROR['message_send_failed']}, status=500)
+
         request.session['prev_phone_number'] = phone_number
         request.session['verification_code'] = verification_code
         request.session['generate_time'] = round(time.time())
