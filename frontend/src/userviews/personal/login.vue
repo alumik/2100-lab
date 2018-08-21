@@ -218,6 +218,8 @@ export default {
         // console.log(response.data.is_new_customer)
         if (response.data.is_new_customer) {
           this.modalShow = !this.modalShow
+        } else {
+          this.$router.push({path: '/personal'})
         }
       }).catch(error => {
         if (error.response.data.message === 'Different phone number.') {

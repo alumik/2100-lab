@@ -30,7 +30,7 @@
         <b-nav-item
           id="logout"
           href="/login">
-          注销
+          dl
         </b-nav-item>
       </b-navbar-nav>
     </b-collapse>
@@ -38,6 +38,9 @@
 </template>
 
 <script>
+import axios from 'axios'
+// import qs from 'qs'
+
 export default {
   name: 'UserNavbar',
   props: {
@@ -49,6 +52,12 @@ export default {
         }
       }
     }
+  },
+  created () {
+    // let that = this
+    axios.get('http://localhost:8000/api/v1/core/auth/is-authenticated/').then((res) => {
+      // console.log(res.data.is_authenticated)
+    })
   }
 }
 </script>
