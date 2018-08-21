@@ -124,3 +124,19 @@ def change_admin_password(request):
     admin.set_password(new_password)
     admin.save()
     return JsonResponse({'message': INFO['success']})
+
+
+@login_required
+def delete_admin(request):
+    if not request.user.is_superuser:
+        return JsonResponse({'message': ERROR['access_denied']}, status=403)
+
+    admin_id = request.POST.get('admin_id')
+
+    try:
+        admin = get_user_model().objects.get(id=admin_id, is_staff=True)
+    except get_user_model().DoesNotExist:
+        return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+
+    admin.delete()
+    return JsonResponse({'message': INFO['object_deleted']})

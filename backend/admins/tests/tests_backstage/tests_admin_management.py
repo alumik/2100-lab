@@ -174,3 +174,23 @@ class AdminOperationsTests(TestCase):
         self.assertEqual(json.loads(response.content)['message'], 'Success.')
         login_state = self.client.login(phone_number='14400000000', password='100000')
         self.assertTrue(login_state)
+
+    def test_delete_admin(self):
+        get_user_model().objects.create_user(
+            phone_number='16600000000',
+            password='123456',
+            is_staff=True,
+            is_superuser=True
+        )
+
+        self.client.login(phone_number='15500000000', password='123456')
+        admin = get_user_model().objects.get(phone_number='16600000000')
+
+        response = self.client.post(
+            reverse('api:admins:backstage:delete-admin'),
+            {'admin_id': admin.id}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content)['message'], 'Object deleted.')
+        login_state = self.client.login(phone_number='16600000000', password='123456')
+        self.assertFalse(login_state)
