@@ -58,9 +58,9 @@ class AdminAuthTests(TestCase):
         self.assertJSONEqual(
             str(response.content, encoding='utf8'),
             {
-                'permissions': [],
                 'admin_id': admin.id,
-                'username': admin.username
+                'username': admin.username,
+                'roles': []
             }
         )
 

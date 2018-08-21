@@ -1,7 +1,9 @@
 from django.http import JsonResponse
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, get_user_model
+from django.contrib.auth.decorators import permission_required, login_required
 
 from core.messages import ERROR
+from admins.utils import get_admin_page
 
 
 def authenticate_admin(request):
@@ -21,11 +23,32 @@ def authenticate_admin(request):
 
     login(request, admin)
     json_data = {
-        'permissions': [],
         'admin_id': admin.id,
-        'username': admin.username
+        'username': admin.username,
+        'roles': []
     }
     for group in admin.groups.all():
-        json_data['permissions'].append(group.name)
+        json_data['roles'].append(group.name)
+    if admin.is_superuser:
+        json_data['roles'].append('super_admin')
 
     return JsonResponse(json_data)
+
+
+@login_required
+def get_admin_list(request):
+    if not request.user.is_superuser:
+        return JsonResponse({'message': ERROR['access_denied']}, status=403)
+
+    username = request.GET.get('username', '')
+    phone_number = request.GET.get('phone_number', '')
+
+    admins = get_user_model().objects.filter(
+        is_staff=True,
+        username__contains=username,
+        phone_number__contains=phone_number
+    ).order_by('-updated_at')
+    page = get_admin_page(request, admins)
+    page['username'] = username
+    page['phone_number'] = phone_number
+    return JsonResponse(page, safe=False)

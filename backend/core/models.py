@@ -112,3 +112,10 @@ class CustomUser(SoftDeletionModel, AbstractUser):
             'date_joined': self.date_joined,
             'updated_at': self.updated_at
         }
+
+    def as_admin_dict(self):
+        return {
+            'admin_id': self.id,
+            'username': self.username,
+            'phone_number': self.phone_number
+        }
