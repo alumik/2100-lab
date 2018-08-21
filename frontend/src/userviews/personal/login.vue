@@ -181,6 +181,7 @@ export default {
         qs.stringify({
           phone_number: this.phone.toString()
         }), {withCredentials: true}).then((response) => {
+        alert(response.data.verification_code)
         this.status = '再次发送 '
         let that = this
         that.seconds = that.seconds - 1
@@ -212,9 +213,11 @@ export default {
           phone_number: this.phone.toString(),
           verification_code: this.code.toString()
         }), {withCredentials: true}).then((response) => {
+        console.log('新用户' + response.data.is_new_customer)
         // if (response.data.is_new_customer) {
         //   this.modalShow = !this.modalShow
         // } else {
+        this.$store.commit('user', response.data)
         this.$router.push({path: '/personal'})
         // }
       }).catch(error => {

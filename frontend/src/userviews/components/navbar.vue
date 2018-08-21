@@ -22,15 +22,15 @@
       is-nav>
       <b-navbar-nav class="ml-auto">
         <b-nav-item
-          href="/personal">
+          @click="personal">
           <img
             id="userimg"
-            src="../../assets/logo.png">{{ user ? user.name : '' }}
+            src="../../assets/logo.png">{{ status ? $store.state.user.name : '' }}
         </b-nav-item>
         <b-nav-item
           id="logout"
-          href="/login">
-          注销
+          @click="log">
+          {{ status ? '注销' : '登录' }}
         </b-nav-item>
       </b-navbar-nav>
     </b-collapse>
@@ -43,20 +43,48 @@ import axios from 'axios'
 
 export default {
   name: 'UserNavbar',
-  props: {
-    user: {
-      type: Object,
-      default: () => {
-        return {
-          name: '默认用户'
-        }
-      }
+  data () {
+    return {
+      status: false
     }
   },
-  created () {
-    // let that = this
-    axios.get('http://localhost:8000/api/v1/core/auth/is-authenticated/').then((res) => {
+  // created () {
+  //   // let that = this
+  //   axios.get('http://localhost:8000/api/v1/core/auth/is-authenticated/').then((res) => {
+  //     console.log('登录状态：' + res.data.is_authenticated)
+  //     console.log(this.$store.state.user)
+  //   })
+  // },
+  mounted () {
+    let that = this
+    axios.post('http://localhost:8000/api/v1/core/auth/is-authenticated/').then((res) => {
+      console.log('登录状态：' + res.data.is_authenticated)
+      if (res.data.is_authenticated) {
+        that.status = true
+      }
     })
+  },
+  methods: {
+    personal () {
+      axios.post('http://localhost:8000/api/v1/core/auth/is-authenticated/').then((res) => {
+        if (res.data.is_authenticated) {
+          this.$router.push({path: '/personal'})
+        }
+      })
+    },
+    log () {
+      // let that = this
+      if (this.status) {
+        axios.post('http://localhost:8000/api/v1/core/auth/logout/').then(res => {
+          console.log(res.data.message)
+          this.$router.push({path: '/'})
+        }).catch(error => {
+          console.log(error.message)
+        })
+      } else {
+        this.$router.push({path: '/login'})
+      }
+    }
   }
 }
 </script>

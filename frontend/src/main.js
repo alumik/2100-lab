@@ -11,19 +11,37 @@ import datePicker from 'vue-bootstrap-datetimepicker'
 import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css'
 import VCharts from 'v-charts'
 import axios from 'axios'
+import Vuex from 'vuex'
 
 Vue.component(VueQrcode.name, VueQrcode)
 Vue.use(BootstrapVue)
 Vue.use(datePicker)
 Vue.use(VCharts)
+Vue.use(Vuex)
 Vue.config.productionTip = false
 Vue.prototype.$http = axios
 axios.defaults.withCredentials = true
+const store = new Vuex.Store({
+  state: {
+    user: {
+      'is_new_customer': null,
+      'customer_id': null,
+      'username': null,
+      'avatar': null
+    }
+  },
+  mutations: {
+    user (state, data) {
+      state.user = data
+    }
+  }
+})
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   axios,
+  store,
   components: { App },
   template: '<App/>'
 })
