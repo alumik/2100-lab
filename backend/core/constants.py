@@ -20,3 +20,19 @@ ERROR = {
     'course_already_purchased': 'This course has already been purchased.',
     'comment_not_allowed': 'Commenting is not allowed.'
 }
+
+ACTION_TYPE = {
+    'add_admin': 1,
+    'change_admin_groups': 2,
+    'update_admin': 3,
+    'delete_admin': 4,
+    'refund_order': 5,
+    'delete_customer': 6,
+    'ban_customer': 7,
+    'set_vip': 8,
+    'delete_comment': 9,
+    'reply_comment': 10,
+    'add_course': 11,
+    'update_course': 12,
+    'delete_course': 13
+}

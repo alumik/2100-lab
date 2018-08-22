@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import permission_required
 from django.http import JsonResponse
 
 from core.utils import get_backstage_page
-from core.messages import ERROR, INFO
+from core.constants import ERROR, INFO
 from courses.models import Course, Comment
 
 

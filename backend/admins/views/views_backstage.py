@@ -6,8 +6,9 @@ from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 
-from core.messages import ERROR, INFO
+from core.constants import ERROR, INFO, ACTION_TYPE
 from admins.utils import get_admin_page
+from admins.models import AdminLog
 
 
 def authenticate_admin(request):
@@ -171,6 +172,12 @@ def add_admin(request):
             password=password,
             is_staff=True
         )
+
+    AdminLog.objects.create(
+        admin_user=request.user,
+        action_type=ACTION_TYPE['add_admin'],
+        object_id=new_admin.id
+    )
     return JsonResponse({'new_admin_id': new_admin.id})
 
 
