@@ -1,3 +1,5 @@
+# pylint: disable=E1101
+
 from django.conf import settings
 from django.db import models
 
