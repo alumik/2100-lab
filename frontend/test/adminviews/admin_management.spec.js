@@ -16,7 +16,7 @@ describe('管理员管理模块单元测验', () => {
 
   it('输入查询手机号内容正确显示', () => {
     wrapper.findAll('[type=text]').at(1).setValue('15222583257')
-    expect(wrapper.vm.query_input[1]).toEqual('15222583257')
+    expect(wrapper.vm.phone_number).toEqual('15222583257')
   })
 
   it('检测新增管理员按钮的正确跳转', () => {
