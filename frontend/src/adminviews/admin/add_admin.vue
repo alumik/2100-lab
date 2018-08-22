@@ -2,15 +2,15 @@
   <Basic :items="items">
     <div class="my-content">
       <h2>新增管理员</h2>
-      <form
-        method="post">
+      {{ error_message }}
+      <div>
         <div class="form-group">
           <label
             class="form-check-label"
             for="telephone">管理员手机号</label>
           <input
             id="telephone"
-            v-model="admin.telephone"
+            v-model="admin.phone_number"
             class="input form-control col-lg-3"
             type="text">
         </div>
@@ -35,16 +35,18 @@
             type="password">
         </div>
         <button
-          type="submit"
           class="btn btn-sm"
+          @click="checkFormat"
         >保存</button>
-      </form>
+      </div>
     </div>
   </Basic>
 </template>
 
 <script>
 import Basic from '../basic/basic'
+import axios from 'axios'
+import qs from 'qs'
 export default {
   name: 'AddAdmin',
   components: {Basic},
@@ -61,11 +63,54 @@ export default {
         active: true
       }],
       admin: {
-        telephone: null,
+        phone_number: null,
         password: null,
         password_again: null
       },
-      error_messages: []
+      error_message: ''
+    }
+  },
+  methods: {
+    checkFormat: function () {
+      this.error_message = ''
+      if (this.admin.phone_number === null) {
+        this.error_message = '请输入手机号！'
+        return
+      }
+      const regix = /^1\d{10}$/
+      let result = this.admin.phone_number.match(regix)
+      if (result === null) {
+        this.error_message = '请输入一个正确的手机号！'
+      } else if (this.admin.password === null) {
+        this.error_message = '请输入密码！'
+      } else if (this.admin.password_again === null) {
+        this.error_message = '请再次输入密码！'
+      } else if (this.admin.password !== this.admin.password_again) {
+        this.error_message = '两次输入密码不相符，请重新输入！'
+      } else {
+        this.sendMessage()
+      }
+    },
+    sendMessage: function () {
+      let _this = this
+      axios.post('http://localhost:8000/api/v1/admin/backstage/admin-management/add-admin/', qs.stringify({
+        phone_number: this.admin.phone_number,
+        password: this.admin.password
+      })).then(
+        response => {
+          if (response.data.new_admin_id) {
+            _this.error_message = '添加成功'
+            _this.admin.phone_number = ''
+            _this.admin.password = ''
+            _this.admin.password_again = ''
+            // this.$router.push({name: 'AdminManagement'})
+          }
+        }
+      ).catch(
+        error => {
+          _this.error_message = error.response.message
+        }
+      )
     }
   }
 }
