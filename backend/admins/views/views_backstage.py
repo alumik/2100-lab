@@ -189,9 +189,6 @@ def change_admin_groups(request):
 
     admin.groups.clear()
     for admin_group in new_admin_groups:
-        if admin_group != 'super_admin':
-            admin.groups.add(Group.objects.get(name=admin_group))
-    if 'super_admin' in new_admin_groups:
-        admin.is_superuser = True
+        admin.groups.add(Group.objects.get(name=admin_group))
     admin.save()
     return JsonResponse({'message': INFO['success']})

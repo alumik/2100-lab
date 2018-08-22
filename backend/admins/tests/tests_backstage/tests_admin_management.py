@@ -317,7 +317,6 @@ class AdminGroupsTests(TestCase):
                 'admin_id': admin.id,
                 'new_admin_groups': [
                     'course_admin',
-                    'super_admin'
                 ]
             }
         )
@@ -326,4 +325,3 @@ class AdminGroupsTests(TestCase):
         self.assertFalse(Group.objects.get(name='log_admin') in admin.groups.all())
         self.assertFalse(Group.objects.get(name='customer_admin') in admin.groups.all())
         self.assertTrue(Group.objects.get(name='course_admin') in admin.groups.all())
-        self.assertTrue(admin.is_superuser)
