@@ -31,7 +31,10 @@ const store = new Vuex.Store({
       customer_id: '',
       username: '',
       avatar: null
-    }
+    },
+    phone: '',
+    money: '',
+    time: ''
   },
   mutations: {
     status (state) {
@@ -41,6 +44,18 @@ const store = new Vuex.Store({
     user (state, data) {
       state.user = data
       sessionStorage.setItem('user', JSON.stringify(data))
+    },
+    phone (state, number) {
+      state.phone = number
+      sessionStorage.setItem('phone', number)
+    },
+    money (state, money) {
+      state.money = money
+      sessionStorage.setItem('money', money)
+    },
+    time (state, time) {
+      state.time = time
+      sessionStorage.setItem('time', time)
     },
     new_customer (state, status) {
       state.user.is_new_customer = status
@@ -68,5 +83,14 @@ new Vue({
   store,
   i18n,
   components: { App },
+  mounted () {
+    if (sessionStorage.getItem('status') === 'true') {
+      this.$store.commit('status')
+      this.$store.commit('user', JSON.parse(sessionStorage.getItem('user')))
+      this.$store.commit('phone', sessionStorage.getItem('phone'))
+      this.$store.commit('money', sessionStorage.getItem('money'))
+      this.$store.commit('time', sessionStorage.getItem('time'))
+    }
+  },
   template: '<App/>'
 }).$mount('#app')
