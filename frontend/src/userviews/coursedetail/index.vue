@@ -57,6 +57,24 @@
       </div>
       <div>
         <b-modal
+          id="log-popup"
+          hide-footer
+          title="注意！">
+          <p>请先登录！</p>
+          <div class="modal-style">
+            <b-btn @click="hide_log_popup">
+              取消
+            </b-btn>
+            <b-btn
+              variant="primary"
+              @click="open_log(course_id)">
+              登录
+            </b-btn>
+          </div>
+        </b-modal>
+      </div>
+      <div>
+        <b-modal
           id="pay-popup"
           hide-footer
           title="购买课程">
@@ -91,7 +109,8 @@
             <b-btn
               variant="primary"
               @click="finishPay">
-              完成支付</b-btn>
+              完成支付
+            </b-btn>
           </div>
         </b-modal>
       </div>
@@ -155,7 +174,7 @@
               <b-button
                 v-b-modal.study-popup
                 id="study-button"
-                size="lg"
+                size="sm"
                 variant="primary"
                 class="my-btn">
                 开始学习
@@ -163,11 +182,11 @@
             </div>
             <div v-show="course.price !== 0 && is_paid === false">
               <b-button
-                v-b-modal.pay-popup
                 id="pay-button"
                 size="sm"
                 variant="primary"
-                class="my-btn">
+                class="my-btn"
+                @click="handle_pay_operate">
                 立即购买
               </b-button>
             </div>
@@ -211,8 +230,7 @@
         id="course-introduction"
         class="profile-style">
         <h5>课程简介</h5>
-        <p>&emsp; &emsp;{{ course.description }}{{ pay_method }}
-          {{ pay_method_chosen }}</p>
+        <p>&emsp; &emsp;{{ course.description }}{{ course.can_access }}</p>
       </div>
     </div>
   </Basic>
@@ -222,6 +240,7 @@
 import Basic from '../components/basic'
 import axios from 'axios'
 import './style.css'
+import qs from 'qs'
 
 export default{
   name: 'CourseDetail',
@@ -244,9 +263,9 @@ export default{
       course: {
         id: 0,
         thumbnail: '',
-        title: '小猪佩奇',
+        title: '',
         description: '',
-        price: 100,
+        price: 0,
         reward_percent: 0,
         up_votes: 0,
         expire_duration: 0,
@@ -261,7 +280,9 @@ export default{
       praise_border_color: 'green',
       pay_method: 0,
       pay_method_chosen: false,
-      pay_remind_color: 'black'
+      pay_remind_color: 'black',
+      finishPay_test: false,
+      finishPay_error_msg: ''
     }
   },
   computed: {
@@ -280,15 +301,19 @@ export default{
     }
   },
   created () {
+    let that = this
     if (typeof (this.$route.query.course_id) === 'undefined') {
       this.$router.push({name: 'BurnedCourse'})
     } else {
-      this.course_id = this.$route.query.course_id
+      that.course_id = this.$route.query.course_id
     }
-    let that = this
-    axios.get('http://localhost:8000/api/v1/courses/forestage/course/get-course-detail?course_id=1')
+    axios.get('http://localhost:8000/api/v1/courses/forestage/course/get-course-detail?course_id=30')
       .then(function (response) {
         that.course = response.data
+        console.log(that.course.price)
+        if (that.course.price !== 0 && that.course.can_access === true) {
+          that.is_paid = true
+        }
       }).catch(function (error) {
         that.created_test = true
         that.created_error_msg = error
@@ -337,19 +362,43 @@ export default{
         this.$root.$emit('bv::hide::modal', 'pay-popup')
       }
     },
+    hide_log_popup () {
+      this.$root.$emit('bv::hide::modal', 'log-popup')
+    },
     hide_study_popup () {
       this.$root.$emit('bv::hide::modal', 'study-popup')
     },
     finishPay () {
+      let that = this
       if (this.pay_method_chosen === false) {
         this.pay_remind_color = 'red'
       } else {
         this.$root.$emit('bv::hide::modal', 'pay-popup')
-        this.is_paid = true
+        axios.post('http://localhost:8000/api/v1/courses/forestage/course/buy-course/',
+          qs.stringify({
+            course_id: 30})).then(function (response) {
+          console.log(response)
+          if (response.message === 'Success.') {
+            that.is_paid = true
+          } else alert('请先完成支付')
+        }).catch(function (error) {
+          that.finishPay_test = true
+          that.finishPay_error_msg = error
+        })
       }
     },
     open_study_page: function (id) {
       this.$router.push({name: 'StudyPage', query: {course_id: id}})
+    },
+    open_log: function (id) {
+      this.$router.push({name: 'Login', params: {source: 'coursedetail', course_id: id}})
+    },
+    handle_pay_operate: function () {
+      if (this.$store.state.status === true) {
+        this.$root.$emit('bv::show::modal', 'pay-popup')
+      } else {
+        this.$root.$emit('bv::show::modal', 'log-popup')
+      }
     }
   }
 }
