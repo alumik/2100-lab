@@ -1,5 +1,6 @@
 import json
 import uuid
+import re
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
@@ -174,7 +175,7 @@ class CustomerOperationTests(TestCase):
     def test_toggle_vip(self):
         self.client.login(phone_number='11122223333', password='123456')
         customer = get_user_model().objects.get(phone_number='00000000001')
-        response = self.client.get(
+        response = self.client.post(
             reverse('api:customers:backstage:toggle-vip'),
             {'customer_id': customer.id}
         )
@@ -187,7 +188,7 @@ class CustomerOperationTests(TestCase):
     def test_toggle_banned(self):
         self.client.login(phone_number='11122223333', password='123456')
         customer = get_user_model().objects.get(phone_number='00000000001')
-        response = self.client.get(
+        response = self.client.post(
             reverse('api:customers:backstage:toggle-banned'),
             {'customer_id': customer.id}
         )
@@ -196,3 +197,14 @@ class CustomerOperationTests(TestCase):
         customer = get_user_model().objects.get(phone_number='00000000001')
         self.assertTrue(response_json_data['is_banned'])
         self.assertTrue(customer.is_banned)
+
+    def delete_user(self):
+        self.client.login(phone_number='11122223333', password='123456')
+        customer = get_user_model().objects.create_user(phone_number='00000000002')
+        response = self.client.post(
+            reverse('api:customers:backstage:delete-customer'),
+            {'customer_id': customer.id}
+        )
+        self.assertEqual(response.status_code, 200)
+        customer = get_user_model().objects.create_user(phone_number='00000000002')
+        self.assertTrue(bool(re.match(r'.*_deleted_.*', customer.username)))

@@ -1,3 +1,5 @@
+import time
+
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
@@ -193,6 +195,7 @@ def toggle_vip(request):
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
     customer.is_vip = not customer.is_vip
+    customer.save()
 
     return JsonResponse({'is_vip': customer.is_vip})
 
@@ -207,5 +210,23 @@ def toggle_banned(request):
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
     customer.is_banned = not customer.is_banned
+    customer.save()
 
     return JsonResponse({'is_banned': customer.is_banned})
+
+
+@permission_required('core.delete_customuser')
+def delete_customer(request):
+    customer_id = request.POST.get('customer_id')
+
+    try:
+        customer = get_user_model().objects.get(id=customer_id, is_staff=False)
+    except OrderLog.DoesNotExist:
+        return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+
+    delete_str = '_deleted_' + str(int(round(time.time() * 1000)))
+    customer.phone_number += delete_str
+    customer.username += delete_str
+
+    customer.delete()
+    return JsonResponse({'message': INFO['object_deleted']})

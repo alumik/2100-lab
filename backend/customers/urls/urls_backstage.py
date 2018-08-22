@@ -52,4 +52,9 @@ urlpatterns = [
         views_backstage.toggle_banned,
         name='toggle-banned'
     ),
+    path(
+        'customer-management/delete-customer/',
+        views_backstage.delete_customer,
+        name='delete-customer'
+    ),
 ]
