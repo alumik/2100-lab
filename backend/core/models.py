@@ -119,3 +119,12 @@ class CustomUser(SoftDeletionModel, AbstractUser):
             'username': self.username,
             'phone_number': self.phone_number
         }
+
+    def as_customer_dict(self):
+        return {
+            'customer_id': self.id,
+            'username': self.username,
+            'phone_number': self.phone_number,
+            'is_vip': self.is_vip,
+            'is_banned': self.is_banned
+        }

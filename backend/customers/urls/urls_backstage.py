@@ -22,4 +22,9 @@ urlpatterns = [
         views_backstage.order_refund,
         name='order-refund'
     ),
+    path(
+        'customer-management/get-customer-list/',
+        views_backstage.get_customer_list,
+        name='get-customer-list'
+    ),
 ]
