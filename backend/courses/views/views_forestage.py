@@ -214,6 +214,9 @@ def get_course_comments(request):
     if not can_access(course, request.user):
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
+    if not course.can_comment:
+        return JsonResponse({'message': ERROR['comment_not_allowed']}, status=403)
+
     comments = Comment.objects.filter(course=course).order_by('-created_at')
     return get_comment_page(request, comments)
 
@@ -287,18 +290,23 @@ def down_vote_comment(request):
 @login_required
 def add_comment(request):
     user = request.user
+    course_id = request.GET.get('course_id')
+    comment_content = request.POST.get('content')
 
     try:
-        course = Course.objects.get(id=request.GET.get('course_id'))
+        course = Course.objects.get(id=course_id)
     except Course.DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
     if not can_access(course, request.user):
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
+    if (not course.can_comment) or user.is_banned:
+        return JsonResponse({'message': ERROR['comment_not_allowed']}, status=403)
+
     Comment.objects.create(
         user=user,
         course=course,
-        content=request.POST.get('content')
+        content=comment_content
     )
     return JsonResponse({'message': INFO['success']})
