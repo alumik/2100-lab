@@ -2,7 +2,8 @@
   <Basic :items="items">
     <div class="my-content">
       <h2>修改密码</h2>
-      <form>
+      {{ error_message }}
+      <div>
         <div class="form-group">
           <label
             class="form-check-label"
@@ -11,7 +12,7 @@
             id="newpassword"
             v-model="new_password"
             class="input form-control col-lg-3"
-            type="text">
+            type="password">
         </div>
         <div class="form-group">
           <label
@@ -24,16 +25,18 @@
             type="password">
         </div>
         <button
-          type="submit"
           class="btn btn-sm"
+          @click="submitMessage"
         >保存</button>
-      </form>
+      </div>
     </div>
   </Basic>
 </template>
 
 <script>
 import Basic from '../basic/basic'
+import axios from 'axios'
+import qs from 'qs'
 export default {
   name: 'ChangeCode',
   components: {Basic},
@@ -53,7 +56,33 @@ export default {
         active: true
       }],
       new_password: null,
-      new_password_again: null
+      new_password_again: null,
+      error_message: ''
+    }
+  },
+  methods: {
+    submitMessage: function () {
+      if (this.new_password === null) {
+        this.error_message = '请输入新密码'
+      } else if (this.new_password_again === null) {
+        this.error_message = '请再次输入新密码'
+      } else if (this.new_password !== this.new_password_again) {
+        this.error_message = '两次输入密码不一致'
+      } else {
+        axios.post('http://localhost:8000/api/v1/admin/backstage/admin-management/change-admin-password/',
+          qs.stringify({
+            admin_id: this.$route.query.admin_id,
+            new_password: this.new_password
+          })).then(
+          response => {
+            this.error_message = response.data.message
+          }
+        ).catch(
+          error => {
+            this.error_message = error.response.message
+          }
+        )
+      }
     }
   }
 }

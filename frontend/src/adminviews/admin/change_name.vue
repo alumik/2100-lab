@@ -2,7 +2,8 @@
   <Basic :items="items">
     <div class="my-content">
       <h2>修改管理员名</h2>
-      <form>
+      {{ error_message }}
+      <div>
         <div class="form-group">
           <label
             class="form-check-label"
@@ -19,16 +20,18 @@
             type="text">
         </div>
         <button
-          type="submit"
           class="btn btn-sm"
+          @click="submitMessage"
         >保存</button>
-      </form>
+      </div>
     </div>
   </Basic>
 </template>
 
 <script>
 import Basic from '../basic/basic'
+import axios from 'axios'
+import qs from 'qs'
 export default {
   name: 'ChangeName',
   components: {Basic},
@@ -48,7 +51,45 @@ export default {
         active: true
       }],
       new_name: null,
-      old_name: null
+      old_name: null,
+      error_message: ''
+    }
+  },
+  created () {
+    axios.get('http://localhost:8000/api/v1/admin/backstage/admin-management/get-admin-detail/', {
+      params: {
+        admin_id: this.$route.query.admin_id
+      }
+    }).then(
+      response => {
+        this.old_name = response.data.username
+      }
+    ).catch(
+      error => {
+        this.error_message = '读取数据出错' + error.response.data.message
+      }
+    )
+  },
+  methods: {
+    submitMessage: function () {
+      if (this.new_name === null) {
+        this.error_message = '请输入新名字'
+      } else if (this.old_name === this.new_name) {
+        this.error_message = '新旧名字一致'
+      } else {
+        axios.post('http://localhost:8000/api/v1/admin/backstage/admin-management/change-admin-username/', qs.stringify({
+          admin_id: this.$route.query.admin_id,
+          new_username: this.new_name
+        })).then(
+          response => {
+            this.error_message = response.data.new_username
+          }
+        ).catch(
+          error => {
+            this.error_message = error.response.message
+          }
+        )
+      }
     }
   }
 }
