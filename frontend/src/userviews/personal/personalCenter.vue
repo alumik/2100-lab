@@ -82,6 +82,8 @@
 import UserNavbar from '../components/navbar'
 import UserMenu from './menu'
 import BreadCrumb from '../../components/breadCrumb'
+import axios from 'axios'
+
 export default {
   name: 'PersonalCenter',
   components: {
@@ -103,7 +105,7 @@ export default {
       ],
       thumbnail: require('../../assets/logo.png'),
       file: null,
-      value: '我们是坠胖的',
+      value: this.$store.state.user.username,
       disabled: true,
       status: '修改',
       phone: 18309351612,
@@ -128,11 +130,20 @@ export default {
         this.status = '保存'
       } else {
         this.status = '修改'
+        console.log(this.value)
+        axios.post('http://localhost:8000/api/v1/customers/forestage/personal-center/change-username/',
+          {withCredentials: true}).then(res => {
+        })
+        this.$store.commit('user', {
+          is_new_customer: this.$store.state.user.is_new_customer,
+          customer_id: this.$store.state.user.customer_id,
+          username: this.value,
+          avatar: this.$store.state.user.avatar
+        })
       }
       this.disabled = !this.disabled
     }
-  }
-}
+  }}
 </script>
 
 <style scoped>
