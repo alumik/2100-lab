@@ -121,7 +121,6 @@ export default {
       }
     }).then(
       response => {
-        console.log(response.data)
         this.admin.admin_id = response.data.admin_id
         this.admin.username = response.data.username
         this.admin.phone_number = response.data.phone_number
