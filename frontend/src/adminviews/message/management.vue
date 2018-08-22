@@ -4,27 +4,19 @@
     class="my-basic">
     <div>
       <h1>{{ $t("message.title") }}</h1>
+      <Alert
+        :count_down="wrong_count_down"
+        :instruction="wrong"
+        variant="danger"
+        @decrease="wrong_count_down-1"
+        @zero="wrong_count_down=0"/>
+      <Alert
+        :count_down="success_count_down"
+        :instruction="success"
+        variant="success"
+        @decrease="success_count_down-1"
+        @zero="success_count_down=0"/>
       <div class="table-div">
-        <div class="alert-div">
-          <b-alert
-            :show="wrong_count_down"
-            class="my-alert"
-            variant="danger"
-            dismissible
-            @dismissed="wrong_count_down=0"
-            @dismiss_count_down="count_down_changed(wrong_count_down)">
-            {{ wrong }}
-          </b-alert>
-          <b-alert
-            :show="success_count_down"
-            class="my-alert"
-            variant="success"
-            dismissible
-            @dismissed="success_count_down=0"
-            @dismiss_count_down="count_down_changed(success_count_down)">
-            {{ success }}
-          </b-alert>
-        </div>
         <table class="table table-striped">
           <thead>
             <tr>
@@ -145,9 +137,10 @@ import InputModal from '../components/InputModal'
 import Basic from '../basic/basic'
 import axios from 'axios'
 import qs from 'qs'
+import Alert from '../../components/alert'
 export default {
   name: 'MessageManagement',
-  components: { Basic, InputModal, ConfirmModal, Pagination },
+  components: { Alert, Basic, InputModal, ConfirmModal, Pagination },
   data () {
     return {
       items: [{
@@ -289,15 +282,6 @@ export default {
           that.wrong_count_down = that.dismiss_second
         })
       this.search()
-    },
-    count_down_changed: function (val) {
-      const that = this
-      let t = setInterval(function () {
-        val -= 1
-        if (that.val === 0) {
-          clearInterval(t)
-        }
-      }, 1000)
     }
   }
 }
@@ -389,15 +373,5 @@ export default {
 
   .lg-td {
     width: 350px;
-  }
-
-  .alert-div {
-    padding-right: 350px;
-    padding-left: 350px;
-  }
-
-  .my-alert {
-    min-width: 400px;
-    max-width: 1000px;
   }
 </style>

@@ -30,26 +30,18 @@
             @click="delete_message"/>
         </div>
       </div>
-      <div class="alert-div">
-        <b-alert
-          :show="wrong_count_down"
-          class="my-alert"
-          variant="danger"
-          dismissible
-          @dismissed="wrong_count_down=0"
-          @dismiss_count_down="count_down_changed(wrong_count_down)">
-          {{ wrong }}
-        </b-alert>
-        <b-alert
-          :show="success_count_down"
-          class="my-alert"
-          variant="success"
-          dismissible
-          @dismissed="success_count_down=0"
-          @dismiss_count_down="count_down_changed(success_count_down)">
-          {{ success }}
-        </b-alert>
-      </div>
+      <Alert
+        :count_down="wrong_count_down"
+        :instruction="wrong"
+        variant="danger"
+        @decrease="wrong_count_down-1"
+        @zero="wrong_count_down=0"/>
+      <Alert
+        :count_down="success_count_down"
+        :instruction="success"
+        variant="success"
+        @decrease="success_count_down-1"
+        @zero="success_count_down=0"/>
       <DetailTable
         :titles="titles"
         :data="message"/>
@@ -64,9 +56,10 @@ import Basic from '../basic/basic'
 import DetailTable from '../components/detail_table'
 import axios from 'axios'
 import qs from 'qs'
+import Alert from '../../components/alert'
 export default {
   name: 'MessageDetail',
-  components: { DetailTable, Basic, InputModal, ConfirmModal },
+  components: { Alert, DetailTable, Basic, InputModal, ConfirmModal },
   data () {
     return {
       items: [{
@@ -242,15 +235,5 @@ export default {
   .btn:hover,
   .btn:active {
     background-color: #5e0057;
-  }
-
-  .alert-div {
-    padding-right: 350px;
-    padding-left: 350px;
-  }
-
-  .my-alert {
-    min-width: 400px;
-    max-width: 1000px;
   }
 </style>
