@@ -166,7 +166,7 @@ export default {
       } else if (id > 0) {
         this.$router.push({name: 'BackendCourseDetail', query: {course_id: id - 1}})
       } else if (id < 0) {
-        this.$router.push({name: 'EditCourse'})
+        this.$router.push({name: 'EditCourse', query: {course_id: (-(id + 2)).toString()}})
       }
     },
     change: function () {

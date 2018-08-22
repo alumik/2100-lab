@@ -72,6 +72,12 @@ import UploadPicture from './upload_picture'
 export default {
   name: 'UploadSource',
   components: {UploadPicture},
+  props: {
+    course_id: {
+      type: String,
+      default: '新增课程'
+    }
+  },
   data () {
     return {
       inputId: '',
@@ -117,7 +123,11 @@ export default {
       this.$refs.upload_source.hide()
     },
     showModalSync () {
-      this.$router.push({name: 'SyncPicture'})
+      if (this.course_id === '新增课程') {
+        this.$router.push({name: 'SyncPicture', query: {'course_id': this.course_id, 'url': '/creation'}})
+      } else {
+        this.$router.push({name: 'SyncPicture', query: {'course_id': this.course_id, 'url': '/edit?course_id=' + this.course_id.toString()}})
+      }
     }
   }
 }

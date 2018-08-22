@@ -27,7 +27,9 @@
           <label
             class="form-check-label my-label"
             for="course_content">课程素材</label>
-          <UploadSource id="course_content"/>
+          <UploadSource
+            id="course_content"
+            :course_id="course_id"/>
         </div>
         <div class="form-group form-inline">
           <div>
@@ -155,12 +157,13 @@ export default {
         text: '课程管理',
         href: '/admin/course'
       }, {
-        text: 'A001',
-        href: '/admin/course/detail'
+        text: this.$route.query.course_id.toString(),
+        href: '/admin/course/detail?course_id=' + this.$route.query.course_id.toString()
       }, {
         text: '修改课程',
         active: true
       }],
+      course_id: 0,
       course: {
         'ID': '123456',
         'name': 'ascmk',
@@ -173,6 +176,9 @@ export default {
         'can_review': 'Yes'
       }
     }
+  },
+  created () {
+    this.course_id = this.$route.query.course_id
   }
 }
 </script>

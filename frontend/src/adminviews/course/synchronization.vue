@@ -98,8 +98,8 @@ export default {
           text: '课程管理',
           href: '/admin/course'
         }, {
-          text: '新增课程',
-          href: '/admin/course/creation'
+          text: this.$route.query.course_id,
+          href: '/admin/course' + this.$route.query.url
         }, {
           text: '音图片同步',
           active: true
