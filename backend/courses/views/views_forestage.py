@@ -59,6 +59,7 @@ def get_course_detail(request):
         'price': course.price,
         'reward_percent': course.reward_percent,
         'up_votes': course.up_votes.count(),
+        'up_voted': request.user in course.up_votes.all(),
         'expire_duration': course.expire_duration,
         'expire_time': None,
         'can_access': False

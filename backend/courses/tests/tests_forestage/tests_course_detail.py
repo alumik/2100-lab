@@ -57,6 +57,12 @@ class CourseDetailTests(TestCase):
         course_id = Course.objects.get(codename='c4').id
 
         response = self.client.get(
+            reverse('api:courses:forestage:up-vote-course'),
+            {'course_id': course_id}
+        )
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(
             reverse('api:courses:forestage:get-course-detail'),
             {'course_id': course_id}
         )
@@ -67,7 +73,8 @@ class CourseDetailTests(TestCase):
         self.assertEqual(response_json_data['title'], 't4')
         self.assertEqual(response_json_data['description'], 'd4')
         self.assertEqual(response_json_data['price'], '0.00')
-        self.assertEqual(response_json_data['up_votes'], 0)
+        self.assertEqual(response_json_data['up_votes'], 1)
+        self.assertTrue(response_json_data['up_voted'])
         self.assertEqual(response_json_data['expire_duration'], 'P3DT07H00M00S')
         self.assertIsNone(response_json_data['expire_time'])
         self.assertTrue(response_json_data['can_access'])
