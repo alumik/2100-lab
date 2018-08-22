@@ -153,7 +153,7 @@ export default {
         this.courses = _course
       }).catch(
       error => {
-        this.error_message = '读取数据出错' + error
+        this.error_message = '读取数据出错' + error.response.data.message
       }
     )
   },

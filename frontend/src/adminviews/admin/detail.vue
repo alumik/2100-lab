@@ -2,6 +2,7 @@
   <Basic :items="items">
     <div class="my-content">
       <h2>管理员详情</h2>
+      {{ error_message }}
       <div class="button_group">
         <button
           type="button"
@@ -35,18 +36,10 @@
           <tbody>
             <tr>
               <td class="head-td">
-                testID
-              </td>
-              <td class="content-td">
-                {{ admin_id }}
-              </td>
-            </tr>
-            <tr>
-              <td class="head-td">
                 管理员名称
               </td>
               <td class="content-td">
-                {{ admin.ID }}
+                {{ admin.username }}
               </td>
             </tr>
             <tr>
@@ -54,7 +47,7 @@
                 管理员手机号
               </td>
               <td class="content-td">
-                {{ admin.name }}
+                {{ admin.phone_number }}
               </td>
             </tr>
             <tr>
@@ -62,7 +55,7 @@
                 添加时间
               </td>
               <td class="content-td">
-                {{ admin.create_time }}
+                {{ admin.date_joined }}
               </td>
             </tr>
             <tr>
@@ -70,7 +63,7 @@
                 修改时间
               </td>
               <td class="content-td">
-                {{ admin.change_time }}
+                {{ admin.updated_at }}
               </td>
             </tr>
             <tr>
@@ -78,7 +71,7 @@
                 权限
               </td>
               <td class="content-td">
-                {{ admin.authority }}
+                {{ admin.admin_groups }}
               </td>
             </tr>
           </tbody>
@@ -91,6 +84,7 @@
 <script>
 import Basic from '../basic/basic'
 import ConfirmModal from '../components/ConfirmModal'
+import axios from 'axios'
 export default {
   name: 'AdminDetail',
   components: {ConfirmModal, Basic},
@@ -103,22 +97,44 @@ export default {
         text: '管理员管理',
         href: '/admin/adminmanagement'
       }, {
-        text: '管理员详情',
+        text: this.$route.query.admin_id.toString(),
         active: true
       }],
       admin: {
-        'ID': '000001',
-        'name': 'DINGQUAN',
-        'create_time': '2018-08-13',
-        'change_time': '2018-08-13',
-        'authority': 'askcnkj'
+        'admin_id': '',
+        'username': '',
+        'phone_number': '',
+        'date_joined': '',
+        'updated_at': '',
+        'admin_groups': ''
       },
       admin_id: -1,
+      error_message: '',
       test_router: -1
     }
   },
   created () {
     this.admin_id = this.$route.query.admin_id
+    axios.get('http://localhost:8000/api/v1/admin/backstage/admin-management/get-admin-detail/', {
+      params: {
+        admin_id: this.admin_id
+      }
+    }).then(
+      response => {
+        console.log(response.data)
+        this.admin.admin_id = response.data.admin_id
+        this.admin.username = response.data.username
+        this.admin.phone_number = response.data.phone_number
+        this.admin.date_joined = response.data.date_joined.replace('T', ' ').substring(0, 19)
+        this.admin.updated_at = response.data.updated_at.replace('T', ' ').substring(0, 19)
+        for (let permission of response.data.admin_groups) {
+          this.admin_groups += permission
+        }
+      }).catch(
+      error => {
+        this.error_message = '读取数据出错' + error.response.data.message
+      }
+    )
   },
   methods: {
     jump: function (id) {

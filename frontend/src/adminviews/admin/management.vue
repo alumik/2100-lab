@@ -2,6 +2,7 @@
   <Basic :items="items">
     <div class="my-content">
       <h2>管理员列表</h2>
+      {{ error_message }}
       <button
         id="head-btn"
         type="button"
@@ -118,7 +119,6 @@ export default {
         this.$router.push({name: 'AddAdmin'})
       } else {
         this.query_id = id
-        console.log(this.query_id)
         this.$router.push({name: 'AdminDetail', query: {'admin_id': this.query_id}})
       }
     },
@@ -136,7 +136,7 @@ export default {
           let _admins = []
           for (let data of response.data.content) {
             _admins.push({
-              'id': data['id'],
+              'id': data['admin_id'],
               'username': data['username'],
               'phone_number': data['phone_number']
             })
@@ -144,7 +144,7 @@ export default {
           this.admins = _admins
         }).catch(
         error => {
-          this.error_message = '读取数据出错' + error
+          this.error_message = '读取数据出错' + error.response.data.message
         }
       )
     },
