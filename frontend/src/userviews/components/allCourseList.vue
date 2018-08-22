@@ -42,7 +42,8 @@
       <Pagination
         id="pagination"
         :rows="rows"
-        :perpage="perpage"/>
+        :perpage="perpage"
+        @change="change_page"/>
     </div>
   </div>
 </template>
@@ -65,18 +66,28 @@ export default {
       default: function () {
         return []
       }
+    },
+    page_limit: {
+      type: Number,
+      default: 10
+    },
+    page: {
+      type: Number,
+      default: 1
     }
   },
   data () {
     return {
-      rows: 20,
-      perpage: 3,
-      cards_per_page: 18
+      rows: 100,
+      perpage: 15
     }
   },
   methods: {
     open_course_detail: function (id) {
       this.$router.push({name: 'CourseDetail', params: {course_id: id}})
+    },
+    change_page: function (page) {
+      this.$emit('change_page', page)
     }
   }
 }

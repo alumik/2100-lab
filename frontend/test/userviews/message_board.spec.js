@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 
 import MessageBoard from '@/userviews/components/messageboard'
+import Pagination from '@/components/pagination'
 import {shallowMount} from '@vue/test-utils'
 import BootstrapVue from 'bootstrap-vue'
 import Vue from 'vue'
@@ -13,6 +14,10 @@ describe('留言板单元测试', () => {
 
   it('留言板', () => {
     expect(wrapper.contains('#message-board')).toBe(true)
+  })
+
+  it('留言分页', () => {
+    expect(wrapper.contains(Pagination)).toBe(true)
   })
 
   it('留言数量', () => {
