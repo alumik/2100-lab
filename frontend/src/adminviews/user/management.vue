@@ -5,6 +5,17 @@
     <div>
       <h1>用户列表</h1>
       <div class="table-div">
+        <div class="alert-div">
+          <b-alert
+            :show="wrong_count_down"
+            class="my-alert"
+            variant="danger"
+            dismissible
+            @dismissed="wrong_count_down=0"
+            @dismiss_count_down="count_down_changed(wrong_count_down)">
+            {{ wrong }}
+          </b-alert>
+        </div>
         <table class="table table-striped">
           <thead>
             <tr>
@@ -17,49 +28,54 @@
           </thead>
           <tbody>
             <tr align="center">
-              <td id="id-td">
+              <td class="s-td">
                 <div class="input-group-sm">
                   <input
                     v-model="user_id"
                     type="text"
                     class="form-control"
-                    placeholder="">
+                    placeholder=""
+                    @keyup.enter="search">
                 </div>
               </td>
-              <td id="name-td">
+              <td class="s-td">
                 <div class="input-group-sm">
                   <input
                     v-model="user_name"
                     type="text"
                     class="form-control"
-                    placeholder="">
+                    placeholder=""
+                    @keyup.enter="search">
                 </div>
               </td>
-              <td id="phone-td">
+              <td class="md-td">
                 <div class="input-group-sm">
                   <input
                     v-model="phone"
                     type="text"
                     class="form-control"
-                    placeholder="">
+                    placeholder=""
+                    @keyup.enter="search">
                 </div>
               </td>
-              <td id="type-td">
+              <td class="lg-td">
                 <div>
                   <select
                     v-model="type"
-                    class="selectpicker">
+                    class="selectpicker"
+                    @change="search">
                     <option value="whole">全部</option>
                     <option value="normal">普通用户</option>
                     <option value="authenticated">认证用户</option>
                   </select>
                 </div>
               </td>
-              <td id="state-td">
+              <td class="lg-td">
                 <div>
                   <select
                     v-model="state"
-                    class="selectpicker">
+                    class="selectpicker"
+                    @change="search">
                     <option value="whole">全部</option>
                     <option value="is_banned">已禁言</option>
                     <option value="not_banned">未禁言</option>
@@ -90,6 +106,7 @@
       </div>
       <Pagination
         :rows="rows"
+        :perpage="per_page"
         @change="change_page"/>
     </div>
   </Basic>
@@ -98,6 +115,8 @@
 <script>
 import Pagination from '../../components/pagination'
 import Basic from '../basic/basic'
+import axios from 'axios'
+
 export default {
   name: 'UserManagement',
   components: { Basic, Pagination },
@@ -119,18 +138,38 @@ export default {
         { label: '操作' }
       ],
       users: [
-        { user_id: '001', user_name: '小红', phone: '13102250001', type: '普通用户', state: '已禁言' },
-        { user_id: '002', user_name: '小明', phone: '13102250002', type: '认证用户', state: '未禁言' }
+        { user_id: '001', user_name: '13102250001', phone: '13102250001', type: '普通用户', state: '已禁言' },
+        { user_id: '002', user_name: '13102250002', phone: '13102250002', type: '认证用户', state: '未禁言' }
       ],
-      rows: 20,
+      // users: [],
+      rows: 0,
       user_id: '',
       user_name: '',
       phone: '',
       type: '',
       state: '',
       page_jump: false,
-      page: 1
+      page: 1,
+      per_page: 2,
+      dismiss_second: 5,
+      wrong_count_down: 0,
+      wrong: ''
     }
+  },
+  created () {
+    const that = this
+    axios.get('', { params: {
+      page_limit: that.per_page,
+      page: that.page
+    }})
+      .then(function (response) {
+        that.users = response.data.content
+        that.rows = response.data.count
+      })
+      .catch(function (error) {
+        that.wrong = '加载用户失败！' + error
+        that.wrong_count_down = that.dismiss_second
+      })
   },
   methods: {
     to_detail: function (val) {
@@ -139,6 +178,51 @@ export default {
     },
     change_page: function (page) {
       this.page = page
+      this.search()
+    },
+    count_down_changed: function (val) {
+      const that = this
+      let t = setInterval(function () {
+        val -= 1
+        if (that.val === 0) {
+          clearInterval(t)
+        }
+      }, 1000)
+    },
+    search: function () {
+      const that = this
+      let type
+      if (that.state === 'whole' || that.state === '') {
+        type = '0'
+      } else if (that.state === 'normal') {
+        type = '1'
+      } else {
+        type = '2'
+      }
+      let state
+      if (that.state === 'whole' || that.state === '') {
+        state = '0'
+      } else if (that.state === 'is_banned') {
+        state = '1'
+      } else {
+        state = '2'
+      }
+      axios.get('',
+        {params: {
+          userid: that.user_id,
+          username: that.user,
+          phone: that.phone,
+          type: type,
+          state: state
+        }})
+        .then(function (response) {
+          that.users = response.data.content
+          that.rows = response.data.count
+        })
+        .catch(function (error) {
+          that.wrong = '查询用户失败！' + error
+          that.wrong_count_down = that.dismiss_second
+        })
     }
   }
 }
@@ -165,6 +249,10 @@ export default {
     font-size: 1.2em;
     text-align: center;
     border: 1px solid #d3d9df;
+  }
+
+  td {
+    vertical-align: middle;
   }
 
   .btn {
@@ -198,18 +286,25 @@ export default {
     background-color: #6c757d;
   }
 
-  #id-td,
-  #name-td {
+  .s-td {
     width: 140px;
   }
 
-  #phone-td {
+  .md-td {
     width: 180px;
   }
 
-  #type-td,
-  #state-td,
-  #operation-td {
+  .lg-td {
     width: 200px;
+  }
+
+  .alert-div {
+    padding-right: 350px;
+    padding-left: 350px;
+  }
+
+  .my-alert {
+    min-width: 400px;
+    max-width: 1000px;
   }
 </style>
