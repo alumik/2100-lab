@@ -91,7 +91,7 @@
                 <button
                   type="button"
                   class="btn"
-                  @click="to_detail(user.user_id)">
+                  @click="to_detail(user.customer_id + '')">
                   详情
                 </button>
               </td>
