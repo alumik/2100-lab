@@ -5,17 +5,12 @@
     <div>
       <h1>用户列表</h1>
       <div class="table-div">
-        <div class="alert-div">
-          <b-alert
-            :show="wrong_count_down"
-            class="my-alert"
-            variant="danger"
-            dismissible
-            @dismissed="wrong_count_down=0"
-            @dismiss_count_down="count_down_changed(wrong_count_down)">
-            {{ wrong }}
-          </b-alert>
-        </div>
+        <Alert
+          :count_down="wrong_count_down"
+          :instruction="wrong"
+          variant="danger"
+          @decrease="wrong_count_down-1"
+          @zero="wrong_count_down=0"/>
         <table class="table table-striped">
           <thead>
             <tr>
@@ -38,7 +33,7 @@
                     @keyup.enter="search">
                 </div>
               </td>
-              <td class="s-td">
+              <td class="md-td">
                 <div class="input-group-sm">
                   <input
                     v-model="user_name"
@@ -58,7 +53,7 @@
                     @keyup.enter="search">
                 </div>
               </td>
-              <td class="lg-td">
+              <td class="md-td">
                 <div>
                   <select
                     v-model="type"
@@ -70,28 +65,28 @@
                   </select>
                 </div>
               </td>
-              <td class="lg-td">
+              <td class="md-td">
                 <div>
                   <select
                     v-model="state"
                     class="selectpicker"
                     @change="search">
                     <option value="whole">全部</option>
-                    <option value="is_banned">已禁言</option>
                     <option value="not_banned">未禁言</option>
+                    <option value="is_banned">已禁言</option>
                   </select>
                 </div>
               </td>
-              <td id="operation-td"/>
+              <td class="s-td"/>
             </tr>
             <tr
               v-for="user in users"
               :key="user.id">
-              <td>{{ user.user_id }}</td>
-              <td>{{ user.user_name }}</td>
-              <td>{{ user.phone }}</td>
-              <td>{{ user.type }}</td>
-              <td>{{ user.state }}</td>
+              <td>{{ user.customer_id }}</td>
+              <td>{{ user.username }}</td>
+              <td>{{ user.phone_number }}</td>
+              <td>{{ get_type(user.is_vip) }}</td>
+              <td>{{ get_state(user.is_banned) }}</td>
               <td>
                 <button
                   type="button"
@@ -116,10 +111,11 @@
 import Pagination from '../../components/pagination'
 import Basic from '../basic/basic'
 import axios from 'axios'
+import Alert from '../../components/alert'
 
 export default {
   name: 'UserManagement',
-  components: { Basic, Pagination },
+  components: { Alert, Basic, Pagination },
   data () {
     return {
       items: [{
@@ -137,11 +133,7 @@ export default {
         { label: '禁言状态' },
         { label: '操作' }
       ],
-      users: [
-        { user_id: '001', user_name: '13102250001', phone: '13102250001', type: '普通用户', state: '已禁言' },
-        { user_id: '002', user_name: '13102250002', phone: '13102250002', type: '认证用户', state: '未禁言' }
-      ],
-      // users: [],
+      users: [],
       rows: 0,
       user_id: '',
       user_name: '',
@@ -150,7 +142,7 @@ export default {
       state: '',
       page_jump: false,
       page: 1,
-      per_page: 2,
+      per_page: 10,
       dismiss_second: 5,
       wrong_count_down: 0,
       wrong: ''
@@ -158,10 +150,11 @@ export default {
   },
   created () {
     const that = this
-    axios.get('', { params: {
-      page_limit: that.per_page,
-      page: that.page
-    }})
+    axios.get('http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-list/',
+      { params: {
+        page_limit: that.per_page,
+        page: that.page
+      }})
       .then(function (response) {
         that.users = response.data.content
         that.rows = response.data.count
@@ -172,6 +165,20 @@ export default {
       })
   },
   methods: {
+    get_type: function (val) {
+      if (val) {
+        return '认证用户'
+      } else {
+        return '普通用户'
+      }
+    },
+    get_state: function (val) {
+      if (val) {
+        return '已禁言'
+      } else {
+        return '未禁言'
+      }
+    },
     to_detail: function (val) {
       this.page_jump = true
       this.$router.push({ name: 'UserDetail', query: { user_id: val } })
@@ -180,21 +187,12 @@ export default {
       this.page = page
       this.search()
     },
-    count_down_changed: function (val) {
-      const that = this
-      let t = setInterval(function () {
-        val -= 1
-        if (that.val === 0) {
-          clearInterval(t)
-        }
-      }, 1000)
-    },
     search: function () {
       const that = this
       let type
-      if (that.state === 'whole' || that.state === '') {
+      if (that.type === 'whole' || that.type === '') {
         type = '0'
-      } else if (that.state === 'normal') {
+      } else if (that.type === 'normal') {
         type = '1'
       } else {
         type = '2'
@@ -202,18 +200,20 @@ export default {
       let state
       if (that.state === 'whole' || that.state === '') {
         state = '0'
-      } else if (that.state === 'is_banned') {
+      } else if (that.state === 'not_banned') {
         state = '1'
       } else {
         state = '2'
       }
-      axios.get('',
+      axios.get('http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-list/',
         {params: {
-          userid: that.user_id,
-          username: that.user,
-          phone: that.phone,
-          type: type,
-          state: state
+          customer_id: that.user_id,
+          username: that.user_name,
+          phone_number: that.phone,
+          is_vip: type,
+          is_banned: state,
+          page_limit: that.per_page,
+          page: that.page
         }})
         .then(function (response) {
           that.users = response.data.content
@@ -287,7 +287,7 @@ export default {
   }
 
   .s-td {
-    width: 140px;
+    width: 120px;
   }
 
   .md-td {
@@ -296,15 +296,5 @@ export default {
 
   .lg-td {
     width: 200px;
-  }
-
-  .alert-div {
-    padding-right: 350px;
-    padding-left: 350px;
-  }
-
-  .my-alert {
-    min-width: 400px;
-    max-width: 1000px;
   }
 </style>

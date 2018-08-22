@@ -40,7 +40,7 @@ describe('用户管理页面单元测试', () => {
 
   it('测试改变状态菜单选项绑定数据是否改变', () => {
     wrapper.findAll('option').at(4).setSelected()
-    expect(wrapper.vm.state).toBe('is_banned')
+    expect(wrapper.vm.state).toBe('not_banned')
   })
 
   it('测试文本框输入是否正确', () => {
@@ -54,11 +54,5 @@ describe('用户管理页面单元测试', () => {
     const input2 = inputs.at(2)
     input2.setValue('13102250001')
     expect(wrapper.vm.phone).toBe('13102250001')
-  })
-
-  it('测试是否能够正确进行页面跳转', () => {
-    expect(wrapper.vm.page_jump).toBe(false)
-    wrapper.find('button').trigger('click')
-    expect(wrapper.vm.page_jump).toBe(true)
   })
 })
