@@ -153,9 +153,7 @@ export default {
     axios.get('http://localhost:8000/api/v1/customers/backstage/order-management/get-order-list/',
       { params: {
         page_limit: that.per_page,
-        page: that.page,
-        course_title: '',
-        customer_username: ''
+        page: that.page
       }})
       .then(function (response) {
         that.orders = response.data.content
