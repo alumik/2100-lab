@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 
-from core.constants import ERROR, INFO, ACTION_TYPE
+from core.constants import ERROR, INFO, ACTION_TYPE, ADMIN_GROUPS_NAME
 from admins.utils import get_admin_page
 from admins.models import AdminLog
 
@@ -103,11 +103,18 @@ def change_admin_username(request):
     try:
         get_user_model().objects.get(username=new_username)
         return JsonResponse({'message': ERROR['username_already_taken']}, status=400)
+
     except get_user_model().DoesNotExist:
         if re.match(r'^.*_deleted_.*$', new_username):
             return JsonResponse({'message': ERROR['invalid_username']}, status=400)
         admin.username = new_username
         admin.save()
+        AdminLog.objects.create(
+            admin_user=request.user,
+            action_type=ACTION_TYPE['update_admin'],
+            new_data=new_username,
+            object_id=admin_id
+        )
         return JsonResponse({'new_username': new_username})
 
 
@@ -126,6 +133,11 @@ def change_admin_password(request):
 
     admin.set_password(new_password)
     admin.save()
+    AdminLog.objects.create(
+        admin_user=request.user,
+        action_type=ACTION_TYPE['update_admin'],
+        object_id=admin_id
+    )
     return JsonResponse({'message': INFO['success']})
 
 
@@ -145,6 +157,11 @@ def delete_admin(request):
     admin.phone_number += delete_str
     admin.username += delete_str
 
+    AdminLog.objects.create(
+        admin_user=request.user,
+        action_type=ACTION_TYPE['delete_admin'],
+        object_id=admin_id
+    )
     admin.delete()
     return JsonResponse({'message': INFO['object_deleted']})
 
@@ -176,6 +193,7 @@ def add_admin(request):
     AdminLog.objects.create(
         admin_user=request.user,
         action_type=ACTION_TYPE['add_admin'],
+        new_data=phone_number,
         object_id=new_admin.id
     )
     return JsonResponse({'new_admin_id': new_admin.id})
@@ -194,8 +212,25 @@ def change_admin_groups(request):
     except get_user_model().DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
+    old_admin_groups = []
+    new_admin_groups_cn = []
+    for admin_group in admin.groups.all():
+        old_admin_groups.append(ADMIN_GROUPS_NAME[str(admin_group)])
+    for admin_group in new_admin_groups:
+        new_admin_groups_cn.append((ADMIN_GROUPS_NAME[str(admin_group)]))
+    old_data = ','.join(old_admin_groups)
+    new_data = ','.join(new_admin_groups_cn)
+
     admin.groups.clear()
     for admin_group in new_admin_groups:
         admin.groups.add(Group.objects.get(name=admin_group))
     admin.save()
+
+    AdminLog.objects.create(
+        admin_user=request.user,
+        action_type=ACTION_TYPE['change_admin_groups'],
+        old_data=old_data,
+        new_data=new_data,
+        object_id=admin_id
+    )
     return JsonResponse({'message': INFO['success']})
