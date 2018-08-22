@@ -1,12 +1,20 @@
 <template>
   <Basic>
     <b-alert
-      :show="connection_test"
+      :show="created_test"
       variant="danger"
       dismissible
       fade
-      @dismissed="connection_test = false">
-      This alert means that you have connectioned to backend.
+      @dismissed="created_test = false">
+      {{ created_error_msg }}
+    </b-alert>
+    <b-alert
+      :show="add_praise_test"
+      variant="danger"
+      dismissible
+      fade
+      @dismissed="add_praise_test = false">
+      {{ add_praise_error_msg }}
     </b-alert>
     <div
       id="page-title"
@@ -52,19 +60,31 @@
           id="pay-popup"
           hide-footer
           title="购买课程">
-          <h5 class="my-4">请选择支付方式</h5>
-          <qrcode
-            :options="{ size: 200 }"
-            value="alipay_qrcode_url"
-            class="qrcode-margin-style"/>
-          <qrcode
-            :options="{ size: 200 }"
-            value="wxpay_qrcode_url"
-            class="qrcode-margin-style"/>
-          <b-row>
-            <h5 class="alipay-title">支付宝</h5>
-            <h5 class="wxpay-title">微信</h5>
+          <h5
+            v-if="!pay_method_chosen"
+            :style="{color: pay_remind_color}"
+            class="my-4">请选择支付方式</h5>
+          <b-row
+            v-if="pay_method_chosen === false"
+            class="pay-method-style">
+            <b-col>
+              <b-button
+                variant="primary"
+                @click="pay_method_chose(0)">支付宝</b-button>
+            </b-col>
+            <b-col>
+              <b-button
+                variant="primary"
+                @click="pay_method_chose(1)">微信</b-button>
+            </b-col>
           </b-row>
+          <div v-if="pay_method_chosen">
+            <qrcode
+              :options="{ size: 200 }"
+              value="pay_qrcode_url"
+              class="qrcode-margin-style"/>
+            <p>{{ pay_method === 0 ? '支付宝': '微信' }}</p>
+          </div>
           <div class="modal-style">
             <b-btn @click="hide_pay_popup">
               取消</b-btn>
@@ -178,8 +198,8 @@
           <b-col cols="4">
             <b-button
               id="praise-button"
+              :style="{background: praise_color, border: praise_border_color}"
               size="sm"
-              variant="primary"
               class="my-btn"
               @click="add_praise">
               {{ course.up_votes }} 赞
@@ -191,7 +211,8 @@
         id="course-introduction"
         class="profile-style">
         <h5>课程简介</h5>
-        <p>&emsp; &emsp;{{ course.description }}</p>
+        <p>&emsp; &emsp;{{ course.description }}{{ pay_method }}
+          {{ pay_method_chosen }}</p>
       </div>
     </div>
   </Basic>
@@ -214,8 +235,7 @@ export default{
       course_img_src_example: 'https://picsum.photos/1024/480/?image=54',
       is_paid: false,
       share_qrcode_url: 'http://www.baidu.com',
-      alipay_qrcode_url: 'http://www.jisuanke.com',
-      wxpay_qrcode_url: 'http://se.jisuanke.com',
+      pay_qrcode_url: 'http://www.jisuanke.com',
       user_reward_balance: 50,
       share_instruction: '        小可爱，你可以通过分享该二维码和' +
         '小朋友一起学习有趣的实验哦~ 分享付费课程给好朋友，如果' +
@@ -232,7 +252,16 @@ export default{
         expire_duration: 0,
         expire_time: 0,
         can_access: false
-      }
+      },
+      created_test: false,
+      created_error_msg: '',
+      add_praise_test: false,
+      add_praise_error_msg: '',
+      praise_color: 'green',
+      praise_border_color: 'green',
+      pay_method: 0,
+      pay_method_chosen: false,
+      pay_remind_color: 'black'
     }
   },
   computed: {
@@ -260,26 +289,64 @@ export default{
     axios.get('http://localhost:8000/api/v1/courses/forestage/course/get-course-detail?course_id=1')
       .then(function (response) {
         that.course = response.data
+      }).catch(function (error) {
+        that.created_test = true
+        that.created_error_msg = error
       })
   },
   mounted: function () {
   },
   methods: {
+    pay_method_chose (payMethod) {
+      if (payMethod === 0) {
+        this.pay_method = 0
+        this.pay_qrcode_url = 'www.baidu.com'
+      } else if (payMethod === 1) {
+        this.pay_method = 1
+        this.pay_qrcode_url = 'se.jisuanke.com'
+      }
+      this.pay_method_chosen = true
+    },
     add_praise () {
+      let that = this
       axios.get('http://localhost:8000/api/v1/courses/forestage/course/up-vote-course/?course_id=1')
+        .then(function (response) {
+          if (response.data.up_voted === true) {
+            that.course.up_votes = response.data.up_votes
+            that.praise_color = 'grey'
+            that.praise_border_color = 'grey'
+          } else if (response.data.up_voted === false) {
+            that.course.up_votes = response.data.up_votes
+            that.praise_color = 'green'
+            that.praise_border_color = 'green'
+          }
+        }).catch(function (error) {
+          that.add_praise_test = true
+          that.add_praise_error_msg = error
+        })
     },
     hide_share_popup () {
       this.$root.$emit('bv::hide::modal', 'share-popup')
     },
     hide_pay_popup () {
-      this.$root.$emit('bv::hide::modal', 'pay-popup')
+      let that = this
+      if (that.pay_method_chosen === true) {
+        that.pay_method_chosen = false
+        that.pay_remind_color = 'black'
+      } else {
+        this.$root.$emit('bv::hide::modal', 'pay-popup')
+      }
     },
     hide_study_popup () {
       this.$root.$emit('bv::hide::modal', 'study-popup')
     },
     finishPay () {
-      this.$root.$emit('bv::hide::modal', 'pay-popup')
-      this.is_paid = true
+      if (this.pay_method_chosen === false) {
+        this.pay_remind_color = 'red'
+      } else {
+        this.$root.$emit('bv::hide::modal', 'pay-popup')
+        this.is_paid = true
+      }
     },
     open_study_page: function (id) {
       this.$router.push({name: 'StudyPage', query: {course_id: id}})

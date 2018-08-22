@@ -77,6 +77,10 @@
   margin-left: 20px;
 }
 
+.pay-method-style {
+  height: 100px;
+}
+
 .modal-input {
   width: 100%;
   border: none;
