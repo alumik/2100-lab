@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.http import JsonResponse
 
 from core.utils import get_page
-from core.messages import ERROR, INFO
+from core.constants import ERROR, INFO
 from customers.models import LearningLog, OrderLog
 from courses.models import Hero, Course, Image, Comment
 from courses.utils import get_courses, can_access, check_learning_log, get_comment_page

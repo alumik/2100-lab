@@ -2,7 +2,7 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
-from core.messages import INFO
+from core.constants import INFO
 
 
 def is_authenticated(request):

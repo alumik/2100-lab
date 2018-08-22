@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.utils import timezone
 
 from core.utils import get_backstage_page, get_brief_page
-from core.messages import ERROR, INFO
+from core.constants import ERROR, INFO
 from customers.models import OrderLog, LearningLog
 from customers.utils import get_customer_page
 

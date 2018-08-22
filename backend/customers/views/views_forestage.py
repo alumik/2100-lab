@@ -9,7 +9,7 @@ from django.http import JsonResponse
 # from qcloudsms_py.httpclient import HTTPError
 
 from core.utils import get_page
-from core.messages import ERROR, INFO
+from core.constants import ERROR, INFO
 from customers.models import LearningLog, OrderLog
 # from customers.utils import tencent_cloud_message
 
