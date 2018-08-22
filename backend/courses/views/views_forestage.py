@@ -102,6 +102,7 @@ def up_vote_course(request):
 @login_required
 def buy_course(request):
     course_id = request.POST.get('course_id')
+    payment_method = request.POST.get('payment_method')
     customer = request.user
 
     try:
@@ -142,7 +143,7 @@ def buy_course(request):
         course=course,
         cash_spent=cash_spent,
         reward_spent=reward_spent,
-        payment_method=1
+        payment_method=int(payment_method)
     )
 
     return JsonResponse({'message': INFO['success']})

@@ -215,7 +215,10 @@ class BuyCourseTest(TestCase):
         )
         response = self.client.post(
             reverse('api:courses:forestage:buy-course'),
-            {'course_id': course.id}
+            {
+                'course_id': course.id,
+                'payment_method': 1
+            }
         )
         user_0 = get_user_model().objects.get(phone_number='00000000000')
         user_1 = get_user_model().objects.get(phone_number='00000000001')
@@ -235,7 +238,10 @@ class BuyCourseTest(TestCase):
         )
         response = self.client.post(
             reverse('api:courses:forestage:buy-course'),
-            {'course_id': course.id}
+            {
+                'course_id': course.id,
+                'payment_method': 2
+            }
         )
         user_0 = get_user_model().objects.get(phone_number='00000000000')
         user_2 = get_user_model().objects.get(phone_number='00000000002')
