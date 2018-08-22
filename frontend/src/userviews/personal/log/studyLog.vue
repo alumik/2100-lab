@@ -21,7 +21,7 @@
             striped
             hover/>
           <b-pagination
-            :total-rows="items.length"
+            :total-rows="count"
             :per-page="perPage"
             v-model="currentPage"
             class="my-0" />
@@ -77,69 +77,62 @@ export default {
         }
       ],
       items: [],
-      // count: this.items.length,
+      count: 0,
       currentPage: 1,
-      perPage: 10,
+      perPage: 1,
       page_nums: 1,
       pageOptions: [5, 10, 15]
     }
   },
-  mounted () {
+  async mounted () {
     let that = this
-    axios
-      .get(
-        'http://localhost:8000/api/v1/customers/forestage/personal-center/get-learning-logs/',
-        {
-          params: {
-            page: that.currentPage,
-            page_limit: that.perPage
-          }
-        }
-      )
-      .then(res => {
-        that.page_nums = res.data.num_pages
-        for (let data of res.data.content) {
-          data.latest_learn = data.latest_learn
-            .toString()
-            .substring(0, 19)
-            .replace('T', ' ')
-          data.expire_time = data.expire_time.toString().substring(0, 19)
-          that.items.push(data)
-        }
-      })
-    setTimeout(() => {
-      for (let i = 2; i <= that.page_nums; i = i + 1) {
-        axios
-          .get(
-            'http://localhost:8000/api/v1/customers/forestage/personal-center/get-learning-logs/',
-            {
-              params: {
-                page: i,
-                page_limit: that.perPage
-              }
-            }
-          )
-          .then(res => {
-            that.page_nums = res.data.num_pages
-            if (i <= res.data.num_pages) {
-              for (let data of res.data.content) {
-                data.latest_learn = data.latest_learn
-                  .toString()
-                  .substring(0, 19)
-                  .replace('T', ' ')
-                data.expire_time = data.expire_time
-                  .toString()
-                  .substring(0, 19)
-                  .replace('T', ' ')
-                that.items.push(data)
-              }
-            }
-          })
-        if (i > that.page_nums) {
-          break
+    let res = await axios.get(
+      'http://localhost:8000/api/v1/customers/forestage/personal-center/get-learning-logs/',
+      {
+        params: {
+          page: that.currentPage,
+          page_limit: that.perPage
         }
       }
-    }, 1000)
+    )
+    that.count = res.data.count
+    that.page_nums = res.data.num_pages
+    for (let data of res.data.content) {
+      data.latest_learn = data.latest_learn
+        .toString()
+        .substring(0, 19)
+        .replace('T', ' ')
+      data.expire_time = data.expire_time.toString().substring(0, 19)
+      that.items.push(data)
+    }
+    for (let i = 2; i <= that.page_nums; i++) {
+      axios
+        .get(
+          'http://localhost:8000/api/v1/customers/forestage/personal-center/get-learning-logs/',
+          {
+            params: {
+              page: i,
+              page_limit: that.perPage
+            }
+          }
+        )
+        .then(res => {
+          that.page_nums = res.data.num_pages
+          if (i <= res.data.num_pages) {
+            for (let data of res.data.content) {
+              data.latest_learn = data.latest_learn
+                .toString()
+                .substring(0, 19)
+                .replace('T', ' ')
+              data.expire_time = data.expire_time
+                .toString()
+                .substring(0, 19)
+                .replace('T', ' ')
+              that.items.push(data)
+            }
+          }
+        })
+    }
   },
   methods: {
     hide: function () {
