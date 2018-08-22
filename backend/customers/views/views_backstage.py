@@ -181,3 +181,31 @@ def get_customer_learning_log_list(request):
 
     learning_logs = LearningLog.objects.filter(customer=customer).order_by('-latest_learn')
     return get_brief_page(request, learning_logs)
+
+
+@permission_required('core.change_customuser')
+def toggle_vip(request):
+    customer_id = request.POST.get('customer_id')
+
+    try:
+        customer = get_user_model().objects.get(id=customer_id, is_staff=False)
+    except OrderLog.DoesNotExist:
+        return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+
+    customer.is_vip = not customer.is_vip
+
+    return JsonResponse({'is_vip': customer.is_vip})
+
+
+@permission_required('core.change_customuser')
+def toggle_banned(request):
+    customer_id = request.POST.get('customer_id')
+
+    try:
+        customer = get_user_model().objects.get(id=customer_id, is_staff=False)
+    except OrderLog.DoesNotExist:
+        return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+
+    customer.is_banned = not customer.is_banned
+
+    return JsonResponse({'is_banned': customer.is_banned})

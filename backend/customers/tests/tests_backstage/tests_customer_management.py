@@ -154,3 +154,45 @@ class CustomerDetailTests(TestCase):
         self.assertEqual(response.status_code, 200)
         response_json_data = json.loads(response.content)
         self.assertEqual(response_json_data['count'], 1)
+
+
+class CustomerOperationTests(TestCase):
+    def setUp(self):
+        get_user_model().objects.create_user(phone_number='00000000001', is_vip=True, is_banned=False)
+        admin = get_user_model().objects.create_user(
+            phone_number='11122223333',
+            password='123456',
+            is_staff=True
+        )
+        permission = Permission.objects.get(codename='change_customuser')
+        admin_group = Group.objects.create(name='customer_admin')
+        admin_group.permissions.add(permission)
+        admin_group.save()
+        admin.groups.add(admin_group)
+        admin.save()
+
+    def test_toggle_vip(self):
+        self.client.login(phone_number='11122223333', password='123456')
+        customer = get_user_model().objects.get(phone_number='00000000001')
+        response = self.client.get(
+            reverse('api:customers:backstage:toggle-vip'),
+            {'customer_id': customer.id}
+        )
+        self.assertEqual(response.status_code, 200)
+        response_json_data = json.loads(response.content)
+        customer = get_user_model().objects.get(phone_number='00000000001')
+        self.assertFalse(response_json_data['is_vip'])
+        self.assertFalse(customer.is_vip)
+
+    def test_toggle_banned(self):
+        self.client.login(phone_number='11122223333', password='123456')
+        customer = get_user_model().objects.get(phone_number='00000000001')
+        response = self.client.get(
+            reverse('api:customers:backstage:toggle-banned'),
+            {'customer_id': customer.id}
+        )
+        self.assertEqual(response.status_code, 200)
+        response_json_data = json.loads(response.content)
+        customer = get_user_model().objects.get(phone_number='00000000001')
+        self.assertTrue(response_json_data['is_banned'])
+        self.assertTrue(customer.is_banned)

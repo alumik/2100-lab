@@ -42,4 +42,14 @@ urlpatterns = [
         views_backstage.get_customer_learning_log_list,
         name='get-customer-learning-log-list'
     ),
+    path(
+        'customer-management/toggle-vip/',
+        views_backstage.toggle_vip,
+        name='toggle-vip'
+    ),
+    path(
+        'customer-management/toggle-banned/',
+        views_backstage.toggle_banned,
+        name='toggle-banned'
+    ),
 ]
