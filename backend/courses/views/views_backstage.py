@@ -43,6 +43,19 @@ def get_course_detail(request):
     )
 
 
+@permission_required('courses.delete_course')
+def delete_course(request):
+    course_id = request.GET.get('course_id')
+
+    try:
+        course = Course.objects.get(id=course_id)
+    except Course.DoesNotExist:
+        return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+
+    course.delete()
+    return JsonResponse({'message': INFO['object_deleted']})
+
+
 @permission_required('courses.view_comment')
 def get_comment_list(request):
     username = request.GET.get('username', '')
