@@ -7,10 +7,12 @@
         <h1>用户详情</h1>
         <div class="buttons">
           <button
+            v-b-modal.redo_authenticate
             v-if="is_vip"
             type="button"
-            class="btn btn-lg">
-            已认证
+            class="btn btn-lg"
+            @click="authenticate_user">
+            取消认证
           </button>
           <button
             v-b-modal.authenticate
@@ -27,7 +29,8 @@
           <button
             v-if="is_banned"
             type="button"
-            class="btn btn-lg">
+            class="btn btn-lg"
+            @click="ban_user">
             取消禁言
           </button>
           <button
@@ -37,16 +40,11 @@
             class="btn btn-lg">
             禁言用户
           </button>
-          <b-modal
+          <ConfirmModal
             id="ban"
-            ref="modal"
             title="确认禁言"
-            centered
-            ok-title="确定"
-            cancel-title="取消"
-            @ok="ban_user">
-            <p id="ban-confirm">您确定要禁言此用户吗？</p>
-          </b-modal>
+            text="您确定要禁言此用户吗？"
+            @click="ban_user"/>
           <button
             v-if="is_deleted"
             type="button"
@@ -85,28 +83,15 @@
             <tr class="row mx-0">
               <td class="col-2">头像</td>
               <td class="col-10">
-                <img :src="user.img">
+                <img src="http://localhost:8000/media/default/customers/avatars/2100_lab.jpg">
               </td>
             </tr>
-            <tr class="row mx-0">
-              <td class="col-2">用户名</td>
-              <td class="col-10">{{ user.name }}</td>
-            </tr>
-            <tr class="row mx-0">
-              <td class="col-2">手机号码</td>
-              <td class="col-10">{{ user.phone }}</td>
-            </tr>
-            <tr class="row mx-0">
-              <td class="col-2">奖励金</td>
-              <td class="col-10">{{ user.balance }}</td>
-            </tr>
-            <tr class="row mx-0">
-              <td class="col-2">注册时间</td>
-              <td class="col-10">{{ user.register_time }}</td>
-            </tr>
-            <tr class="row mx-0">
-              <td class="col-2">修改时间</td>
-              <td class="col-10">{{ user.change_time }}</td>
+            <tr
+              v-for="n in titles.length"
+              :key="n"
+              class="row mx-0">
+              <td class="col-2">{{ titles[n-1] }}</td>
+              <td class="col-10">{{ user[n-1] }}</td>
             </tr>
           </tbody>
         </table>
@@ -114,6 +99,7 @@
       <div class="title">
         <h2>相关订单</h2>
         <button
+          id="order"
           type="button"
           class="btn"
           @click="to_order">
@@ -137,11 +123,11 @@
             <tr
               v-for="order in orders"
               :key="order.id">
-              <td>{{ order.order_code }}</td>
-              <td>{{ order.course_code }}</td>
-              <td>{{ order.course_name }}</td>
-              <td>{{ order.charge }}</td>
-              <td>{{ order.state }}</td>
+              <td class="lg-td">{{ order.order_no }}</td>
+              <td class="md-td">{{ order.course_codename }}</td>
+              <td class="md-td">{{ order.course_title }}</td>
+              <td class="s-td">{{ order.money }}</td>
+              <td class="s-td">{{ compute_state(order.is_refunded) }}</td>
             </tr>
           </tbody>
         </table>
@@ -150,6 +136,7 @@
         <h2>相关课程</h2>
         <div class="buttons">
           <button
+            id="course"
             type="button"
             class="btn"
             @click="to_course">
@@ -174,11 +161,11 @@
             <tr
               v-for="course_log in course_logs"
               :key="course_log.id">
-              <td>{{ course_log.course_code }}</td>
-              <td>{{ course_log.course_name }}</td>
-              <td>{{ course_log.progress }}</td>
-              <td>{{ course_log.time }}</td>
-              <td>{{ course_log.state }}</td>
+              <td class="md-td">{{ course_log.course_codename }}</td>
+              <td class="md-td">{{ course_log.course_title }}</td>
+              <td class="s-td">{{ course_log.progress }}</td>
+              <td class="md-td">{{ compute_date(course_log.latest_learn) }}</td>
+              <td class="md-td">{{ compute_burnt(course_log.is_burnt) }}</td>
             </tr>
           </tbody>
         </table>
@@ -201,12 +188,8 @@ export default {
   components: {Alert, Basic, ConfirmModal, BreadCrumb, AdminNavbar, Menu},
   data () {
     return {
-      user: { img: require('../../assets/logo.png'),
-        name: '小红',
-        phone: '13102250001',
-        balance: '15.00',
-        register_time: '2018-01-01',
-        change_time: '2018-08-01' },
+      titles: ['用户名', '手机号码', '奖励金', '注册时间', '修改时间'],
+      user: new Array(5),
       items: [{
         text: '主页',
         href: '/admin/main'
@@ -224,10 +207,7 @@ export default {
         { label: '金额' },
         { label: '状态' }
       ],
-      orders: [
-        { order_code: '0001', course_code: 'SOFT1', course_name: '计算机', charge: '110.00', state: '已完成' },
-        { order_code: '0010', course_code: 'ENGLISH2', course_name: '口语', charge: '120.00', state: '已退款' }
-      ],
+      orders: [],
       course_titles: [
         { label: '课程代码' },
         { label: '课程名' },
@@ -235,10 +215,7 @@ export default {
         { label: '最近学习时间' },
         { label: '是否焚毁' }
       ],
-      course_logs: [
-        { course_code: 'SOFT1', course_name: '计算机', progress: '01:22', time: '2018-08-14', state: '已焚毁' },
-        { course_code: 'ENGLISH3', course_name: '英语写作', progress: '15:00', time: '2018-05-14', state: '未焚毁' }
-      ],
+      course_logs: [],
       page_jump_course: false,
       page_jump_order: false,
       dismiss_second: 5,
@@ -253,7 +230,7 @@ export default {
   },
   created () {
     const that = this
-    axios.get('',
+    axios.get('http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-detail/',
       {params: {
         customer_id: that.$route.query.user_id
       }})
@@ -262,15 +239,18 @@ export default {
           that.wrong = '无法查找到此用户的详情信息！'
           that.wrong_count_down = that.dismiss_second
         } else {
-          that.user = response.data
-          that.is_banned = response.data.is_banned
+          let temp = that.compute_user(response.data.customer_info)
+          that.user = temp
+          that.is_banned = response.data.customer_info.is_banned
+          that.is_vip = response.data.customer_info.is_vip
+          that.is_deleted = response.data.customer_info.is_deleted
         }
       })
       .catch(function (error) {
         that.wrong = '获取用户详情失败！' + error
         that.wrong_count_down = that.dismiss_second
       })
-    axios.get('',
+    axios.get('http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-order-list/',
       {params: {
         customer_id: that.$route.query.user_id
       }})
@@ -279,14 +259,14 @@ export default {
           that.wrong = '无法查找到此用户的订单信息！'
           that.wrong_count_down = that.dismiss_second
         } else {
-          that.orders = response.data
+          that.orders = response.data.content
         }
       })
       .catch(function (error) {
         that.wrong = '获取此用户的订单信息失败！' + error
         that.wrong_count_down = that.dismiss_second
       })
-    axios.get('',
+    axios.get('http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-learning-log-list/',
       {params: {
         customer_id: that.$route.query.user_id
       }})
@@ -295,7 +275,7 @@ export default {
           that.wrong = '无法查找到此用户的学习记录！'
           that.wrong_count_down = that.dismiss_second
         } else {
-          that.orders = response.data
+          that.course_logs = response.data.content
         }
       })
       .catch(function (error) {
@@ -304,8 +284,31 @@ export default {
       })
   },
   methods: {
-    change_banned: function () {
-      this.is_banned = !this.is_banned
+    compute_user: function (val) {
+      let temp = []
+      temp[0] = val.username
+      temp[1] = val.phone_number
+      temp[2] = val.reward_coin
+      temp[3] = val.date_joined.slice(0, 10)
+      temp[4] = val.updated_at.slice(0, 10)
+      return temp
+    },
+    compute_state: function (val) {
+      if (val) {
+        return '已退款'
+      } else {
+        return '未退款'
+      }
+    },
+    compute_date: function (val) {
+      return val.slice(0, 10)
+    },
+    compute_burnt: function (val) {
+      if (val) {
+        return '已焚毁'
+      } else {
+        return '未焚毁'
+      }
     },
     to_course: function () {
       this.page_jump_course = true
@@ -317,17 +320,21 @@ export default {
     },
     authenticate_user: function () {
       const that = this
-      axios.post('',
+      axios.post('http://localhost:8000/api/v1/customers/backstage/customer-management/toggle-vip/',
         qs.stringify({
           customer_id: that.$route.query.user_id
         }))
         .then(function (response) {
           if (response.data.message === 'Object not found.') {
-            that.wrong = '无法认证此用户！'
+            that.wrong = '无法更改此用户认证信息！'
             that.wrong_count_down = that.dismiss_second
           } else {
-            that.success = '您已经成功认证此用户！'
-            that.is_vip = true
+            that.is_vip = !that.is_vip
+            if (that.is_vip) {
+              that.success = '您已经成功认证此用户！'
+            } else {
+              that.success = '您已经成功取消此用户的认证！'
+            }
             that.success_count_down = that.dismiss_second
           }
         })
@@ -338,7 +345,7 @@ export default {
     },
     ban_user: function () {
       const that = this
-      axios.post('',
+      axios.post('http://localhost:8000/api/v1/customers/backstage/customer-management/toggle-banned/',
         qs.stringify({
           customer_id: that.$route.query.user_id
         }))
@@ -347,19 +354,23 @@ export default {
             that.wrong = '无法禁言此用户！'
             that.wrong_count_down = that.dismiss_second
           } else {
-            that.success = '您已经成功禁言此用户！'
-            that.is_banned = true
+            that.is_banned = !that.is_banned
+            if (that.is_banned) {
+              that.success = '您已经成功禁言此用户！'
+            } else {
+              that.success = '您已经成功取消此用户的禁言！'
+            }
             that.success_count_down = that.dismiss_second
           }
         })
         .catch(function (error) {
-          that.wrong = '禁言失败！' + error
+          that.wrong = '操作失败！' + error
           that.wrong_count_down = that.dismiss_second
         })
     },
     delete_user: function () {
       const that = this
-      axios.post('',
+      axios.post('http://localhost:8000/api/v1/customers/backstage/customer-management/delete-customer/',
         qs.stringify({
           customer_id: that.$route.query.user_id
         }))
@@ -406,10 +417,6 @@ export default {
 
   img {
     width: 40px;
-  }
-
-  #ban-confirm {
-    text-align: left;
   }
 
   #order-table,
@@ -460,5 +467,21 @@ export default {
     font-weight: bold;
     color: white;
     background-color: #6c757d;
+  }
+
+  td {
+    vertical-align: middle;
+  }
+
+  .s-td {
+    width: 150px;
+  }
+
+  .md-td {
+    width: 250px;
+  }
+
+  .lg-td {
+    width: 500px;
   }
 </style>
