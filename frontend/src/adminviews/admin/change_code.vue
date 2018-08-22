@@ -46,8 +46,8 @@ export default {
         text: '管理员管理',
         href: '/admin/adminmanagement'
       }, {
-        text: '管理员详情',
-        href: '/admin/adminmanagement/detail'
+        text: this.$route.query.admin_id.toString(),
+        href: '/admin/adminmanagement/detail?admin_id=' + this.$route.query.admin_id.toString()
       }, {
         text: '修改密码',
         active: true

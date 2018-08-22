@@ -49,8 +49,8 @@ export default {
         text: '管理员管理',
         href: '/admin/adminmanagement'
       }, {
-        text: '管理员详情',
-        href: '/admin/adminmanagement/detail'
+        text: this.$route.query.admin_id.toString(),
+        href: '/admin/adminmanagement/detail?admin_id=' + this.$route.query.admin_id.toString()
       }, {
         text: '分配权限',
         active: true
@@ -64,8 +64,7 @@ export default {
     }
   },
   watch: {
-    selected (newVal, oldVal) {
-      // Handle changes in individual flavour checkboxes
+    selected () {
       this.allSelected = false
     }
   },

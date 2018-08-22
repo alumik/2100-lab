@@ -3,8 +3,17 @@
 import { shallowMount } from '@vue/test-utils'
 import ChangeName from '@/adminviews/admin/change_name.vue'
 
+const $route = {
+  path: '/admin/adminmanagement/changename',
+  query: {'admin_id': 0}
+}
+
 describe('修改管理员名模块单元测验', () => {
-  const wrapper = shallowMount(ChangeName)
+  const wrapper = shallowMount(ChangeName, {
+    mocks: {
+      $route
+    }
+  })
 
   it('标题是"修改管理员名"', () => {
     expect(wrapper.find('h2').text()).toEqual('修改管理员名')

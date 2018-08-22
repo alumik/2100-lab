@@ -27,7 +27,8 @@
         <ConfirmModal
           id="delete"
           title="确认删除"
-          text="您确定要删除该管理员吗？"/>
+          text="您确定要删除该管理员吗？"
+          @click="deleteMessage"/>
       </div>
       <div class="table_div">
         <table
@@ -85,6 +86,7 @@
 import Basic from '../basic/basic'
 import ConfirmModal from '../components/ConfirmModal'
 import axios from 'axios'
+import qs from 'qs'
 export default {
   name: 'AdminDetail',
   components: {ConfirmModal, Basic},
@@ -139,14 +141,27 @@ export default {
     jump: function (id) {
       if (id === 1) {
         this.test_router = 1
-        this.$router.push({name: 'DistributeAuthority'})
+        this.$router.push({name: 'DistributeAuthority', query: {admin_id: this.admin_id}})
       } else if (id === 2) {
         this.test_router = 2
-        this.$router.push({name: 'ChangeCode'})
+        this.$router.push({name: 'ChangeCode', query: {admin_id: this.admin_id}})
       } else if (id === 3) {
         this.test_router = 3
-        this.$router.push({name: 'ChangeName'})
+        this.$router.push({name: 'ChangeName', query: {admin_id: this.admin_id}})
       }
+    },
+    deleteMessage: function () {
+      axios.post('http://localhost:8000/api/v1/admin/backstage/admin-management/delete-admin/',
+        qs.stringify({
+          admin_id: this.admin_id
+        })).then(
+        response => {
+          this.$router.push({name: 'AdminManagement'})
+        }).catch(
+        error => {
+          this.error_message = error.response.message
+        }
+      )
     }
   }
 }
