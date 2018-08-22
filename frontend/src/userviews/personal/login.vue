@@ -220,6 +220,7 @@ export default {
         // console.log(response.data)
         this.$store.commit('status')
         this.$store.commit('user', response.data)
+        this.$store.commit('phone', this.phone)
         this.$router.push({path: '/personal'})
         // }
       }).catch(error => {

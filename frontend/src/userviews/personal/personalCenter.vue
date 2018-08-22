@@ -116,9 +116,9 @@ export default {
       value: this.$store.state.user.username,
       disabled: true,
       status: '修改',
-      phone: 18309351612,
-      money: 10,
-      time: Date()
+      phone: this.$store.state.phone,
+      money: this.$store.state.money,
+      time: this.$store.state.time
     }
   },
   watch: {
@@ -126,6 +126,34 @@ export default {
       this.status = '保存'
       this.nameState = true
     }
+  },
+  mounted () {
+    axios
+      .get(
+        'http://localhost:8000/api/v1/customers/forestage/personal-center/get-reward-coin/'
+      )
+      .then(res => {
+        this.$store.commit('money', (this.money = res.data.reward_coin))
+      })
+    axios
+      .get(
+        'http://localhost:8000/api/v1/customers/forestage/auth/get-generate-time/'
+      )
+      .then(res => {
+        function unix (value) {
+          function add0 (m) {
+            return m < 10 ? '0' + m : m
+          }
+          let time = new Date(parseInt(value) * 1000)
+          let y = time.getFullYear()
+          let m = time.getMonth() + 1
+          let d = time.getDate()
+          let h = time.getHours()
+          let s = time.getSeconds()
+          return y + '.' + add0(m) + '.' + add0(d) + ' ' + add0(h) + ':' + add0(s)
+        }
+        this.$store.commit('time', (this.time = unix(res.data.generate_time)))
+      })
   },
   methods: {
     hide: function () {
