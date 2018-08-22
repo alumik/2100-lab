@@ -60,7 +60,7 @@ export default {
         active: true
       }],
       admin_id: '',
-      flavours: ['用户评论管理权限', '课程管理权限', '客户管理权限', '日志管理权限', '订单管理权限'],
+      flavours: ['评论管理权限', '课程管理权限', '客户管理权限', '日志管理权限', '订单管理权限'],
       selected: [],
       error_message: '',
       allSelected: false
@@ -89,7 +89,7 @@ export default {
         }
       }).catch(
       error => {
-        this.error_message = '读取数据出错' + error.response.data.message
+        this.error_message = '读取数据出错' + error.response.data
       })
   },
   methods: {
@@ -99,7 +99,7 @@ export default {
     transferPermission (permission) {
       switch (permission) {
         case 'comment_admin':
-          return '用户评论管理权限'
+          return '评论管理权限'
         case 'course_admin':
           return '课程管理权限'
         case 'customer_admin':
@@ -112,7 +112,7 @@ export default {
     },
     reversePermission (sel) {
       switch (sel) {
-        case '用户评论管理权限':
+        case '评论管理权限':
           return 'comment_admin'
         case '课程管理权限':
           return 'course_admin'

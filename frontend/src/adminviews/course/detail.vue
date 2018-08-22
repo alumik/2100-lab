@@ -156,7 +156,17 @@ export default {
       this.$router.push({name: 'EditCourse', query: {'course_id': this.$route.query.course_id}})
     },
     deleteMessage: function () {
-      axios.get('http://localhost:8000/api/v1/courses/backstage/course-management/get-course-detail')
+      axios.get('http://localhost:8000/api/v1/courses/backstage/course-management/delete-course/', {
+        params: {
+          course_id: this.$route.query.course_id
+        }}).then(
+        response => {
+          this.$router.push({name: 'CourseManagement'})
+        }).catch(
+        error => {
+          this.error_message = error.response.message
+        }
+      )
     }
   }
 }
