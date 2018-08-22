@@ -179,7 +179,7 @@ export default {
       let that = this
       axios.post('http://localhost:8000/api/v1/customers/forestage/auth/get-verification-code/',
         qs.stringify({
-          phone_number: this.phone.toString()
+          phone_number: this.phone
         }), {withCredentials: true}).then((response) => {
         alert(response.data.verification_code)
         that.$store.commit('new_customer', response.data.is_customer)
