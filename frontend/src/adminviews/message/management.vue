@@ -180,10 +180,11 @@ export default {
   },
   created () {
     const that = this
-    axios.get('http://localhost:8000/api/v1/courses/backstage/comment-management/get-comment-list/', { params: {
-      page_limit: that.per_page,
-      page: that.page
-    }})
+    axios.get('http://localhost:8000/api/v1/courses/backstage/comment-management/get-comment-list/',
+      { params: {
+        page_limit: that.per_page,
+        page: that.page
+      }})
       .then(function (response) {
         that.messages = response.data.content
         that.rows = response.data.count

@@ -5,14 +5,12 @@
     <div>
       <h1>订单列表</h1>
       <div class="table-div">
-        <b-alert
-          :show="wrong_count_down"
+        <Alert
+          :count_down="wrong_count_down"
+          :instruction="wrong"
           variant="danger"
-          dismissible
-          @dismissed="wrong_count_down=0"
-          @dismiss_count_down="count_down_changed(wrong_count_down)">
-          {{ wrong }}
-        </b-alert>
+          @decrease="wrong_count_down-1"
+          @zero="wrong_count_down=0"/>
         <table class="table table-striped">
           <thead>
             <tr>
@@ -25,7 +23,7 @@
           </thead>
           <tbody>
             <tr align="center">
-              <td class="small-td">
+              <td class="lg-td">
                 <div class="input-group-sm">
                   <input
                     v-model="order_code"
@@ -35,7 +33,7 @@
                     @keyup.enter="search">
                 </div>
               </td>
-              <td class="small-td">
+              <td class="md-td">
                 <div class="input-group-sm">
                   <input
                     v-model="course_code"
@@ -45,7 +43,7 @@
                     @keyup.enter="search">
                 </div>
               </td>
-              <td class="small-td">
+              <td class="md-td">
                 <div class="input-group-sm">
                   <input
                     v-model="course_name"
@@ -55,7 +53,7 @@
                     @keyup.enter="search">
                 </div>
               </td>
-              <td class="small-td">
+              <td class="md-td">
                 <div class="input-group-sm">
                   <input
                     v-model="user"
@@ -65,8 +63,8 @@
                     @keyup.enter="search">
                 </div>
               </td>
-              <td/>
-              <td class="big-td">
+              <td class="s-td"/>
+              <td class="s-td">
                 <div>
                   <select
                     v-model="state"
@@ -78,22 +76,22 @@
                   </select>
                 </div>
               </td>
-              <td/>
+              <td class="s-td"/>
             </tr>
             <tr
               v-for="order in orders"
               :key="order.id">
-              <td>{{ order.order_code }}</td>
-              <td>{{ order.course_code }}</td>
-              <td>{{ order.course_name }}</td>
-              <td>{{ order.user }}</td>
-              <td>{{ order.charge }}</td>
-              <td> {{ order.state }} </td>
+              <td>{{ order.order_no }}</td>
+              <td>{{ order.course_codename }}</td>
+              <td>{{ order.course_title }}</td>
+              <td>{{ order.customer_username }}</td>
+              <td>{{ order.money }}</td>
+              <td> {{ get_state(order.is_refunded) }} </td>
               <td>
                 <button
                   type="button"
                   class="btn"
-                  @click="to_detail(order.id)">
+                  @click="to_detail(order.order_id + '')">
                   详情
                 </button>
               </td>
@@ -103,6 +101,7 @@
       </div>
       <Pagination
         :rows="rows"
+        :perpage="per_page"
         @change="change_page"/>
     </div>
   </Basic>
@@ -112,9 +111,10 @@
 import Pagination from '../../components/pagination'
 import Basic from '../basic/basic'
 import axios from 'axios'
+import Alert from '../../components/alert'
 export default {
   name: 'OrderManagement',
-  components: { Basic, Pagination },
+  components: { Alert, Basic, Pagination },
   data () {
     return {
       items: [{
@@ -133,28 +133,13 @@ export default {
         { label: '状态' },
         { label: '操作' }
       ],
-      orders: [
-        { id: '001',
-          order_code: '1001',
-          course_code: 'SOFT1',
-          course_name: '计算机',
-          user: '小红',
-          charge: '100.00',
-          state: '已完成' },
-        { id: '003',
-          order_code: '1002',
-          course_code: 'ENGLISH2',
-          course_name: '口语',
-          user: '小明',
-          charge: '120.00',
-          state: '已退款' }
-      ],
-      rows: 6,
+      orders: [],
+      rows: 0,
       order_code: '',
       course_code: '',
       course_name: '',
       user: '',
-      state: null,
+      state: '',
       page_jump: false,
       page: 1,
       per_page: 2,
@@ -165,10 +150,13 @@ export default {
   },
   created () {
     const that = this
-    axios.get('', { params: {
-      page_limit: that.per_page,
-      page: that.page
-    }})
+    axios.get('http://localhost:8000/api/v1/customers/backstage/order-management/get-order-list/',
+      { params: {
+        page_limit: that.per_page,
+        page: that.page,
+        course_title: '',
+        customer_username: ''
+      }})
       .then(function (response) {
         that.orders = response.data.content
         that.rows = response.data.count
@@ -179,6 +167,13 @@ export default {
       })
   },
   methods: {
+    get_state: function (val) {
+      if (val) {
+        return '已退款'
+      } else {
+        return '已完成'
+      }
+    },
     search: function () {
       const that = this
       let state
@@ -189,13 +184,15 @@ export default {
       } else {
         state = '2'
       }
-      axios.get('',
+      axios.get('http://localhost:8000/api/v1/customers/backstage/order-management/get-order-list/',
         {params: {
-          order_codename: that.order_code,
+          order_no: that.order_code,
           course_codename: that.course_code,
           course_title: that.course_name,
-          username: that.user,
-          state: state
+          customer_username: that.user,
+          is_refunded: state,
+          page_limit: that.per_page,
+          page: that.page
         }})
         .then(function (response) {
           that.orders = response.data.content
@@ -213,15 +210,6 @@ export default {
     change_page: function (page) {
       this.page = page
       this.search()
-    },
-    count_down_changed: function (val) {
-      const that = this
-      let t = setInterval(function () {
-        val -= 1
-        if (that.val === 0) {
-          clearInterval(t)
-        }
-      }, 1000)
     }
   }
 }
@@ -237,6 +225,10 @@ export default {
     margin-top: 25px;
     margin-bottom: 25px;
     text-align: left;
+  }
+
+  td {
+    vertical-align: middle;
   }
 
   table {
@@ -280,11 +272,15 @@ export default {
     background-color: #6c757d;
   }
 
-  .small-td {
+  .s-td {
+    width: 100px;
+  }
+
+  .md-td {
     width: 180px;
   }
 
-  .big-td {
-    width: 200px;
+  .lg-td {
+    width: 420px;
   }
 </style>
