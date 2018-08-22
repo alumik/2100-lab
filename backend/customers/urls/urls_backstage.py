@@ -27,4 +27,9 @@ urlpatterns = [
         views_backstage.get_customer_list,
         name='get-customer-list'
     ),
+    path(
+        'customer-management/get-customer-detail/',
+        views_backstage.get_customer_detail,
+        name='get-customer-detail'
+    )
 ]

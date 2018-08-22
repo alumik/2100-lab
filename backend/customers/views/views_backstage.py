@@ -5,7 +5,7 @@ from django.utils import timezone
 
 from core.utils import get_backstage_page
 from core.messages import ERROR, INFO
-from customers.models import OrderLog
+from customers.models import OrderLog, LearningLog
 from customers.utils import get_customer_page
 
 
@@ -114,3 +114,58 @@ def get_customer_list(request):
     page['is_vip'] = is_vip
     page['is_banned'] = is_banned
     return JsonResponse(page, safe=False)
+
+
+@permission_required('core.view_customuser')
+def get_customer_detail(request):
+    customer_id = request.GET.get('customer_id')
+
+    try:
+        customer = get_user_model().objects.get(id=customer_id, is_staff=False)
+    except OrderLog.DoesNotExist:
+        return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+
+    json_data = {
+        'customer_info': {
+            'avatar': str(customer.avatar),
+            'user_id': customer.id,
+            'username': customer.username,
+            'phone_number': customer.phone_number,
+            'reward_coin': customer.reward_coin,
+            'is_vip': customer.is_vip,
+            'is_banned': customer.is_banned,
+            'date_joined': customer.date_joined,
+            'updated_at': customer.updated_at
+        },
+        'recent_orders': [],
+        'recent_learning_logs': []
+    }
+
+    recent_orders = OrderLog.objects.filter(customer=customer)[:5]
+    recent_learning_logs = LearningLog.objects.filter(customer=customer)[:5]
+
+    for recent_order in recent_orders:
+        json_data['recent_orders'].append(
+            {
+                'order_no': recent_order.order_no,
+                'course_codename': recent_order.course.codename,
+                'course_title': recent_order.course.title,
+                'money': recent_order.cash_spent + recent_order.reward_spent,
+                'is_refunded': recent_order.refunded_at is None
+            }
+        )
+
+    for recent_learning_log in recent_learning_logs:
+        item = {
+            'course_codename': recent_learning_log.course.codename,
+            'course_title': recent_learning_log.course.title,
+            'progress': recent_learning_log.progress,
+            'latest_learn': recent_learning_log.latest_learn,
+            'is_burnt': False
+        }
+        if recent_learning_log.expire_time is not None:
+            if recent_learning_log.expire_time < timezone.now():
+                item['is_burnt'] = True
+        json_data['recent_learning_logs'].append(item)
+
+    return JsonResponse(json_data)
