@@ -1,19 +1,20 @@
+<!--suppress ALL -->
 <template>
   <Basic :items="items">
     <div class="my-content">
       <div>
         <h2>分配权限</h2>
-        <h4 class="my-text">管理员账号：{{ admin.ID }}</h4>
+        {{ error_message }}
+        <h4 class="my-text">管理员账号：{{ admin_id }}</h4>
         <div>
           <h4 class="my-text">权限选择：</h4>
           <b-form-group class="my-form-group">
             <b-form-checkbox
               v-model="allSelected"
-              aria-describedby="flavours"
               aria-controls="flavours"
               @change="toggleAll"
             >
-              <h4>{{ allSelected ? '取消超级管理员权限' : '超级管理员权限' }}</h4>
+              <h4>{{ allSelected ? '取消全选' : '全选' }}</h4>
             </b-form-checkbox>
             <b-form-checkbox-group
               id="flavors"
@@ -27,6 +28,7 @@
             />
             <b-button
               class="btn"
+              @click="submitMessage"
             >提交</b-button>
           </b-form-group>
         </div>
@@ -37,6 +39,8 @@
 
 <script>
 import Basic from '../basic/basic'
+import axios from 'axios'
+import qs from 'qs'
 export default {
   name: 'DistributeAuthority',
   components: {Basic},
@@ -55,22 +59,90 @@ export default {
         text: '分配权限',
         active: true
       }],
-      admin: {
-        ID: 'DingQuan'
-      },
-      flavours: ['用户评论管理权限', '课程管理权限', '客户管理权限', '日志权限', '订单管理权限', '管理员管理权限'],
+      admin_id: '',
+      flavours: ['用户评论管理权限', '课程管理权限', '客户管理权限', '日志管理权限', '订单管理权限'],
       selected: [],
+      error_message: '',
       allSelected: false
     }
   },
   watch: {
     selected () {
-      this.allSelected = false
+      if (this.allSelected === true && this.selected.length !== this.flavours.length) {
+        this.allSelected = false
+      }
+      if (this.allSelected === false && this.selected.length === this.flavours.length) {
+        this.allSelected = true
+      }
     }
+  },
+  mounted () {
+    this.admin_id = this.$route.query.admin_id
+    axios.get('http://localhost:8000/api/v1/admin/backstage/admin-management/get-admin-detail/', {
+      params: {
+        admin_id: this.admin_id
+      }
+    }).then(
+      response => {
+        for (let permission of response.data.admin_groups) {
+          this.selected.push(this.transferPermission(permission))
+        }
+      }).catch(
+      error => {
+        this.error_message = '读取数据出错' + error.response.data.message
+      })
   },
   methods: {
     toggleAll (checked) {
       this.selected = checked ? this.flavours.slice() : []
+    },
+    transferPermission (permission) {
+      switch (permission) {
+        case 'comment_admin':
+          return '用户评论管理权限'
+        case 'course_admin':
+          return '课程管理权限'
+        case 'customer_admin':
+          return '客户管理权限'
+        case 'log_admin':
+          return '日志管理权限'
+        case 'order_admin':
+          return '订单管理权限'
+      }
+    },
+    reversePermission (sel) {
+      switch (sel) {
+        case '用户评论管理权限':
+          return 'comment_admin'
+        case '课程管理权限':
+          return 'course_admin'
+        case '客户管理权限':
+          return 'customer_admin'
+        case '日志管理权限':
+          return 'log_admin'
+        case '订单管理权限':
+          return 'order_admin'
+      }
+    },
+    submitMessage () {
+      let adminGroups = []
+      for (let sel of this.selected) {
+        adminGroups.push(this.reversePermission(sel))
+      }
+      axios.post('http://localhost:8000/api/v1/admin/backstage/admin-management/change-admin-groups/',
+        qs.stringify({
+          new_admin_groups: adminGroups,
+          admin_id: this.admin_id
+        }, {arrayFormat: 'repeat'})).then(
+        response => {
+          this.error_message = response.data.message
+          this.$router.push({name: 'AdminDetail', query: {'admin_id': this.admin_id}})
+        }
+      ).catch(
+        error => {
+          this.error_message = error.response.message
+        }
+      )
     }
   }
 }

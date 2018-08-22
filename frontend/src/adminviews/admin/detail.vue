@@ -129,7 +129,12 @@ export default {
         this.admin.date_joined = response.data.date_joined.replace('T', ' ').substring(0, 19)
         this.admin.updated_at = response.data.updated_at.replace('T', ' ').substring(0, 19)
         for (let permission of response.data.admin_groups) {
-          this.admin_groups += permission
+          if (permission === 'super_admin') {
+            this.admin.admin_groups = '超级管理员权限'
+            break
+          } else {
+            this.admin.admin_groups = this.admin.admin_groups + ' ' + this.transferPermission(permission)
+          }
         }
       }).catch(
       error => {
@@ -138,6 +143,22 @@ export default {
     )
   },
   methods: {
+    transferPermission (permission) {
+      switch (permission) {
+        case 'comment_admin':
+          return '用户评论管理权限'
+        case 'course_admin':
+          return '课程管理权限'
+        case 'customer_admin':
+          return '客户管理权限'
+        case 'log_admin':
+          return '日志权限'
+        case 'order_admin':
+          return '订单管理权限'
+        case 'super_admin':
+          return '超级管理员权限'
+      }
+    },
     jump: function (id) {
       if (id === 1) {
         this.test_router = 1
