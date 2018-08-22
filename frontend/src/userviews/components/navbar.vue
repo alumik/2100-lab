@@ -62,7 +62,9 @@ export default {
     },
     personal () {
       axios
-        .post('http://localhost:8000/api/v1/core/auth/is-authenticated/')
+        .post('http://localhost:8000/api/v1/core/auth/is-authenticated/', {
+          withCredentials: true
+        })
         .then(res => {
           if (res.data.is_authenticated) {
             this.$router.push({ path: '/personal' })
@@ -73,7 +75,9 @@ export default {
       let that = this
       if (that.$store.state.status) {
         axios
-          .post('http://localhost:8000/api/v1/core/auth/logout/')
+          .post('http://localhost:8000/api/v1/core/auth/logout/', {
+            withCredentials: true
+          })
           .then(res => {
             // console.log(res.data.message)
             that.$store.commit('logout')
