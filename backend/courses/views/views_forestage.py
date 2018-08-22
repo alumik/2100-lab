@@ -1,9 +1,12 @@
+import uuid
+
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 from django.http import JsonResponse
 
 from core.utils import get_page
 from core.messages import ERROR, INFO
-from customers.models import LearningLog
+from customers.models import LearningLog, OrderLog
 from courses.models import Hero, Course, Image, Comment
 from courses.utils import get_courses, can_access, check_learning_log, get_comment_page
 
@@ -96,9 +99,60 @@ def up_vote_course(request):
 
 
 @login_required
-def get_course_assets(request):
+def buy_course(request):
+    course_id = request.POST.get('course_id')
+    customer = request.user
+
     try:
-        course = Course.objects.get(id=request.GET.get('course_id'))
+        course = Course.objects.get(id=course_id)
+    except Course.DoesNotExist:
+        return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+
+    price = course.price
+    reward_coin = customer.reward_coin
+    referer_id = request.session['referer_id']
+    reward_percent = course.reward_percent
+
+    if price > reward_coin:
+        cash_spent = price - reward_coin
+        reward_spent = reward_coin
+        reward_coin = 0
+    else:
+        cash_spent = 0
+        reward_spent = price
+        reward_coin -= price
+
+    customer.reward_coin = reward_coin
+    customer.save()
+
+    if referer_id != '':
+        referer_id = int(referer_id)
+        try:
+            referer = get_user_model().objects.get(id=referer_id)
+            reward_get = reward_percent * price
+            referer.reward_coin += reward_get
+            referer.save()
+        except Course.DoesNotExist:
+            pass
+
+    OrderLog.objects.create(
+        order_no=uuid.uuid1(),
+        customer=customer,
+        course=course,
+        cash_spent=cash_spent,
+        reward_spent=reward_spent,
+        payment_method=1
+    )
+
+    return JsonResponse({'message': INFO['success']})
+
+
+@login_required
+def get_course_assets(request):
+    course_id = request.GET.get('course_id')
+
+    try:
+        course = Course.objects.get(id=course_id)
     except Course.DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
