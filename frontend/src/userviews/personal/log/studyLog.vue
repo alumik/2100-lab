@@ -103,9 +103,7 @@ export default {
             .toString()
             .substring(0, 19)
             .replace('T', ' ')
-          data.expire_time = data.expire_time
-            .toString()
-            .substring(0, 19)
+          data.expire_time = data.expire_time.toString().substring(0, 19)
           that.items.push(data)
         }
       })

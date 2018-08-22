@@ -35,36 +35,7 @@
 import UserNavbar from '../../components/navbar'
 import UserMenu from '../menu'
 import BreadCrumb from '../../../components/breadCrumb'
-const Items = [
-  {
-    isActive: true,
-    age: 40,
-    first_name: 'Dickerson',
-    last_name: 'Macdonald',
-    address: { country: 'USA', city: 'New York' }
-  },
-  {
-    isActive: false,
-    age: 21,
-    first_name: 'Larsen',
-    last_name: 'Shaw',
-    address: { country: 'Canada', city: 'Toronto' }
-  },
-  {
-    isActive: false,
-    age: 89,
-    first_name: 'Geneva',
-    last_name: 'Wilson',
-    address: { country: 'Australia', city: 'Sydney' }
-  },
-  {
-    isActive: true,
-    age: 38,
-    first_name: 'Jami',
-    last_name: 'Carney',
-    address: { country: 'England', city: 'London' }
-  }
-]
+import axios from 'axios'
 export default {
   name: 'OrderLog',
   components: {
@@ -81,22 +52,22 @@ export default {
       ],
       responsive: 'lg',
       fields: {
-        last_name: {
+        order_no: {
           label: '订单号',
           sortable: true
         },
-        first_name: {
+        course_codename: {
           label: '课程编号'
         },
-        foo: {
+        course_title: {
           key: 'age',
           label: '课程名',
           sortable: true
         },
-        city: {
+        created_at: {
           key: '时间'
         },
-        'address.country': {
+        money: {
           label: '金额'
         }
       },
@@ -110,11 +81,65 @@ export default {
           href: '/personal/orderlog'
         }
       ],
-      items: Items.concat(Items.concat(Items.concat(Items.concat(Items)))),
+      items: [],
       currentPage: 1,
       perPage: 10,
-      pageOptions: [ 5, 10, 15 ]
+      page_nums: 1,
+      pageOptions: [5, 10, 15]
     }
+  },
+  mounted () {
+    let that = this
+    axios
+      .get(
+        'http://localhost:8000/api/v1/customers/forestage/personal-center/get_order_logs/',
+        {
+          params: {
+            page: that.currentPage,
+            page_limit: that.perPage
+          }
+        }
+      )
+      .then(res => {
+        that.page_nums = res.data.num_pages
+        for (let data of res.data.content) {
+          data.latest_learn = data.latest_learn
+            .toString()
+            .substring(0, 19)
+            .replace('T', ' ')
+          data.expire_time = data.expire_time.toString().substring(0, 19)
+          that.items.push(data)
+        }
+      })
+    setTimeout(() => {
+      for (let i = 2; i <= that.page_nums; i = i + 1) {
+        axios
+          .get(
+            'http://localhost:8000/api/v1/customers/forestage/personal-center/get-learning-logs/',
+            {
+              params: {
+                page: i,
+                page_limit: that.perPage
+              }
+            }
+          )
+          .then(res => {
+            that.page_nums = res.data.num_pages
+            if (i <= res.data.num_pages) {
+              for (let data of res.data.content) {
+                data.created_at = data.created_at
+                  .toString()
+                  .substring(0, 19)
+                  .replace('T', ' ')
+                that.items.push(data)
+              }
+            }
+          })
+        if (i > that.page_nums) {
+          break
+        }
+      }
+    }, 1000)
   },
   methods: {
     hide: function () {
@@ -125,24 +150,24 @@ export default {
 </script>
 
 <style scoped>
-  #page {
-    height: 100%;
-  }
+#page {
+  height: 100%;
+}
 
-  #main {
-    display: flex;
-    height: 100%;
-  }
+#main {
+  display: flex;
+  height: 100%;
+}
 
-  #info {
-    flex-grow: 1;
-  }
+#info {
+  flex-grow: 1;
+}
 
-  .content {
-    padding: 20px;
-  }
+.content {
+  padding: 20px;
+}
 
-  .my-0 {
-    justify-content: center;
-  }
+.my-0 {
+  justify-content: center;
+}
 </style>
