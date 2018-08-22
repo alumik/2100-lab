@@ -179,3 +179,61 @@ class CourseDetailTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(course.up_votes.count(), 0)
+
+
+class BuyCourseTest(TestCase):
+    def test_buy_course(self):
+        user_0 = get_user_model().objects.create_user(phone_number='00000000000')
+        user_1 = get_user_model().objects.create_user(phone_number='00000000001')
+        user_2 = get_user_model().objects.create_user(phone_number='00000000002')
+        user_1.reward_coin = 30
+        user_2.reward_coin = 70
+        user_1.save()
+        user_2.save()
+        course = Course.objects.create(
+            codename='c1',
+            title='t1',
+            description='d1',
+            price=50,
+            reward_percent=0.5
+        )
+
+        self.client.force_login(user_1)
+        self.client.get(
+            reverse('api:courses:forestage:get-course-detail'),
+            {
+                'course_id': course.id,
+                'referer_id': user_0.id
+            }
+        )
+        response = self.client.post(
+            reverse('api:courses:forestage:buy-course'),
+            {'course_id': course.id}
+        )
+        user_0 = get_user_model().objects.get(phone_number='00000000000')
+        user_1 = get_user_model().objects.get(phone_number='00000000001')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(int(user_1.reward_coin), 0)
+        self.assertEqual(int(user_0.reward_coin), 25)
+        self.assertEqual(int(OrderLog.objects.get(customer__phone_number='00000000001').cash_spent), 20)
+        self.client.logout()
+
+        self.client.force_login(user_2)
+        self.client.get(
+            reverse('api:courses:forestage:get-course-detail'),
+            {
+                'course_id': course.id,
+                'referer_id': user_0.id
+            }
+        )
+        response = self.client.post(
+            reverse('api:courses:forestage:buy-course'),
+            {'course_id': course.id}
+        )
+        user_0 = get_user_model().objects.get(phone_number='00000000000')
+        user_2 = get_user_model().objects.get(phone_number='00000000002')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(int(user_2.reward_coin), 20)
+        self.assertEqual(int(user_0.reward_coin), 50)
+        self.assertEqual(int(OrderLog.objects.get(customer__phone_number='00000000002').cash_spent), 0)
+        self.client.logout()

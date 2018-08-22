@@ -93,8 +93,8 @@ class Comment(SoftDeletionModel):
             'content': self.content,
             'up_votes': self.up_votes.count(),
             'down_votes': self.down_votes.count(),
-            'up_voted': True if customer in self.up_votes.all() else False,
-            'down_voted': True if customer in self.down_votes.all() else False,
+            'up_voted': customer in self.up_votes.all(),
+            'down_voted': customer in self.down_votes.all(),
             'created_at': self.created_at
         }
 
@@ -106,7 +106,7 @@ class Comment(SoftDeletionModel):
             'course_codename': self.course.codename,
             'course_title': self.course.title,
             'content': self.content,
-            'is_deleted': True if self.deleted_at is not None else False
+            'is_deleted': self.deleted_at is not None
         }
 
 

@@ -33,6 +33,11 @@ urlpatterns = [
         name='up-vote-course'
     ),
     path(
+        'course/buy-course/',
+        views_forestage.buy_course,
+        name='buy-course'
+    ),
+    path(
         'play/get-course-assets/',
         views_forestage.get_course_assets,
         name='get-course-assets'

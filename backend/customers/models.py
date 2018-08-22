@@ -1,3 +1,5 @@
+# pylint: disable=E1101
+
 from django.conf import settings
 from django.db import models
 
@@ -45,5 +47,16 @@ class OrderLog(models.Model):
             'customer_username': self.customer.username,
             'created_at': self.created_at,
             'money': self.cash_spent + self.reward_spent,
-            'refunded': self.refunded_at is not None
+            'is_refunded': self.refunded_at is not None
+        }
+
+    def as_backstage_dict(self):
+        return {
+            'order_id': self.id,
+            'order_no': self.order_no,
+            'course_codename': self.course.codename,
+            'course_title': self.course.title,
+            'customer_username': self.customer.username,
+            'money': self.cash_spent + self.reward_spent,
+            'is_refunded': self.refunded_at is not None
         }
