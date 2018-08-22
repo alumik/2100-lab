@@ -202,7 +202,7 @@ class CommentListTests(TestCase):
                 'username': comment.user.username,
                 'course_codename': comment.course.codename,
                 'course_title': comment.course.title,
-                'is_deleted': True if comment.deleted_at is not None else False,
+                'is_deleted': comment.deleted_at is not None,
                 'deleted_at': response_json_data['deleted_at'],
                 'up_votes': comment.up_votes.count(),
                 'down_votes': comment.down_votes.count(),
