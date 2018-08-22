@@ -7,7 +7,14 @@
         <h1>用户详情</h1>
         <div class="buttons">
           <button
+            v-if="is_vip"
+            type="button"
+            class="btn btn-lg">
+            已认证
+          </button>
+          <button
             v-b-modal.authenticate
+            v-else
             type="button"
             class="btn btn-lg">
             认证用户
@@ -15,12 +22,12 @@
           <ConfirmModal
             id="authenticate"
             title="确认认证"
-            text="您确定要认证此用户吗？"/>
+            text="您确定要认证此用户吗？"
+            @click="authenticate_user"/>
           <button
             v-if="is_banned"
             type="button"
-            class="btn btn-lg"
-            @click="change_banned">
+            class="btn btn-lg">
             取消禁言
           </button>
           <button
@@ -37,11 +44,18 @@
             centered
             ok-title="确定"
             cancel-title="取消"
-            @ok="change_banned">
+            @ok="ban_user">
             <p id="ban-confirm">您确定要禁言此用户吗？</p>
           </b-modal>
           <button
+            v-if="is_deleted"
+            type="button"
+            class="btn btn-lg">
+            已删除
+          </button>
+          <button
             v-b-modal.delete
+            v-else
             type="button"
             class="btn btn-lg">
             删除用户
@@ -49,9 +63,22 @@
           <ConfirmModal
             id="delete"
             title="确认删除"
-            text="您确定要删除此用户吗？"/>
+            text="您确定要删除此用户吗？"
+            @click="delete_user"/>
         </div>
       </div>
+      <Alert
+        :count_down="wrong_count_down"
+        :instruction="wrong"
+        variant="danger"
+        @decrease="wrong_count_down-1"
+        @zero="wrong_count_down=0"/>
+      <Alert
+        :count_down="success_count_down"
+        :instruction="success"
+        variant="success"
+        @decrease="success_count_down-1"
+        @zero="success_count_down=0"/>
       <div class="table-div">
         <table class="table table-bordered">
           <tbody class="w-100">
@@ -166,9 +193,12 @@ import Menu from '../components/menu'
 import BreadCrumb from '../../components/breadCrumb'
 import ConfirmModal from '../components/ConfirmModal'
 import Basic from '../basic/basic'
+import Alert from '../../components/alert'
+import axios from 'axios'
+import qs from 'qs'
 export default {
   name: 'UserDetail',
-  components: {Basic, ConfirmModal, BreadCrumb, AdminNavbar, Menu},
+  components: {Alert, Basic, ConfirmModal, BreadCrumb, AdminNavbar, Menu},
   data () {
     return {
       user: { img: require('../../assets/logo.png'),
@@ -209,22 +239,144 @@ export default {
         { course_code: 'SOFT1', course_name: '计算机', progress: '01:22', time: '2018-08-14', state: '已焚毁' },
         { course_code: 'ENGLISH3', course_name: '英语写作', progress: '15:00', time: '2018-05-14', state: '未焚毁' }
       ],
-      is_banned: true,
       page_jump_course: false,
-      page_jump_order: false
+      page_jump_order: false,
+      dismiss_second: 5,
+      wrong_count_down: 0,
+      wrong: '',
+      success_count_down: 0,
+      success: '',
+      is_banned: false,
+      is_vip: false,
+      is_deleted: false
     }
   },
+  created () {
+    const that = this
+    axios.get('',
+      {params: {
+        customer_id: that.$route.query.user_id
+      }})
+      .then(function (response) {
+        if (response.data.message === 'Object not found.') {
+          that.wrong = '无法查找到此用户的详情信息！'
+          that.wrong_count_down = that.dismiss_second
+        } else {
+          that.user = response.data
+          that.is_banned = response.data.is_banned
+        }
+      })
+      .catch(function (error) {
+        that.wrong = '获取用户详情失败！' + error
+        that.wrong_count_down = that.dismiss_second
+      })
+    axios.get('',
+      {params: {
+        customer_id: that.$route.query.user_id
+      }})
+      .then(function (response) {
+        if (response.data.message === 'Object not found.') {
+          that.wrong = '无法查找到此用户的订单信息！'
+          that.wrong_count_down = that.dismiss_second
+        } else {
+          that.orders = response.data
+        }
+      })
+      .catch(function (error) {
+        that.wrong = '获取此用户的订单信息失败！' + error
+        that.wrong_count_down = that.dismiss_second
+      })
+    axios.get('',
+      {params: {
+        customer_id: that.$route.query.user_id
+      }})
+      .then(function (response) {
+        if (response.data.message === 'Object not found.') {
+          that.wrong = '无法查找到此用户的学习记录！'
+          that.wrong_count_down = that.dismiss_second
+        } else {
+          that.orders = response.data
+        }
+      })
+      .catch(function (error) {
+        that.wrong = '获取此用户的学习记录失败！' + error
+        that.wrong_count_down = that.dismiss_second
+      })
+  },
   methods: {
-    change_banned () {
+    change_banned: function () {
       this.is_banned = !this.is_banned
     },
-    to_course () {
+    to_course: function () {
       this.page_jump_course = true
       this.$router.push({ name: 'Course', query: { user_id: this.$route.query.user_id } })
     },
     to_order () {
       this.page_jump_order = true
       this.$router.push({ name: 'Order', query: { user_id: this.$route.query.user_id } })
+    },
+    authenticate_user: function () {
+      const that = this
+      axios.post('',
+        qs.stringify({
+          customer_id: that.$route.query.user_id
+        }))
+        .then(function (response) {
+          if (response.data.message === 'Object not found.') {
+            that.wrong = '无法认证此用户！'
+            that.wrong_count_down = that.dismiss_second
+          } else {
+            that.success = '您已经成功认证此用户！'
+            that.is_vip = true
+            that.success_count_down = that.dismiss_second
+          }
+        })
+        .catch(function (error) {
+          that.wrong = '认证失败！' + error
+          that.wrong_count_down = that.dismiss_second
+        })
+    },
+    ban_user: function () {
+      const that = this
+      axios.post('',
+        qs.stringify({
+          customer_id: that.$route.query.user_id
+        }))
+        .then(function (response) {
+          if (response.data.message === 'Object not found.') {
+            that.wrong = '无法禁言此用户！'
+            that.wrong_count_down = that.dismiss_second
+          } else {
+            that.success = '您已经成功禁言此用户！'
+            that.is_banned = true
+            that.success_count_down = that.dismiss_second
+          }
+        })
+        .catch(function (error) {
+          that.wrong = '禁言失败！' + error
+          that.wrong_count_down = that.dismiss_second
+        })
+    },
+    delete_user: function () {
+      const that = this
+      axios.post('',
+        qs.stringify({
+          customer_id: that.$route.query.user_id
+        }))
+        .then(function (response) {
+          if (response.data.message === 'Object not found.') {
+            that.wrong = '无法删除此用户！'
+            that.wrong_count_down = that.dismiss_second
+          } else {
+            that.success = '您已经成功删除此用户！'
+            that.is_deleted = true
+            that.success_count_down = that.dismiss_second
+          }
+        })
+        .catch(function (error) {
+          that.wrong = '删除失败！' + error
+          that.wrong_count_down = that.dismiss_second
+        })
     }
   }
 }
