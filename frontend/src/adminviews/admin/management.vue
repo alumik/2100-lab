@@ -22,18 +22,20 @@
               <td>
                 <div class="input-group">
                   <input
-                    v-model="query_input[0]"
+                    v-model="username"
                     type="text"
                     class="form-control col-xs-2"
-                    placeholder="">
+                    placeholder=""
+                    @keyup.enter="change">
               </div></td>
               <td>
                 <div class="input-group">
                   <input
-                    v-model="query_input[1]"
+                    v-model="phone_number"
                     type="text"
                     class="form-control col-xs-2"
-                    placeholder="">
+                    placeholder=""
+                    @keyup.enter="change">
                 </div>
               </td><td>
               <div class="input-group"/></td>
@@ -41,8 +43,8 @@
             <tr
               v-for="admin in admins"
               :key="admin.id">
-              <td>{{ admin.ID }}</td>
-              <td>{{ admin.name }}</td>
+              <td>{{ admin.username }}</td>
+              <td>{{ admin.phone_number }}</td>
               <button
                 type="button"
                 class="row inner-btn btn-sm"
@@ -52,7 +54,10 @@
           </tbody>
         </table>
       </div>
-      <Pagination :rows="rows"/>
+      <Pagination
+        :rows="rows"
+        :perpage="per_limit"
+        @change="changePage"/>
     </div>
   </Basic>
 </template>
@@ -60,6 +65,7 @@
 <script>
 import Basic from '../basic/basic'
 import Pagination from '../../components/pagination'
+import axios from 'axios'
 export default {
   name: 'AdminManagement',
   components: {Pagination, Basic},
@@ -72,21 +78,38 @@ export default {
         text: '管理员管理',
         active: true
       }],
-      admins: [
-        {'id': 0, 'ID': '000000', 'name': 'DingQuan'},
-        {'id': 1, 'ID': '000001', 'name': 'DingQuan1'},
-        {'id': 2, 'ID': '000002', 'name': 'DingQuan2'},
-        {'id': 3, 'ID': '000000', 'name': 'DingQuan3'},
-        {'id': 4, 'ID': '000001', 'name': 'DingQuan4'},
-        {'id': 5, 'ID': '000002', 'name': 'DingQuan5'},
-        {'id': 6, 'ID': '000000', 'name': 'DingQuan6'},
-        {'id': 7, 'ID': '000001', 'name': 'DingQuan7'}
-      ],
-      rows: 20,
-      query_input: [],
+      admins: [],
+      username: '',
+      phone_number: '',
+      page: 1,
+      rows: 0,
+      per_limit: 8,
+      error_message: '',
       query_id: -1,
       test_add_admin: false
     }
+  },
+  created: function () {
+    axios.get('http://localhost:8000/api/v1/admin/backstage/admin-management/get-admin-list/', {
+      params: {
+        username: '',
+        phone_number: '',
+        page_limit: this.per_limit,
+        page: 1
+      }
+    }).then(
+      response => {
+        this.rows = response.data.count
+        let _admins = []
+        for (let data of response.data.content) {
+          _admins.push({'id': data['admin_id'], 'username': data['username'], 'phone_number': data['phone_number']})
+        }
+        this.admins = _admins
+      }).catch(
+      error => {
+        this.error_message = '读取数据出错' + error
+      }
+    )
   },
   methods: {
     jump: function (id) {
@@ -95,8 +118,39 @@ export default {
         this.$router.push({name: 'AddAdmin'})
       } else {
         this.query_id = id
+        console.log(this.query_id)
         this.$router.push({name: 'AdminDetail', query: {'admin_id': this.query_id}})
       }
+    },
+    change: function () {
+      axios.get('http://localhost:8000/api/v1/admin/backstage/admin-management/get-admin-list/', {
+        params: {
+          username: this.username,
+          phone_number: this.phone_number,
+          page_limit: this.per_limit,
+          page: this.page
+        }
+      }).then(
+        response => {
+          this.rows = response.data.count
+          let _admins = []
+          for (let data of response.data.content) {
+            _admins.push({
+              'id': data['id'],
+              'username': data['username'],
+              'phone_number': data['phone_number']
+            })
+          }
+          this.admins = _admins
+        }).catch(
+        error => {
+          this.error_message = '读取数据出错' + error
+        }
+      )
+    },
+    changePage: function (currentpage) {
+      this.page = currentpage
+      this.change()
     }
   }
 }
