@@ -333,7 +333,6 @@ export default{
       if (that.pay_method_chosen === true) {
         that.pay_method_chosen = false
         that.pay_remind_color = 'black'
-        console.log(that.pay_method_chosen)
       } else {
         this.$root.$emit('bv::hide::modal', 'pay-popup')
       }
