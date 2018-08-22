@@ -130,3 +130,27 @@ class CustomerDetailTests(TestCase):
         self.assertEqual(response_json_data['customer_info']['username'], '00000000001')
         self.assertEqual(len(response_json_data['recent_orders']), 1)
         self.assertEqual(len(response_json_data['recent_learning_logs']), 1)
+
+    def test_customer_order_list(self):
+        self.client.login(phone_number='11122223333', password='123456')
+        customer = get_user_model().objects.get(phone_number='00000000001')
+
+        response = self.client.get(
+            reverse('api:customers:backstage:get-customer-order-list'),
+            {'customer_id': customer.id}
+        )
+        self.assertEqual(response.status_code, 200)
+        response_json_data = json.loads(response.content)
+        self.assertEqual(response_json_data['count'], 1)
+
+    def test_customer_learning_log_list(self):
+        self.client.login(phone_number='11122223333', password='123456')
+        customer = get_user_model().objects.get(phone_number='00000000001')
+
+        response = self.client.get(
+            reverse('api:customers:backstage:get-customer-learning-log-list'),
+            {'customer_id': customer.id}
+        )
+        self.assertEqual(response.status_code, 200)
+        response_json_data = json.loads(response.content)
+        self.assertEqual(response_json_data['count'], 1)

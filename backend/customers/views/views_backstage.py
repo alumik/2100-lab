@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.http import JsonResponse
 from django.utils import timezone
 
-from core.utils import get_backstage_page
+from core.utils import get_backstage_page, get_brief_page
 from core.messages import ERROR, INFO
 from customers.models import OrderLog, LearningLog
 from customers.utils import get_customer_page
@@ -141,31 +141,43 @@ def get_customer_detail(request):
         'recent_learning_logs': []
     }
 
-    recent_orders = OrderLog.objects.filter(customer=customer)[:5]
-    recent_learning_logs = LearningLog.objects.filter(customer=customer)[:5]
+    recent_orders = OrderLog.objects.filter(customer=customer).order_by('-created_at')[:5]
+    recent_learning_logs = LearningLog.objects.filter(customer=customer).order_by('-latest_learn')[:5]
 
     for recent_order in recent_orders:
-        json_data['recent_orders'].append(
-            {
-                'order_no': recent_order.order_no,
-                'course_codename': recent_order.course.codename,
-                'course_title': recent_order.course.title,
-                'money': recent_order.cash_spent + recent_order.reward_spent,
-                'is_refunded': recent_order.refunded_at is None
-            }
-        )
+        json_data['recent_orders'].append(recent_order.as_brief_dict())
 
     for recent_learning_log in recent_learning_logs:
-        item = {
-            'course_codename': recent_learning_log.course.codename,
-            'course_title': recent_learning_log.course.title,
-            'progress': recent_learning_log.progress,
-            'latest_learn': recent_learning_log.latest_learn,
-            'is_burnt': False
-        }
+        item = recent_learning_log.as_brief_dict()
         if recent_learning_log.expire_time is not None:
             if recent_learning_log.expire_time < timezone.now():
                 item['is_burnt'] = True
         json_data['recent_learning_logs'].append(item)
 
     return JsonResponse(json_data)
+
+
+@permission_required('core.view_customuser')
+def get_customer_order_list(request):
+    customer_id = request.GET.get('customer_id')
+
+    try:
+        customer = get_user_model().objects.get(id=customer_id, is_staff=False)
+    except OrderLog.DoesNotExist:
+        return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+
+    orders = OrderLog.objects.filter(customer=customer).order_by('-created_at')
+    return get_brief_page(request, orders)
+
+
+@permission_required('core.view_customuser')
+def get_customer_learning_log_list(request):
+    customer_id = request.GET.get('customer_id')
+
+    try:
+        customer = get_user_model().objects.get(id=customer_id, is_staff=False)
+    except OrderLog.DoesNotExist:
+        return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+
+    learning_logs = LearningLog.objects.filter(customer=customer).order_by('-latest_learn')
+    return get_brief_page(request, learning_logs)

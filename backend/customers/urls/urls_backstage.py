@@ -31,5 +31,15 @@ urlpatterns = [
         'customer-management/get-customer-detail/',
         views_backstage.get_customer_detail,
         name='get-customer-detail'
-    )
+    ),
+    path(
+        'customer-management/get-customer-order-list/',
+        views_backstage.get_customer_order_list,
+        name='get-customer-order-list'
+    ),
+    path(
+        'customer-management/get-customer-learning-log-list/',
+        views_backstage.get_customer_learning_log_list,
+        name='get-customer-learning-log-list'
+    ),
 ]
