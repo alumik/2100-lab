@@ -17,4 +17,5 @@ ERROR = {
     'invalid_phone_number_or_password': 'Invalid phone number or password.',
     'admin_already_registered': 'Admin is already registered.',
     'message_send_failed': 'Message send failed.',
+    'course_already_purchased': 'This course has already been purchased.'
 }

@@ -45,9 +45,6 @@ class OrderLog(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     refunded_at = models.DateTimeField(blank=True, null=True)
 
-    class Meta:
-        unique_together = ('customer', 'course')
-
     def as_dict(self):
         return {
             'order_no': self.order_no,

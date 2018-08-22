@@ -226,6 +226,15 @@ class BuyCourseTest(TestCase):
         self.assertEqual(int(user_1.reward_coin), 0)
         self.assertEqual(int(user_0.reward_coin), 25)
         self.assertEqual(int(OrderLog.objects.get(customer__phone_number='00000000001').cash_spent), 20)
+
+        response = self.client.post(
+            reverse('api:courses:forestage:buy-course'),
+            {
+                'course_id': course.id,
+                'payment_method': 1
+            }
+        )
+        self.assertEqual(response.status_code, 400)
         self.client.logout()
 
         self.client.force_login(user_2)

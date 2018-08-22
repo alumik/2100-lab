@@ -110,6 +110,12 @@ def buy_course(request):
     except Course.DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
+    try:
+        OrderLog.objects.get(customer=customer, course=course, refunded_at=None)
+        return JsonResponse({'message': ERROR['course_already_purchased']}, status=400)
+    except OrderLog.DoesNotExist:
+        pass
+
     price = course.price
     reward_coin = customer.reward_coin
     referer_id = request.session['referer_id']
