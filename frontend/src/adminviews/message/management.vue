@@ -86,14 +86,15 @@
             <tr
               v-for="message in messages"
               :key="message.id">
-              <td>{{ compute_date(message.created_at) }}</td>
+              <td class="date">{{ compute_date(message.created_at) }}</td>
               <td>{{ message.username }}</td>
               <td>{{ message.course_codename }}</td>
               <td>{{ message.course_title }}</td>
               <td>{{ message.content }}</td>
-              <td> {{ compute_state(message.is_deleted) }} </td>
+              <td class="state"> {{ compute_state(message.is_deleted) }} </td>
               <td class="buttons">
                 <button
+                  id="detail"
                   type="button"
                   class="btn btn-xs"
                   @click="to_detail(message.comment_id + '')">
