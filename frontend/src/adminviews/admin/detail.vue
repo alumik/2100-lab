@@ -136,7 +136,6 @@ export default {
             this.admin.admin_groups = this.admin.admin_groups + ' ' + this.transferPermission(permission)
           }
         }
-        console.log(this.admin.admin_groups)
       }).catch(
       error => {
         this.error_message = '读取数据出错' + error.response.data.message
