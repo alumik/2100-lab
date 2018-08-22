@@ -3,8 +3,17 @@
 import { shallowMount } from '@vue/test-utils'
 import ChangeCode from '@/adminviews/admin/change_code.vue'
 
+const $route = {
+  path: '/admin/adminmanagement/changecode',
+  query: {'admin_id': 0}
+}
+
 describe('修改管理员名模块单元测验', () => {
-  const wrapper = shallowMount(ChangeCode)
+  const wrapper = shallowMount(ChangeCode, {
+    mocks: {
+      $route
+    }
+  })
 
   it('标题是"修改管理员名"', () => {
     expect(wrapper.find('h2').text()).toEqual('修改密码')

@@ -82,7 +82,7 @@ export default {
           that.$router.push({path: '/'})
         })
         //   .catch(error => {
-        //   console.log(error.message)
+        //  console.log(error.message)
         // })
       } else {
         this.$router.push({path: '/login'})

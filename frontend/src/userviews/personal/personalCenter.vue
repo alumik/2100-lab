@@ -130,7 +130,7 @@ export default {
         this.status = '保存'
       } else {
         this.status = '修改'
-        console.log(this.value)
+        // console.log(this.value)
         axios.post('http://localhost:8000/api/v1/customers/forestage/personal-center/change-username/',
           {withCredentials: true}).then(res => {
         })

@@ -32,7 +32,6 @@ export default {
     }
   },
   create () {
-    console.log(this.lists[0].text)
   },
   methods: {
     jump: function (id) {
