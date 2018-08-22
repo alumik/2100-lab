@@ -18,6 +18,11 @@ urlpatterns = [
         name='get-course-detail'
     ),
     path(
+        'course-management/delete-course/',
+        views_backstage.delete_course,
+        name='delete-course'
+    ),
+    path(
         'comment-management/get-comment-list/',
         views_backstage.get_comment_list,
         name='get-comment-list'
