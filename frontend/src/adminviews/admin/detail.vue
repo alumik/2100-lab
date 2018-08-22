@@ -118,9 +118,7 @@ export default {
     }
   },
   created () {
-    if (typeof (this.$route.query.admin_id) === 'number') {
-      this.admin_id = this.$route.query.admin_id
-    }
+    this.admin_id = this.$route.query.admin_id
   },
   methods: {
     jump: function (id) {

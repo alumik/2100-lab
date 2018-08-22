@@ -135,7 +135,6 @@ export default {
       }
     }).then(
       response => {
-        console.log(response.data)
         this.course.codename = response.data.codename
         this.course.title = response.data.title
         this.course.expire_duration = response.data.expire_duration.replace('P', '').replace('DT', '天').replace('H', '小时').replace('M', '分钟').replace('S', '秒钟')

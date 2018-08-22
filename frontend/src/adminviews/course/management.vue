@@ -145,7 +145,6 @@ export default {
       }
     }).then(
       response => {
-        console.log(response.data.count)
         this.rows = response.data.count
         let _course = []
         for (let data of response.data.content) {
@@ -180,7 +179,6 @@ export default {
         }
       }).then(
         response => {
-          console.log(response.data.count)
           this.rows = response.data.count
           let _course = []
           for (let data of response.data.content) {
