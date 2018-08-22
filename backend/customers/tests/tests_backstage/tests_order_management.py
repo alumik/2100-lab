@@ -103,3 +103,67 @@ class OrderListTests(TestCase):
         response_json_data = json.loads(response.content)
         self.assertEqual(response_json_data['content'][0]['order_no'], 'AA02')
         self.assertEqual(response_json_data['count'], 1)
+
+
+class OrderDetailTests(TestCase):
+    def setUp(self):
+        get_user_model().objects.create_user(phone_number='11122223333', password='123456')
+        admin = get_user_model().objects.create_user(phone_number='11122224444', password='123456')
+        permission = Permission.objects.get(codename='view_orderlog')
+        admin_group = Group.objects.create(name='order_admin')
+        admin_group.permissions.add(permission)
+        admin_group.save()
+        admin.groups.add(admin_group)
+        admin.save()
+        course_1 = Course.objects.create(
+            title='t1',
+            description='d1',
+            codename='SOFT1'
+        )
+        course_2 = Course.objects.create(
+            title='t2',
+            description='d2',
+            codename='SOFT2'
+        )
+        OrderLog.objects.create(
+            order_no='AA01',
+            customer=get_user_model().objects.get(phone_number='11122223333'),
+            course=course_1,
+            cash_spent=70,
+            payment_method=1
+        )
+        OrderLog.objects.create(
+            order_no='AA02',
+            customer=get_user_model().objects.get(phone_number='11122223333'),
+            course=course_2,
+            cash_spent=50,
+            reward_spent=50,
+            payment_method=2,
+            refunded_at=timezone.now()
+        )
+
+    def test_order_detail_not_refunded(self):
+        self.client.login(phone_number='11122224444', password='123456')
+        order = OrderLog.objects.get(order_no='AA01')
+
+        response = self.client.get(
+            reverse('api:customers:backstage:get-order-detail'),
+            {'order_id': order.id}
+        )
+        self.assertEqual(response.status_code, 200)
+        response_json_data = json.loads(response.content)
+        self.assertFalse(response_json_data['is_refunded'])
+        self.assertEqual(response_json_data['order_no'], 'AA01')
+
+    def test_order_detail_refunded(self):
+        self.client.login(phone_number='11122224444', password='123456')
+        order = OrderLog.objects.get(order_no='AA02')
+
+        response = self.client.get(
+            reverse('api:customers:backstage:get-order-detail'),
+            {'order_id': order.id}
+        )
+        self.assertEqual(response.status_code, 200)
+        response_json_data = json.loads(response.content)
+        self.assertTrue(response_json_data['is_refunded'])
+        self.assertEqual(response_json_data['order_no'], 'AA02')

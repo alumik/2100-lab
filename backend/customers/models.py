@@ -45,7 +45,7 @@ class OrderLog(models.Model):
             'customer_username': self.customer.username,
             'created_at': self.created_at,
             'money': self.cash_spent + self.reward_spent,
-            'refunded': self.refunded_at is not None
+            'is_refunded': self.refunded_at is not None
         }
 
     def as_backstage_dict(self):
@@ -56,5 +56,5 @@ class OrderLog(models.Model):
             'course_title': self.course.title,
             'customer_username': self.customer.username,
             'money': self.cash_spent + self.reward_spent,
-            'refunded': self.refunded_at is not None
+            'is_refunded': self.refunded_at is not None
         }

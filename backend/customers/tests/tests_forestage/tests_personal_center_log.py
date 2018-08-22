@@ -95,7 +95,7 @@ class PersonalCenterLogTests(TestCase):
         self.assertEqual(response_json_data['content'][0]['course_codename'], 'c2')
         self.assertEqual(response_json_data['content'][0]['course_title'], 't2')
         self.assertEqual(response_json_data['content'][0]['money'], '100.00')
-        self.assertTrue(response_json_data['content'][0]['refunded'])
+        self.assertTrue(response_json_data['content'][0]['is_refunded'])
 
         response = self.client.get(
             reverse('api:customers:forestage:get-order-logs'),
@@ -111,4 +111,4 @@ class PersonalCenterLogTests(TestCase):
         self.assertEqual(response_json_data['content'][0]['course_codename'], 'c1')
         self.assertEqual(response_json_data['content'][0]['course_title'], 't1')
         self.assertEqual(response_json_data['content'][0]['money'], '70.00')
-        self.assertFalse(response_json_data['content'][0]['refunded'])
+        self.assertFalse(response_json_data['content'][0]['is_refunded'])

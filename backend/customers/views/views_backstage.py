@@ -1,14 +1,8 @@
-import re
-import random
-import time
-
-from django.conf import settings
-from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.decorators import permission_required
 from django.http import JsonResponse
 
-from core.utils import get_page, get_backstage_page
-from core.messages import ERROR, INFO
+from core.utils import get_backstage_page
+from core.messages import ERROR
 from customers.models import OrderLog
 
 
@@ -38,3 +32,27 @@ def get_order_list(request):
     page['customer_username'] = customer_username
     page['is_refunded'] = is_refunded
     return JsonResponse(page, safe=False)
+
+
+@permission_required('customers.view_orderlog')
+def get_order_detail(request):
+    order_id = request.GET.get('order_id')
+
+    try:
+        order = OrderLog.objects.get(id=order_id)
+    except OrderLog.DoesNotExist:
+        return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+
+    return JsonResponse(
+        {
+            'order_id': order.id,
+            'order_no': order.order_no,
+            'course_codename': order.course.codename,
+            'course_title': order.course.title,
+            'customer_username': order.customer.username,
+            'money': order.cash_spent + order.reward_spent,
+            'is_refunded': order.refunded_at is not None,
+            'created_at': order.created_at,
+            'refunded_at': order.refunded_at
+        }
+    )
