@@ -3,11 +3,11 @@
     <div class="navbar-style">
       <UserNavbar/>
       <b-alert
-        :show="test"
+        :show="created_test"
         variant="danger"
         dismissible
-        @dismissed="test = false">
-        This alert means the connection has passed.
+        @dismissed="created_test = false">
+        {{ created_error_msg }}
       </b-alert>
     </div>
     <div class="homepage-container">
@@ -49,17 +49,16 @@
       <div class="recommend-list">
         <RecommendList
           :courselist="freecourselist"
-          list_title="免费课程"/>
+          course_type="free"/>
         <RecommendList
           :courselist="paidcourselist"
-          list_title="付费课程"/>
+          course_type="paid"/>
       </div>
     </div>
   </body>
 </template>
 
 <script>
-import Basic from '../components/basic'
 import UserNavbar from '../components/navbar'
 import RecommendList from '../components/recommendList'
 import axios from 'axios'
@@ -68,97 +67,30 @@ export default {
   name: 'Homepage',
   components: {
     UserNavbar,
-    Basic,
     RecommendList
   },
   data () {
     return {
       test: false,
       err_msg: '',
-      freecourselist: [
-        {
-          id: 1,
-          name: '数据库',
-          introduction: '床前明月光',
-          src: 'https://picsum.photos/1024/480/?image=54',
-          value: 0
-        },
-        {
-          id: 2,
-          name: '数据结构',
-          introduction: '疑是地上霜',
-          src: 'https://picsum.photos/1024/480/?image=54',
-          value: 0
-        },
-        {
-          id: 3,
-          name: '线性代数',
-          introduction: '举头望明月',
-          src: 'https://picsum.photos/1024/480/?image=58',
-          value: 0
-        },
-        {
-          id: 4,
-          name: '离散数学',
-          introduction: '低头思故乡',
-          src: 'https://picsum.photos/1024/480/?image=55',
-          value: 0
-        },
-        {
-          id: 5,
-          name: '概率论',
-          introduction: '春眠不觉晓',
-          src: 'https://picsum.photos/1024/480/?image=55',
-          value: 0
-        }
-      ],
-      paidcourselist: [
-        {
-          id: 6,
-          name: '数据库',
-          introduction: '床前明月光',
-          src: 'https://picsum.photos/1024/480/?image=58',
-          value: 100
-        },
-        {
-          id: 7,
-          name: '数据结构',
-          introduction: '疑是地上霜',
-          src: 'https://picsum.photos/1024/480/?image=54',
-          value: 90
-        },
-        {
-          id: 8,
-          name: '线性代数',
-          introduction: '举头望明月',
-          src: 'https://picsum.photos/1024/480/?image=54',
-          value: 80
-        },
-        {
-          id: 9,
-          name: '离散数学',
-          introduction: '低头思故乡',
-          src: 'https://picsum.photos/1024/480/?image=51',
-          value: 70
-        },
-        {
-          id: 10,
-          name: '概率论',
-          introduction: '春眠不觉晓',
-          src: 'https://picsum.photos/1024/480/?image=52',
-          value: 60
-        }
-      ]
+      freecourselist: [],
+      paidcourselist: [],
+      created_test: false,
+      created_error_msg: ''
     }
   },
   created: function () {
     let that = this
-    axios.get('http://localhost:8000/api/v1/courses/course/get-recent-courses')
+    axios.get('http://localhost:8000/api/v1/courses/forestage/course/get-recent-courses')
       .then(function (response) {
-        // console.log(response)
+        console.log(response)
+        that.freecourselist = response.data.free_courses
+        that.paidcourselist = response.data.paid_courses
+        console.log(that.freecourselist)
+        console.log(that.paidcourselist)
       }).catch(function (error) {
-        that.test = true
-        that.err_msg = error
+        that.created_test = true
+        that.created_error_msg = error
       })
   }
 }

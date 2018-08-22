@@ -6,7 +6,7 @@
         <b-col
           cols="8"
           class="text-align-left">
-          <label id="list-title">{{ list_title }}</label>
+          <label id="list-title">{{ course_type === 'free' ? '免费课程':'付费课程' }}</label>
         </b-col>
         <b-col
           class="text-align-right">
@@ -23,34 +23,34 @@
           :key="i"
           class="col-style">
           <b-card
-            :img-src="courselist[i].src"
-            :title="courselist[i].name"
+            :img-src="courselist[i].thumbnail"
+            :title="courselist[i].title"
             img-alt="Image"
             img-top
             tag="article"
             class="mb-2 width-style"
-            @click="open_detail_page(courselist[i].id)">
+            @click="open_detail_page(courselist[i].course_id)">
             <p class="card-text">
-              {{ courselist[i].introduction }}
+              {{ courselist[i].description }}
             </p>
           </b-card>
         </b-col>
       </b-row>
       <b-row>
         <b-col
-          v-for="i in [0, 1, 2, 3]"
+          v-for="i in [4, 5, 6, 7]"
           :key="i">
           <b-card
             id="course-card"
-            :img-src="courselist[i].src"
-            :title="courselist[i].name"
+            :img-src="courselist[i].thumbnail"
+            :title="courselist[i].title"
             img-alt="Image"
             img-top
             tag="article"
             class="mb-2 width-style"
-            @click="open_detail_page(courselist[i].id)">
+            @click="open_detail_page(courselist[i].course_id)">
             <p class="card-text">
-              {{ courselist[i].introduction }}
+              {{ courselist[i].description }}
             </p>
           </b-card>
         </b-col>
@@ -63,7 +63,7 @@
 export default {
   name: 'RecommendList',
   props: {
-    list_title: {
+    course_type: {
       type: String,
       default: function () {
         return ''
@@ -78,7 +78,7 @@ export default {
   },
   methods: {
     watch_more: function () {
-      if (this.list_title === '免费课程') {
+      if (this.course_type === 'free') {
         this.$router.push({name: 'AllFreeCourse'})
       } else {
         this.$router.push({name: 'AllPaidCourse'})

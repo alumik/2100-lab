@@ -20,7 +20,7 @@
       id="page-title"
       class="content-style">
       <h5>
-        {{ course.title }}
+        {{ course.title }}{{ course.course_id }}
       </h5>
     </div>
     <div id="modals">
@@ -128,7 +128,7 @@
               取消</b-btn>
             <b-btn
               variant="primary"
-              @click="open_study_page(course.id)">
+              @click="open_study_page(course.course_id)">
               我知道了</b-btn>
           </div>
         </b-modal>
@@ -190,7 +190,7 @@
                 立即购买
               </b-button>
             </div>
-          </b-col>
+          </b-col >
           <b-col cols="4">
             <b-button
               v-b-modal.share-popup
@@ -230,7 +230,7 @@
         id="course-introduction"
         class="profile-style">
         <h5>课程简介</h5>
-        <p>&emsp; &emsp;{{ course.description }}{{ course.can_access }}</p>
+        <p>&emsp; &emsp;{{ course.description }}</p>
       </div>
     </div>
   </Basic>
@@ -249,6 +249,7 @@ export default{
   },
   data () {
     return {
+      query_course_id: 0,
       connection_test: false,
       connection_err_msg: 'Server access failed. ',
       course_img_src_example: 'https://picsum.photos/1024/480/?image=54',
@@ -260,18 +261,7 @@ export default{
         '小朋友一起学习有趣的实验哦~ 分享付费课程给好朋友，如果' +
         '他/她购买该课程，你将会获得奖励金哦~奖励金可以用来购买' +
         '其他有趣的实验课程呢，所以赶紧拿起你的手机进行分享吧(*^▽^*)',
-      course: {
-        id: 0,
-        thumbnail: '',
-        title: '',
-        description: '',
-        price: 0,
-        reward_percent: 0,
-        up_votes: 0,
-        expire_duration: 0,
-        expire_time: 0,
-        can_access: false
-      },
+      course: { },
       created_test: false,
       created_error_msg: '',
       add_praise_test: false,
@@ -302,17 +292,16 @@ export default{
   },
   created () {
     let that = this
-    if (typeof (this.$route.query.course_id) === 'undefined') {
-      this.$router.push({name: 'BurnedCourse'})
+    if (typeof (that.$route.query.course_id) === 'undefined') {
+      that.$router.push({name: 'BurnedCourse'})
     } else {
-      that.course_id = this.$route.query.course_id
+      that.query_course_id = that.$route.query.course_id
     }
-    axios.get('http://localhost:8000/api/v1/courses/forestage/course/get-course-detail?course_id=30')
+    axios.get('http://localhost:8000/api/v1/courses/forestage/course/get-course-detail/' +
+      '?course_id=' + that.query_course_id)
       .then(function (response) {
         that.course = response.data
-        if (that.course.price !== 0 && that.course.can_access === true) {
-          that.is_paid = true
-        }
+        console.log('course_id ' + that.course.course_id)
       }).catch(function (error) {
         that.created_test = true
         that.created_error_msg = error
@@ -333,16 +322,17 @@ export default{
     },
     add_praise () {
       let that = this
-      axios.get('http://localhost:8000/api/v1/courses/forestage/course/up-vote-course/?course_id=1')
+      axios.get('http://localhost:8000/api/v1/courses/forestage/course/up-vote-course/' +
+        '?course_id=' + that.query_course_id)
         .then(function (response) {
           if (response.data.up_voted === true) {
             that.course.up_votes = response.data.up_votes
-            that.praise_color = 'grey'
-            that.praise_border_color = 'grey'
-          } else if (response.data.up_voted === false) {
-            that.course.up_votes = response.data.up_votes
             that.praise_color = 'green'
             that.praise_border_color = 'green'
+          } else if (response.data.up_voted === false) {
+            that.course.up_votes = response.data.up_votes
+            that.praise_color = '#007bff'
+            that.praise_border_color = '#007bff'
           }
         }).catch(function (error) {
           that.add_praise_test = true
