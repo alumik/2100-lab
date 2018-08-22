@@ -218,6 +218,7 @@ export default {
         //   this.modalShow = !this.modalShow
         // } else {
         // console.log(response.data)
+        this.$store.commit('status')
         this.$store.commit('user', response.data)
         this.$router.push({path: '/personal'})
         // }

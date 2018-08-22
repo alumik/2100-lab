@@ -123,6 +123,7 @@ export default {
   },
   watch: {
     value (n) {
+      this.status = '保存'
       this.nameState = true
     }
   },
@@ -141,7 +142,7 @@ export default {
     editable: function () {
       let that = this
       if (this.status === '修改') {
-        this.status = '保存'
+        this.disabled = !this.disabled
       } else {
         axios
           .post(
@@ -151,20 +152,19 @@ export default {
           )
           .then(res => {
             this.status = '修改'
-            console.log(res.data.new_username)
+            // console.log(res.data.new_username)
+            this.$store.commit('user', {
+              is_new_customer: this.$store.state.user.is_new_customer,
+              customer_id: this.$store.state.user.customer_id,
+              username: this.value,
+              avatar: this.$store.state.user.avatar
+            })
           })
-          .catch(error => {
-            console.log('error: ' + error.message)
+          .catch(() => {
+            // console.log('error: ' + error.message)
             that.nameState = false
           })
-        this.$store.commit('user', {
-          is_new_customer: this.$store.state.user.is_new_customer,
-          customer_id: this.$store.state.user.customer_id,
-          username: this.value,
-          avatar: this.$store.state.user.avatar
-        })
       }
-      this.disabled = !this.disabled
     }
   }
 }
@@ -213,7 +213,7 @@ img {
   height: 50px;
   padding: 0;
   margin: 0;
-  -ms-filter: "alpha(opacity=0)";
+  -ms-filter: 'alpha(opacity=0)';
   opacity: 0;
 }
 
@@ -222,9 +222,9 @@ img {
 }
 
 .input-group-text {
-  background-color: white;
-  width: 100px;
   justify-content: center;
+  width: 100px;
+  background-color: white;
 }
 
 .money .input-group-text {

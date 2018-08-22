@@ -68,5 +68,11 @@ new Vue({
   store,
   i18n,
   components: { App },
+  mounted () {
+    if (sessionStorage.getItem('status') === 'true') {
+      this.$store.commit('status')
+      this.$store.commit('user', JSON.parse(sessionStorage.getItem('user')))
+    }
+  },
   template: '<App/>'
 }).$mount('#app')

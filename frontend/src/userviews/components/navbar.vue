@@ -44,48 +44,46 @@ import axios from 'axios'
 export default {
   name: 'UserNavbar',
   created () {
-    if (sessionStorage.getItem('status') === 'true') {
-      // console.log('created')
-      this.$store.commit('status')
-      // console.log(sessionStorage.getItem('user'))
-      this.$store.commit('user', JSON.parse(sessionStorage.getItem('user')))
-    }
-    let that = this
-    axios.post('http://localhost:8000/api/v1/core/auth/is-authenticated/').then((res) => {
-      // console.log('登录状态：' + res.data.is_authenticated)
-      if (res.data.is_authenticated) {
-        that.$store.commit('status')
-        // console.log(that.$store.state)
-      }
-    })
+    // let that = this
+    // axios
+    //   .post('http://localhost:8000/api/v1/core/auth/is-authenticated/')
+    //   .then(res => {
+    //     // console.log('登录状态：' + res.data.is_authenticated)
+    //     if (res.data.is_authenticated) {
+    //       that.$store.commit('status')
+    //       // console.log(that.$store.state)
+    //     }
+    //   })
   },
-  mounted () {
-
-  },
+  mounted () {},
   methods: {
     home () {
-      this.$router.push({path: '/'})
+      this.$router.push({ path: '/' })
     },
     personal () {
-      axios.post('http://localhost:8000/api/v1/core/auth/is-authenticated/').then((res) => {
-        if (res.data.is_authenticated) {
-          this.$router.push({path: '/personal'})
-        }
-      })
+      axios
+        .post('http://localhost:8000/api/v1/core/auth/is-authenticated/')
+        .then(res => {
+          if (res.data.is_authenticated) {
+            this.$router.push({ path: '/personal' })
+          }
+        })
     },
     log () {
       let that = this
       if (that.$store.state.status) {
-        axios.post('http://localhost:8000/api/v1/core/auth/logout/').then(res => {
-          // console.log(res.data.message)
-          that.$store.commit('logout')
-          that.$router.push({path: '/'})
-        })
+        axios
+          .post('http://localhost:8000/api/v1/core/auth/logout/')
+          .then(res => {
+            // console.log(res.data.message)
+            that.$store.commit('logout')
+            that.$router.push({ path: '/' })
+          })
         //   .catch(error => {
         //  console.log(error.message)
         // })
       } else {
-        this.$router.push({path: '/login'})
+        this.$router.push({ path: '/login' })
       }
     }
   }
@@ -93,70 +91,70 @@ export default {
 </script>
 
 <style>
-  .my-navbar {
-    margin: 0;
-    vertical-align: middle;
-  }
+.my-navbar {
+  margin: 0;
+  vertical-align: middle;
+}
 
-  #userimg {
-    width: 40px;
-    height: 40px;
-    margin-right: 20px;
-    border-radius: 50%;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-  }
+#userimg {
+  width: 40px;
+  height: 40px;
+  margin-right: 20px;
+  border-radius: 50%;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
 
-  .logo {
-    height: 50px;
-    margin: 0;
-    vertical-align: middle;
-  }
+.logo {
+  height: 50px;
+  margin: 0;
+  vertical-align: middle;
+}
 
-  .logo img {
-    height: 35px;
-  }
+.logo img {
+  height: 35px;
+}
 
-  .nav-link {
-    padding: 0;
-  }
+.nav-link {
+  padding: 0;
+}
 
-  .navbar-dark .navbar-nav .nav-link {
-    color: #999;
-  }
+.navbar-dark .navbar-nav .nav-link {
+  color: #999;
+}
 
-  .navbar-dark .navbar-nav .nav-link:hover,
-  .navbar-dark .navbar-nav .nav-link:focus {
-    color: #f00;
-  }
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link:focus {
+  color: #f00;
+}
 
-  .navbar {
-    padding: 10px 5px;
-    background-color: #fff !important;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-    opacity: 0.8;
-  }
+.navbar {
+  padding: 10px 5px;
+  background-color: #fff !important;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  opacity: 0.8;
+}
 
-  .navbar-toggler {
-    background-color: #f00;
-  }
+.navbar-toggler {
+  background-color: #f00;
+}
 
-  #userimg:hover {
-    -webkit-filter: brightness(150%);
-    filter: brightness(150%);
-  }
+#userimg:hover {
+  -webkit-filter: brightness(150%);
+  filter: brightness(150%);
+}
 
-  #logoimg:hover {
-    -webkit-filter: brightness(150%);
-    filter: brightness(150%);
-  }
+#logoimg:hover {
+  -webkit-filter: brightness(150%);
+  filter: brightness(150%);
+}
 
-  #logout {
-    padding: 6px;
-  }
+#logout {
+  padding: 6px;
+}
 
-  @media (min-width: 780px) {
-    button {
-      display: none;
-    }
+@media (min-width: 780px) {
+  button {
+    display: none;
   }
+}
 </style>
