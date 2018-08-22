@@ -1,5 +1,6 @@
 from qcloudsms_py import SmsSingleSender
 from qcloudsms_py.httpclient import HTTPError
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 
 def tencent_cloud_message(phone_number, verification_code):
@@ -24,3 +25,22 @@ def tencent_cloud_message(phone_number, verification_code):
         raise HTTPError from error
     except Exception as error:
         raise Exception from error
+
+
+def get_customer_page(request, items):
+    count = items.count()
+    page = request.GET.get('page')
+    paginator = Paginator(items, request.GET.get('page_limit', 10))
+    try:
+        item_page = paginator.page(page)
+    except (PageNotAnInteger, EmptyPage):
+        item_page = paginator.page(1)
+    item_list = list(
+        map(lambda item: item.as_customer_dict(), list(item_page))
+    )
+    return {
+        'count': count,
+        'page': item_page.number,
+        'num_pages': paginator.num_pages,
+        'content': item_list
+    }

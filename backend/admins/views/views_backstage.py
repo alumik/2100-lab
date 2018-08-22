@@ -1,4 +1,5 @@
 import re
+import time
 
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, get_user_model
@@ -138,6 +139,10 @@ def delete_admin(request):
         admin = get_user_model().objects.get(id=admin_id, is_staff=True)
     except get_user_model().DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+
+    delete_str = '_deleted_' + str(int(round(time.time() * 1000)))
+    admin.phone_number += delete_str
+    admin.username += delete_str
 
     admin.delete()
     return JsonResponse({'message': INFO['object_deleted']})

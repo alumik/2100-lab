@@ -25,9 +25,18 @@ class LearningLog(models.Model):
             'expire_time': self.expire_time
         }
 
+    def as_brief_dict(self):
+        return {
+            'course_codename': self.course.codename,
+            'course_title': self.course.title,
+            'progress': self.progress,
+            'latest_learn': self.latest_learn,
+            'is_burnt': False
+        }
+
 
 class OrderLog(models.Model):
-    order_no = models.CharField(max_length=20, unique=True)
+    order_no = models.CharField(max_length=50, unique=True)
     customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     cash_spent = models.DecimalField(decimal_places=2, max_digits=12, default=0)
@@ -59,4 +68,13 @@ class OrderLog(models.Model):
             'customer_username': self.customer.username,
             'money': self.cash_spent + self.reward_spent,
             'is_refunded': self.refunded_at is not None
+        }
+
+    def as_brief_dict(self):
+        return {
+            'order_no': self.order_no,
+            'course_codename': self.course.codename,
+            'course_title': self.course.title,
+            'money': self.cash_spent + self.reward_spent,
+            'is_refunded': self.refunded_at is None
         }

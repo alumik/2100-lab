@@ -6,7 +6,7 @@ INFO = {
 
 ERROR = {
     'access_denied': 'Access denied.',
-    'object_not_found': 'Course not found.',
+    'object_not_found': 'Object not found.',
     'different_phone_number': 'Different phone number.',
     'invalid_phone_number': 'Not a valid phone number.',
     'invalid_username': 'Invalid username.',

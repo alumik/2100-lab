@@ -124,8 +124,9 @@ def get_order_logs(request):
 def delete_customer(request):
     user = request.user
     logout(request)
-    user.phone_number += '_deleted_' + str(int(round(time.time() * 1000)))
-    user.username = user.phone_number
+    delete_str = '_deleted_' + str(int(round(time.time() * 1000)))
+    user.phone_number += delete_str
+    user.username += delete_str
     user.save()
     user.delete()
     return JsonResponse({'message': INFO['object_deleted']})
