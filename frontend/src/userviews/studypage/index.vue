@@ -52,11 +52,11 @@
             <b-row>
               <b-col class="delete-margin text-left-style">
                 <h5>
-                  {{ course.title }}
+                  {{ course.title }}{{ course.course_id }}
                 </h5>
               </b-col>
               <b-col class="vote-style">
-                {{ course.up_votes }}
+                {{ up_votes }}
                 <img
                   id="praise-button"
                   src="../../assets/praise.png"
@@ -92,7 +92,7 @@
             <p
               id="message-board"
               class="card-text width-style">
-              <MessageBoard :course_id="course_id"/>
+              <MessageBoard :course_id="query_course_id"/>
             </p>
           </b-card-body>
         </b-card>
@@ -114,14 +114,13 @@ export default {
   },
   data () {
     return {
-      course_id: 1,
+      query_course_id: 0,
       assets_test: false,
       assets_error_msg: '',
       detail_test: false,
       detail_error_msg: '',
       up_vote_test: false,
       up_vote_error_msg: '',
-      current_course_id: 1,
       now_picture: '',
       now_picture_index: 0,
       audio_current_time: null,
@@ -129,15 +128,8 @@ export default {
       introduction_brandFold: true,
       introduction_text_show: '',
       introduction_text_hide: '',
-      course: {
-        title: '小猪佩奇',
-        course_id: 1,
-        description: '',
-        audio: '',
-        images: [],
-        progress: 0,
-        up_votes: 5
-      },
+      course: {},
+      up_votes: 0,
       audio_piece_num: 0
     }
   },
@@ -163,46 +155,46 @@ export default {
   },
   created: function () {
     let that = this
-    // if (typeof (this.$route.query.course_id) === 'undefined') {
-    //   this.$router.push({name: 'BurnedCourse'})
-    // } else {
-    //   that.course_id = this.$route.query.course_id
-    // }
+    if (typeof (that.$route.query.course_id) === 'undefined') {
+      that.$router.push({name: 'BurnedCourse'})
+    } else {
+      that.query_course_id = that.$route.query.course_id
+    }
     axios.get('http://localhost:8000/api/v1/courses/forestage/play/get-course-assets?' +
-      'course_id=1')
+      'course_id=' + that.query_course_id)
       .then(function (response) {
         that.course = response.data
       }).catch(function (error) {
         that.assets_test = true
-        this.assets_error_msg = error
+        that.assets_error_msg = error
       })
     axios.get('http://localhost:8000/api/v1/courses/forestage/course/get-course-detail?' +
-      'course_id=1')
+      'course_id=' + that.query_course_id)
       .then(function (response) {
         var data = response.data
-        that.course.up_votes = data.up_votes
+        that.up_votes = data.up_votes
       }).catch(function (error) {
         that.detail_test = true
-        this.detail_error_msg = error
+        that.detail_error_msg = error
       })
-  },
-  mounted () {
-    this.audio_current_time = this.$refs.player.currentTime
-    this.audio_piece_num = this.course.images.length
-    this.introduction_text_show = this.course.description.substring(0, 2)
-    this.introduction_text_hide = this.course.description.substring(2)
-    this.addEventListeners()
+    that.audio_current_time = that.$refs.player.currentTime
+    that.audio_piece_num = that.course.images.length
+    that.introduction_text_show = that.course.description.substring(0, 2)
+    that.introduction_text_hide = that.course.description.substring(2)
+    that.addEventListeners()
   },
   methods: {
     up_vote_course () {
-      axios.get('http://localhost:8000/api/v1/courses/forestage/course/up-vote-course?course_id=1')
+      let that = this
+      axios.get('http://localhost:8000/api/v1/courses/forestage/course/up-vote-course?' +
+      'course_id=' + that.query_course_id)
         .then(function (response) {
           if (response.up_voted) {
-            this.course.up_votes = response.up_votes
+            that.course.up_votes = response.up_votes
           }
         }).catch(function (error) {
-          this.up_vote_test = true
-          this.up_vote_error_msg = error
+          that.up_vote_test = true
+          that.up_vote_error_msg = error
         })
     },
     changeFoldState () {
@@ -221,7 +213,7 @@ export default {
     },
     _currentTime: function () {
       const self = this
-      self.ctime = parseInt(self.$refs.player.currentTime)
+      self.audio_current_time = parseInt(self.$refs.player.currentTime)
     }
   }
 }

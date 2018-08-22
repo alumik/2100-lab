@@ -80,13 +80,13 @@
               id="praise-button"
               src="../../assets/praise.png"
               class="vote-style "
-              @click="up_vote(index-1,msg.comment_id)">
+              @click="up_vote(index-1,message_list[index-1].comment_id)">
             &emsp; &emsp;{{ message_list[index-1].down_votes }}
             <img
               id="detest-button"
               src="../../assets/detest.png"
               class="vote-style "
-              @click="down_vote(index-1,msg.comment_id)">
+              @click="down_vote(index-1,message_list[index-1].comment_id)">
           </div>
         </div>
       </div>
@@ -128,8 +128,10 @@ export default {
   },
   props: {
     course_id: {
-      type: Number,
-      default: 0
+      type: String,
+      default: function () {
+        return 0
+      }
     }
   },
   data () {
@@ -150,20 +152,23 @@ export default {
       add_message_error_msg: '',
       delete_message_test: false,
       delete_message_error_msg: '',
-      page_limit: 10,
-      page: 1,
-      rows: 100
+      page_limit: 1,
+      page: 0,
+      rows: 0
     }
   },
   created: function () {
     let that = this
-    axios.get('http://localhost:8000/api/v1/courses/forestage/play/get-course-comments?' +
-      'course_id=1', { params: {
-      page_limit: that.per_page,
-      page: that.page
-    }})
+    axios.get('http://localhost:8000/api/v1/courses/forestage/play/get-course-comments/',
+      { params: {
+        course_id: that.course_id,
+        page_limit: that.page_limit,
+        page: that.page
+      }})
       .then(function (response) {
-        that.message_list = response.content.data
+        that.rows = response.data.count
+        console.log(response)
+        that.message_list = response.data.content
       }).catch(function (error) {
         that.created_test = true
         that.created_error_msg = error
@@ -171,37 +176,48 @@ export default {
   },
   methods: {
     getallmessage: function () {
-      axios.get('http://localhost:8000/api/v1/courses/forestage/play/get-course-comments?' +
-        'course_id=?' + this.course_id)
+      let that = this
+      axios.get('http://localhost:8000/api/v1/courses/forestage/play/get-course-comments/',
+        { params: {
+          course_id: that.course_id,
+          page_limit: that.page_limit,
+          page: that.page
+        }})
         .then(function (response) {
-          this.message_list = response.content.data
+          that.message_list = response.data.content
         }).catch(function (error) {
-          this.getallmessage_test = true
-          this.getallmessage_error_msg = error
+          that.getallmessage_test = true
+          that.getallmessage_error_msg = error
         })
     },
     up_vote: function (index, msgCommentId) {
+      let that = this
       axios.get('http://localhost:8000/api/v1/courses/forestage/play/up-vote-comment?' +
         'comment_id=' + msgCommentId)
         .then(function (response) {
-          if (response.up_voted === true) {
-            this.message_list[index].up_votes = response.up_votes
+          if (response.data.up_voted === true) {
+            that.message_list[index].up_votes = response.data.up_votes
+          } else if (response.data.up_voted === false) {
+            that.message_list[index].up_votes = response.data.up_votes
           }
         }).catch(function (error) {
-          this.up_vote_test = true
-          this.up_vote_error_msg = error
+          that.up_vote_test = true
+          that.up_vote_error_msg = error
         })
     },
     down_vote: function (index, msgCommentId) {
+      let that = this
       axios.get('http://localhost:8000/api/v1/courses/forestage/play/down-vote-comment?' +
         'comment_id=' + msgCommentId)
         .then(function (response) {
-          if (response.down_voted === true) {
-            this.message_list[index].down_votes = response.down_votes
+          if (response.data.down_voted === true) {
+            that.message_list[index].down_votes = response.data.down_votes
+          } else if (response.data.down_voted === false) {
+            that.message_list[index].down_votes = response.data.down_votes
           }
         }).catch(function (error) {
-          this.down_vote_test = true
-          this.down_vote_error_msg = error
+          that.down_vote_test = true
+          that.down_vote_error_msg = error
         })
     },
     delete_comment: function (commentId) {
@@ -224,7 +240,7 @@ export default {
         return
       }
       axios.post('http://localhost:8000/api/v1/courses/forestage/play/add-comment?' +
-        'course=' + this.course_id,
+        'course=' + parseInt(this.course_id),
       qs.stringify({
         content: value
       })).then(function (response) {
@@ -241,6 +257,7 @@ export default {
     },
     change_page: function (page) {
       this.page = page
+      this.getallmessage()
     }
   }
 }
