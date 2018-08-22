@@ -310,7 +310,6 @@ export default{
     axios.get('http://localhost:8000/api/v1/courses/forestage/course/get-course-detail?course_id=30')
       .then(function (response) {
         that.course = response.data
-        console.log(that.course.price)
         if (that.course.price !== 0 && that.course.can_access === true) {
           that.is_paid = true
         }
@@ -377,7 +376,6 @@ export default{
         axios.post('http://localhost:8000/api/v1/courses/forestage/course/buy-course/',
           qs.stringify({
             course_id: 30})).then(function (response) {
-          console.log(response)
           if (response.message === 'Success.') {
             that.is_paid = true
           } else alert('请先完成支付')
