@@ -103,6 +103,9 @@ def add_comment(request):
     except Course.DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
+    if not course.can_comment:
+        return JsonResponse({'message': ERROR['comment_not_allowed']}, status=403)
+
     Comment.objects.create(
         user=request.user,
         course=course,

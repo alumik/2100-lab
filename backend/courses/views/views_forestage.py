@@ -59,6 +59,7 @@ def get_course_detail(request):
         'price': course.price,
         'reward_percent': course.reward_percent,
         'up_votes': course.up_votes.count(),
+        'up_voted': request.user in course.up_votes.all(),
         'expire_duration': course.expire_duration,
         'expire_time': None,
         'can_access': False
@@ -101,12 +102,19 @@ def up_vote_course(request):
 @login_required
 def buy_course(request):
     course_id = request.POST.get('course_id')
+    payment_method = request.POST.get('payment_method')
     customer = request.user
 
     try:
         course = Course.objects.get(id=course_id)
     except Course.DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+
+    try:
+        OrderLog.objects.get(customer=customer, course=course, refunded_at=None)
+        return JsonResponse({'message': ERROR['course_already_purchased']}, status=400)
+    except OrderLog.DoesNotExist:
+        pass
 
     price = course.price
     reward_coin = customer.reward_coin
@@ -141,7 +149,7 @@ def buy_course(request):
         course=course,
         cash_spent=cash_spent,
         reward_spent=reward_spent,
-        payment_method=1
+        payment_method=int(payment_method)
     )
 
     return JsonResponse({'message': INFO['success']})
@@ -205,6 +213,9 @@ def get_course_comments(request):
 
     if not can_access(course, request.user):
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
+
+    if not course.can_comment:
+        return JsonResponse({'message': ERROR['comment_not_allowed']}, status=403)
 
     comments = Comment.objects.filter(course=course).order_by('-created_at')
     return get_comment_page(request, comments)
@@ -279,18 +290,23 @@ def down_vote_comment(request):
 @login_required
 def add_comment(request):
     user = request.user
+    course_id = request.GET.get('course_id')
+    comment_content = request.POST.get('content')
 
     try:
-        course = Course.objects.get(id=request.GET.get('course_id'))
+        course = Course.objects.get(id=course_id)
     except Course.DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
     if not can_access(course, request.user):
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
+    if (not course.can_comment) or user.is_banned:
+        return JsonResponse({'message': ERROR['comment_not_allowed']}, status=403)
+
     Comment.objects.create(
         user=user,
         course=course,
-        content=request.POST.get('content')
+        content=comment_content
     )
     return JsonResponse({'message': INFO['success']})

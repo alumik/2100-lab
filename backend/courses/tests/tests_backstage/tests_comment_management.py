@@ -230,11 +230,28 @@ class CommentOperationTests(TestCase):
             description='d1',
             codename='SOFT1'
         )
+        Course.objects.create(
+            title='t2',
+            description='d2',
+            codename='SOFT2',
+            can_comment=False
+        )
         Comment.objects.create(
             user=user,
             course=course,
             content='1234'
         )
+
+    def test_add_comment_not_allowed(self):
+        self.client.login(phone_number='13312345678', password='123456')
+        response = self.client.post(
+            reverse('api:courses:backstage:add-comment'),
+            {
+                'course_codename': 'SOFT2',
+                'comment_content': '12345678'
+            }
+        )
+        self.assertEqual(response.status_code, 403)
 
     def test_add_comment(self):
         self.client.login(phone_number='13312345678', password='123456')

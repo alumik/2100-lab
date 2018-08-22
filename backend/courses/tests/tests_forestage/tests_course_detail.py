@@ -57,6 +57,12 @@ class CourseDetailTests(TestCase):
         course_id = Course.objects.get(codename='c4').id
 
         response = self.client.get(
+            reverse('api:courses:forestage:up-vote-course'),
+            {'course_id': course_id}
+        )
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(
             reverse('api:courses:forestage:get-course-detail'),
             {'course_id': course_id}
         )
@@ -67,7 +73,8 @@ class CourseDetailTests(TestCase):
         self.assertEqual(response_json_data['title'], 't4')
         self.assertEqual(response_json_data['description'], 'd4')
         self.assertEqual(response_json_data['price'], '0.00')
-        self.assertEqual(response_json_data['up_votes'], 0)
+        self.assertEqual(response_json_data['up_votes'], 1)
+        self.assertTrue(response_json_data['up_voted'])
         self.assertEqual(response_json_data['expire_duration'], 'P3DT07H00M00S')
         self.assertIsNone(response_json_data['expire_time'])
         self.assertTrue(response_json_data['can_access'])
@@ -208,7 +215,10 @@ class BuyCourseTest(TestCase):
         )
         response = self.client.post(
             reverse('api:courses:forestage:buy-course'),
-            {'course_id': course.id}
+            {
+                'course_id': course.id,
+                'payment_method': 1
+            }
         )
         user_0 = get_user_model().objects.get(phone_number='00000000000')
         user_1 = get_user_model().objects.get(phone_number='00000000001')
@@ -216,6 +226,15 @@ class BuyCourseTest(TestCase):
         self.assertEqual(int(user_1.reward_coin), 0)
         self.assertEqual(int(user_0.reward_coin), 25)
         self.assertEqual(int(OrderLog.objects.get(customer__phone_number='00000000001').cash_spent), 20)
+
+        response = self.client.post(
+            reverse('api:courses:forestage:buy-course'),
+            {
+                'course_id': course.id,
+                'payment_method': 1
+            }
+        )
+        self.assertEqual(response.status_code, 400)
         self.client.logout()
 
         self.client.force_login(user_2)
@@ -228,7 +247,10 @@ class BuyCourseTest(TestCase):
         )
         response = self.client.post(
             reverse('api:courses:forestage:buy-course'),
-            {'course_id': course.id}
+            {
+                'course_id': course.id,
+                'payment_method': 2
+            }
         )
         user_0 = get_user_model().objects.get(phone_number='00000000000')
         user_2 = get_user_model().objects.get(phone_number='00000000002')
