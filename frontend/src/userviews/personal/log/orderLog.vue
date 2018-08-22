@@ -83,7 +83,7 @@ export default {
       items: [],
       count: 0,
       currentPage: 1,
-      perPage: 1,
+      perPage: 10,
       page_nums: 1,
       pageOptions: [5, 10, 15]
     }

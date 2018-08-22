@@ -79,7 +79,7 @@ export default {
       items: [],
       count: 0,
       currentPage: 1,
-      perPage: 1,
+      perPage: 10,
       page_nums: 1,
       pageOptions: [5, 10, 15]
     }
@@ -102,7 +102,10 @@ export default {
         .toString()
         .substring(0, 19)
         .replace('T', ' ')
-      data.expire_time = data.expire_time.toString().substring(0, 19)
+      data.expire_time = data.expire_time
+        .toString()
+        .substring(0, 19)
+        .replace('T', ' ')
       that.items.push(data)
     }
     for (let i = 2; i <= that.page_nums; i++) {

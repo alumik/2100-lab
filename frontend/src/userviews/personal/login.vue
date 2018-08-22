@@ -143,7 +143,8 @@ export default {
         '本协议根据现行中华人民共和国法律法规制定并解释。如发生协议条款与中华人民共和国法律法规相抵触时，则抵触的内容将按法律规定重新解释，但不影响其他条款的效力。\n' +
         '\n' +
         '八、解释权\n' +
-        '上述条款的解释权在法律允许的范围内归本网站所有。'
+        '上述条款的解释权在法律允许的范围内归本网站所有。',
+      course_id: -1
     }
   },
   computed: {
@@ -175,7 +176,11 @@ export default {
       }
     }
   },
-  mounted () {},
+  mounted () {
+    if (this.$route.params.source === 'coursedetail') {
+      this.course_id = this.$route.params.course_id
+    }
+  },
   methods: {
     send () {
       let that = this
@@ -234,8 +239,13 @@ export default {
           this.$store.commit('status')
           this.$store.commit('user', response.data)
           this.$store.commit('phone', this.phone)
+          if (this.course_id !== -1) {
+            this.$router.push({
+              path: '/coursedetail',
+              query: { course_id: this.course_id }
+            })
+          }
           this.$router.push({ path: '/personal' })
-          // }
         })
         .catch(error => {
           if (error.response.data.message === 'Different phone number.') {
