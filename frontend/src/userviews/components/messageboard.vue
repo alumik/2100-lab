@@ -106,16 +106,27 @@
           @click="add_comment">评论</b-button>
       </div>
     </div>
+    <div>
+      <Pagination
+        id="pagination"
+        :rows="rows"
+        :perpage="page_limit"
+        @change="change_page"/>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import qs from 'qs'
+import Pagination from '../../components/pagination'
 
 export default {
   name: 'MessageBoard',
-  pros: {
+  components: {
+    Pagination
+  },
+  props: {
     course_id: {
       type: Number,
       default: 0
@@ -138,13 +149,19 @@ export default {
       add_message_test: false,
       add_message_error_msg: '',
       delete_message_test: false,
-      delete_message_error_msg: ''
+      delete_message_error_msg: '',
+      page_limit: 10,
+      page: 1,
+      rows: 100
     }
   },
   created: function () {
     let that = this
     axios.get('http://localhost:8000/api/v1/courses/forestage/play/get-course-comments?' +
-      'course_id=1')
+      'course_id=1', { params: {
+      page_limit: that.per_page,
+      page: that.page
+    }})
       .then(function (response) {
         that.message_list = response.content.data
       }).catch(function (error) {
@@ -221,6 +238,9 @@ export default {
         this.add_message_error_msg = error
       })
       this.new_msg = ''
+    },
+    change_page: function (page) {
+      this.page = page
     }
   }
 }
