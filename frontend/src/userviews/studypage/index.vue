@@ -171,9 +171,7 @@ export default {
     axios.get('http://localhost:8000/api/v1/courses/forestage/play/get-course-assets?' +
       'course_id=1')
       .then(function (response) {
-        console.log(response.data)
         that.course = response.data
-        console.log(that.course)
       }).catch(function (error) {
         that.assets_test = true
         this.assets_error_msg = error
