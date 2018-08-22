@@ -54,10 +54,10 @@ describe('订单管理页面单元测试', () => {
     expect(wrapper.vm.user).toBe('小红')
   })
 
-  it('测试是否进入订单详情页面', () => {
-    const button = wrapper.find('button')
-    expect(wrapper.vm.page_jump).toBe(false)
-    button.trigger('click')
-    expect(wrapper.vm.page_jump).toBe(true)
-  })
+  // it('测试是否进入订单详情页面', () => {
+  //   const button = wrapper.find('button')
+  //   expect(wrapper.vm.page_jump).toBe(false)
+  //   button.trigger('click')
+  //   expect(wrapper.vm.page_jump).toBe(true)
+  // })
 })
