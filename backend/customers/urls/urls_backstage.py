@@ -17,4 +17,9 @@ urlpatterns = [
         views_backstage.get_order_detail,
         name='get-order-detail'
     ),
+    path(
+        'order-management/order-refund/',
+        views_backstage.order_refund,
+        name='order-refund'
+    ),
 ]

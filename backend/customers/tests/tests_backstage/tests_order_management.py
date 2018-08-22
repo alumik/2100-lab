@@ -109,9 +109,10 @@ class OrderDetailTests(TestCase):
     def setUp(self):
         get_user_model().objects.create_user(phone_number='11122223333', password='123456')
         admin = get_user_model().objects.create_user(phone_number='11122224444', password='123456')
-        permission = Permission.objects.get(codename='view_orderlog')
+        permission_1 = Permission.objects.get(codename='view_orderlog')
+        permission_2 = Permission.objects.get(codename='change_orderlog')
         admin_group = Group.objects.create(name='order_admin')
-        admin_group.permissions.add(permission)
+        admin_group.permissions.add(permission_1, permission_2)
         admin_group.save()
         admin.groups.add(admin_group)
         admin.save()
@@ -130,6 +131,7 @@ class OrderDetailTests(TestCase):
             customer=get_user_model().objects.get(phone_number='11122223333'),
             course=course_1,
             cash_spent=70,
+            reward_spent=10,
             payment_method=1
         )
         OrderLog.objects.create(
@@ -167,3 +169,17 @@ class OrderDetailTests(TestCase):
         response_json_data = json.loads(response.content)
         self.assertTrue(response_json_data['is_refunded'])
         self.assertEqual(response_json_data['order_no'], 'AA02')
+
+    def test_order_refund(self):
+        self.client.login(phone_number='11122224444', password='123456')
+        order = OrderLog.objects.get(order_no='AA01')
+
+        response = self.client.post(
+            reverse('api:customers:backstage:order-refund'),
+            {'order_id': order.id}
+        )
+        self.assertEqual(response.status_code, 200)
+        order = OrderLog.objects.get(order_no='AA01')
+        user = get_user_model().objects.get(phone_number='11122223333')
+        self.assertTrue(order.refunded_at is not None)
+        self.assertEqual(int(user.reward_coin), 10)

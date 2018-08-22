@@ -1,8 +1,9 @@
 from django.contrib.auth.decorators import permission_required
 from django.http import JsonResponse
+from django.utils import timezone
 
 from core.utils import get_backstage_page
-from core.messages import ERROR
+from core.messages import ERROR, INFO
 from customers.models import OrderLog
 
 
@@ -56,3 +57,24 @@ def get_order_detail(request):
             'refunded_at': order.refunded_at
         }
     )
+
+
+@permission_required('customers.change_orderlog')
+def order_refund(request):
+    order_id = request.POST.get('order_id')
+
+    try:
+        order = OrderLog.objects.get(id=order_id)
+    except OrderLog.DoesNotExist:
+        return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+
+    # payment_method = order.payment_method
+    # cash_spent = order.cash_spent
+    reward_spent = order.reward_spent
+    customer = order.customer
+    customer.reward_coin += reward_spent
+    customer.save()
+    order.refunded_at = timezone.now()
+    order.save()
+
+    return JsonResponse({'message': INFO['success']})
