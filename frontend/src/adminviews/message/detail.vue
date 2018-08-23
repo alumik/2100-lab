@@ -149,24 +149,26 @@ export default {
     },
     delete_message: function () {
       const that = this
-      axios.get('http://localhost:8000/api/v1/courses/backstage/comment-management/delete-comment/',
-        {params: {
+      axios.post('http://localhost:8000/api/v1/courses/backstage/comment-management/delete-comment/',
+        qs.stringify({
           comment_id: that.$route.query.message_id
-        }})
+        }))
         .then(function (response) {
-          if (response.data.message === 'Object deleted.') {
+          if (response.data.message === 'Object not found.') {
+            that.wrong = '你所删除的留言不存在，删除失败！'
+            that.wrong_count_down = that.dismiss_second
             that.success = '您已经成功删除此留言。'
             that.success_count_down = that.dismiss_second
           } else {
-            that.wrong = '你所删除的留言不存在，删除失败！'
-            that.wrong_count_down = that.dismiss_second
+            that.search()
+            that.success = '您已经成功删除此留言。'
+            that.success_count_down = that.dismiss_second
           }
         })
         .catch(function (error) {
           that.wrong = '删除失败！' + error
           that.wrong_count_down = that.dismiss_second
         })
-      this.search()
     },
     reply_message: function (val) {
       const that = this
