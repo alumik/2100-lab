@@ -224,7 +224,7 @@ def get_course_comments(request):
 @login_required
 def delete_comment(request):
     try:
-        comment = Comment.objects.get(id=request.GET.get('comment_id'))
+        comment = Comment.objects.get(id=request.POST.get('comment_id'))
     except Comment.DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
@@ -290,7 +290,7 @@ def down_vote_comment(request):
 @login_required
 def add_comment(request):
     user = request.user
-    course_id = request.GET.get('course_id')
+    course_id = request.POST.get('course_id')
     comment_content = request.POST.get('content')
 
     try:

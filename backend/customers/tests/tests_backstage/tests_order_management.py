@@ -47,7 +47,7 @@ class OrderListTests(TestCase):
             refunded_at=timezone.now()
         )
 
-    def test_order_list_access_denied (self):
+    def test_order_list_access_denied(self):
         self.client.login(phone_number='11122223333', password='123456')
 
         response = self.client.get(

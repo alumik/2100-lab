@@ -211,7 +211,7 @@ class CourseOperationsTests(TestCase):
         )
         self.client.login(phone_number='13312345678', password='123456')
 
-        response = self.client.get(
+        response = self.client.post(
             reverse('api:courses:backstage:delete-course'),
             {'course_id': course.id}
         )
