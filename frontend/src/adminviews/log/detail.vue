@@ -63,7 +63,7 @@ export default {
       }],
       titles: [
         { label: '时间' },
-        { label: '管理员账号' },
+        { label: '管理员名称' },
         { label: '内容' }
       ],
       logs: [],
@@ -131,7 +131,8 @@ export default {
         })
     },
     compute_date: function (date) {
-      return date.slice(0, 10)
+      let temp = new Date(date)
+      return temp.toLocaleString()
     }
   }
 }
@@ -170,7 +171,7 @@ export default {
   }
 
   .sm-td {
-    width: 150px;
+    width: 200px;
   }
 
   .md-td {
