@@ -4,7 +4,18 @@
     <div class="my-content">
       <div>
         <h2>分配权限</h2>
-        {{ error_message }}
+        <Alert
+          :count_down="wrong_count_down"
+          :instruction="error_message"
+          variant="danger"
+          @decrease="wrong_count_down-1"
+          @zero="wrong_count_down=0"/>
+        <Alert
+          :count_down="success_count_down"
+          :instruction="error_message"
+          variant="success"
+          @decrease="success_count_down-1"
+          @zero="success_count_down=0"/>
         <h4 class="my-text">管理员账号：{{ admin_id }}</h4>
         <div>
           <h4 class="my-text">权限选择：</h4>
@@ -41,9 +52,10 @@
 import Basic from '../basic/basic'
 import axios from 'axios'
 import qs from 'qs'
+import Alert from '../../components/alert'
 export default {
   name: 'DistributeAuthority',
-  components: {Basic},
+  components: {Alert, Basic},
   data: function () {
     return {
       items: [{
@@ -63,6 +75,8 @@ export default {
       flavours: ['评论管理权限', '课程管理权限', '客户管理权限', '日志管理权限', '订单管理权限'],
       selected: [],
       error_message: '',
+      wrong_count_down: 0,
+      success_count_down: 0,
       allSelected: false
     }
   },
@@ -89,7 +103,8 @@ export default {
         }
       }).catch(
       error => {
-        this.error_message = '读取数据出错' + error.response.data
+        this.error_message = '读取数据出错' + error.response.data.message
+        this.wrong_count_down = 5
       })
   },
   methods: {
@@ -141,6 +156,7 @@ export default {
       ).catch(
         error => {
           this.error_message = error.response.message
+          this.wrong_count_down = 5
         }
       )
     }

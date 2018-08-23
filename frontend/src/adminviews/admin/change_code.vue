@@ -2,7 +2,18 @@
   <Basic :items="items">
     <div class="my-content">
       <h2>修改密码</h2>
-      {{ error_message }}
+      <Alert
+        :count_down="wrong_count_down"
+        :instruction="error_message"
+        variant="danger"
+        @decrease="wrong_count_down-1"
+        @zero="wrong_count_down=0"/>
+      <Alert
+        :count_down="success_count_down"
+        :instruction="error_message"
+        variant="success"
+        @decrease="success_count_down-1"
+        @zero="success_count_down=0"/>
       <div>
         <div class="form-group">
           <label
@@ -37,9 +48,10 @@
 import Basic from '../basic/basic'
 import axios from 'axios'
 import qs from 'qs'
+import Alert from '../../components/alert'
 export default {
   name: 'ChangeCode',
-  components: {Basic},
+  components: {Alert, Basic},
   data: function () {
     return {
       items: [{
@@ -57,6 +69,8 @@ export default {
       }],
       new_password: null,
       new_password_again: null,
+      wrong_count_down: 0,
+      success_count_down: 0,
       error_message: ''
     }
   },
@@ -64,10 +78,13 @@ export default {
     submitMessage: function () {
       if (this.new_password === null) {
         this.error_message = '请输入新密码'
+        this.wrong_count_down = 5
       } else if (this.new_password_again === null) {
         this.error_message = '请再次输入新密码'
+        this.wrong_count_down = 5
       } else if (this.new_password !== this.new_password_again) {
         this.error_message = '两次输入密码不一致'
+        this.wrong_count_down = 5
       } else {
         axios.post('http://localhost:8000/api/v1/admin/backstage/admin-management/change-admin-password/',
           qs.stringify({
@@ -76,10 +93,12 @@ export default {
           })).then(
           response => {
             this.error_message = response.data.message
+            this.$router.push({name: 'AdminDetail', query: {'admin_id': this.admin_id}})
           }
         ).catch(
           error => {
             this.error_message = error.response.message
+            this.wrong_count_down = 5
           }
         )
       }

@@ -2,7 +2,18 @@
   <Basic :items="items">
     <div class="my-content">
       <h2>新增管理员</h2>
-      {{ error_message }}
+      <Alert
+        :count_down="wrong_count_down"
+        :instruction="error_message"
+        variant="danger"
+        @decrease="wrong_count_down-1"
+        @zero="wrong_count_down=0"/>
+      <Alert
+        :count_down="success_count_down"
+        :instruction="error_message"
+        variant="success"
+        @decrease="success_count_down-1"
+        @zero="success_count_down=0"/>
       <div>
         <div class="form-group">
           <label
@@ -47,9 +58,10 @@
 import Basic from '../basic/basic'
 import axios from 'axios'
 import qs from 'qs'
+import Alert from '../../components/alert'
 export default {
   name: 'AddAdmin',
-  components: {Basic},
+  components: {Alert, Basic},
   data: function () {
     return {
       items: [{
@@ -67,6 +79,8 @@ export default {
         password: null,
         password_again: null
       },
+      wrong_count_down: 0,
+      success_count_down: 0,
       error_message: ''
     }
   },
@@ -75,18 +89,23 @@ export default {
       this.error_message = ''
       if (this.admin.phone_number === null) {
         this.error_message = '请输入手机号！'
+        this.wrong_count_down = 5
         return
       }
       const regix = /^1\d{10}$/
       let result = this.admin.phone_number.match(regix)
       if (result === null) {
         this.error_message = '请输入一个正确的手机号！'
+        this.wrong_count_down = 5
       } else if (this.admin.password === null) {
         this.error_message = '请输入密码！'
+        this.wrong_count_down = 5
       } else if (this.admin.password_again === null) {
         this.error_message = '请再次输入密码！'
+        this.wrong_count_down = 5
       } else if (this.admin.password !== this.admin.password_again) {
         this.error_message = '两次输入密码不相符，请重新输入！'
+        this.wrong_count_down = 5
       } else {
         this.sendMessage()
       }
@@ -98,17 +117,20 @@ export default {
         password: this.admin.password
       })).then(
         response => {
+          let that = this
           if (response.data.new_admin_id) {
             _this.error_message = '添加成功'
             _this.admin.phone_number = ''
             _this.admin.password = ''
             _this.admin.password_again = ''
-            // this.$router.push({name: 'AdminManagement'})
+            this.success_count_down = 5
+            setTimeout(function () { that.$router.push({name: 'AdminManagement'}) }, 5000)
           }
         }
       ).catch(
         error => {
           _this.error_message = error.response.message
+          this.wrong_count_down = 5
         }
       )
     }

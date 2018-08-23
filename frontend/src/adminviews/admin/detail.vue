@@ -2,7 +2,18 @@
   <Basic :items="items">
     <div class="my-content">
       <h2>管理员详情</h2>
-      {{ error_message }}
+      <Alert
+        :count_down="wrong_count_down"
+        :instruction="error_message"
+        variant="danger"
+        @decrease="wrong_count_down-1"
+        @zero="wrong_count_down=0"/>
+      <Alert
+        :count_down="success_count_down"
+        :instruction="error_message"
+        variant="success"
+        @decrease="success_count_down-1"
+        @zero="success_count_down=0"/>
       <div class="button_group">
         <button
           type="button"
@@ -87,9 +98,10 @@ import Basic from '../basic/basic'
 import ConfirmModal from '../components/ConfirmModal'
 import axios from 'axios'
 import qs from 'qs'
+import Alert from '../../components/alert'
 export default {
   name: 'AdminDetail',
-  components: {ConfirmModal, Basic},
+  components: {Alert, ConfirmModal, Basic},
   data: function () {
     return {
       items: [{
@@ -112,6 +124,8 @@ export default {
       },
       admin_id: -1,
       error_message: '',
+      wrong_count_down: 0,
+      success_count_down: 0,
       test_router: -1
     }
   },
@@ -139,6 +153,7 @@ export default {
       }).catch(
       error => {
         this.error_message = '读取数据出错' + error.response.data.message
+        this.wrong_count_down = 5
       }
     )
   },
@@ -181,6 +196,7 @@ export default {
         }).catch(
         error => {
           this.error_message = error.response.message
+          this.wrong_count_down = 5
         }
       )
     }

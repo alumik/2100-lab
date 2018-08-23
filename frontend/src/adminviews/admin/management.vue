@@ -2,7 +2,18 @@
   <Basic :items="items">
     <div class="my-content">
       <h2>管理员列表</h2>
-      {{ error_message }}
+      <Alert
+        :count_down="wrong_count_down"
+        :instruction="error_message"
+        variant="danger"
+        @decrease="wrong_count_down-1"
+        @zero="wrong_count_down=0"/>
+      <Alert
+        :count_down="success_count_down"
+        :instruction="error_message"
+        variant="success"
+        @decrease="success_count_down-1"
+        @zero="success_count_down=0"/>
       <button
         id="head-btn"
         type="button"
@@ -67,9 +78,10 @@
 import Basic from '../basic/basic'
 import Pagination from '../../components/pagination'
 import axios from 'axios'
+import Alert from '../../components/alert'
 export default {
   name: 'AdminManagement',
-  components: {Pagination, Basic},
+  components: {Alert, Pagination, Basic},
   data: function () {
     return {
       items: [{
@@ -86,6 +98,8 @@ export default {
       rows: 0,
       per_limit: 8,
       error_message: '',
+      wrong_count_down: 0,
+      success_count_down: 0,
       query_id: -1,
       test_add_admin: false
     }
@@ -109,6 +123,7 @@ export default {
       }).catch(
       error => {
         this.error_message = '读取数据出错' + error
+        this.wrong_count_down = 5
       }
     )
   },
@@ -145,6 +160,7 @@ export default {
         }).catch(
         error => {
           this.error_message = '读取数据出错' + error.response.data.message
+          this.wrong_count_down = 5
         }
       )
     },

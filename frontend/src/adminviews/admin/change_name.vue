@@ -2,7 +2,18 @@
   <Basic :items="items">
     <div class="my-content">
       <h2>修改管理员名</h2>
-      {{ error_message }}
+      <Alert
+        :count_down="wrong_count_down"
+        :instruction="error_message"
+        variant="danger"
+        @decrease="wrong_count_down-1"
+        @zero="wrong_count_down=0"/>
+      <Alert
+        :count_down="success_count_down"
+        :instruction="error_message"
+        variant="success"
+        @decrease="success_count_down-1"
+        @zero="success_count_down=0"/>
       <div>
         <div class="form-group">
           <label
@@ -32,9 +43,10 @@
 import Basic from '../basic/basic'
 import axios from 'axios'
 import qs from 'qs'
+import Alert from '../../components/alert'
 export default {
   name: 'ChangeName',
-  components: {Basic},
+  components: {Alert, Basic},
   data: function () {
     return {
       items: [{
@@ -52,6 +64,8 @@ export default {
       }],
       new_name: null,
       old_name: null,
+      wrong_count_down: 0,
+      success_count_down: 0,
       error_message: ''
     }
   },
@@ -67,6 +81,7 @@ export default {
     ).catch(
       error => {
         this.error_message = '读取数据出错' + error.response.data.message
+        this.wrong_count_down = 5
       }
     )
   },
@@ -74,8 +89,10 @@ export default {
     submitMessage: function () {
       if (this.new_name === null) {
         this.error_message = '请输入新名字'
+        this.wrong_count_down = 5
       } else if (this.old_name === this.new_name) {
         this.error_message = '新旧名字一致'
+        this.wrong_count_down = 5
       } else {
         axios.post('http://localhost:8000/api/v1/admin/backstage/admin-management/change-admin-username/', qs.stringify({
           admin_id: this.$route.query.admin_id,
@@ -83,10 +100,12 @@ export default {
         })).then(
           response => {
             this.error_message = response.data.new_username
+            this.$router.push({name: 'AdminDetail', query: {'admin_id': this.admin_id}})
           }
         ).catch(
           error => {
             this.error_message = error.response.message
+            this.wrong_count_down = 5
           }
         )
       }
