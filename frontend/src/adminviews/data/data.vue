@@ -28,7 +28,7 @@
                 </div>
                 <img
                   class="image"
-                  src="../../assets/user.png">
+                  src="../../assets/logo.png">
               </div>
               <div class="statistics2">
                 <div class="number">
@@ -37,7 +37,7 @@
                 </div>
                 <img
                   class="image"
-                  src="../../assets/money.png">
+                  src="../../assets/logo.png">
               </div>
               <div class="statistics3">
                 <div class="number">
@@ -46,7 +46,7 @@
                 </div>
                 <img
                   class="image"
-                  src="../../assets/course.png">
+                  src="../../assets/logo.png">
               </div>
               <div class="statistics4">
                 <div class="number">
@@ -55,7 +55,7 @@
                 </div>
                 <img
                   class="image"
-                  src="../../assets/order.png">
+                  src="../../assets/logo.png">
               </div>
             </div>
             <div class="table">
@@ -155,6 +155,25 @@ export default {
           {'日期': '8月14日', '课程1购买量': 1200, '课程2购买量': 1105},
           {'日期': '8月15日', '课程1购买量': 1000, '课程2购买量': 900}
         ]
+      }
+    }
+  },
+  methods: {
+    change_type: function () {
+      if (this.index === 0) {
+        this.index = 1
+      } else {
+        this.index = 0
+      }
+      this.settings1 = {type: this.type[this.index]}
+    },
+    change_button_state: function (val) {
+      for (let i = 0; i < this.buttons.length; i++) {
+        if (i === val) {
+          this.buttons[i].state = true
+        } else {
+          this.buttons[i].state = false
+        }
       }
     }
   }
