@@ -47,11 +47,9 @@ export default {
       page_limit: that.page_limit,
       page: that.page
     }}).then(function (response) {
-      console.log(response.data.content)
       that.course_list = response.data.content
       that.rows = response.data.count
     }).catch(function (error) {
-      console.log(error.data.message)
       that.created_test = true
       that.created_error_msg = error
     })
@@ -60,7 +58,6 @@ export default {
     change_page: function (page) {
       let that = this
       that.page = page
-      console.log(that.page)
       that.getcourselist()
     },
     getcourselist: function (page) {
@@ -73,7 +70,6 @@ export default {
         that.course_list = response.data.content
         that.rows = response.data.count
       }).catch(function (error) {
-        console.log(error.data.message)
         that.created_test = true
         that.created_error_msg = error
       })
