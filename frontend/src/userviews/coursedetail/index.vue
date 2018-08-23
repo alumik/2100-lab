@@ -308,7 +308,6 @@ export default{
       .then(function (response) {
         that.course = response.data
         that.course.price = parseFloat(response.data.price)
-        console.log(that.course)
       }).catch(function (error) {
         that.created_test = true
         that.created_error_msg = error

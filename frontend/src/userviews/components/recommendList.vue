@@ -24,7 +24,7 @@
           class="col-style">
           <b-card
             id="course-card"
-            :img-src="course.thumbnail"
+            :img-src="example_src"
             :title="course.title"
             img-alt="Image"
             img-top

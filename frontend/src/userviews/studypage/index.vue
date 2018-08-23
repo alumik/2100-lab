@@ -18,6 +18,14 @@
       @dismissed="detail_test=false">
       {{ detail_error_msg }}
     </b-alert>
+    <b-alert
+      :show="beforedestroy_test"
+      variant="danger"
+      dismissible
+      fade
+      @dismissed="beforedestroy_error_msg=false">
+      {{ beforedestroy_error_msg }}
+    </b-alert>
     <div
       id="content"
       class="width-style">
@@ -123,14 +131,16 @@ export default {
       up_vote_error_msg: '',
       now_picture: '',
       now_picture_index: 0,
-      audio_current_time: null,
+      audio_current_time: 0,
       audio_duration: null,
       introduction_brandFold: true,
       introduction_text_show: '',
       introduction_text_hide: '',
       course: {},
       up_votes: 0,
-      audio_piece_num: 0
+      audio_piece_num: 0,
+      beforedestroy_test: false,
+      beforedestroy_error_msg: ''
     }
   },
   watch: {
@@ -154,7 +164,7 @@ export default {
     }
   },
   mounted () {
-    this.audio_current_time = this.$refs.player.currentTime
+    this.audio_current_time = this.course.progress ? this.course.progress : 0
     this.audio_piece_num = this.course.images ? this.course.images.length : 0
     this.introduction_text_show = this.course.description ? this.course.description.substring(0, 2) : ''
     this.introduction_text_hide = this.course.description ? this.course.description.substring(2) : ''
@@ -184,6 +194,23 @@ export default {
         that.detail_test = true
         that.detail_error_msg = error
       })
+  },
+  beforeDestroy () {
+    let that = this
+    axios.get('http://localhost:8000/api/v1/courses/forestage/play/save-learning-log/', {params: {
+      course_id: that.query_course_id,
+      progress: that.audio_current_time
+    }}).then(function (response) {
+      if (response.data.message === 'Success.') {
+        alert('学习记录保存成功 ')
+      } else {
+        alert(response.data.message)
+      }
+    }).catch(function (error) {
+      alert(error)
+      that.beforedestroy_test = true
+      that.beforedestroy_error_msg = error
+    })
   },
   methods: {
     up_vote_course () {

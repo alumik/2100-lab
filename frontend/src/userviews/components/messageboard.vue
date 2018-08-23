@@ -166,7 +166,6 @@ export default {
         page: that.page
       }})
       .then(function (response) {
-        console.log(response.data)
         that.rows = response.data.count
         that.message_list = response.data.content
       }).catch(function (error) {
@@ -222,19 +221,20 @@ export default {
         })
     },
     delete_comment: function (commentId) {
+      let that = this
       axios.post('http://localhost:8000/api/v1/courses/forestage/play/delete-comment/',
         qs.stringify({
           comment_id: commentId
         }))
         .then(function (response) {
           if (response.data.message === 'Object deleted.') {
-            this.getallmessage()
+            that.getallmessage()
           } else {
             alert(response.data.message)
           }
         }).catch(function (error) {
-          this.delete_message_test = true
-          this.delete_message_error_msg = error.data.message
+          that.delete_message_test = true
+          that.delete_message_error_msg = error
         })
     },
     add_comment: function () {
@@ -248,14 +248,12 @@ export default {
           content: value,
           course_id: that.course_id
         })).then(function (response) {
-        console.log(response)
         if (response.data.message === 'Success.') {
           that.getallmessage()
         } else {
           alert(response.data.message)
         }
       }).catch(function (error) {
-        console.log(error)
         that.add_message_test = true
         that.add_message_error_msg = error
       })
