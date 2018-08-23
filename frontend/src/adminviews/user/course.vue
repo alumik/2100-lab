@@ -4,6 +4,12 @@
     class="my-basic">
     <div>
       <h1>相关课程</h1>
+      <Alert
+        :count_down="wrong_count_down"
+        :instruction="wrong"
+        variant="danger"
+        @decrease="wrong_count_down-1"
+        @zero="wrong_count_down=0"/>
       <div class="table-div">
         <table class="table table-striped">
           <thead>
@@ -19,17 +25,18 @@
             <tr
               v-for="log in logs"
               :key="log.id">
-              <td>{{ log.course_code }}</td>
-              <td>{{ log.course_name }}</td>
+              <td>{{ log.course_codename }}</td>
+              <td>{{ log.course_title }}</td>
               <td>{{ log.progress }}</td>
-              <td>{{ log.time }}</td>
-              <td>{{ log.state }}</td>
+              <td>{{ compute_date(log.latest_learn) }}</td>
+              <td>{{ compute_burnt(log.is_burnt) }}</td>
             </tr>
           </tbody>
         </table>
       </div>
       <Pagination
         :rows="rows"
+        :perpage="per_page"
         @change="change_page"/>
     </div>
   </Basic>
@@ -38,9 +45,11 @@
 <script>
 import Pagination from '../../components/pagination'
 import Basic from '../basic/basic'
+import axios from 'axios'
+import Alert from '../../components/alert'
 export default {
   name: 'Course',
-  components: { Basic, Pagination },
+  components: { Alert, Basic, Pagination },
   data () {
     return {
       items: [{
@@ -63,18 +72,70 @@ export default {
         { label: '最近学习时间' },
         { label: '是否焚毁' }
       ],
-      logs: [
-        { course_code: 'SOFT1', course_name: '计算机', progress: '01:22', time: '2018-08-14', state: '已焚毁' },
-        { course_code: 'ENGLISH3', course_name: '英语写作', progress: '15:00', time: '2018-05-14', state: '未焚毁' },
-        { course_code: 'PHYSICS5', course_name: '小孔成像', progress: '16:00', time: '2018-06-20', state: '已焚毁' }
-      ],
+      logs: [],
       rows: 10,
-      page: 1
+      page: 1,
+      per_page: 2,
+      wrong_count_down: 0,
+      dismiss_second: 5,
+      wrong: ''
     }
+  },
+  created () {
+    const that = this
+    axios.get('http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-learning-log-list/',
+      {params: {
+        customer_id: that.$route.query.user_id,
+        page: that.page,
+        page_limit: that.per_page
+      }})
+      .then(function (response) {
+        if (response.data.message === 'Object not found.') {
+          that.wrong = '无法查找到此用户的学习记录！'
+          that.wrong_count_down = that.dismiss_second
+        } else {
+          that.logs = response.data.content
+          that.rows = response.data.count
+        }
+      })
+      .catch(function (error) {
+        that.wrong = '获取此用户的学习记录失败！' + error
+        that.wrong_count_down = that.dismiss_second
+      })
   },
   methods: {
     change_page: function (page) {
       this.page = page
+      const that = this
+      axios.get('http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-learning-log-list/',
+        {params: {
+          customer_id: that.$route.query.user_id,
+          page: that.page,
+          page_limit: that.per_page
+        }})
+        .then(function (response) {
+          if (response.data.message === 'Object not found.') {
+            that.wrong = '无法查找到此用户的学习记录！'
+            that.wrong_count_down = that.dismiss_second
+          } else {
+            that.logs = response.data.content
+            that.rows = response.data.count
+          }
+        })
+        .catch(function (error) {
+          that.wrong = '获取此用户的学习记录失败！' + error
+          that.wrong_count_down = that.dismiss_second
+        })
+    },
+    compute_date: function (val) {
+      return val.slice(0, 10)
+    },
+    compute_burnt: function (val) {
+      if (val) {
+        return '已焚毁'
+      } else {
+        return '未焚毁'
+      }
     }
   }
 }
