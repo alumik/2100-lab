@@ -110,7 +110,7 @@ def change_avatar(request):
     customer.avatar = new_avatar
     customer.save()
 
-    return JsonResponse({'message': INFO['success']})
+    return JsonResponse({'new_avatar': str(customer.avatar)})
 
 
 @login_required

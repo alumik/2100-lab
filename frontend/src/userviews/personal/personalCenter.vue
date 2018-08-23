@@ -145,6 +145,7 @@ export default {
       )
       .then(res => {
         this.thumbnail = this.address + res.data.avatar
+        console.log(this.thumbnail)
         this.$store.commit('money', (this.money = res.data.reward_coin))
         this.time = res.data.date_joined
           .toString()
@@ -161,23 +162,18 @@ export default {
       this.hidden = !this.hidden
     },
     change: function (event) {
-      let reader = new FileReader()
-      reader.readAsDataURL(event.target.files[0])
+      // let reader = new FileReader()
       let that = this
-      reader.onloadend = function () {
-        that.thumbnail = reader.result
-      }
+      let data = new FormData()
+      data.set('new_avatar', event.target.files[0])
       axios
         .post(
           'http://localhost:8000/api/v1/customers/forestage/personal-center/change-avatar/',
-          qs.stringify({
-            new_avatar: that.thumbnail
-          })
+          data
         )
         .then(res => {
-          if (res.data.message === 'Success.') {
-            alert('头像上传成功')
-          }
+          that.thumbnail = this.address + res.data.new_avatar
+          alert('头像上传成功')
         })
     },
     editable: function () {
