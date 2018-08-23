@@ -1,3 +1,4 @@
+from decimal import Decimal
 import json
 
 from django.contrib.auth import get_user_model
@@ -218,3 +219,31 @@ class CourseOperationsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         course = Course.all_objects.get(title='t1')
         self.assertTrue(course.deleted_at is not None)
+
+    def test_add_course(self):
+        get_user_model().objects.create_user(
+            phone_number='13312345678',
+            password='123456',
+            is_staff=True,
+            is_superuser=True
+        )
+        self.client.login(phone_number='13312345678', password='123456')
+
+        response = self.client.post(
+            reverse('api:courses:backstage:add-course'),
+            {
+                'title': 'test_title1',
+                'codename': 'test_codename1',
+                'days': 2,
+                'hours': 3,
+                'price': 23.43,
+                'can_comment': 1,
+                'reward_percent': 0.50,
+                'description': 'test_description1'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        course = Course.objects.get(codename='test_codename1')
+        self.assertEqual(course.title, 'test_title1')
+        self.assertTrue(course.can_comment)
+        self.assertEqual(course.reward_percent, Decimal('0.50'))

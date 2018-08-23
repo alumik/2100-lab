@@ -16,7 +16,7 @@ class Course(SoftDeletionModel):
         blank=True,
         related_name='course_up_vote_customer'
     )
-    codename = models.CharField(max_length=10, unique=True)
+    codename = models.CharField(max_length=50, unique=True)
     price = models.DecimalField(decimal_places=2, max_digits=12, default=0)
     reward_percent = models.DecimalField(decimal_places=2, max_digits=2, default=0)
     thumbnail = models.ImageField(upload_to='uploads/courses/thumbnails/', blank=True)
