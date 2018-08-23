@@ -75,7 +75,7 @@ class CourseDetailTests(TestCase):
         self.assertEqual(response_json_data['price'], '0.00')
         self.assertEqual(response_json_data['up_votes'], 1)
         self.assertTrue(response_json_data['up_voted'])
-        self.assertEqual(response_json_data['expire_duration'], 'P3DT07H00M00S')
+        self.assertEqual(response_json_data['expire_duration'], 284400.0)
         self.assertIsNone(response_json_data['expire_time'])
         self.assertTrue(response_json_data['can_access'])
 
@@ -97,7 +97,7 @@ class CourseDetailTests(TestCase):
         self.assertEqual(response_json_data['description'], 'd3')
         self.assertEqual(response_json_data['price'], '0.00')
         self.assertEqual(response_json_data['up_votes'], 0)
-        self.assertEqual(response_json_data['expire_duration'], 'P0DT00H00M00S')
+        self.assertEqual(response_json_data['expire_duration'], 0.0)
         self.assertIsNone(response_json_data['expire_time'])
         self.assertTrue(response_json_data['can_access'])
 
@@ -119,7 +119,7 @@ class CourseDetailTests(TestCase):
         self.assertEqual(response_json_data['description'], 'd2')
         self.assertEqual(response_json_data['price'], '0.00')
         self.assertEqual(response_json_data['up_votes'], 0)
-        self.assertEqual(response_json_data['expire_duration'], 'P1DT05H00M00S')
+        self.assertEqual(response_json_data['expire_duration'], 104400.0)
         self.assertEqual(response_json_data['expire_time'], '1997-08-17T00:00:00Z')
         self.assertTrue(response_json_data['can_access'])
 
