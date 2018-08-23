@@ -100,7 +100,7 @@ export default {
         })).then(
           response => {
             this.error_message = response.data.new_username
-            this.$router.push({name: 'AdminDetail', query: {'admin_id': this.admin_id}})
+            this.$router.push({name: 'AdminDetail', query: {'admin_id': this.$route.query.admin_id}})
           }
         ).catch(
           error => {
