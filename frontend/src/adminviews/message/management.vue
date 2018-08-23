@@ -78,12 +78,12 @@
             <tr
               v-for="message in messages"
               :key="message.id">
-              <td class="date">{{ compute_date(message.created_at) }}</td>
+              <td id="date">{{ compute_date(message.created_at) }}</td>
               <td>{{ compute_username(message.username) }}</td>
               <td>{{ message.course_codename }}</td>
               <td>{{ message.course_title }}</td>
               <td>{{ compute_message(message.content) }}</td>
-              <td class="state"> {{ compute_state(message.is_deleted) }} </td>
+              <td id="state"> {{ compute_state(message.is_deleted) }} </td>
               <td class="buttons">
                 <button
                   id="detail"
