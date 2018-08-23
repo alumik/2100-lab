@@ -204,7 +204,6 @@ export default {
           alert(response.data.verification_code)
           // that.$store.commit('new_customer', response.data.is_customer)
           that.new_customer = response.data.is_new_customer
-          console.log(that.new_customer)
           that.status = '再次发送 '
           this.log_disabled = false
           that.seconds = that.seconds - 1
