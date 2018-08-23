@@ -218,8 +218,10 @@ export default {
       axios.get('http://localhost:8000/api/v1/courses/forestage/course/up-vote-course?' +
       'course_id=' + that.query_course_id)
         .then(function (response) {
-          if (response.up_voted) {
-            that.course.up_votes = response.up_votes
+          if (response.data.up_voted === true) {
+            that.up_votes = response.data.up_votes
+          } else if (response.data.up_voted === false) {
+            that.up_votes = response.data.up_votes
           }
         }).catch(function (error) {
           that.up_vote_test = true
