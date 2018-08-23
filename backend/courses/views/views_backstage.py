@@ -2,8 +2,9 @@ from django.contrib.auth.decorators import permission_required
 from django.http import JsonResponse
 
 from core.utils import get_backstage_page
-from core.constants import ERROR, INFO
+from core.constants import ERROR, INFO, ACTION_TYPE
 from courses.models import Course, Comment
+from admins.models import AdminLog
 
 
 @permission_required('courses.view_course')
@@ -51,6 +52,12 @@ def delete_course(request):
         course = Course.objects.get(id=course_id)
     except Course.DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+
+    AdminLog.objects.create(
+        admin_user=request.user,
+        action_type=ACTION_TYPE['delete_course'],
+        object_id=course_id
+    )
 
     course.delete()
     return JsonResponse({'message': INFO['object_deleted']})
@@ -124,6 +131,14 @@ def add_comment(request):
         course=course,
         content=comment_content
     )
+
+    AdminLog.objects.create(
+        admin_user=request.user,
+        action_type=ACTION_TYPE['reply_comment'],
+        new_data=course.id,
+        object_id=Comment.objects.get(user=request.user, course=course, content=comment_content).id
+    )
+
     return JsonResponse({'message': INFO['success']})
 
 
@@ -135,6 +150,12 @@ def delete_comment(request):
         comment = Comment.objects.get(id=comment_id)
     except Course.DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+
+    AdminLog.objects.create(
+        admin_user=request.user,
+        action_type=ACTION_TYPE['delete_comment'],
+        object_id=comment_id
+    )
 
     comment.delete()
     return JsonResponse({'message': INFO['object_deleted']})

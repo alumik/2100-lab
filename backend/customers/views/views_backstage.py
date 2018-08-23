@@ -6,9 +6,10 @@ from django.http import JsonResponse
 from django.utils import timezone
 
 from core.utils import get_backstage_page, get_brief_page
-from core.constants import ERROR, INFO
+from core.constants import ERROR, INFO, ACTION_TYPE
 from customers.models import OrderLog, LearningLog
 from customers.utils import get_customer_page
+from admins.models import AdminLog
 
 
 @permission_required('customers.view_orderlog')
@@ -79,6 +80,13 @@ def order_refund(request):
     customer.reward_coin += reward_spent
     customer.save()
     order.refunded_at = timezone.now()
+
+    AdminLog.objects.create(
+        admin_user=request.user,
+        action_type=ACTION_TYPE['refund_order'],
+        new_data=customer.id,
+        object_id=order_id
+    )
     order.save()
 
     return JsonResponse({'message': INFO['success']})
@@ -195,6 +203,15 @@ def toggle_vip(request):
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
     customer.is_vip = not customer.is_vip
+
+    AdminLog.objects.create(
+        admin_user=request.user,
+        action_type=ACTION_TYPE['set_vip'],
+        old_data=str(not customer.is_vip),
+        new_data=str(customer.is_vip),
+        object_id=customer_id
+    )
+
     customer.save()
 
     return JsonResponse({'is_vip': customer.is_vip})
@@ -210,6 +227,15 @@ def toggle_banned(request):
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
     customer.is_banned = not customer.is_banned
+
+    AdminLog.objects.create(
+        admin_user=request.user,
+        action_type=ACTION_TYPE['ban_customer'],
+        old_data=str(not customer.is_banned),
+        new_data=str(customer.is_banned),
+        object_id = customer_id
+    )
+
     customer.save()
 
     return JsonResponse({'is_banned': customer.is_banned})
@@ -228,5 +254,10 @@ def delete_customer(request):
     customer.phone_number += delete_str
     customer.username += delete_str
 
+    AdminLog.objects.create(
+        admin_user=request.user,
+        action_type=ACTION_TYPE['delete_customer'],
+        object_id=customer_id
+    )
     customer.delete()
     return JsonResponse({'message': INFO['object_deleted']})
