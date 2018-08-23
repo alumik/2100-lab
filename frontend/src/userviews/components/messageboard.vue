@@ -65,10 +65,10 @@
                 <label class="time-style">&emsp;{{ message_list[index-1].created_at }}评论</label>
               </b-col>
               <b-col
-                v-if="message_list[index-1].username === username"
+                v-if="message_list[index-1].username === $store.state.user.username"
                 class="delete-comment"
                 @click="delete_comment(message_list[index-1].comment_id)">
-                ×
+                <label>×</label>
               </b-col>
             </b-row>
             <p class="message-content">{{ message_list[index-1].content }}</p>
@@ -166,6 +166,7 @@ export default {
         page: that.page
       }})
       .then(function (response) {
+        console.log(response.data)
         that.rows = response.data.count
         that.message_list = response.data.content
       }).catch(function (error) {
@@ -183,6 +184,7 @@ export default {
           page: that.page
         }})
         .then(function (response) {
+          that.rows = response.data.count
           that.message_list = response.data.content
         }).catch(function (error) {
           that.getallmessage_test = true
@@ -220,13 +222,15 @@ export default {
         })
     },
     delete_comment: function (commentId) {
-      axios.get('http://localhost:8000/api/v1/courses/forestage/play/delete-comment?' +
-        'comment_id=' + commentId)
+      axios.post('http://localhost:8000/api/v1/courses/forestage/play/delete-comment/',
+        qs.stringify({
+          comment_id: commentId
+        }))
         .then(function (response) {
-          if (response.message === 'Object deleted') {
+          if (response.data.message === 'Object deleted.') {
             this.getallmessage()
           } else {
-            alert(response.message)
+            alert(response.data.message)
           }
         }).catch(function (error) {
           this.delete_message_test = true
@@ -245,7 +249,7 @@ export default {
           course_id: that.course_id
         })).then(function (response) {
         console.log(response)
-        if (response.message === 'Object deleted') {
+        if (response.data.message === 'Success.') {
           that.getallmessage()
         } else {
           alert(response.data.message)

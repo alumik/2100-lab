@@ -67,7 +67,7 @@
             </b-btn>
             <b-btn
               variant="primary"
-              @click="open_log(course_id)">
+              @click="open_log(query_course_id)">
               登录
             </b-btn>
           </div>
@@ -172,11 +172,11 @@
             cols="4">
             <div v-show="course.can_access">
               <b-button
-                v-b-modal.study-popup
                 id="study-button"
                 size="sm"
                 variant="primary"
-                class="my-btn">
+                class="my-btn"
+                @click="start_study">
                 开始学习
               </b-button>
             </div>
@@ -230,7 +230,7 @@
         id="course-introduction"
         class="profile-style">
         <h5>课程简介</h5>
-        <p>&emsp; &emsp;{{ course.description }}</p>
+        <p>&emsp; &emsp;{{ course.description }} can_access {{ course.can_access }}</p>
       </div>
     </div>
   </Basic>
@@ -249,6 +249,7 @@ export default{
   },
   data () {
     return {
+      user_status: null,
       query_course_id: 0,
       connection_test: false,
       connection_err_msg: 'Server access failed. ',
@@ -305,6 +306,7 @@ export default{
         that.created_test = true
         that.created_error_msg = error
       })
+    that.user_status = that.$store.state.status
   },
   mounted: function () {
   },
@@ -385,6 +387,13 @@ export default{
     handle_pay_operate: function () {
       if (this.$store.state.status === true) {
         this.$root.$emit('bv::show::modal', 'pay-popup')
+      } else {
+        this.$root.$emit('bv::show::modal', 'log-popup')
+      }
+    },
+    start_study: function () {
+      if (this.$store.state.status === true) {
+        this.$root.$emit('bv::show::modal', 'study-popup')
       } else {
         this.$root.$emit('bv::show::modal', 'log-popup')
       }
