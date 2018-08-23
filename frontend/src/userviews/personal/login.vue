@@ -45,7 +45,7 @@
         title="用户协议"
         centered
         ok-title="我同意"
-        cancel-title="返回"
+        cancel-title="我不同意"
         @ok="handleOk">
         {{ content }}
         <br>
@@ -144,7 +144,8 @@ export default {
         '\n' +
         '八、解释权\n' +
         '上述条款的解释权在法律允许的范围内归本网站所有。',
-      course_id: -1
+      course_id: -1,
+      user_data: {}
     }
   },
   computed: {
@@ -215,6 +216,15 @@ export default {
     },
     handleOk (evt) {
       if (this.accept === 'accepted') {
+        this.$store.commit('status')
+        this.$store.commit('user', this.user_data)
+        this.$store.commit('phone', this.phone)
+        if (this.course_id !== -1) {
+          this.$router.push({
+            path: '/coursedetail',
+            query: { course_id: this.course_id }
+          })
+        }
         this.$router.push({ path: '/personal' })
       }
       evt.preventDefault()
@@ -231,21 +241,22 @@ export default {
           { withCredentials: true }
         )
         .then(response => {
-          // console.log('新用户：' + response.data.is_new_customer)
-          // if (response.data.is_new_customer) {
-          //   this.modalShow = !this.modalShow
-          // } else {
-          // console.log(response.data)
-          this.$store.commit('status')
-          this.$store.commit('user', response.data)
-          this.$store.commit('phone', this.phone)
-          if (this.course_id !== -1) {
-            this.$router.push({
-              path: '/coursedetail',
-              query: { course_id: this.course_id }
-            })
+          if (response.data.is_new_customer) {
+            this.modalShow = !this.modalShow
+            this.$store.commit('new_customer')
+            this.user_data = response.data
+          } else {
+            this.$store.commit('status')
+            this.$store.commit('user', response.data)
+            this.$store.commit('phone', this.phone)
+            if (this.course_id !== -1) {
+              this.$router.push({
+                path: '/coursedetail',
+                query: { course_id: this.course_id }
+              })
+            }
+            this.$router.push({ path: '/personal' })
           }
-          this.$router.push({ path: '/personal' })
         })
         .catch(error => {
           if (error.response.data.message === 'Different phone number.') {
@@ -254,6 +265,8 @@ export default {
             error.response.data.message === 'Wrong verification code.'
           ) {
             this.codeState = false
+          } else {
+            alert('请刷新重试')
           }
         })
     }

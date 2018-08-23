@@ -60,14 +60,14 @@ export default {
           label: '课程编号'
         },
         course_title: {
-          key: 'age',
           label: '课程名'
         },
         created_at: {
-          key: '时间'
+          label: '创建时间'
         },
         money: {
-          label: '金额'
+          label: '金额',
+          variant: 'warning'
         }
       },
       crumbs: [

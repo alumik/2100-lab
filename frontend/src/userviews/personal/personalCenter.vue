@@ -77,6 +77,15 @@
                 disabled/>
             </b-input-group>
           </b-row>
+          <b-row>
+            <b-button
+              :disabled="del_disabled"
+              size="lg"
+              variant="danger"
+              @click="Delete">
+              删除账号
+            </b-button>
+          </b-row>
         </div>
       </div>
     </div>
@@ -118,7 +127,8 @@ export default {
       status: '修改',
       phone: this.$store.state.phone,
       money: this.$store.state.money,
-      time: this.$store.state.time
+      time: this.$store.state.time,
+      del_disabled: false
     }
   },
   watch: {
@@ -150,7 +160,9 @@ export default {
           let d = time.getDate()
           let h = time.getHours()
           let s = time.getSeconds()
-          return y + '.' + add0(m) + '.' + add0(d) + ' ' + add0(h) + ':' + add0(s)
+          return (
+            y + '.' + add0(m) + '.' + add0(d) + ' ' + add0(h) + ':' + add0(s)
+          )
         }
         this.$store.commit('time', (this.time = unix(res.data.generate_time)))
       })
@@ -194,6 +206,20 @@ export default {
             that.nameState = false
           })
       }
+    },
+    Delete () {
+      let that = this
+      axios
+        .post(
+          'http://localhost:8000/api/v1/customers/forestage/personal-center/delete-customer/'
+        )
+        .then(res => {
+          if (res.data.message === 'Object deleted.') {
+            this.del_disabled = true
+            that.$store.commit('logout')
+            that.$router.push({ path: '/' })
+          }
+        })
     }
   }
 }
