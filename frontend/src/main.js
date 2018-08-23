@@ -57,9 +57,6 @@ const store = new Vuex.Store({
       state.time = time
       sessionStorage.setItem('time', time)
     },
-    new_customer (state, status) {
-      state.user.is_new_customer = status
-    },
     logout (state) {
       state.status = false
       sessionStorage.setItem('status', 'false')

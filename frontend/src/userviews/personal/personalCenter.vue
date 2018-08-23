@@ -10,7 +10,7 @@
         <div class="content">
           <b-row>
             <b-img
-              :src="thumbnail"
+              :src="avatar"
               thumbnail
               fluid
               alt="Thumbnail" />
@@ -120,7 +120,7 @@ export default {
         }
       ],
       nameState: true,
-      thumbnail: require('../../assets/logo.png'),
+      avatar: '',
       file: null,
       value: this.$store.state.user.username,
       disabled: true,
@@ -128,7 +128,8 @@ export default {
       phone: this.$store.state.phone,
       money: this.$store.state.money,
       time: this.$store.state.time,
-      del_disabled: false
+      del_disabled: false,
+      address: 'http://localhost:8000/media/'
     }
   },
   watch: {
@@ -140,31 +141,19 @@ export default {
   mounted () {
     axios
       .get(
-        'http://localhost:8000/api/v1/customers/forestage/personal-center/get-reward-coin/'
+        'http://localhost:8000/api/v1/customers/forestage/personal-center/get-customer-detail/'
       )
       .then(res => {
+        this.avatar = this.address + res.data.avatar
         this.$store.commit('money', (this.money = res.data.reward_coin))
+        this.time = res.data.date_joined
+          .toString()
+          .substring(0, 19)
+          .replace('T', ' ')
+        this.$store.commit('time', this.time)
       })
-    axios
-      .get(
-        'http://localhost:8000/api/v1/customers/forestage/auth/get-generate-time/'
-      )
-      .then(res => {
-        function unix (value) {
-          function add0 (m) {
-            return m < 10 ? '0' + m : m
-          }
-          let time = new Date(parseInt(value) * 1000)
-          let y = time.getFullYear()
-          let m = time.getMonth() + 1
-          let d = time.getDate()
-          let h = time.getHours()
-          let s = time.getSeconds()
-          return (
-            y + '.' + add0(m) + '.' + add0(d) + ' ' + add0(h) + ':' + add0(s)
-          )
-        }
-        this.$store.commit('time', (this.time = unix(res.data.generate_time)))
+      .catch(error => {
+        alert(error.message)
       })
   },
   methods: {
@@ -172,12 +161,19 @@ export default {
       this.hidden = !this.hidden
     },
     change: function (event) {
-      let reader = new FileReader()
-      reader.readAsDataURL(event.target.files[0])
+      // let reader = new FileReader()
       let that = this
-      reader.onloadend = function () {
-        that.thumbnail = reader.result
-      }
+      let data = new FormData()
+      data.set('new_avatar', event.target.files[0])
+      axios
+        .post(
+          'http://localhost:8000/api/v1/customers/forestage/personal-center/change-avatar/',
+          data
+        )
+        .then(res => {
+          that.avatar = this.address + res.data.new_avatar
+          alert('头像上传成功')
+        })
     },
     editable: function () {
       let that = this
@@ -202,7 +198,6 @@ export default {
             })
           })
           .catch(() => {
-            // console.log('error: ' + error.message)
             that.nameState = false
           })
       }
