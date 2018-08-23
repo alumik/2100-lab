@@ -99,6 +99,21 @@ def change_username(request):
 
 
 @login_required
+def change_avatar(request):
+    new_avatar = request.FILES.get('new_avatar')
+
+    customer = request.user
+    old_avatar = customer.avatar
+    if old_avatar != 'default/customers/avatars/2100_lab.jpg':
+        old_avatar.delete()
+
+    customer.avatar = new_avatar
+    customer.save()
+
+    return JsonResponse({'message': INFO['success']})
+
+
+@login_required
 def get_customer_detail(request):
     return JsonResponse(request.user.as_dict())
 

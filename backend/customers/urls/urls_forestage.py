@@ -33,6 +33,11 @@ urlpatterns = [
         name='change-username'
     ),
     path(
+        'personal-center/change-avatar/',
+        views_forestage.change_avatar,
+        name='change-avatar'
+    ),
+    path(
         'personal-center/delete-customer/',
         views_forestage.delete_customer,
         name='delete-customer'
