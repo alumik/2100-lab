@@ -230,7 +230,7 @@
         id="course-introduction"
         class="profile-style">
         <h5>课程简介</h5>
-        <p>&emsp; &emsp;{{ course.description }} can_access {{ course.can_access }}</p>
+        <p>&emsp; &emsp;{{ course.description }}</p>
       </div>
     </div>
   </Basic>
@@ -241,6 +241,8 @@ import Basic from '../components/basic'
 import axios from 'axios'
 import './style.css'
 import qs from 'qs'
+
+const shareQrcodeHost = 'http://localhost:8080/coursedetail'
 
 export default{
   name: 'CourseDetail',
@@ -254,7 +256,6 @@ export default{
       connection_test: false,
       connection_err_msg: 'Server access failed. ',
       course_img_src_example: 'https://picsum.photos/1024/480/?image=54',
-      share_qrcode_url: 'http://www.baidu.com',
       pay_qrcode_url: 'http://www.jisuanke.com',
       user_reward_balance: 50,
       share_instruction: '        小可爱，你可以通过分享该二维码和' +
@@ -272,7 +273,9 @@ export default{
       pay_method_chosen: false,
       pay_remind_color: 'black',
       finishPay_test: false,
-      finishPay_error_msg: ''
+      finishPay_error_msg: '',
+      share_qrcode_url: '',
+      referer_id: ''
     }
   },
   computed: {
@@ -296,17 +299,23 @@ export default{
       that.$router.push({name: 'BurnedCourse'})
     } else {
       that.query_course_id = that.$route.query.course_id
+      if (typeof (that.$route.query.course_id) !== 'undefined') {
+        that.referer_id = that.$route.query.referer_id ? that.$route.query.referer_id : ''
+      }
     }
     axios.get('http://localhost:8000/api/v1/courses/forestage/course/get-course-detail/' +
       '?course_id=' + that.query_course_id)
       .then(function (response) {
         that.course = response.data
         that.course.price = parseFloat(response.data.price)
+        console.log(that.course)
       }).catch(function (error) {
         that.created_test = true
         that.created_error_msg = error
       })
     that.user_status = that.$store.state.status
+    that.share_qrcode_url = shareQrcodeHost + '?course_id=' +
+      that.query_course_id + '&' + 'referer_id=' + that.$store.state.user.customer_id
   },
   mounted: function () {
   },
@@ -367,7 +376,8 @@ export default{
         axios.post('http://localhost:8000/api/v1/courses/forestage/course/buy-course/',
           qs.stringify({
             course_id: that.query_course_id,
-            payment_method: that.pay_method
+            payment_method: that.pay_method,
+            referer_id: that.referer_id
           })).then(function (response) {
           if (response.data.message === 'Success.') {
             that.course.can_access = true
