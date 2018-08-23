@@ -128,8 +128,7 @@ export default {
       phone: this.$store.state.phone,
       money: this.$store.state.money,
       time: this.$store.state.time,
-      del_disabled: false,
-      address: 'http://localhost:8000/media/'
+      del_disabled: false
     }
   },
   watch: {
@@ -144,7 +143,7 @@ export default {
         'http://localhost:8000/api/v1/customers/forestage/personal-center/get-customer-detail/'
       )
       .then(res => {
-        this.avatar = this.address + res.data.avatar
+        this.avatar = this.$store.state.address + res.data.avatar
         this.$store.commit('money', (this.money = res.data.reward_coin))
         this.time = res.data.date_joined
           .toString()
@@ -171,7 +170,8 @@ export default {
           data
         )
         .then(res => {
-          that.avatar = this.address + res.data.new_avatar
+          that.$state.user.avatar = res.data.new_avatar
+          that.avatar = this.$store.state.address + res.data.new_avatar
           alert('头像上传成功')
         })
     },

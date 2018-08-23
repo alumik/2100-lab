@@ -30,11 +30,12 @@ const store = new Vuex.Store({
       is_new_customer: null,
       customer_id: '',
       username: '',
-      avatar: null
+      avatar: 'default/customers/avatars/2100_lab.jpg'
     },
     phone: '',
     money: '',
-    time: ''
+    time: '',
+    address: 'http://localhost:8000/media/'
   },
   mutations: {
     status (state, status = true) {
@@ -56,6 +57,10 @@ const store = new Vuex.Store({
     time (state, time) {
       state.time = time
       sessionStorage.setItem('time', time)
+    },
+    avatar (state, avatar) {
+      state.user.avatar = avatar
+      sessionStorage.setItem('avatar', avatar)
     },
     logout (state) {
       state.status = false
@@ -87,6 +92,7 @@ new Vue({
       this.$store.commit('phone', sessionStorage.getItem('phone'))
       this.$store.commit('money', sessionStorage.getItem('money'))
       this.$store.commit('time', sessionStorage.getItem('time'))
+      this.$store.commit('avatar', sessionStorage.getItem('avatar'))
     }
   },
   template: '<App/>'
