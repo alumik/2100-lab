@@ -231,21 +231,21 @@ export default {
           { withCredentials: true }
         )
         .then(response => {
-          // console.log('新用户：' + response.data.is_new_customer)
-          // if (response.data.is_new_customer) {
-          //   this.modalShow = !this.modalShow
-          // } else {
-          // console.log(response.data)
-          this.$store.commit('status')
-          this.$store.commit('user', response.data)
-          this.$store.commit('phone', this.phone)
-          if (this.course_id !== -1) {
-            this.$router.push({
-              path: '/coursedetail',
-              query: { course_id: this.course_id }
-            })
+          if (response.data.is_new_customer) {
+            this.modalShow = !this.modalShow
+            this.$store.commit('new_customer')
+          } else {
+            this.$store.commit('status')
+            this.$store.commit('user', response.data)
+            this.$store.commit('phone', this.phone)
+            if (this.course_id !== -1) {
+              this.$router.push({
+                path: '/coursedetail',
+                query: { course_id: this.course_id }
+              })
+            }
+            this.$router.push({ path: '/personal' })
           }
-          this.$router.push({ path: '/personal' })
         })
         .catch(error => {
           if (error.response.data.message === 'Different phone number.') {
@@ -254,6 +254,8 @@ export default {
             error.response.data.message === 'Wrong verification code.'
           ) {
             this.codeState = false
+          } else {
+            alert('请刷新重试')
           }
         })
     }
