@@ -66,7 +66,8 @@ export default {
           label: '创建时间'
         },
         money: {
-          label: '金额'
+          label: '金额',
+          variant: 'warning'
         }
       },
       crumbs: [
