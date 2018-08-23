@@ -255,7 +255,6 @@ export default {
         .then(response => {
           if (that.new_customer) {
             this.modalShow = !this.modalShow
-            // this.$store.commit('new_customer')
             this.user_data = response.data
           } else {
             this.$store.commit('status')
