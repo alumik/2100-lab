@@ -170,7 +170,7 @@ export default {
           data
         )
         .then(res => {
-          that.$state.user.avatar = res.data.new_avatar
+          that.$store.state.user.avatar = res.data.new_avatar
           that.avatar = this.$store.state.address + res.data.new_avatar
           alert('头像上传成功')
         })
