@@ -1,9 +1,12 @@
 <template>
   <Basic>
     <div class="container">
-      <img src="../../assets/logo.png">
-      <h2>2100实验室</h2>
-      <br>
+      <b-navbar-brand>
+        <img
+          id="logoimg"
+          src="../../assets/2100logo.png">
+      </b-navbar-brand>
+      <!--<h2>2100实验室</h2>-->
       <b-input-group prepend="手机号">
         <b-form-input
           v-model="phone"
@@ -231,6 +234,15 @@ export default {
 </script>
 
 <style scoped>
+.navbar-brand {
+  margin: 20px auto;
+}
+
+#logoimg {
+  width: 300px;
+  margin: 20px auto;
+}
+
 .container {
   display: block;
   width: 350px;
