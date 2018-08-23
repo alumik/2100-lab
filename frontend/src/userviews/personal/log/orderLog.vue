@@ -101,7 +101,6 @@ export default {
     that.count = res.data.count
     that.page_nums = res.data.num_pages
     for (let data of res.data.content) {
-      console.log(data)
       data.created_at = data.created_at
         .toString()
         .substring(0, 19)
