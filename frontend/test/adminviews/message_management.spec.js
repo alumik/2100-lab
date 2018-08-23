@@ -58,20 +58,4 @@ describe('留言管理页面单元测试', () => {
     input2.setValue('计算机')
     expect(wrapper.vm.course_name).toBe('计算机')
   })
-
-  it('测试compute_date函数返回结果是否正确', () => {
-    wrapper.setData({ messages: [{ created_at: '2018-08-21T15:33:56.553Z', deleted_at: true }] })
-    expect(wrapper.vm.messages[0].created_at).toBe('2018-08-21T15:33:56.553Z')
-    const td1 = wrapper.find('.date')
-    expect(td1.text()).toBe('2018-08-21')
-    const td2 = wrapper.find('.state')
-    expect(td2.text()).toBe('message.state2')
-  })
-
-  it('测试是否进入留言详情页面', () => {
-    const button = wrapper.find('#detail')
-    expect(wrapper.vm.page_jump).toBe(false)
-    button.trigger('click')
-    expect(wrapper.vm.page_jump).toBe(true)
-  })
 })

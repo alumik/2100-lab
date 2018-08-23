@@ -78,12 +78,12 @@
             <tr
               v-for="message in messages"
               :key="message.id">
-              <td class="date">{{ compute_date(message.created_at) }}</td>
-              <td>{{ message.username }}</td>
+              <td id="date">{{ compute_date(message.created_at) }}</td>
+              <td>{{ compute_username(message.username) }}</td>
               <td>{{ message.course_codename }}</td>
               <td>{{ message.course_title }}</td>
-              <td>{{ message.content }}</td>
-              <td class="state"> {{ compute_state(message.is_deleted) }} </td>
+              <td>{{ compute_message(message.content) }}</td>
+              <td id="state"> {{ compute_state(message.is_deleted) }} </td>
               <td class="buttons">
                 <button
                   id="detail"
@@ -207,6 +207,21 @@ export default {
         return this.$t('message.state3')
       } else {
         return this.$t('message.state2')
+      }
+    },
+    compute_username: function (name) {
+      let index = name.search('_deleted_')
+      if (index !== -1) {
+        return name.slice(0, index) + '\n' + '（已删除）'
+      } else {
+        return name
+      }
+    },
+    compute_message: function (content) {
+      if (content.length > 7) {
+        return content.slice(0, 7) + '...'
+      } else {
+        return content
       }
     },
     search: function () {
