@@ -22,7 +22,8 @@
         <ConfirmModal
           id="delete"
           title="确认删除"
-          text="您确定要删除该课程吗？"/>
+          text="您确定要删除该课程吗？"
+          @click="deleteMessage"/>
       </div>
       <div>
         <table
@@ -111,7 +112,7 @@ export default {
         text: '课程管理',
         href: '/admin/course'
       }, {
-        text: '课程详情',
+        text: this.$route.query.course_id.toString(),
         active: true
       }],
       test_router: -1,
@@ -152,7 +153,20 @@ export default {
   methods: {
     jump: function (id) {
       this.test_router = id
-      this.$router.push({name: 'EditCourse'})
+      this.$router.push({name: 'EditCourse', query: {'course_id': this.$route.query.course_id}})
+    },
+    deleteMessage: function () {
+      axios.get('http://localhost:8000/api/v1/courses/backstage/course-management/delete-course/', {
+        params: {
+          course_id: this.$route.query.course_id
+        }}).then(
+        response => {
+          this.$router.push({name: 'CourseManagement'})
+        }).catch(
+        error => {
+          this.error_message = error.response.message
+        }
+      )
     }
   }
 }
