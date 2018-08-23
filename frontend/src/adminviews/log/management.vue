@@ -8,7 +8,7 @@
         <table class="table">
           <thead>
             <tr>
-              <th>管理员账号</th>
+              <th>管理员名称</th>
               <th>开始时间</th>
               <th>结束时间</th>
             </tr>
@@ -42,19 +42,42 @@
       </div>
       <h4>查询项目</h4>
       <form class="checkbox-div">
-        <b-form-group>
+        <b-form-group class="outer">
+          <b-form-checkbox
+            :indeterminate="indeterminate"
+            aria-describedby="options1"
+            aria-controls="options1"
+            @change="toggleAll">
+            全选
+          </b-form-checkbox>
+        </b-form-group>
+        <b-form-group class="inner">
           <b-form-checkbox-group
             id="row1"
             v-model="select1"
             :options="options1"
             name="row1"/>
         </b-form-group>
-        <b-form-group>
+        <b-form-group class="inner">
           <b-form-checkbox-group
             id="row2"
             v-model="select2"
             :options="options2"
             name="row2"/>
+        </b-form-group>
+        <b-form-group class="inner">
+          <b-form-checkbox-group
+            id="row3"
+            v-model="select3"
+            :options="options3"
+            name="row3"/>
+        </b-form-group>
+        <b-form-group class="inner">
+          <b-form-checkbox-group
+            id="row4"
+            v-model="select4"
+            :options="options4"
+            name="row4"/>
         </b-form-group>
       </form>
       <div class="button-group">
@@ -89,23 +112,50 @@ export default {
         useCurrent: true
       },
       admin_id: '',
-      select1: '',
+      select1: [],
       options1: [
-        { text: 'A', value: 'a' },
-        { text: 'B', value: 'b' },
-        { text: 'C', value: 'c' },
-        { text: 'D', value: 'd' },
-        { text: 'E', value: 'e' }
+        { text: '增加管理员', value: 1 },
+        { text: '修改权限组', value: 2 },
+        { text: '修改权限&#12288', value: 3 },
+        { text: '删除管理员', value: 4 }
       ],
-      select2: '',
+      select2: [],
       options2: [
-        { text: 'F', value: 'f' },
-        { text: 'G', value: 'g' },
-        { text: 'H', value: 'h' },
-        { text: 'I', value: 'i' },
-        { text: 'J', value: 'j' }
+        { text: '订单退款&#12288', value: 5 },
+        { text: '删除用户&#12288', value: 6 },
+        { text: '禁言用户&#12288', value: 7 },
+        { text: '认证用户&#12288', value: 8 }
+      ],
+      select3: [],
+      options3: [
+        { text: '删除留言&#12288', value: 9 },
+        { text: '回复留言&#12288', value: 10 },
+        { text: '增加课程&#12288', value: 11 },
+        { text: '修改课程&#12288', value: 12 }
+      ],
+      select4: [],
+      options4: [
+        { text: '删除课程&#12288', value: 13 }
       ],
       page_jump: false
+      // indeterminate: false
+    }
+  },
+  computed: {
+    indeterminate: function () {
+      if (this.select1.length === 4 &&
+        this.select2.length === 4 &&
+        this.select3.length === 4 &&
+        this.select4.length === 1) {
+        return false
+      } else if (this.select1.length === 0 &&
+        this.select2.length === 0 &&
+        this.select3.length === 0 &&
+        this.select4.length === 0) {
+        return false
+      } else {
+        return true
+      }
     }
   },
   methods: {
@@ -116,9 +166,24 @@ export default {
           admin_id: this.admin_id,
           begin_date: Date.parse(this.begin_date) / 1000,
           end_date: Date.parse(this.end_date) / 1000,
-          select: this.select1 + ',' + this.select2
+          select: this.select1 + ',' + this.select2 + ',' + this.select3 + ',' + this.select4
         }
       })
+    },
+    toggleAll (checked) {
+      if (checked) {
+        for (let i = 0; i < 4; i++) {
+          this.select1.push(this.options1[i].value)
+          this.select2.push(this.options2[i].value)
+          this.select3.push(this.options3[i].value)
+        }
+        this.select4.push(this.options4[0].value)
+      } else {
+        this.select1 = []
+        this.select2 = []
+        this.select3 = []
+        this.select4 = []
+      }
     }
   }
 }
@@ -167,9 +232,19 @@ export default {
     text-align: left;
   }
 
+  .outer {
+    font-size: 1.2em;
+    font-weight: normal;
+  }
+
+  .inner {
+    padding-left: 30px;
+  }
+
   .button-group {
     display: flex;
     justify-content: flex-start;
+    padding-top: 10px;
     padding-left: 20px;
   }
 
