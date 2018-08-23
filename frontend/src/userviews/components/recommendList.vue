@@ -23,7 +23,8 @@
           :key="course.course_id"
           class="col-style">
           <b-card
-            :img-src="example_src"
+            id="course-card"
+            :img-src="course.thumbnail"
             :title="course.title"
             img-alt="Image"
             img-top
