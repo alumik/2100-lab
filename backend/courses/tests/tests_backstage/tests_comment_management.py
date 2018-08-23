@@ -321,7 +321,7 @@ class CommentOperationTests(TestCase):
         response_json_data = json.loads(response.content)
         self.assertEqual(response_json_data['count'], 1)
 
-        response = self.client.get(
+        response = self.client.post(
             reverse('api:courses:backstage:delete-comment'),
             {'comment_id': comment.id}
         )

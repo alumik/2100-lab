@@ -46,7 +46,7 @@ def get_course_detail(request):
 
 @permission_required('courses.delete_course')
 def delete_course(request):
-    course_id = request.GET.get('course_id')
+    course_id = request.POST.get('course_id')
 
     try:
         course = Course.objects.get(id=course_id)
@@ -144,7 +144,7 @@ def add_comment(request):
 
 @permission_required('courses.delete_comment')
 def delete_comment(request):
-    comment_id = request.GET.get('comment_id')
+    comment_id = request.POST.get('comment_id')
 
     try:
         comment = Comment.objects.get(id=comment_id)

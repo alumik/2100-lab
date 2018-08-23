@@ -233,7 +233,7 @@ def toggle_banned(request):
         action_type=ACTION_TYPE['ban_customer'],
         old_data=str(not customer.is_banned),
         new_data=str(customer.is_banned),
-        object_id = customer_id
+        object_id=customer_id
     )
 
     customer.save()
