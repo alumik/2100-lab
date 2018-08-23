@@ -208,6 +208,7 @@ export default {
             this.$store.commit('status')
             this.$store.commit('user', response.data)
             this.$store.commit('phone', this.phone)
+            this.$store.commit('avatar', response.data.avatar)
             if (this.course_id !== -1) {
               this.$router.push({
                 path: '/coursedetail',
@@ -218,6 +219,7 @@ export default {
           }
         })
         .catch(error => {
+          console.log(error)
           if (error.response.data.message === 'Different phone number.') {
             that.phoneState = false
           } else if (

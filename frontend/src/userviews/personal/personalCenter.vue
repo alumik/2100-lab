@@ -13,7 +13,7 @@
               :src="avatar"
               thumbnail
               fluid
-              alt="Thumbnail" />
+              alt="Thumbnail"/>
             <button
               type="button"
               class="btn btn-warning btn-lg">
@@ -22,6 +22,7 @@
                 v-model="file"
                 :class="{'upload': true}"
                 plain
+                accept="image/*"
                 @change="change"/>
             </button>
           </b-row>
@@ -171,8 +172,10 @@ export default {
         )
         .then(res => {
           that.$store.state.user.avatar = res.data.new_avatar
+          this.$store.commit('avatar', res.data.new_avatar)
           that.avatar = this.$store.state.address + res.data.new_avatar
           alert('头像上传成功')
+          this.$router.push({ path: '/personal' })
         })
     },
     editable: function () {
@@ -263,7 +266,7 @@ img {
   height: 50px;
   padding: 0;
   margin: 0;
-  -ms-filter: 'alpha(opacity=0)';
+  -ms-filter: "alpha(opacity=0)";
   opacity: 0;
 }
 
