@@ -153,7 +153,7 @@ export default {
       delete_message_test: false,
       delete_message_error_msg: '',
       page_limit: 1,
-      page: 0,
+      page: 1,
       rows: 0
     }
   },
@@ -167,11 +167,10 @@ export default {
       }})
       .then(function (response) {
         that.rows = response.data.count
-        console.log(response)
         that.message_list = response.data.content
       }).catch(function (error) {
         that.created_test = true
-        that.created_error_msg = error
+        that.created_error_msg = error.data.message
       })
   },
   methods: {
@@ -187,7 +186,7 @@ export default {
           that.message_list = response.data.content
         }).catch(function (error) {
           that.getallmessage_test = true
-          that.getallmessage_error_msg = error
+          that.getallmessage_error_msg = error.data.message
         })
     },
     up_vote: function (index, msgCommentId) {
@@ -202,7 +201,7 @@ export default {
           }
         }).catch(function (error) {
           that.up_vote_test = true
-          that.up_vote_error_msg = error
+          that.up_vote_error_msg = error.data.message
         })
     },
     down_vote: function (index, msgCommentId) {
@@ -217,7 +216,7 @@ export default {
           }
         }).catch(function (error) {
           that.down_vote_test = true
-          that.down_vote_error_msg = error
+          that.down_vote_error_msg = error.data.message
         })
     },
     delete_comment: function (commentId) {
@@ -231,29 +230,32 @@ export default {
           }
         }).catch(function (error) {
           this.delete_message_test = true
-          this.delete_message_error_msg = error
+          this.delete_message_error_msg = error.data.message
         })
     },
     add_comment: function () {
-      const value = this.new_msg && this.new_msg.trim()
+      let that = this
+      const value = that.new_msg && that.new_msg.trim()
       if (!value) {
         return
       }
-      axios.post('http://localhost:8000/api/v1/courses/forestage/play/add-comment?' +
-        'course=' + parseInt(this.course_id),
-      qs.stringify({
-        content: value
-      })).then(function (response) {
+      axios.post('http://localhost:8000/api/v1/courses/forestage/play/add-comment/',
+        qs.stringify({
+          content: value,
+          course_id: that.course_id
+        })).then(function (response) {
+        console.log(response)
         if (response.message === 'Object deleted') {
-          this.getallmessage()
+          that.getallmessage()
         } else {
-          alert(response.message)
+          alert(response.data.message)
         }
       }).catch(function (error) {
-        this.add_message_test = true
-        this.add_message_error_msg = error
+        console.log(error)
+        that.add_message_test = true
+        that.add_message_error_msg = error
       })
-      this.new_msg = ''
+      that.new_msg = ''
     },
     change_page: function (page) {
       this.page = page
