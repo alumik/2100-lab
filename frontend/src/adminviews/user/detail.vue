@@ -239,49 +239,34 @@ export default {
           that.wrong = '无法查找到此用户的详情信息！'
           that.wrong_count_down = that.dismiss_second
         } else {
-          let temp = that.compute_user(response.data.customer_info)
-          that.user = temp
+          that.user = that.compute_user(response.data.customer_info)
           that.is_banned = response.data.customer_info.is_banned
           that.is_vip = response.data.customer_info.is_vip
           that.is_deleted = response.data.customer_info.is_deleted
+          that.orders = response.data.recent_orders
+          that.course_logs = response.data.recent_learning_logs
         }
       })
       .catch(function (error) {
         that.wrong = '获取用户详情失败！' + error
         that.wrong_count_down = that.dismiss_second
       })
-    axios.get('http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-order-list/',
-      {params: {
-        customer_id: that.$route.query.user_id
-      }})
-      .then(function (response) {
-        if (response.data.message === 'Object not found.') {
-          that.wrong = '无法查找到此用户的订单信息！'
-          that.wrong_count_down = that.dismiss_second
-        } else {
-          that.orders = response.data.content
-        }
-      })
-      .catch(function (error) {
-        that.wrong = '获取此用户的订单信息失败！' + error
-        that.wrong_count_down = that.dismiss_second
-      })
-    axios.get('http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-learning-log-list/',
-      {params: {
-        customer_id: that.$route.query.user_id
-      }})
-      .then(function (response) {
-        if (response.data.message === 'Object not found.') {
-          that.wrong = '无法查找到此用户的学习记录！'
-          that.wrong_count_down = that.dismiss_second
-        } else {
-          that.course_logs = response.data.content
-        }
-      })
-      .catch(function (error) {
-        that.wrong = '获取此用户的学习记录失败！' + error
-        that.wrong_count_down = that.dismiss_second
-      })
+    // axios.get('http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-order-list/',
+    //   {params: {
+    //     customer_id: that.$route.query.user_id
+    //   }})
+    //   .then(function (response) {
+    //     if (response.data.message === 'Object not found.') {
+    //       that.wrong = '无法查找到此用户的订单信息！'
+    //       that.wrong_count_down = that.dismiss_second
+    //     } else {
+    //       that.orders = response.data.content
+    //     }
+    //   })
+    //   .catch(function (error) {
+    //     that.wrong = '获取此用户的订单信息失败！' + error
+    //     that.wrong_count_down = that.dismiss_second
+    //   })
   },
   methods: {
     compute_user: function (val) {
