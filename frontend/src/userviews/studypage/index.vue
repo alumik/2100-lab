@@ -155,9 +155,9 @@ export default {
   },
   mounted () {
     this.audio_current_time = this.$refs.player.currentTime
-    this.audio_piece_num = this.course.images.length
-    this.introduction_text_show = this.course.description.substring(0, 2)
-    this.introduction_text_hide = this.course.description.substring(2)
+    this.audio_piece_num = this.course.images ? this.course.images.length : 0
+    this.introduction_text_show = this.course.description ? this.course.description.substring(0, 2) : ''
+    this.introduction_text_hide = this.course.description ? this.course.description.substring(2) : ''
     this.addEventListeners()
   },
   created: function () {
