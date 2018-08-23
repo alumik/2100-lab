@@ -152,7 +152,9 @@ def get_customer_detail(request):
     }
 
     recent_orders = OrderLog.objects.filter(customer=customer).order_by('-created_at')[:5]
-    recent_learning_logs = LearningLog.objects.filter(customer=customer).order_by('-latest_learn')[:5]
+    recent_learning_logs = LearningLog.objects.filter(
+        customer=customer
+    ).order_by('-latest_learn')[:5]
 
     for recent_order in recent_orders:
         json_data['recent_orders'].append(recent_order.as_brief_dict())
@@ -207,7 +209,6 @@ def toggle_vip(request):
     AdminLog.objects.create(
         admin_user=request.user,
         action_type=ACTION_TYPE['set_vip'],
-        old_data=str(not customer.is_vip),
         new_data=str(customer.is_vip),
         object_id=customer_id
     )
@@ -231,7 +232,6 @@ def toggle_banned(request):
     AdminLog.objects.create(
         admin_user=request.user,
         action_type=ACTION_TYPE['ban_customer'],
-        old_data=str(not customer.is_banned),
         new_data=str(customer.is_banned),
         object_id=customer_id
     )
