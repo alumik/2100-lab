@@ -60,11 +60,10 @@ export default {
           label: '课程编号'
         },
         course_title: {
-          key: 'age',
           label: '课程名'
         },
         created_at: {
-          key: '时间'
+          label: '创建时间'
         },
         money: {
           label: '金额'
@@ -102,6 +101,7 @@ export default {
     that.count = res.data.count
     that.page_nums = res.data.num_pages
     for (let data of res.data.content) {
+      console.log(data)
       data.created_at = data.created_at
         .toString()
         .substring(0, 19)
