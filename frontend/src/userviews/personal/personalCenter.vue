@@ -120,7 +120,7 @@ export default {
         }
       ],
       nameState: true,
-      thumbnail: require('../../assets/logo.png'),
+      thumbnail: '',
       file: null,
       value: this.$store.state.user.username,
       disabled: true,
@@ -128,7 +128,8 @@ export default {
       phone: this.$store.state.phone,
       money: this.$store.state.money,
       time: this.$store.state.time,
-      del_disabled: false
+      del_disabled: false,
+      address: 'http://localhost:8000/media/'
     }
   },
   watch: {
@@ -166,6 +167,16 @@ export default {
         }
         this.$store.commit('time', (this.time = unix(res.data.generate_time)))
       })
+    axios
+      .get(
+        'http://localhost:8000/api/v1/customers/forestage/personal-center/get-customer-detail/'
+      )
+      .then(res => {
+        this.thumbnail = this.address + res.data.avatar
+      })
+      .catch(error => {
+        alert(error.message)
+      })
   },
   methods: {
     hide: function () {
@@ -178,6 +189,18 @@ export default {
       reader.onloadend = function () {
         that.thumbnail = reader.result
       }
+      axios
+        .post(
+          'http://localhost:8000/api/v1/customers/forestage/personal-center/change-avatar/',
+          qs.stringify({
+            new_avatar: that.thumbnail
+          })
+        )
+        .then(res => {
+          if (res.data.message === 'Success.') {
+            alert('头像上传成功')
+          }
+        })
     },
     editable: function () {
       let that = this
