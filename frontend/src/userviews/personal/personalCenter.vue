@@ -141,38 +141,16 @@ export default {
   mounted () {
     axios
       .get(
-        'http://localhost:8000/api/v1/customers/forestage/personal-center/get-reward-coin/'
-      )
-      .then(res => {
-        this.$store.commit('money', (this.money = res.data.reward_coin))
-      })
-    axios
-      .get(
-        'http://localhost:8000/api/v1/customers/forestage/auth/get-generate-time/'
-      )
-      .then(res => {
-        function unix (value) {
-          function add0 (m) {
-            return m < 10 ? '0' + m : m
-          }
-          let time = new Date(parseInt(value) * 1000)
-          let y = time.getFullYear()
-          let m = time.getMonth() + 1
-          let d = time.getDate()
-          let h = time.getHours()
-          let s = time.getSeconds()
-          return (
-            y + '.' + add0(m) + '.' + add0(d) + ' ' + add0(h) + ':' + add0(s)
-          )
-        }
-        this.$store.commit('time', (this.time = unix(res.data.generate_time)))
-      })
-    axios
-      .get(
         'http://localhost:8000/api/v1/customers/forestage/personal-center/get-customer-detail/'
       )
       .then(res => {
         this.thumbnail = this.address + res.data.avatar
+        this.$store.commit('money', (this.money = res.data.reward_coin))
+        this.time = res.data.date_joined
+          .toString()
+          .substring(0, 19)
+          .replace('T', ' ')
+        this.$store.commit('time', this.time)
       })
       .catch(error => {
         alert(error.message)
