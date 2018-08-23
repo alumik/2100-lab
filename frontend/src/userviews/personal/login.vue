@@ -45,7 +45,7 @@
         title="用户协议"
         centered
         ok-title="我同意"
-        cancel-title="返回"
+        cancel-title="我不同意"
         @ok="handleOk">
         {{ content }}
         <br>
@@ -144,7 +144,8 @@ export default {
         '\n' +
         '八、解释权\n' +
         '上述条款的解释权在法律允许的范围内归本网站所有。',
-      course_id: -1
+      course_id: -1,
+      user_data: {}
     }
   },
   computed: {
@@ -215,6 +216,15 @@ export default {
     },
     handleOk (evt) {
       if (this.accept === 'accepted') {
+        this.$store.commit('status')
+        this.$store.commit('user', this.user_data)
+        this.$store.commit('phone', this.phone)
+        if (this.course_id !== -1) {
+          this.$router.push({
+            path: '/coursedetail',
+            query: { course_id: this.course_id }
+          })
+        }
         this.$router.push({ path: '/personal' })
       }
       evt.preventDefault()
@@ -234,6 +244,7 @@ export default {
           if (response.data.is_new_customer) {
             this.modalShow = !this.modalShow
             this.$store.commit('new_customer')
+            this.user_data = response.data
           } else {
             this.$store.commit('status')
             this.$store.commit('user', response.data)
