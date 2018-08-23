@@ -13,7 +13,7 @@
               :src="avatar"
               thumbnail
               fluid
-              alt="Thumbnail" />
+              alt="Thumbnail"/>
             <button
               type="button"
               class="btn btn-warning btn-lg">
@@ -22,6 +22,7 @@
                 v-model="file"
                 :class="{'upload': true}"
                 plain
+                accept="image/*"
                 @change="change"/>
             </button>
           </b-row>
@@ -128,8 +129,7 @@ export default {
       phone: this.$store.state.phone,
       money: this.$store.state.money,
       time: this.$store.state.time,
-      del_disabled: false,
-      address: 'http://localhost:8000/media/'
+      del_disabled: false
     }
   },
   watch: {
@@ -144,7 +144,7 @@ export default {
         'http://localhost:8000/api/v1/customers/forestage/personal-center/get-customer-detail/'
       )
       .then(res => {
-        this.avatar = this.address + res.data.avatar
+        this.avatar = this.$store.state.address + res.data.avatar
         this.$store.commit('money', (this.money = res.data.reward_coin))
         this.time = res.data.date_joined
           .toString()
@@ -171,8 +171,11 @@ export default {
           data
         )
         .then(res => {
-          that.avatar = this.address + res.data.new_avatar
+          that.$store.state.user.avatar = res.data.new_avatar
+          this.$store.commit('avatar', res.data.new_avatar)
+          that.avatar = this.$store.state.address + res.data.new_avatar
           alert('头像上传成功')
+          this.$router.push({ path: '/personal' })
         })
     },
     editable: function () {
@@ -263,7 +266,7 @@ img {
   height: 50px;
   padding: 0;
   margin: 0;
-  -ms-filter: 'alpha(opacity=0)';
+  -ms-filter: "alpha(opacity=0)";
   opacity: 0;
 }
 

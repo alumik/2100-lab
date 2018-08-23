@@ -25,8 +25,9 @@
         <b-nav-item
           @click="personal">
           <img
+            v-if="$store.state.status"
             id="userimg"
-            src="../../assets/logo.png">{{ $store.state.status ? $store.state.user.username : '' }}
+            :src="avatar">{{ $store.state.status ? $store.state.user.username : '' }}
         </b-nav-item>
         <b-nav-item
           id="logout"
@@ -43,6 +44,15 @@ import axios from 'axios'
 
 export default {
   name: 'UserNavbar',
+  data () {
+    return {
+    }
+  },
+  computed: {
+    avatar () {
+      return this.$store.state.address + this.$store.state.user.avatar
+    }
+  },
   created () {
     // let that = this
     // axios
