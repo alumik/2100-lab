@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     open_detail_page: function (id) {
-      this.$router.push({name: 'CourseDetail', params: {course_id: id}})
+      this.$router.push({name: 'CourseDetail', query: {course_id: id}})
     },
     change_page: function (page) {
       this.$emit('change_page', page)
