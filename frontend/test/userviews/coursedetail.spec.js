@@ -5,6 +5,8 @@ import BootstrapVue from 'bootstrap-vue'
 import CourseDetail from '@/userviews/coursedetail/index'
 import Basic from '@/userviews/components/basic'
 import {shallowMount} from '@vue/test-utils'
+import Vuex from 'vuex'
+Vue.use(Vuex)
 
 Vue.use(BootstrapVue)
 
@@ -13,10 +15,26 @@ const $route = {
   query: { course_id: 1 }
 }
 
+const $store = new Vuex.Store({
+  state: {
+    status: true,
+    user: {
+      is_new_customer: null,
+      customer_id: '',
+      username: '',
+      avatar: null
+    },
+    phone: '',
+    money: '',
+    time: ''
+  }
+})
+
 describe('课程详情页单元测试', () => {
   const wrapper = shallowMount(CourseDetail, {
     mocks: {
-      $route
+      $route,
+      $store
     }
   })
 

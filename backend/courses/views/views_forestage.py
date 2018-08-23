@@ -62,7 +62,7 @@ def get_course_detail(request):
         'up_voted': request.user in course.up_votes.all(),
         'expire_duration': course.expire_duration,
         'expire_time': None,
-        'can_access': False
+        'can_access': can_access(course, request.user)
     }
     if request.user.is_authenticated:
         try:
@@ -72,7 +72,6 @@ def get_course_detail(request):
                 course_detail['expire_time'] = expire_time
         except LearningLog.DoesNotExist:
             pass
-        course_detail['can_access'] = can_access(course, request.user)
     return JsonResponse(course_detail)
 
 
@@ -228,7 +227,7 @@ def delete_comment(request):
     except Comment.DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
-    if not request.user.id == comment.customer.id:
+    if not request.user.id == comment.user.id:
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
     comment.delete()

@@ -65,10 +65,10 @@
                 <label class="time-style">&emsp;{{ message_list[index-1].created_at }}评论</label>
               </b-col>
               <b-col
-                v-if="message_list[index-1].username === username"
+                v-if="message_list[index-1].username === $store.state.user.username"
                 class="delete-comment"
                 @click="delete_comment(message_list[index-1].comment_id)">
-                ×
+                <label>×</label>
               </b-col>
             </b-row>
             <p class="message-content">{{ message_list[index-1].content }}</p>
@@ -153,7 +153,7 @@ export default {
       delete_message_test: false,
       delete_message_error_msg: '',
       page_limit: 1,
-      page: 0,
+      page: 1,
       rows: 0
     }
   },
@@ -166,12 +166,12 @@ export default {
         page: that.page
       }})
       .then(function (response) {
+        console.log(response.data)
         that.rows = response.data.count
-        console.log(response)
         that.message_list = response.data.content
       }).catch(function (error) {
         that.created_test = true
-        that.created_error_msg = error
+        that.created_error_msg = error.data.message
       })
   },
   methods: {
@@ -184,10 +184,11 @@ export default {
           page: that.page
         }})
         .then(function (response) {
+          that.rows = response.data.count
           that.message_list = response.data.content
         }).catch(function (error) {
           that.getallmessage_test = true
-          that.getallmessage_error_msg = error
+          that.getallmessage_error_msg = error.data.message
         })
     },
     up_vote: function (index, msgCommentId) {
@@ -202,7 +203,7 @@ export default {
           }
         }).catch(function (error) {
           that.up_vote_test = true
-          that.up_vote_error_msg = error
+          that.up_vote_error_msg = error.data.message
         })
     },
     down_vote: function (index, msgCommentId) {
@@ -217,43 +218,48 @@ export default {
           }
         }).catch(function (error) {
           that.down_vote_test = true
-          that.down_vote_error_msg = error
+          that.down_vote_error_msg = error.data.message
         })
     },
     delete_comment: function (commentId) {
-      axios.get('http://localhost:8000/api/v1/courses/forestage/play/delete-comment?' +
-        'comment_id=' + commentId)
+      axios.post('http://localhost:8000/api/v1/courses/forestage/play/delete-comment/',
+        qs.stringify({
+          comment_id: commentId
+        }))
         .then(function (response) {
-          if (response.message === 'Object deleted') {
+          if (response.data.message === 'Object deleted.') {
             this.getallmessage()
           } else {
-            alert(response.message)
+            alert(response.data.message)
           }
         }).catch(function (error) {
           this.delete_message_test = true
-          this.delete_message_error_msg = error
+          this.delete_message_error_msg = error.data.message
         })
     },
     add_comment: function () {
-      const value = this.new_msg && this.new_msg.trim()
+      let that = this
+      const value = that.new_msg && that.new_msg.trim()
       if (!value) {
         return
       }
-      axios.post('http://localhost:8000/api/v1/courses/forestage/play/add-comment?' +
-        'course=' + parseInt(this.course_id),
-      qs.stringify({
-        content: value
-      })).then(function (response) {
-        if (response.message === 'Object deleted') {
-          this.getallmessage()
+      axios.post('http://localhost:8000/api/v1/courses/forestage/play/add-comment/',
+        qs.stringify({
+          content: value,
+          course_id: that.course_id
+        })).then(function (response) {
+        console.log(response)
+        if (response.data.message === 'Success.') {
+          that.getallmessage()
         } else {
-          alert(response.message)
+          alert(response.data.message)
         }
       }).catch(function (error) {
-        this.add_message_test = true
-        this.add_message_error_msg = error
+        console.log(error)
+        that.add_message_test = true
+        that.add_message_error_msg = error
       })
-      this.new_msg = ''
+      that.new_msg = ''
     },
     change_page: function (page) {
       this.page = page
