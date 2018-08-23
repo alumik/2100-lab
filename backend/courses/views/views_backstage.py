@@ -12,7 +12,10 @@ def get_course_list(request):
     codename = request.GET.get('codename', '')
     title = request.GET.get('title', '')
 
-    courses = Course.objects.filter(codename__contains=codename, title__contains=title).order_by('-updated_at')
+    courses = Course.objects.filter(
+        codename__contains=codename,
+        title__contains=title
+    ).order_by('-updated_at')
     page = get_backstage_page(request, courses)
     page['title'] = title
     page['codename'] = codename
@@ -126,7 +129,7 @@ def add_comment(request):
     if not course.can_comment:
         return JsonResponse({'message': ERROR['comment_not_allowed']}, status=403)
 
-    Comment.objects.create(
+    comment = Comment.objects.create(
         user=request.user,
         course=course,
         content=comment_content
@@ -136,7 +139,7 @@ def add_comment(request):
         admin_user=request.user,
         action_type=ACTION_TYPE['reply_comment'],
         new_data=course.id,
-        object_id=Comment.objects.get(user=request.user, course=course, content=comment_content).id
+        object_id=comment.id
     )
 
     return JsonResponse({'message': INFO['success']})

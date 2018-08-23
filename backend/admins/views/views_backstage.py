@@ -1,12 +1,15 @@
+from datetime import datetime
 import re
 import time
+import pytz
 
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, get_user_model
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import Group
 
 from core.constants import ERROR, INFO, ACTION_TYPE, ADMIN_GROUPS_NAME
+from core.utils import get_page
 from admins.utils import get_admin_page
 from admins.models import AdminLog
 
@@ -97,6 +100,7 @@ def change_admin_username(request):
 
     try:
         admin = get_user_model().objects.get(id=admin_id, is_staff=True)
+        old_username = admin.username
     except get_user_model().DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
@@ -112,6 +116,7 @@ def change_admin_username(request):
         AdminLog.objects.create(
             admin_user=request.user,
             action_type=ACTION_TYPE['update_admin'],
+            old_data=old_username,
             new_data=new_username,
             object_id=admin_id
         )
@@ -212,14 +217,14 @@ def change_admin_groups(request):
     except get_user_model().DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
-    old_admin_groups = []
+    old_admin_groups_cn = []
     new_admin_groups_cn = []
     for admin_group in admin.groups.all():
-        old_admin_groups.append(ADMIN_GROUPS_NAME[str(admin_group)])
+        old_admin_groups_cn.append(ADMIN_GROUPS_NAME[str(admin_group)])
     for admin_group in new_admin_groups:
         new_admin_groups_cn.append((ADMIN_GROUPS_NAME[str(admin_group)]))
-    old_data = ','.join(old_admin_groups)
-    new_data = ','.join(new_admin_groups_cn)
+    old_data = ', '.join(old_admin_groups_cn)
+    new_data = ', '.join(new_admin_groups_cn)
 
     admin.groups.clear()
     for admin_group in new_admin_groups:
@@ -234,3 +239,23 @@ def change_admin_groups(request):
         object_id=admin_id
     )
     return JsonResponse({'message': INFO['success']})
+
+
+@permission_required('admins.view_adminlog')
+def get_admin_log(request):
+    admin_username = request.GET.get('admin_username', '')
+    start_timestamp = request.GET.get('start_timestamp', round(time.time()))
+    end_timestamp = request.GET.get('end_timestamp', round(time.time()))
+    filters = request.GET.getlist('filters', [])
+
+    start_date_time = datetime.fromtimestamp(int(start_timestamp), tz=pytz.utc)
+    end_date_time = datetime.fromtimestamp(int(end_timestamp), tz=pytz.utc)
+
+    admin_logs = AdminLog.objects.filter(
+        admin_user__username__contains=admin_username,
+        created_at__gte=start_date_time,
+        created_at__lte=end_date_time,
+        action_type__in=filters
+    ).order_by('-created_at')
+
+    return get_page(request, admin_logs)

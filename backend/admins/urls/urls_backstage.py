@@ -46,5 +46,10 @@ urlpatterns = [
         'admin-management/change-admin-groups/',
         views_backstage.change_admin_groups,
         name='change-admin-groups'
-    )
+    ),
+    path(
+        'log-management/get-admin-log/',
+        views_backstage.get_admin_log,
+        name='get-admin-log'
+    ),
 ]
