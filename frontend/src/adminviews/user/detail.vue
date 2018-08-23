@@ -251,22 +251,6 @@ export default {
         that.wrong = '获取用户详情失败！' + error
         that.wrong_count_down = that.dismiss_second
       })
-    // axios.get('http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-order-list/',
-    //   {params: {
-    //     customer_id: that.$route.query.user_id
-    //   }})
-    //   .then(function (response) {
-    //     if (response.data.message === 'Object not found.') {
-    //       that.wrong = '无法查找到此用户的订单信息！'
-    //       that.wrong_count_down = that.dismiss_second
-    //     } else {
-    //       that.orders = response.data.content
-    //     }
-    //   })
-    //   .catch(function (error) {
-    //     that.wrong = '获取此用户的订单信息失败！' + error
-    //     that.wrong_count_down = that.dismiss_second
-    //   })
   },
   methods: {
     compute_user: function (val) {
