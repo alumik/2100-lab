@@ -10,7 +10,7 @@
         <div class="content">
           <b-row>
             <b-img
-              :src="thumbnail"
+              :src="avatar"
               thumbnail
               fluid
               alt="Thumbnail" />
@@ -120,7 +120,7 @@ export default {
         }
       ],
       nameState: true,
-      thumbnail: '',
+      avatar: '',
       file: null,
       value: this.$store.state.user.username,
       disabled: true,
@@ -144,8 +144,7 @@ export default {
         'http://localhost:8000/api/v1/customers/forestage/personal-center/get-customer-detail/'
       )
       .then(res => {
-        this.thumbnail = this.address + res.data.avatar
-        console.log(this.thumbnail)
+        this.avatar = this.address + res.data.avatar
         this.$store.commit('money', (this.money = res.data.reward_coin))
         this.time = res.data.date_joined
           .toString()
@@ -172,7 +171,7 @@ export default {
           data
         )
         .then(res => {
-          that.thumbnail = this.address + res.data.new_avatar
+          that.avatar = this.address + res.data.new_avatar
           alert('头像上传成功')
         })
     },
@@ -199,7 +198,6 @@ export default {
             })
           })
           .catch(() => {
-            // console.log('error: ' + error.message)
             that.nameState = false
           })
       }
