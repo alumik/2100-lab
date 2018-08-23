@@ -23,6 +23,11 @@ urlpatterns = [
         name='delete-course'
     ),
     path(
+        'course-management/add-course/',
+        views_backstage.add_course,
+        name='add-course'
+    ),
+    path(
         'comment-management/get-comment-list/',
         views_backstage.get_comment_list,
         name='get-comment-list'

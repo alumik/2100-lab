@@ -1,9 +1,12 @@
+from decimal import Decimal
+import datetime
+
 from django.contrib.auth.decorators import permission_required
 from django.http import JsonResponse
 
 from core.utils import get_backstage_page
 from core.constants import ERROR, INFO, ACTION_TYPE
-from courses.models import Course, Comment
+from courses.models import Course, Comment, Image
 from admins.models import AdminLog
 
 
@@ -64,6 +67,43 @@ def delete_course(request):
 
     course.delete()
     return JsonResponse({'message': INFO['object_deleted']})
+
+
+@permission_required('courses.add_course')
+def add_course(request):
+    title = request.POST.get('title')
+    codename = request.POST.get('codename')
+    expire_duration = datetime.timedelta(
+        days=int(request.POST.get('days')),
+        hours=int(request.POST.get('hours'))
+    )
+    price = float(request.POST.get('price'))
+    can_comment = request.POST.get('can_comment') == '1'
+    reward_percent = float(request.POST.get('reward_percent'))
+    description = request.POST.get('description')
+    images = request.FILES.getlist('images')
+    audio = request.FILES.get('audio')
+    load_times = request.POST.getlist('load_times')
+
+    course = Course.objects.create(
+        title=title,
+        codename=codename,
+        expire_duration=expire_duration,
+        price=Decimal(price),
+        can_comment=can_comment,
+        reward_percent=Decimal(reward_percent),
+        description=description,
+        audio=audio,
+    )
+
+    for image in images:
+        Image.objects.create(
+            course=course,
+            image_path=image,
+            load_time=load_times[images.index(image)]
+        )
+
+    return JsonResponse({'message': INFO['success']})
 
 
 @permission_required('courses.view_comment')
