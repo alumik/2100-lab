@@ -310,6 +310,13 @@ export default{
       .then(function (response) {
         that.course = response.data
         that.course.price = parseFloat(response.data.price)
+        if (that.course.up_voted === true) {
+          that.praise_color = 'green'
+          that.praise_border_color = 'green'
+        } else {
+          that.praise_color = '#007bff'
+          that.praise_border_color = '#007bff'
+        }
       }).catch(function (error) {
         that.created_test = true
         that.created_error_msg = error
