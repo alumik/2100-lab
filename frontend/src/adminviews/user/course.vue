@@ -25,11 +25,11 @@
             <tr
               v-for="log in logs"
               :key="log.id">
-              <td>{{ log.course_codename }}</td>
-              <td>{{ log.course_title }}</td>
-              <td>{{ log.progress }}</td>
-              <td>{{ compute_date(log.latest_learn) }}</td>
-              <td>{{ compute_burnt(log.is_burnt) }}</td>
+              <td class="lg-td">{{ log.course_codename }}</td>
+              <td class="lg-td">{{ log.course_title }}</td>
+              <td class="s-td">{{ log.progress }}</td>
+              <td class="s-td">{{ compute_date(log.latest_learn) }}</td>
+              <td class="s-td">{{ compute_burnt(log.is_burnt) }}</td>
             </tr>
           </tbody>
         </table>
@@ -167,5 +167,17 @@ export default {
     font-weight: bold;
     color: white;
     background-color: #6c757d;
+  }
+
+  td {
+    vertical-align: middle;
+  }
+
+  .s-td {
+    width: 200px;
+  }
+
+  .lg-td {
+    width: 250px;
   }
 </style>
