@@ -52,7 +52,7 @@
             <b-row>
               <b-col class="delete-margin text-left-style">
                 <h5>
-                  {{ course.title }}<b-button @click="test"/>
+                  {{ course.title }}
                 </h5>
               </b-col>
               <b-col class="vote-style">
@@ -186,9 +186,6 @@ export default {
       })
   },
   methods: {
-    test () {
-      console.log(this.course)
-    },
     up_vote_course () {
       let that = this
       axios.get('http://localhost:8000/api/v1/courses/forestage/course/up-vote-course?' +

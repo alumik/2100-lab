@@ -83,11 +83,8 @@ export default {
     let that = this
     axios.get('http://localhost:8000/api/v1/courses/forestage/course/get-recent-courses')
       .then(function (response) {
-        console.log(response)
         that.freecourselist = response.data.free_courses
         that.paidcourselist = response.data.paid_courses
-        console.log(that.freecourselist)
-        console.log(that.paidcourselist)
       }).catch(function (error) {
         that.created_test = true
         that.created_error_msg = error

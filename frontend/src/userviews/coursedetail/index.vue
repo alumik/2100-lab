@@ -20,7 +20,7 @@
       id="page-title"
       class="content-style">
       <h5>
-        {{ course.title }}<b-button @click="test"/>
+        {{ course.title }}
       </h5>
     </div>
     <div id="modals">
@@ -309,9 +309,6 @@ export default{
   mounted: function () {
   },
   methods: {
-    test () {
-      console.log(this.course)
-    },
     pay_method_chose (payMethod) {
       if (payMethod === 1) {
         this.pay_method = 1
@@ -367,12 +364,10 @@ export default{
         this.$root.$emit('bv::hide::modal', 'pay-popup')
         axios.post('http://localhost:8000/api/v1/courses/forestage/course/buy-course/',
           qs.stringify({
-            course_id: 30,
+            course_id: that.query_course_id,
             payment_method: that.pay_method
           })).then(function (response) {
-          console.log(response)
           if (response.data.message === 'Success.') {
-            console.log(666)
             that.course.can_access = true
           } else alert('请先完成支付')
         }).catch(function (error) {
