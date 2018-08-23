@@ -68,7 +68,7 @@ urlpatterns = [
         name='add-comment'
     ),
     path(
-        'play/save-learning-log',
+        'play/save-learning-log/',
         views_forestage.save_learning_log,
         name='save-learning-log'
     ),
