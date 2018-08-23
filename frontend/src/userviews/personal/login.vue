@@ -23,7 +23,7 @@
         <b-input-group-append>
           <b-btn
             id="send"
-            :disabled="disabled"
+            :disabled="code_disabled"
             variant="outline-success"
             @click="send">{{ status }}{{ second }}</b-btn>
         </b-input-group-append>
@@ -34,6 +34,7 @@
       <br>
       <b-button
         id="btn"
+        :disabled="log_disabled"
         type="submit"
         variant="success"
         @click="login">登录
@@ -46,7 +47,8 @@
         centered
         ok-title="我同意"
         cancel-title="我不同意"
-        @ok="handleOk">
+        @ok="handleOk"
+        @cancel="handleCancel">
         {{ content }}
         <br>
         <b-form-checkbox
@@ -78,7 +80,9 @@ export default {
       codeState: true,
       phoneState: true,
       seconds: 61,
-      disabled: false,
+      log_disabled: true,
+      code_disabled: false,
+      new_customer: false,
       okDisabled: true,
       modalShow: false,
       accept: '',
@@ -160,6 +164,8 @@ export default {
     accept: function (o) {
       if (o === 'accepted') {
         this.okDisabled = false
+      } else {
+        this.okDisabled = true
       }
     },
     phone: function (n) {
@@ -185,6 +191,7 @@ export default {
   methods: {
     send () {
       let that = this
+      that.code_disabled = true
       axios
         .post(
           'http://localhost:8000/api/v1/customers/forestage/auth/get-verification-code/',
@@ -195,14 +202,16 @@ export default {
         )
         .then(response => {
           alert(response.data.verification_code)
-          that.$store.commit('new_customer', response.data.is_customer)
+          // that.$store.commit('new_customer', response.data.is_customer)
+          that.new_customer = response.data.is_new_customer
+          console.log(that.new_customer)
           that.status = '再次发送 '
+          this.log_disabled = false
           that.seconds = that.seconds - 1
-          that.disabled = true
           let t = setInterval(function () {
             that.seconds = that.seconds - 1
             if (that.seconds === -1) {
-              that.disabled = false
+              that.code_disabled = false
               that.seconds = 61
               clearInterval(t)
             }
@@ -210,24 +219,27 @@ export default {
         })
         .catch(error => {
           if (error) {
+            that.code_disabled = false
             that.phoneState = false
           }
         })
     },
     handleOk (evt) {
-      if (this.accept === 'accepted') {
-        this.$store.commit('status')
-        this.$store.commit('user', this.user_data)
-        this.$store.commit('phone', this.phone)
-        if (this.course_id !== -1) {
-          this.$router.push({
-            path: '/coursedetail',
-            query: { course_id: this.course_id }
-          })
-        }
-        this.$router.push({ path: '/personal' })
+      this.$store.commit('status')
+      this.$store.commit('user', this.user_data)
+      this.$store.commit('phone', this.phone)
+      if (this.course_id !== -1) {
+        this.$router.push({
+          path: '/coursedetail',
+          query: { course_id: this.course_id }
+        })
       }
-      evt.preventDefault()
+      this.$router.push({ path: '/personal' })
+    },
+    handleCancel (evt) {
+      axios.post('http://localhost:8000/api/v1/core/auth/logout/', {
+        withCredentials: true
+      })
     },
     login () {
       let that = this
@@ -241,9 +253,9 @@ export default {
           { withCredentials: true }
         )
         .then(response => {
-          if (response.data.is_new_customer) {
+          if (that.new_customer) {
             this.modalShow = !this.modalShow
-            this.$store.commit('new_customer')
+            // this.$store.commit('new_customer')
             this.user_data = response.data
           } else {
             this.$store.commit('status')
