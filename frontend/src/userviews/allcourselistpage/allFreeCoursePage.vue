@@ -12,6 +12,7 @@
       id="all-free"
       :page_title="page_title"
       :course_list="course_list"
+      :rows="rows"
       @change_page="change_page"/>
   </Basic>
 </template>
@@ -34,18 +35,20 @@ export default {
       course_type: 'free',
       page_limit: 15,
       page: 1,
+      rows: 0,
       created_test: false,
       created_error_msg: ''
     }
   },
   created () {
     let that = this
-    axios.get('http://localhost:8000/api/v1/courses/backstage/course/get-course-list/', { params: {
+    axios.get('http://localhost:8000/api/v1/courses/forestage/course/get-course-list/', { params: {
       course_type: that.course_type,
-      page_limit: that.per_page,
+      page_limit: that.page_limit,
       page: that.page
     }}).then(function (response) {
-      that.course_list = response.content.data
+      that.course_list = response.data.content
+      that.rows = response.data.count
     }).catch(function (error) {
       that.created_test = true
       that.created_error_msg = error
@@ -53,7 +56,23 @@ export default {
   },
   methods: {
     change_page: function (page) {
-      this.page = page
+      let that = this
+      that.page = page
+      that.getcourselist()
+    },
+    getcourselist: function (page) {
+      let that = this
+      axios.get('http://localhost:8000/api/v1/courses/forestage/course/get-course-list/', { params: {
+        course_type: that.course_type,
+        page_limit: that.page_limit,
+        page: that.page
+      }}).then(function (response) {
+        that.course_list = response.data.content
+        that.rows = response.data.count
+      }).catch(function (error) {
+        that.created_test = true
+        that.created_error_msg = error
+      })
     }
   }
 }

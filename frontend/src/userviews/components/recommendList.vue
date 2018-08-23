@@ -23,7 +23,7 @@
           :key="course.course_id"
           class="col-style">
           <b-card
-            :img-src="course.thumbnail"
+            :img-src="example_src"
             :title="course.title"
             img-alt="Image"
             img-top
@@ -31,7 +31,7 @@
             class="mb-2 width-style"
             @click="open_detail_page(course.course_id)">
             <p class="card-text">
-              {{ course.description }}
+              {{ course.description.substring(0,30) }}
             </p>
           </b-card>
         </b-col>
@@ -55,6 +55,11 @@ export default {
       default: function () {
         return []
       }
+    }
+  },
+  data () {
+    return {
+      example_src: 'https://picsum.photos/400/300/?image=32'
     }
   },
   methods: {
