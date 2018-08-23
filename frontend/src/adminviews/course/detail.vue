@@ -100,6 +100,7 @@
 import Basic from '../basic/basic'
 import ConfirmModal from '../components/ConfirmModal'
 import axios from 'axios'
+import qs from 'qs'
 export default {
   name: 'BackendCourseDetail',
   components: {ConfirmModal, Basic},
@@ -156,10 +157,10 @@ export default {
       this.$router.push({name: 'EditCourse', query: {'course_id': this.$route.query.course_id}})
     },
     deleteMessage: function () {
-      axios.get('http://localhost:8000/api/v1/courses/backstage/course-management/delete-course/', {
-        params: {
+      axios.post('http://localhost:8000/api/v1/courses/backstage/course-management/delete-course/',
+        qs.stringify({
           course_id: this.$route.query.course_id
-        }}).then(
+        })).then(
         response => {
           this.$router.push({name: 'CourseManagement'})
         }).catch(
