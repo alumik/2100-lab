@@ -25,6 +25,7 @@
         <b-nav-item
           @click="personal">
           <img
+            v-if="$store.state.status"
             id="userimg"
             :src="avatar">{{ $store.state.status ? $store.state.user.username : '' }}
         </b-nav-item>
