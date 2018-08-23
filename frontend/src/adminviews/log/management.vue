@@ -163,7 +163,7 @@ export default {
       this.page_jump = true
       this.$router.push({ name: 'LogDetail',
         query: {
-          admin_id: this.admin_id,
+          admin_username: this.admin_id,
           begin_date: Date.parse(this.begin_date) / 1000,
           end_date: Date.parse(this.end_date) / 1000,
           select: this.select1 + ',' + this.select2 + ',' + this.select3 + ',' + this.select4
