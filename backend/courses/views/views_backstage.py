@@ -103,6 +103,11 @@ def add_course(request):
             load_time=load_times[images.index(image)]
         )
 
+    AdminLog.objects.create(
+        admin_user=request.user,
+        action_type=ACTION_TYPE['add_course'],
+        object_id=course.id,
+    )
     return JsonResponse({'message': INFO['success']})
 
 

@@ -19,7 +19,7 @@ class AdminLog(models.Model):
         if self.action_type == ACTION_TYPE['add_admin']:
             msg = '新增了ID为 ' \
                   + str(self.object_id) \
-                  + ' 电话号码为 ' \
+                  + ' ，电话号码为 ' \
                   + str(self.new_data) \
                   + ' 的管理员'
         elif self.action_type == ACTION_TYPE['change_admin_groups']:
@@ -46,9 +46,9 @@ class AdminLog(models.Model):
                   + str(self.object_id) \
                   + ' 的管理员'
         elif self.action_type == ACTION_TYPE['refund_order']:
-            msg = '为ID为 ' \
+            msg = '为用户ID为 ' \
                   + self.new_data \
-                  + ' 的用户的订单为 ' \
+                  + ' ，订单ID为 ' \
                   + str(self.object_id) \
                   + ' 的订单办理了退款'
         elif self.action_type == ACTION_TYPE['delete_customer']:
@@ -82,6 +82,14 @@ class AdminLog(models.Model):
                   + self.new_data \
                   + ' 的课程下的留言，新留言ID为 ' \
                   + str(self.object_id)
+        elif self.action_type == ACTION_TYPE['add_course']:
+            msg = '新增了ID为 ' \
+                  + str(self.object_id) \
+                  + ' 的课程'
+        elif self.action_type == ACTION_TYPE['update_course']:
+            msg = '修改了ID为 ' \
+                  + str(self.object_id) \
+                  + ' 的课程'
         elif self.action_type == ACTION_TYPE['delete_course']:
             msg = '删除了ID为 ' \
                   + str(self.object_id) \
