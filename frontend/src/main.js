@@ -37,8 +37,8 @@ const store = new Vuex.Store({
     time: ''
   },
   mutations: {
-    status (state) {
-      state.status = true
+    status (state, status = true) {
+      state.status = status
       sessionStorage.setItem('status', 'true')
     },
     user (state, data) {
@@ -70,8 +70,8 @@ const store = new Vuex.Store({
 const i18n = new VueI18n({
   locale: 'zh',
   messages: {
-    'zh': require('./lang/zh/zh'),
-    'en': require('./lang/en/en')
+    zh: require('./lang/zh/zh'),
+    en: require('./lang/en/en')
   }
 })
 

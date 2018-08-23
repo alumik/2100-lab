@@ -80,7 +80,7 @@ export default {
           })
           .then(res => {
             // console.log(res.data.message)
-            that.$store.commit('logout')
+            that.$store.commit('status', false)
             that.$router.push({ path: '/' })
           })
         //   .catch(error => {
