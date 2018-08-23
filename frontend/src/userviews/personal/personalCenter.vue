@@ -180,6 +180,7 @@ export default {
           )
           .then(res => {
             this.status = '修改'
+            this.disabled = !this.disabled
             // console.log(res.data.new_username)
             this.$store.commit('user', {
               is_new_customer: this.$store.state.user.is_new_customer,
