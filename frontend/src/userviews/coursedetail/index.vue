@@ -20,7 +20,7 @@
       id="page-title"
       class="content-style">
       <h5>
-        {{ course.title }}{{ course.course_id }}
+        {{ course.title }}
       </h5>
     </div>
     <div id="modals">
@@ -101,7 +101,7 @@
               :options="{ size: 200 }"
               value="pay_qrcode_url"
               class="qrcode-margin-style"/>
-            <p>{{ pay_method === 0 ? '支付宝': '微信' }}</p>
+            <p>{{ pay_method === 1 ? '支付宝': '微信' }}</p>
           </div>
           <div class="modal-style">
             <b-btn @click="hide_pay_popup">
@@ -152,7 +152,7 @@
         class="introduction-style">
         <div class="reminder-style">
           <div
-            v-if="course.price!=0 && is_paid === false"
+            v-if="!course.can_access"
             class="row row-style">
             <h6>现价 ￥{{ course.price - user_reward_balance }}  ￥</h6>
             <h6 class="origin-value">{{ course.price }}</h6>
@@ -170,7 +170,7 @@
           <b-col
             id="study-or-pay"
             cols="4">
-            <div v-show="course.price === 0 || is_paid === true">
+            <div v-show="course.can_access">
               <b-button
                 v-b-modal.study-popup
                 id="study-button"
@@ -180,7 +180,7 @@
                 开始学习
               </b-button>
             </div>
-            <div v-show="course.price !== 0 && is_paid === false">
+            <div v-show="!course.can_access">
               <b-button
                 id="pay-button"
                 size="sm"
@@ -253,7 +253,6 @@ export default{
       connection_test: false,
       connection_err_msg: 'Server access failed. ',
       course_img_src_example: 'https://picsum.photos/1024/480/?image=54',
-      is_paid: false,
       share_qrcode_url: 'http://www.baidu.com',
       pay_qrcode_url: 'http://www.jisuanke.com',
       user_reward_balance: 50,
@@ -301,7 +300,7 @@ export default{
       '?course_id=' + that.query_course_id)
       .then(function (response) {
         that.course = response.data
-        console.log('course_id ' + that.course.course_id)
+        that.course.price = parseFloat(response.data.price)
       }).catch(function (error) {
         that.created_test = true
         that.created_error_msg = error
@@ -311,11 +310,11 @@ export default{
   },
   methods: {
     pay_method_chose (payMethod) {
-      if (payMethod === 0) {
-        this.pay_method = 0
-        this.pay_qrcode_url = 'www.baidu.com'
-      } else if (payMethod === 1) {
+      if (payMethod === 1) {
         this.pay_method = 1
+        this.pay_qrcode_url = 'www.baidu.com'
+      } else if (payMethod === 2) {
+        this.pay_method = 2
         this.pay_qrcode_url = 'se.jisuanke.com'
       }
       this.pay_method_chosen = true
@@ -365,9 +364,11 @@ export default{
         this.$root.$emit('bv::hide::modal', 'pay-popup')
         axios.post('http://localhost:8000/api/v1/courses/forestage/course/buy-course/',
           qs.stringify({
-            course_id: 30})).then(function (response) {
-          if (response.message === 'Success.') {
-            that.is_paid = true
+            course_id: that.query_course_id,
+            payment_method: that.pay_method
+          })).then(function (response) {
+          if (response.data.message === 'Success.') {
+            that.course.can_access = true
           } else alert('请先完成支付')
         }).catch(function (error) {
           that.finishPay_test = true

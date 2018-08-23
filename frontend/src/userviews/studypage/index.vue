@@ -52,7 +52,7 @@
             <b-row>
               <b-col class="delete-margin text-left-style">
                 <h5>
-                  {{ course.title }}{{ course.course_id }}
+                  {{ course.title }}
                 </h5>
               </b-col>
               <b-col class="vote-style">
@@ -153,6 +153,13 @@ export default {
       }
     }
   },
+  mounted () {
+    this.audio_current_time = this.$refs.player.currentTime
+    this.audio_piece_num = this.course.images.length
+    this.introduction_text_show = this.course.description.substring(0, 2)
+    this.introduction_text_hide = this.course.description.substring(2)
+    this.addEventListeners()
+  },
   created: function () {
     let that = this
     if (typeof (that.$route.query.course_id) === 'undefined') {
@@ -177,11 +184,6 @@ export default {
         that.detail_test = true
         that.detail_error_msg = error
       })
-    that.audio_current_time = that.$refs.player.currentTime
-    that.audio_piece_num = that.course.images.length
-    that.introduction_text_show = that.course.description.substring(0, 2)
-    that.introduction_text_hide = that.course.description.substring(2)
-    that.addEventListeners()
   },
   methods: {
     up_vote_course () {

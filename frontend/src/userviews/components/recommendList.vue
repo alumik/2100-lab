@@ -19,38 +19,19 @@
     <b-container class="bv-example-row">
       <b-row>
         <b-col
-          v-for="i in [0, 1, 2, 3]"
-          :key="i"
+          v-for="course in courselist"
+          :key="course.course_id"
           class="col-style">
           <b-card
-            :img-src="courselist[i].thumbnail"
-            :title="courselist[i].title"
+            :img-src="course.thumbnail"
+            :title="course.title"
             img-alt="Image"
             img-top
             tag="article"
             class="mb-2 width-style"
-            @click="open_detail_page(courselist[i].course_id)">
+            @click="open_detail_page(course.course_id)">
             <p class="card-text">
-              {{ courselist[i].description }}
-            </p>
-          </b-card>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col
-          v-for="i in [4, 5, 6, 7]"
-          :key="i">
-          <b-card
-            id="course-card"
-            :img-src="courselist[i].thumbnail"
-            :title="courselist[i].title"
-            img-alt="Image"
-            img-top
-            tag="article"
-            class="mb-2 width-style"
-            @click="open_detail_page(courselist[i].course_id)">
-            <p class="card-text">
-              {{ courselist[i].description }}
+              {{ course.description }}
             </p>
           </b-card>
         </b-col>
