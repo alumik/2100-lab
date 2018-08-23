@@ -159,11 +159,13 @@
           </div>
           <div
             class="row time-style">
-            <h6>课程时效 {{ course.expire_duration }} h</h6>
+            <h6 v-if="course.expire_duration !==0">
+              课程时效 {{ change_duration_to_timestamp(course.expire_duration) }}
+            </h6>
           </div>
           <div
             class="row time-style">
-            <h6>距离失效还有 {{ course.expire_time - now_time }} h</h6>
+            <h6 v-if="course.expire_time !== null">距离失效还有 {{ left_time }}</h6>
           </div>
         </div>
         <b-row class="button-row">
@@ -243,6 +245,7 @@ import './style.css'
 import qs from 'qs'
 
 const shareQrcodeHost = 'http://localhost:8080/coursedetail'
+var mygenerator = null
 
 export default{
   name: 'CourseDetail',
@@ -275,7 +278,8 @@ export default{
       finishPay_test: false,
       finishPay_error_msg: '',
       share_qrcode_url: '',
-      referer_id: ''
+      referer_id: '',
+      left_time: ''
     }
   },
   computed: {
@@ -288,9 +292,6 @@ export default{
       return '分享该课程的二维码，如果小伙伴点击你分享的链接购买课程,\n你就将获得' +
         that.course.price * that.course.reward_percent +
         '奖励金哦！'
-    },
-    now_time: function () {
-      return new Date()
     }
   },
   created () {
@@ -316,9 +317,29 @@ export default{
     that.share_qrcode_url = shareQrcodeHost + '?course_id=' +
       that.query_course_id + '&' + 'referer_id=' + that.$store.state.user.customer_id
   },
-  mounted: function () {
+  mounted () {
+    mygenerator = setInterval(this.generate_left_time, 1000)
   },
   methods: {
+    generate_left_time () {
+      let due = new Date(this.course.expire_time)
+      let now = new Date()
+      let substract = Math.floor((due - now) / 1000)
+      if (substract === 0) {
+        clearInterval(mygenerator)
+      }
+      let days = Math.floor(substract / (3600 * 24))
+      let hours = Math.floor((substract - days * (3600 * 24)) / 3600)
+      let minutes = Math.floor((substract - days * (3600 * 24) - hours * 3600) / 60)
+      let seconds = substract - days * (3600 * 24) - hours * 3600 - minutes * 60
+      this.left_time = days + '天' + hours + '小时' + minutes + '分钟' + seconds + '秒'
+    },
+    change_duration_to_timestamp (duration) {
+      const hours = Math.floor(duration / 3600)
+      const minutes = Math.floor((duration - hours * 3600) / 60)
+      const seconds = duration - hours * 3600 - minutes * 60
+      return hours + '小时' + minutes + '分钟' + seconds + '秒'
+    },
     pay_method_chose (payMethod) {
       if (payMethod === 1) {
         this.pay_method = 1
