@@ -80,12 +80,26 @@
           </b-row>
           <b-row>
             <b-button
+              v-b-modal.modal
               :disabled="del_disabled"
               size="lg"
-              variant="danger"
-              @click="Delete">
+              variant="danger">
               删除账号
             </b-button>
+            <b-modal
+              id="modal"
+              centered
+              hide-footer
+              title="您确认删除自己的账号吗？">
+              <b-form-input
+                v-model="phone"
+                type="text"
+                placeholder="请输入自己的手机号"/>
+              <b-btn
+                variant="outline-danger"
+                block
+                @click="Delete">确认删除</b-btn>
+            </b-modal>
           </b-row>
         </div>
       </div>
@@ -155,6 +169,7 @@ export default {
       .catch(error => {
         alert(error.message)
       })
+    this.phone = ''
   },
   methods: {
     hide: function () {
@@ -207,17 +222,19 @@ export default {
     },
     Delete () {
       let that = this
-      axios
-        .post(
-          'http://localhost:8000/api/v1/customers/forestage/personal-center/delete-customer/'
-        )
-        .then(res => {
-          if (res.data.message === 'Object deleted.') {
-            this.del_disabled = true
-            that.$store.commit('logout')
-            that.$router.push({ path: '/' })
-          }
-        })
+      if (that.$store.state.phone === that.phone) {
+        axios
+          .post(
+            'http://localhost:8000/api/v1/customers/forestage/personal-center/delete-customer/'
+          )
+          .then(res => {
+            if (res.data.message === 'Object deleted.') {
+              this.del_disabled = true
+              that.$store.commit('logout')
+              that.$router.push({ path: '/' })
+            }
+          })
+      }
     }
   }
 }
@@ -286,5 +303,9 @@ img {
 
 .input-group-append .input-group-text {
   width: auto;
+}
+
+[placeholder="请输入自己的手机号"] {
+  margin-bottom: 15px;
 }
 </style>

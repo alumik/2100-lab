@@ -6,10 +6,6 @@
       type="dark"
       variant="primary"
       class="navbar">
-      <button
-        class="navbar-toggler">
-        <span class="navbar-toggler-icon"/>
-      </button>
       <b-navbar-brand
         class="logo">
         <img
@@ -103,6 +99,7 @@ export default {
           })
           .catch(error => {
             let errorMessage = error.response.data.message
+            console.log(errorMessage)
             if (errorMessage === 'User is already authenticated.') {
               this.error_message = '用户已登录'
             } else if (errorMessage === 'Invalid phone number or password.') {

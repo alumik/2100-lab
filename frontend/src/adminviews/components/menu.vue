@@ -1,8 +1,7 @@
 <template>
-  <!-- Sidebar  -->
   <nav
     id="sidebar"
-    :class="{hide: hidden, 'sidebar': true}">
+    :class="{hide: menu_hide, 'sidebar': true}">
     <div class="sidebar-header">{{ $t('menu.header') }}</div>
     <ul class="components">
       <li
@@ -20,7 +19,7 @@ import './style/style.css'
 export default {
   name: 'Menu',
   props: {
-    hidden: {
+    menu_hide: {
       type: Boolean,
       default: true
     },
@@ -73,7 +72,7 @@ export default {
     }
   },
   watch: {
-    hidden () {
+    menu_hide () {
       console.log(123)
     }
   },

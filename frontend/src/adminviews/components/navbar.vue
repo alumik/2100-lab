@@ -1,12 +1,13 @@
 <template>
   <b-navbar
     :sticky="true"
-    toggleable="md"
+    :toggleable="toggleable"
     type="dark"
     variant="primary"
     class="navbar">
     <button
-      class="navbar-toggler">
+      class="navbar-toggler"
+      @click="$emit('hide')">
       <span class="navbar-toggler-icon"/>
     </button>
     <b-navbar-brand
@@ -36,6 +37,11 @@
 import axios from 'axios'
 export default {
   name: 'AdminNavbar',
+  data () {
+    return {
+      toggleable: 'md'
+    }
+  },
   methods: {
     log () {
       if (this.$store.state.adminStatus) {
@@ -91,9 +97,13 @@ export default {
   background-color: #f00;
 }
 
-@media (min-width: 768px) {
-  button {
-    display: none;
+@media (min-width: 1200px) {
+  #nav_collapse {
+    display: -ms-flexbox !important;
+    display: -webkit-box !important;
+    display: flex !important;
+    -ms-flex-preferred-size: auto;
+    flex-basis: auto;
   }
 }
 </style>

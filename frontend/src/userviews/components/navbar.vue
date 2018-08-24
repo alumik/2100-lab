@@ -17,9 +17,9 @@
         id="logoimg"
         src="../../assets/2100logo.png">
     </b-navbar-brand>
-    <b-navbar-toggle target="nav_collapse"/>
+    <b-navbar-toggle target="nav_collapse_user"/>
     <b-collapse
-      id="nav_collapse"
+      id="nav_collapse_user"
       is-nav>
       <b-navbar-nav class="ml-auto">
         <b-nav-item
