@@ -9,7 +9,7 @@ from courses.models import Course, CourseUpVotes
 
 class DataTests(TestCase):
     def setUp(self):
-        admin = get_user_model().objects.create_user(
+        get_user_model().objects.create_user(
             phone_number='15500000000',
             password='123456',
             is_staff=True,
