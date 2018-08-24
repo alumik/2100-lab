@@ -22,7 +22,6 @@ def get_income(start_time, end_time):
         created_at__lte=end_time,
         refunded_at=None
     )
-    decimal.getcontext().prec = 2
     income = Decimal('0.00')
     for order in orders:
         income += order.cash_spent

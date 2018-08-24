@@ -10,7 +10,9 @@
         variant="danger"
         @decrease="wrong_count_down-1"
         @zero="wrong_count_down=0"/>
-      <b-tabs class="data">
+      <b-tabs
+        class="data"
+        @input="change_tab">
         <b-tab
           title="总体概况"
           active>
@@ -105,13 +107,23 @@
                   <b-input-group
                     size="sm"
                     append="月">
-                    <b-form-input/>
+                    <b-form-input v-model="month"/>
                   </b-input-group>
                   <b-input-group
                     size="sm"
                     append="日">
-                    <b-form-input/>
+                    <b-form-input v-model="day"/>
                   </b-input-group>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="search-button">
+                  <b-button
+                    id="search"
+                    variant="outline-secondary"
+                    @click="search2">
+                    查询
+                  </b-button>
                 </div>
               </div>
             </div>
@@ -174,31 +186,19 @@ export default {
         { id: 2, state: false, text: '近一月' },
         { id: 3, state: false, text: '近半年' }
       ],
-      increased_users: 1500,
-      sale: 150000,
-      increased_courses: 100,
-      orders: 1000,
+      increased_users: 0,
+      sale: 0,
+      increased_courses: 0,
+      orders: 0,
       colors1: ['#ff5722'],
       colors2: ['#448aff'],
       praise_top: {
         columns: ['title', 'up_votes'],
-        rows: [
-          { '课程名': '数学', '点赞数': 1500 },
-          { '课程名': '语文', '点赞数': 1300 },
-          { '课程名': '英语', '点赞数': 1200 },
-          { '课程名': '物理', '点赞数': 1000 },
-          { '课程名': '化学', '点赞数': 800 }
-        ]
+        rows: []
       },
       study_top: {
         columns: ['title', 'learners'],
-        rows: [
-          { '课程名': '数学', '学习人数': 1500 },
-          { '课程名': '语文', '学习人数': 1300 },
-          { '课程名': '英语', '学习人数': 1200 },
-          { '课程名': '物理', '学习人数': 1000 },
-          { '课程名': '化学', '学习人数': 800 }
-        ]
+        rows: []
       },
       praise_top_setting: {
         labelMap: {
@@ -218,6 +218,8 @@ export default {
         format: 'YYYY/MM/DD',
         useCurrent: true
       },
+      month: '',
+      day: '',
       charts_users: {
         columns: ['日期', '新增用户数'],
         rows: [
@@ -298,18 +300,13 @@ export default {
       })
   },
   methods: {
-    change_button_state: function (val) {
-      for (let i = 0; i < this.buttons.length; i++) {
-        if (i === val) {
-          this.buttons[i].state = true
-        } else {
-          this.buttons[i].state = false
-        }
-      }
-      const that = this
+    change_tab: function (val) {
+      // console.log(val)
+    },
+    get_days: function () {
       let i
-      for (i = 0; i < that.buttons.length; i++) {
-        if (that.buttons[i].state) {
+      for (i = 0; i < this.buttons.length; i++) {
+        if (this.buttons[i].state) {
           break
         }
       }
@@ -323,20 +320,112 @@ export default {
       } else if (i === 3) {
         days = 182
       }
+      return days
+    },
+    get_step: function () {
+      if (this.day === '' && this.month === '') {
+        return -1
+      }
+      let month = (this.month === '') ? 0 : parseFloat(this.month)
+      let day = (this.day === '') ? 0 : parseFloat(this.day)
+      if ((this.day !== '' && day % 1 !== 0) ||
+        (this.month !== '' && month % 1 !== 0)) {
+        return -2
+      } else {
+        return 30 * month + day
+      }
+    },
+    get_start_end_time: function () {
+      let start = Date.parse(this.begin_date) / 1000
+      let end = Date.parse(this.end_date) / 1000
+      if (start >= end) {
+        return -1
+      } else {
+        let temp = []
+        temp[0] = start
+        temp[1] = end
+        return temp
+      }
+    },
+    search1: function () {
+      const that = this
+      let days = this.get_days()
       axios.get('http://localhost:8000/api/v1/data/data-management/get-overall-data/',
         {params: {days: days}})
         .then(function (response) {
-          that.increased_users = response.data.customers_count
-          that.sale = response.data.income
-          that.increased_courses = response.data.courses_count
-          that.orders = response.data.orders_count
-          that.praise_top.rows = response.data.top_up_voted_courses
-          that.study_top.rows = response.data.top_learned_courses
+          if (response.data.message === 'Access denied.') {
+            that.wrong = '您没有权限获取数据！'
+            that.wrong_count_down = that.dismiss_second
+          } else {
+            that.increased_users = response.data.customers_count
+            that.sale = response.data.income
+            that.increased_courses = response.data.courses_count
+            that.orders = response.data.orders_count
+            that.praise_top.rows = response.data.top_up_voted_courses
+            that.study_top.rows = response.data.top_learned_courses
+          }
         })
         .catch(function (error) {
           that.wrong = '获取数据失败' + error
           that.wrong_count_down = that.dismiss_second
         })
+    },
+    check_date: function () {
+      let step = this.get_step()
+      if (step === -1 || step === 0) {
+        this.wrong = '您所输入的时间有误'
+        this.wrong_count_down = this.dismiss_second
+        return -1
+      } else if (step === -2) {
+        this.wrong = '请输入整数'
+        this.wrong_count_down = this.dismiss_second
+        return -1
+      }
+      let time = this.get_start_end_time()
+      if (time === -1 ||
+        (step * 24 * 60 * 60) > (time[1] - time[0])) {
+        this.wrong = '您所输入的时间有误'
+        this.wrong_count_down = this.dismiss_second
+        return -1
+      }
+      let temp = []
+      temp[0] = time[0]
+      temp[1] = time[1]
+      temp[2] = step
+      return temp
+    },
+    search2: function () {
+      const that = this
+      let data = this.check_date()
+      if (data === -1) {
+        return null
+      } else {
+        axios.get('http://localhost:8000/api/v1/data/data-management/get-data-by-time/',
+          {
+            params: {
+              start_timestamp: data[0],
+              end_timestamp: data[1],
+              time_step: data[2]
+            }
+          })
+          .then(function (response) {
+            // console.log(response.data.content)
+          })
+          .catch(function (error) {
+            that.wrong = '获取信息失败！' + error
+            that.wrong_count_down = that.dismiss_second
+          })
+      }
+    },
+    change_button_state: function (val) {
+      for (let i = 0; i < this.buttons.length; i++) {
+        if (i === val) {
+          this.buttons[i].state = true
+        } else {
+          this.buttons[i].state = false
+        }
+      }
+      this.search1()
     }
   }
 }
@@ -425,7 +514,7 @@ export default {
     width: 150px;
     height: 31px;
     text-align: center;
-    vertical-align: top;
+    vertical-align: middle;
   }
 
   .step {
@@ -435,5 +524,14 @@ export default {
   .tab-content > div {
     margin-top: 20px;
     margin-bottom: 20px;
+  }
+
+  .search-button {
+    padding-top: 30px;
+  }
+
+  #search {
+    height: 30px;
+    font-size: 0.8em;
   }
 </style>
