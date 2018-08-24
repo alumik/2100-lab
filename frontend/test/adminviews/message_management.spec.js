@@ -7,7 +7,9 @@ import Pagination from '@/components/pagination'
 import BootstrapVue from 'bootstrap-vue'
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
+import Vuex from 'vuex'
 Vue.use(VueI18n)
+Vue.use(Vuex)
 
 const i18n = new VueI18n({})
 
