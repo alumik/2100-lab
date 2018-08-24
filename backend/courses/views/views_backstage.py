@@ -6,7 +6,7 @@ from django.http import JsonResponse
 
 from core.utils import get_backstage_page
 from core.constants import ERROR, INFO, ACTION_TYPE
-from courses.models import Course, Comment, Image
+from courses.models import Course, Comment, Image, Hero
 from admins.models import AdminLog
 
 
@@ -207,3 +207,36 @@ def delete_comment(request):
 
     comment.delete()
     return JsonResponse({'message': INFO['object_deleted']})
+
+
+@permission_required('courses.add_hero')
+def add_hero(request):
+    heroes = request.FILES.getlist('heroes', [])
+    captions = request.POST.getlist('captions', [])
+
+    for hero in heroes:
+        Hero.objects.create(
+            image=hero,
+            caption=captions[heroes.index(hero)]
+        )
+
+    return JsonResponse({'message': INFO['success']})
+
+
+@permission_required('courses.delete_hero')
+def delete_hero(request):
+    delete_list = request.POST.getlist('delete_list', [])
+
+    deleted = []
+    for hero_id in delete_list:
+        try:
+            Hero.objects.get(id=int(hero_id)).delete()
+            deleted.append(int(hero_id))
+        except Hero.DoesNotExist:
+            pass
+
+    return JsonResponse(
+        {
+            'deleted': deleted
+        }
+    )

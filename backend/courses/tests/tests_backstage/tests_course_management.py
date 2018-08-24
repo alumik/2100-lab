@@ -6,7 +6,7 @@ from django.contrib.auth.models import Group, Permission
 from django.test import TestCase
 from django.urls import reverse
 
-from courses.models import Course
+from courses.models import Course, Hero
 
 
 class CourseListTests(TestCase):
@@ -247,3 +247,27 @@ class CourseOperationsTests(TestCase):
         self.assertEqual(course.title, 'test_title1')
         self.assertTrue(course.can_comment)
         self.assertEqual(course.reward_percent, Decimal('0.50'))
+
+
+class HeroOperationsTests(TestCase):
+    def test_delete_hero(self):
+        get_user_model().objects.create_user(
+            phone_number='13312345678',
+            password='123456',
+            is_staff=True,
+            is_superuser=True
+        )
+        self.client.login(phone_number='13312345678', password='123456')
+        hero = Hero.objects.create(
+            image='fake/path/image1.png',
+            caption='c1'
+        )
+
+        response = self.client.post(
+            reverse('api:courses:backstage:delete-hero'),
+            {
+                'delete_list': [hero.id]
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Hero.objects.all().count(), 0)
