@@ -1,3 +1,7 @@
+from datetime import datetime
+import time
+import pytz
+
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.http import JsonResponse
@@ -33,3 +37,42 @@ def get_overall_data(request):
             'top_learned_courses': top_learned_courses
         }
     )
+
+
+@login_required
+def get_data_by_time(request):
+    if not request.user.is_superuser:
+        return JsonResponse({'message': ERROR['access_denied']}, status=403)
+
+    start_timestamp = request.GET.get('start_timestamp', round(time.time()))
+    end_timestamp = request.GET.get('end_timestamp', round(time.time()))
+    time_step = request.GET.get('time_step', 1)
+
+    start_time = datetime.fromtimestamp(int(start_timestamp), tz=pytz.utc)
+    end_time = datetime.fromtimestamp(int(end_timestamp), tz=pytz.utc)
+    data = []
+
+    right_time = end_time
+    while right_time - timezone.timedelta(days=int(time_step)) > start_time:
+        left_time = right_time - timezone.timedelta(days=int(time_step))
+
+        customers_count = utils.get_customers_count(left_time, right_time)
+        income = utils.get_income(left_time, right_time)
+        courses_count = utils.get_courses_count(left_time, right_time)
+        orders_count = utils.get_orders_count(left_time, right_time)
+
+        right_time = left_time
+
+        data.append(
+            {
+                'right_time': right_time,
+                'data': {
+                    'customers_count': customers_count,
+                    'income': income,
+                    'courses_count': courses_count,
+                    'orders_count': orders_count
+                }
+            }
+        )
+
+    return JsonResponse(data)
