@@ -6,8 +6,7 @@
     variant="primary"
     class="navbar">
     <button
-      class="navbar-toggler"
-      @click="$emit('hide')">
+      class="navbar-toggler">
       <span class="navbar-toggler-icon"/>
     </button>
     <b-navbar-brand
@@ -21,11 +20,12 @@
       id="nav_collapse"
       is-nav>
       <b-navbar-nav class="ml-auto">
-        <b-nav-item>管理员一</b-nav-item>
+        <b-nav-item>{{ $store.state.adminStatus ? '管理员' : '' }}
+        </b-nav-item>
         <b-nav-item
-          right
-          @click="logout">
-          注销
+          id="logout"
+          @click="log">
+          {{ $store.state.adminStatus ? '注销' : '登录' }}
         </b-nav-item>
       </b-navbar-nav>
     </b-collapse>
@@ -37,7 +37,7 @@ import axios from 'axios'
 export default {
   name: 'AdminNavbar',
   methods: {
-    logout () {
+    log () {
       axios
         .post('http://localhost:8000/api/v1/core/auth/logout/', {
           withCredentials: true

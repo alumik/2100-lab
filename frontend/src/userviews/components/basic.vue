@@ -1,5 +1,5 @@
 <template>
-  <div class="adjust-style">
+  <div>
     <UserNavbar/>
     <slot/>
   </div>

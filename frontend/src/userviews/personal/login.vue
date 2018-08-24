@@ -215,7 +215,7 @@ export default {
                 query: { course_id: this.course_id }
               })
             }
-            this.$router.push({ path: '/personal' })
+            this.$router.push({ path: '/' })
           }
         })
         .catch(error => {
