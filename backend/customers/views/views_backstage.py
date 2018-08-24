@@ -205,16 +205,20 @@ def toggle_vip(request):
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
     customer.is_vip = not customer.is_vip
-
-    AdminLog.objects.create(
-        admin_user=request.user,
-        action_type=ACTION_TYPE['set_vip'],
-        new_data=str(customer.is_vip),
-        object_id=customer_id
-    )
-
     customer.save()
 
+    if customer.is_vip:
+        AdminLog.objects.create(
+            admin_user=request.user,
+            action_type=ACTION_TYPE['set_vip_true'],
+            object_id=customer_id
+        )
+    else:
+        AdminLog.objects.create(
+            admin_user=request.user,
+            action_type=ACTION_TYPE['set_vip_false'],
+            object_id=customer_id
+        )
     return JsonResponse({'is_vip': customer.is_vip})
 
 
@@ -228,16 +232,20 @@ def toggle_banned(request):
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
     customer.is_banned = not customer.is_banned
-
-    AdminLog.objects.create(
-        admin_user=request.user,
-        action_type=ACTION_TYPE['ban_customer'],
-        new_data=str(customer.is_banned),
-        object_id=customer_id
-    )
-
     customer.save()
 
+    if customer.is_banned:
+        AdminLog.objects.create(
+            admin_user=request.user,
+            action_type=ACTION_TYPE['ban_customer_true'],
+            object_id=customer_id
+        )
+    else:
+        AdminLog.objects.create(
+            admin_user=request.user,
+            action_type=ACTION_TYPE['ban_customer_false'],
+            object_id=customer_id
+        )
     return JsonResponse({'is_banned': customer.is_banned})
 
 
