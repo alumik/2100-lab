@@ -297,13 +297,9 @@ export default{
   },
   created () {
     let that = this
-    if (typeof (that.$route.query.course_id) === 'undefined') {
-      that.$router.push({name: 'BurnedCourse'})
-    } else {
-      that.query_course_id = that.$route.query.course_id
-      if (typeof (that.$route.query.course_id) !== 'undefined') {
-        that.referer_id = that.$route.query.referer_id ? that.$route.query.referer_id : ''
-      }
+    that.query_course_id = that.$route.query.course_id
+    if (typeof (that.$route.query.referer_id) !== 'undefined') {
+      that.referer_id = that.$route.query.referer_id ? that.$route.query.referer_id : ''
     }
     axios.get('http://localhost:8000/api/v1/courses/forestage/course/get-course-detail/' +
       '?course_id=' + that.query_course_id)
@@ -318,8 +314,11 @@ export default{
           that.praise_border_color = '#007bff'
         }
       }).catch(function (error) {
-        that.created_test = true
-        that.created_error_msg = error
+        if (error.response.data.message === 'Object not found.') {
+          that.$router.push({name: 'PageNotFound'})
+          that.created_test = true
+          that.created_error_msg = that.$t('error.object_not_found')
+        }
       })
     that.user_status = that.$store.state.status
     that.share_qrcode_url = shareQrcodeHost + '?course_id=' +
@@ -335,6 +334,7 @@ export default{
       let substract = Math.floor((due - now) / 1000)
       if (substract === 0) {
         clearInterval(mygenerator)
+        this.$router.push({name: 'BurnedCourse'})
       }
       let days = Math.floor(substract / (3600 * 24))
       let hours = Math.floor((substract - days * (3600 * 24)) / 3600)
@@ -373,8 +373,10 @@ export default{
             that.praise_border_color = '#007bff'
           }
         }).catch(function (error) {
-          that.add_praise_test = true
-          that.add_praise_error_msg = error
+          if (error.response.data.message === 'Object not found.') {
+            that.add_praise_test = true
+            that.add_praise_error_msg = that.$t('error.object_not_found')
+          }
         })
     },
     hide_share_popup () {
@@ -409,10 +411,15 @@ export default{
           })).then(function (response) {
           if (response.data.message === 'Success.') {
             that.course.can_access = true
-          } else alert('请先完成支付')
+          }
         }).catch(function (error) {
-          that.finishPay_test = true
-          that.finishPay_error_msg = error
+          if (error.response.data.message === 'Object not found.') {
+            that.finishPay_test = true
+            that.finishPay_error_msg = that.$t('error.object_not_found')
+          } else if (error.response.data.message === 'This course has already been purchased.') {
+            that.finishPay_test = true
+            that.finishPay_error_msg = that.$t('error.course_already_purchased')
+          }
         })
       }
     },

@@ -49,7 +49,7 @@ def get_course_detail(request):
     try:
         course = Course.objects.get(id=course_id)
     except Course.DoesNotExist:
-        return JsonResponse({'message', ERROR['object_not_found']}, status=404)
+        return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
     course_detail = {
         'course_id': course.id,

@@ -41,18 +41,7 @@ export default {
     }
   },
   created () {
-    let that = this
-    axios.get('http://localhost:8000/api/v1/courses/forestage/course/get-course-list/', { params: {
-      course_type: that.course_type,
-      page_limit: that.page_limit,
-      page: that.page
-    }}).then(function (response) {
-      that.course_list = response.data.content
-      that.rows = response.data.count
-    }).catch(function (error) {
-      that.created_test = true
-      that.created_error_msg = error
-    })
+    this.getcourselist()
   },
   methods: {
     change_page: function (page) {
@@ -71,7 +60,7 @@ export default {
         that.rows = response.data.count
       }).catch(function (error) {
         that.created_test = true
-        that.created_error_msg = error
+        that.created_error_msg = error.response.data.message
       })
     }
   }

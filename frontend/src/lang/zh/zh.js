@@ -26,5 +26,14 @@ module.exports = {
     admin: '管理员管理',
     data: '数据分析',
     log: '日志查询'
+  },
+  error: {
+    object_not_found: '抱歉，您访问的信息不存在',
+    course_already_purchased: '课程已购买',
+    access_denied: '抱歉，您的访问被拒绝',
+    comment_not_allowed: '抱歉，您没有评论的权限'
+  },
+  prompt: {
+    object_deleted: '删除成功'
   }
 }

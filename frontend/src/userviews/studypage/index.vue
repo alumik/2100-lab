@@ -172,18 +172,22 @@ export default {
   },
   created: function () {
     let that = this
-    if (typeof (that.$route.query.course_id) === 'undefined') {
-      that.$router.push({name: 'BurnedCourse'})
-    } else {
-      that.query_course_id = that.$route.query.course_id
-    }
+    that.query_course_id = that.$route.query.course_id
     axios.get('http://localhost:8000/api/v1/courses/forestage/play/get-course-assets?' +
       'course_id=' + that.query_course_id)
       .then(function (response) {
-        that.course = response.data
+        if (response.data.message === 'Success.') {
+          that.course = response.data
+        }
       }).catch(function (error) {
-        that.assets_test = true
-        that.assets_error_msg = error
+        if (error.response.data.message === 'Object not found.') {
+          that.$router.push({name: 'PageNotFound'})
+          that.assets_test = true
+          that.assets_error_msg = that.$t('error.object_not_found')
+        } else if (error.response.data.message === 'Access denied.') {
+          that.assets_test = true
+          that.assets_error_msg = that.$t('error.access_denied')
+        }
       })
     axios.get('http://localhost:8000/api/v1/courses/forestage/course/get-course-detail?' +
       'course_id=' + that.query_course_id)
@@ -196,8 +200,10 @@ export default {
           that.praise_course_color = '#ccc'
         }
       }).catch(function (error) {
-        that.detail_test = true
-        that.detail_error_msg = error
+        if (error.response.data.message === 'Object not found.') {
+          that.detail_test = true
+          that.detail_error_msg = that.$t('error.object_not_found')
+        }
       })
   },
   beforeDestroy () {
@@ -208,13 +214,15 @@ export default {
     }}).then(function (response) {
       if (response.data.message === 'Success.') {
         alert('学习记录保存成功 ')
-      } else {
-        alert(response.data.message)
       }
     }).catch(function (error) {
-      alert(error)
-      that.beforedestroy_test = true
-      that.beforedestroy_error_msg = error
+      if (error.response.data.message === 'Object not found.') {
+        that.beforedestroy_test = true
+        that.beforedestroy_error_msg = that.$t('error.object_not_found')
+      } else if (error.response.data.message === 'Access denied.') {
+        that.beforedestroy_message_test = true
+        that.beforedestroy_message_error_msg = that.$t('error.access_denied')
+      }
     })
   },
   methods: {
@@ -231,8 +239,10 @@ export default {
             that.praise_course_color = '#ccc'
           }
         }).catch(function (error) {
-          that.up_vote_test = true
-          that.up_vote_error_msg = error
+          if (error.response.data.message === 'Object not found.') {
+            that.up_vote_test = true
+            that.up_vote_error_msg = that.$t('error.object_not_found')
+          }
         })
     },
     changeFoldState () {
