@@ -42,7 +42,7 @@ class LogListTests(TestCase):
             {
                 'start_timestamp': 1534910804,
                 'end_timestamp': 1634910804,
-                'filters': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+                'filters': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
                 'page': 1,
                 'page_limit': 1
             }
