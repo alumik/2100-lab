@@ -115,7 +115,7 @@ def change_admin_username(request):
         admin.save()
         AdminLog.objects.create(
             admin_user=request.user,
-            action_type=ACTION_TYPE['update_admin'],
+            action_type=ACTION_TYPE['update_admin_username'],
             old_data=old_username,
             new_data=new_username,
             object_id=admin_id
@@ -140,7 +140,7 @@ def change_admin_password(request):
     admin.save()
     AdminLog.objects.create(
         admin_user=request.user,
-        action_type=ACTION_TYPE['update_admin'],
+        action_type=ACTION_TYPE['update_admin_password'],
         object_id=admin_id
     )
     return JsonResponse({'message': INFO['success']})
