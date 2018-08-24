@@ -9,6 +9,14 @@
         @dismissed="created_test = false">
         {{ created_error_msg }}
       </b-alert>
+      <b-alert
+        :show="carousel_test"
+        variant="danger"
+        dismissible
+        fade
+        @dismissed="carousel_test=false">
+        {{ carousel_error_msg }}
+      </b-alert>
     </div>
     <div class="homepage-container">
       <div class="carousel-container">
@@ -73,10 +81,14 @@ export default {
     return {
       test: false,
       err_msg: '',
+      carousellist: [],
+      carouselnum: 0,
       freecourselist: [],
       paidcourselist: [],
       created_test: false,
-      created_error_msg: ''
+      created_error_msg: '',
+      carousel_test: false,
+      carousel_error_msg: ''
     }
   },
   created: function () {
@@ -88,6 +100,15 @@ export default {
       }).catch(function (error) {
         that.created_test = true
         that.created_error_msg = error
+      })
+    axios.get('http://localhost:8000/api/v1/courses/forestage/main/get-heroes/')
+      .then(function (response) {
+        console.log(response)
+        that.carousellist = response.content
+        that.carouselnum = response.count
+      }).catch(function (error) {
+        that.carousel_test = true
+        that.carousel_error_msg = error
       })
   }
 }
