@@ -99,9 +99,14 @@ new Vue({
       this.$store.commit('time', sessionStorage.getItem('time'))
       this.$store.commit('avatar', sessionStorage.getItem('avatar'))
     }
-    if (sessionStorage.getItem('adminStatus') === 'true') {
-      this.$store.commit('adminStatus')
-    }
+    axios
+      .post('http://localhost:8000/api/v1/core/auth/is-authenticated/', {
+        withCredentials: true
+      }).then(res => {
+        if (res.data.is_authenticated) {
+          this.$store.commit('adminStatus')
+        }
+      })
   },
   template: '<App/>'
 }).$mount('#app')

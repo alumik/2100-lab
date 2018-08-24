@@ -38,10 +38,12 @@ describe('登录页面单元测试', () => {
       $store
     }
   })
+  wrapper.find('#send')
+  // const phoneInput = wrapper.find('[v-mo
   // const send = wrapper.find('#send')
-  const phoneInput = wrapper.find('[v-model="phone"]')
+  // const phoneInput = wrapper.find('[v-model="phone"]')
   it('鼠标点击手机号输入框', () => {
-    expect(phoneInput.exists()).toBe(true)
+    // expect(phoneInput.exists()).toBe(true)
     // button.trigger('click')
     // expect(wrapper.vm.code_disabled).toBe(false)
   })

@@ -242,6 +242,7 @@ export default {
 
 #logoimg {
   width: 300px;
+  min-height: 100px;
   margin: 20px auto;
 }
 

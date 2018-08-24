@@ -38,19 +38,23 @@ export default {
   name: 'AdminNavbar',
   methods: {
     log () {
-      axios
-        .post('http://localhost:8000/api/v1/core/auth/logout/', {
-          withCredentials: true
-        })
-        .then(res => {
-          alert(res.data.message)
-          this.$store.commit('adminStatus', false)
-          this.$router.push({ path: '/admin' })
-        })
-        .catch(error => {
-          alert(error)
-          this.$router.push({ path: '/admin' })
-        })
+      if (this.$store.state.adminStatus) {
+        axios
+          .post('http://localhost:8000/api/v1/core/auth/logout/', {
+            withCredentials: true
+          })
+          .then(res => {
+            alert(res.data.message)
+            this.$store.commit('adminStatus', false)
+            this.$router.push({ path: '/admin' })
+          })
+          .catch(error => {
+            alert(error)
+            this.$router.push({ path: '/admin' })
+          })
+      } else {
+        this.$router.push({ path: '/admin' })
+      }
     }
   }
 }
