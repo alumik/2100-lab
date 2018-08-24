@@ -26,7 +26,7 @@
               v-for="log in logs"
               :key="log.id">
               <td class="sm-td">{{ compute_date(log.created_at) }}</td>
-              <td class="md-td">{{ log.admin_username }}</td>
+              <td class="md-td">{{ compute_admin_name(log.admin_username) }}</td>
               <td class="lg-td">{{ log.message }}</td>
             </tr>
           </tbody>
@@ -133,6 +133,14 @@ export default {
     compute_date: function (date) {
       let temp = new Date(date)
       return temp.toLocaleString()
+    },
+    compute_admin_name: function (name) {
+      let index = name.search('_deleted_')
+      if (index !== -1) {
+        return name.slice(0, index) + '\n' + '（已删除）'
+      } else {
+        return name
+      }
     }
   }
 }
