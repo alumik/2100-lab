@@ -93,12 +93,14 @@ new Vue({
   mounted () {
     if (sessionStorage.getItem('status') === 'true') {
       this.$store.commit('status')
-      this.$store.commit('adminStatus')
       this.$store.commit('user', JSON.parse(sessionStorage.getItem('user')))
       this.$store.commit('phone', sessionStorage.getItem('phone'))
       this.$store.commit('money', sessionStorage.getItem('money'))
       this.$store.commit('time', sessionStorage.getItem('time'))
       this.$store.commit('avatar', sessionStorage.getItem('avatar'))
+    }
+    if (sessionStorage.getItem('adminStatus') === 'true') {
+      this.$store.commit('adminStatus')
     }
   },
   template: '<App/>'

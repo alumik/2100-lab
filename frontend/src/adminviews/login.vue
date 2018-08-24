@@ -74,7 +74,7 @@ export default {
       error_message: ''
     }
   },
-  mounted () {
+  beforeMount () {
     if (this.$store.state.adminStatus) {
       this.$router.push({ path: '/admin/main' })
     }
@@ -96,22 +96,21 @@ export default {
             })
           )
           .then(response => {
-            if (this.phone_number === response.data.username) {
-              this.$store.commit('adminStatus')
-              this.$router.push({ path: '/admin/main' })
-              evt.preventDefault()
-            } else {
-              this.error_message = '数据库错误'
-            }
+            this.$store.commit('adminStatus')
+            this.$router.push({ path: '/admin/main' })
+            // evt.preventDefault()
+            // this.error_message = '数据库错误'
           })
           .catch(error => {
             let errorMessage = error.response.data.message
             if (errorMessage === 'User is already authenticated.') {
               this.error_message = '用户已登录'
-            } else if (errorMessage === 'Wrong phone number or password.') {
+            } else if (errorMessage === 'Invalid phone number or password.') {
               this.error_message = '用户输入密码错误，请重新输入'
-            } else if (errorMessage === 'Permission denied.') {
+            } else if (errorMessage === 'Access denied.') {
               this.error_message = '该用户不是管理员'
+            } else {
+              this.error_message = '数据库错误'
             }
           })
       }

@@ -24,7 +24,7 @@
         <b-nav-item>管理员一</b-nav-item>
         <b-nav-item
           right
-          @click="log">
+          @click="logout">
           注销
         </b-nav-item>
       </b-navbar-nav>
@@ -37,7 +37,7 @@ import axios from 'axios'
 export default {
   name: 'AdminNavbar',
   methods: {
-    log () {
+    logout () {
       axios
         .post('http://localhost:8000/api/v1/core/auth/logout/', {
           withCredentials: true
@@ -48,7 +48,8 @@ export default {
           this.$router.push({ path: '/admin' })
         })
         .catch(error => {
-          alert(error.message)
+          alert(error)
+          this.$router.push({ path: '/admin' })
         })
     }
   }
