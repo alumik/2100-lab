@@ -8,7 +8,7 @@
         <b-tab
           title="总体概况"
           active>
-          <div class="tab1-content">
+          <div class="tab-content">
             <b-button-group
               class="title">
               <b-button
@@ -58,15 +58,15 @@
                   src="../../assets/logo.png">
               </div>
             </div>
-            <div class="table">
-              <div id="table1">
+            <div class="charts">
+              <div id="charts-praise_top">
                 <h5>课程点赞数TOP5</h5>
                 <ve-histogram
                   :data="praise_top"
                   :colors="colors1"/>
               </div>
-              <div id="table2">
-                <h5>学习点赞数TOP5</h5>
+              <div id="charts_learners_top">
+                <h5>学习人数TOP5</h5>
                 <ve-histogram
                   :data="study_top"
                   :colors="colors2"/>
@@ -75,7 +75,66 @@
           </div>
         </b-tab>
         <b-tab title="时间对比" >
-          <br>I'm the second tab content
+          <div class="tab-content">
+            <div class="search">
+              <div class="col-md-2">
+                <div>开始时间</div>
+                <date-picker
+                  v-model="begin_date"
+                  :config="options"
+                  class="date-picker"/>
+              </div>
+              <div class="col-md-2">
+                <div>结束时间</div>
+                <date-picker
+                  v-model="end_date"
+                  :config="options"
+                  class="date-picker"/>
+              </div>
+              <div class="col-md-2">
+                <div>步长</div>
+                <div class="step">
+                  <b-input-group
+                    size="sm"
+                    append="月">
+                    <b-form-input/>
+                  </b-input-group>
+                  <b-input-group
+                    size="sm"
+                    append="日">
+                    <b-form-input/>
+                  </b-input-group>
+                </div>
+              </div>
+            </div>
+            <div class="charts">
+              <div class="users">
+                <h5>新增用户数</h5>
+                <ve-line
+                  :data="charts_users"
+                  :colors="colors1"/>
+              </div>
+              <div class="money">
+                <h5>销售额</h5>
+                <ve-line
+                  :data="charts_users"
+                  :settings="money_settings"
+                  :colors="colors2"/>
+              </div>
+              <div class="courses">
+                <h5>新增课程数</h5>
+                <ve-histogram
+                  :data="charts_courses"
+                  :colors="colors1"/>
+              </div>
+              <div class="courses">
+                <h5>新增学习人数</h5>
+                <ve-histogram
+                  :data="charts_learners"
+                  :colors="colors2"/>
+              </div>
+            </div>
+          </div>
         </b-tab>
       </b-tabs>
     </div>
@@ -91,11 +150,6 @@ export default {
   name: 'Data',
   components: {Basic, BreadCrumb, Menu, AdminNavbar},
   data () {
-    this.type = ['line', 'histogram']
-    this.index = 1
-    this.settings2 = {
-      showLine: ['课程1购买量']
-    }
     return {
       items: [{
         text: '主页',
@@ -136,37 +190,56 @@ export default {
           { '课程名': '化学', '学习人数': 800 }
         ]
       },
-      data1: {
-        columns: ['日期', '购买量'],
+      begin_date: new Date(),
+      end_date: new Date(),
+      options: {
+        format: 'YYYY/MM/DD',
+        useCurrent: true
+      },
+      charts_users: {
+        columns: ['日期', '新增用户数'],
         rows: [
-          {'日期': '1月1日', '购买量': 123},
-          {'日期': '1月2日', '购买量': 1223},
-          {'日期': '1月3日', '购买量': 2123},
-          {'日期': '1月4日', '购买量': 4123},
-          {'日期': '1月5日', '购买量': 3123},
-          {'日期': '1月6日', '购买量': 7123}
+          { '日期': '2018-08-01', '新增用户数': 1500 },
+          { '日期': '2018-08-02', '新增用户数': 1300 },
+          { '日期': '2018-08-03', '新增用户数': 1200 },
+          { '日期': '2018-08-04', '新增用户数': 1000 },
+          { '日期': '2018-08-05', '新增用户数': 800 }
         ]
       },
-      settings1: {type: this.type[this.index]},
-      data2: {
-        columns: ['日期', '课程1购买量', '课程2购买量'],
+      charts_money: {
+        columns: ['日期', '销售额'],
         rows: [
-          {'日期': '8月13日', '课程1购买量': 1350, '课程2购买量': 1455},
-          {'日期': '8月14日', '课程1购买量': 1200, '课程2购买量': 1105},
-          {'日期': '8月15日', '课程1购买量': 1000, '课程2购买量': 900}
+          { '日期': '2018-08-01', '销售额': 1500 },
+          { '日期': '2018-08-02', '销售额': 1300 },
+          { '日期': '2018-08-03', '销售额': 1200 },
+          { '日期': '2018-08-04', '销售额': 1000 },
+          { '日期': '2018-08-05', '销售额': 800 }
+        ]
+      },
+      money_settings: { area: true },
+      charts_courses: {
+        columns: ['日期', '新增课程数'],
+        rows: [
+          { '日期': '2018-08-01', '新增课程数': 1500 },
+          { '日期': '2018-08-02', '新增课程数': 1300 },
+          { '日期': '2018-08-03', '新增课程数': 1200 },
+          { '日期': '2018-08-04', '新增课程数': 1000 },
+          { '日期': '2018-08-05', '新增课程数': 800 }
+        ]
+      },
+      charts_learners: {
+        columns: ['日期', '新增学习人数'],
+        rows: [
+          { '日期': '2018-08-01', '新增学习人数': 1500 },
+          { '日期': '2018-08-02', '新增学习人数': 1300 },
+          { '日期': '2018-08-03', '新增学习人数': 1200 },
+          { '日期': '2018-08-04', '新增学习人数': 1000 },
+          { '日期': '2018-08-05', '新增学习人数': 800 }
         ]
       }
     }
   },
   methods: {
-    change_type: function () {
-      if (this.index === 0) {
-        this.index = 1
-      } else {
-        this.index = 0
-      }
-      this.settings1 = {type: this.type[this.index]}
-    },
     change_button_state: function (val) {
       for (let i = 0; i < this.buttons.length; i++) {
         if (i === val) {
@@ -185,7 +258,7 @@ export default {
     min-width: 800px;
   }
 
-  .tab1-content {
+  .tab-content {
     padding: 20px;
     text-align: left;
   }
@@ -205,13 +278,14 @@ export default {
     border: 1px solid #ced4da;
   }
 
-  .table {
+  .charts {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
-    margin-top: 70px;
+    margin-top: 100px;
   }
 
-  .table > div {
+  .charts > div {
     flex-basis: 50%;
     justify-content: space-around;
     text-align: center;
@@ -242,5 +316,31 @@ export default {
     margin-top: 25px;
     margin-bottom: 25px;
     text-align: left;
+  }
+
+  .search {
+    display: flex;
+    justify-content: flex-start;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top: 1px solid #ced4da;
+    border-bottom: 1px solid #ced4da;
+  }
+
+  .col-md-2 > div,
+  .col-md-2 > .date-picker {
+    width: 150px;
+    height: 31px;
+    text-align: center;
+    vertical-align: top;
+  }
+
+  .step {
+    display: flex;
+  }
+
+  .tab-content > div {
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 </style>
