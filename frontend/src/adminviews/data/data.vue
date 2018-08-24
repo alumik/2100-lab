@@ -137,7 +137,7 @@
               <div class="money">
                 <h5>销售额</h5>
                 <ve-line
-                  :data="charts_users"
+                  :data="charts_money"
                   :settings="money_settings"
                   :colors="colors2"/>
               </div>
@@ -148,9 +148,9 @@
                   :colors="colors1"/>
               </div>
               <div class="courses">
-                <h5>新增学习人数</h5>
+                <h5>新增订单数</h5>
                 <ve-histogram
-                  :data="charts_learners"
+                  :data="charts_orders"
                   :colors="colors2"/>
               </div>
             </div>
@@ -222,44 +222,20 @@ export default {
       day: '',
       charts_users: {
         columns: ['日期', '新增用户数'],
-        rows: [
-          { '日期': '2018-08-01', '新增用户数': 1500 },
-          { '日期': '2018-08-02', '新增用户数': 1300 },
-          { '日期': '2018-08-03', '新增用户数': 1200 },
-          { '日期': '2018-08-04', '新增用户数': 1000 },
-          { '日期': '2018-08-05', '新增用户数': 800 }
-        ]
+        rows: []
       },
       charts_money: {
-        columns: ['日期', '销售额'],
-        rows: [
-          { '日期': '2018-08-01', '销售额': 1500 },
-          { '日期': '2018-08-02', '销售额': 1300 },
-          { '日期': '2018-08-03', '销售额': 1200 },
-          { '日期': '2018-08-04', '销售额': 1000 },
-          { '日期': '2018-08-05', '销售额': 800 }
-        ]
+        columns: ['日期', '新增销售额'],
+        rows: []
       },
       money_settings: { area: true },
       charts_courses: {
         columns: ['日期', '新增课程数'],
-        rows: [
-          { '日期': '2018-08-01', '新增课程数': 1500 },
-          { '日期': '2018-08-02', '新增课程数': 1300 },
-          { '日期': '2018-08-03', '新增课程数': 1200 },
-          { '日期': '2018-08-04', '新增课程数': 1000 },
-          { '日期': '2018-08-05', '新增课程数': 800 }
-        ]
+        rows: []
       },
-      charts_learners: {
-        columns: ['日期', '新增学习人数'],
-        rows: [
-          { '日期': '2018-08-01', '新增学习人数': 1500 },
-          { '日期': '2018-08-02', '新增学习人数': 1300 },
-          { '日期': '2018-08-03', '新增学习人数': 1200 },
-          { '日期': '2018-08-04', '新增学习人数': 1000 },
-          { '日期': '2018-08-05', '新增学习人数': 800 }
-        ]
+      charts_orders: {
+        columns: ['日期', '新增订单数'],
+        rows: []
       },
       dismiss_second: 5,
       wrong_count_down: 0,
@@ -394,6 +370,34 @@ export default {
       temp[2] = step
       return temp
     },
+    get_data: function (val) {
+      for (let i = val.length - 1; i >= 0; i--) {
+        this.charts_users.rows.push(
+          {
+            日期: val[i].right_time.slice(0, 10),
+            新增用户数: val[i].data.customers_count
+          }
+        )
+        this.charts_money.rows.push(
+          {
+            日期: val[i].right_time.slice(0, 10),
+            新增销售额: val[i].data.income
+          }
+        )
+        this.charts_courses.rows.push(
+          {
+            日期: val[i].right_time.slice(0, 10),
+            新增课程数: val[i].data.courses_count
+          }
+        )
+        this.charts_orders.rows.push(
+          {
+            日期: val[i].right_time.slice(0, 10),
+            新增订单数: val[i].data.orders_count
+          }
+        )
+      }
+    },
     search2: function () {
       const that = this
       let data = this.check_date()
@@ -409,7 +413,7 @@ export default {
             }
           })
           .then(function (response) {
-            // console.log(response.data.content)
+            that.get_data(response.data.content)
           })
           .catch(function (error) {
             that.wrong = '获取信息失败！' + error
