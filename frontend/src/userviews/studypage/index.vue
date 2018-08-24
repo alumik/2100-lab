@@ -49,7 +49,7 @@
             preload
             class="audio-player">
             <source
-              src="./media/background.mp3"
+              src=""
               type="audio/mpeg">
           </audio>
         </div>
