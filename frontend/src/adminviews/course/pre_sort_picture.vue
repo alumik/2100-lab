@@ -138,25 +138,25 @@ export default {
 </script>
 
 <style scoped>
-  .head-btn {
-    display: inline-block;
-    float: right;
-  }
+.head-btn {
+  display: inline-block;
+  float: right;
+}
 
-  .choose-list {
-    display: flex;
-    flex-direction: row;
-    min-height: 200px;
-    max-height: 200px;
-    padding: 0;
-    margin: 0
-  }
+.choose-list {
+  display: flex;
+  flex-direction: row;
+  min-height: 200px;
+  max-height: 200px;
+  padding: 0;
+  margin: 0;
+}
 
-  .choose-row {
-    width: 200px;
-    max-width: 200px;
-    height: 200px;
-    max-height: 200px;
-    padding: 5px;
-  }
+.choose-row {
+  width: 200px;
+  max-width: 200px;
+  height: 200px;
+  max-height: 200px;
+  padding: 5px;
+}
 </style>

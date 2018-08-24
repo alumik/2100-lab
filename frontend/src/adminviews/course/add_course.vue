@@ -183,91 +183,91 @@ export default {
       }
     },
     receive_sync_data (imageDataList) {
-      
+      this.image_file_list = imageDataList
     }
   }
 }
 </script>
 
 <style scoped>
-  .my-content {
-    margin: 40px;
-    text-align: left;
-  }
+.my-content {
+  margin: 40px;
+  text-align: left;
+}
 
-  .my-label {
-    display: inline-block;
-    width: 150px;
-    text-align: left;
-  }
+.my-label {
+  display: inline-block;
+  width: 150px;
+  text-align: left;
+}
 
-  .flare_time {
-    display: flex;
-  }
+.flare_time {
+  display: flex;
+}
 
-  #flare_time_day {
-    width: 80px;
-    min-width: 80px;
-    max-width: 80px;
-  }
+#flare_time_day {
+  width: 80px;
+  min-width: 80px;
+  max-width: 80px;
+}
 
-  #flare_time_hour {
-    width: 70px;
-    min-width: 70px;
-    max-width: 70px;
-  }
+#flare_time_hour {
+  width: 70px;
+  min-width: 70px;
+  max-width: 70px;
+}
 
-  .input {
-    width: 260px;
-    min-width: 260px;
-    max-width: 260px;
-  }
+.input {
+  width: 260px;
+  min-width: 260px;
+  max-width: 260px;
+}
 
-  #can_review {
-    display: flex;
-  }
+#can_review {
+  display: flex;
+}
 
-  #input-group-flare {
-    display: flex;
-  }
+#input-group-flare {
+  display: flex;
+}
 
-  .my-btn,
-  #intro {
-    max-width: 405px;
-  }
+.my-btn,
+#intro {
+  max-width: 405px;
+}
 
-  #No {
-    margin-left: 100px;
-  }
+#No {
+  margin-left: 100px;
+}
 
-  #intro-label {
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
+#intro-label {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
 
-  #percent {
-    width: 210px;
-    min-width: 210px;
-    max-width: 210px;
-  }
+#percent {
+  width: 210px;
+  min-width: 210px;
+  max-width: 210px;
+}
 
-  #price {
-    width: 210px;
-    min-width: 210px;
-    max-width: 210px;
-  }
+#price {
+  width: 210px;
+  min-width: 210px;
+  max-width: 210px;
+}
 
-  .btn {
-    color: white;
-    background-color: #8d4e91;
-    border-color: #8d6592;
-    border-radius: 10px;
-    outline: none;
-    box-shadow: #8d6592 inset;
-  }
+.btn {
+  color: white;
+  background-color: #8d4e91;
+  border-color: #8d6592;
+  border-radius: 10px;
+  outline: none;
+  box-shadow: #8d6592 inset;
+}
 
-  .btn:hover,
-  .btn:active {
-    background-color: #5e0057;
-  }
+.btn:hover,
+.btn:active {
+  background-color: #5e0057;
+}
 </style>

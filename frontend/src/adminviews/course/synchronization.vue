@@ -154,7 +154,6 @@ export default {
       this.$refs.sync_picture.hide()
     },
     upload_time_data () {
-      console.log(this.image_data_list)
       this.$emit('sync_picture_audio', this.image_data_list)
     }
   }
