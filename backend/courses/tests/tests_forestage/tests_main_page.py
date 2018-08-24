@@ -16,6 +16,7 @@ class MainPageTests(TestCase):
 
         response = self.client.get(reverse('api:courses:forestage:get-heroes'))
         self.assertEqual(response.status_code, 200)
+        response_json_data = json.loads(response.content)
         self.assertJSONEqual(
             str(response.content, encoding='utf8'),
             {
@@ -23,14 +24,17 @@ class MainPageTests(TestCase):
                 'content': [
                     {
                         'image': 'fake/path/image1.png',
+                        'hero_id': response_json_data['content'][0]['hero_id'],
                         'caption': 'c1'
                     },
                     {
                         'image': 'fake/path/image2.png',
+                        'hero_id': response_json_data['content'][1]['hero_id'],
                         'caption': 'c2'
                     },
                     {
                         'image': 'fake/path/image3.png',
+                        'hero_id': response_json_data['content'][2]['hero_id'],
                         'caption': 'c3'
                     }
                 ]

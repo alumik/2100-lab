@@ -116,6 +116,7 @@ class Hero(models.Model):
 
     def as_dict(self):
         return {
+            'hero_id': self.id,
             'image': str(self.image),
             'caption': self.caption
         }
