@@ -265,8 +265,10 @@ export default {
 
   .statistics {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     margin-top: 20px;
+    margin-bottom: 20px;
   }
 
   .statistics > div {
@@ -275,6 +277,8 @@ export default {
     width: 300px;
     height: 100px;
     padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     border: 1px solid #ced4da;
   }
 
