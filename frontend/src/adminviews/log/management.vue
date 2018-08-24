@@ -51,34 +51,40 @@
             全选
           </b-form-checkbox>
         </b-form-group>
-        <b-form-group class="inner">
-          <b-form-checkbox-group
-            id="row1"
-            v-model="select1"
-            :options="options1"
-            name="row1"/>
-        </b-form-group>
-        <b-form-group class="inner">
-          <b-form-checkbox-group
-            id="row2"
-            v-model="select2"
-            :options="options2"
-            name="row2"/>
-        </b-form-group>
-        <b-form-group class="inner">
-          <b-form-checkbox-group
-            id="row3"
-            v-model="select3"
-            :options="options3"
-            name="row3"/>
-        </b-form-group>
-        <b-form-group class="inner">
-          <b-form-checkbox-group
-            id="row4"
-            v-model="select4"
-            :options="options4"
-            name="row4"/>
-        </b-form-group>
+        <div class="checkbox">
+          <b-form-group class="inner">
+            <b-form-checkbox-group
+              id="row1"
+              v-model="select1"
+              :options="options1"
+              name="row1"
+              stacked/>
+          </b-form-group>
+          <b-form-group class="inner">
+            <b-form-checkbox-group
+              id="row2"
+              v-model="select2"
+              :options="options2"
+              name="row2"
+              stacked/>
+          </b-form-group>
+          <b-form-group class="inner">
+            <b-form-checkbox-group
+              id="row3"
+              v-model="select3"
+              :options="options3"
+              name="row3"
+              stacked/>
+          </b-form-group>
+          <b-form-group class="inner">
+            <b-form-checkbox-group
+              id="row4"
+              v-model="select4"
+              :options="options4"
+              name="row4"
+              stacked/>
+          </b-form-group>
+        </div>
       </form>
       <div class="button-group">
         <button
@@ -114,31 +120,33 @@ export default {
       admin_id: '',
       select1: [],
       options1: [
-        { text: '增加管理员', value: 1 },
-        { text: '修改权限组', value: 2 },
-        { text: '修改权限&#12288', value: 3 },
-        { text: '删除管理员', value: 4 }
+        { text: '增加管理员&#12288', value: 1 },
+        { text: '修改管理员权限', value: 2 },
+        { text: '修改管理员名称', value: 3 },
+        { text: '修改管理员密码', value: 4 }
       ],
       select2: [],
       options2: [
-        { text: '订单退款&#12288', value: 5 },
-        { text: '删除用户&#12288', value: 6 },
-        { text: '禁言用户&#12288', value: 7 },
-        { text: '认证用户&#12288', value: 8 }
+        { text: '删除管理员', value: 5 },
+        { text: '订单退款&#12288', value: 6 },
+        { text: '删除用户&#12288', value: 7 },
+        { text: '禁言用户&#12288', value: 8 }
       ],
       select3: [],
       options3: [
-        { text: '删除留言&#12288', value: 9 },
-        { text: '回复留言&#12288', value: 10 },
-        { text: '增加课程&#12288', value: 11 },
-        { text: '修改课程&#12288', value: 12 }
+        { text: '解除禁言', value: 9 },
+        { text: '认证用户&#12288', value: 10 },
+        { text: '取消认证&#12288', value: 11 },
+        { text: '删除留言&#12288', value: 12 }
       ],
       select4: [],
       options4: [
-        { text: '删除课程&#12288', value: 13 }
+        { text: '回复留言&#12288', value: 13 },
+        { text: '增加课程&#12288', value: 14 },
+        { text: '修改课程&#12288', value: 15 },
+        { text: '删除课程&#12288', value: 16 }
       ],
       page_jump: false
-      // indeterminate: false
     }
   },
   computed: {
@@ -146,7 +154,7 @@ export default {
       if (this.select1.length === 4 &&
         this.select2.length === 4 &&
         this.select3.length === 4 &&
-        this.select4.length === 1) {
+        this.select4.length === 4) {
         return false
       } else if (this.select1.length === 0 &&
         this.select2.length === 0 &&
@@ -176,8 +184,8 @@ export default {
           this.select1.push(this.options1[i].value)
           this.select2.push(this.options2[i].value)
           this.select3.push(this.options3[i].value)
+          this.select4.push(this.options4[i].value)
         }
-        this.select4.push(this.options4[0].value)
       } else {
         this.select1 = []
         this.select2 = []
@@ -235,6 +243,10 @@ export default {
   .outer {
     font-size: 1.2em;
     font-weight: normal;
+  }
+
+  .checkbox {
+    display: flex;
   }
 
   .inner {
