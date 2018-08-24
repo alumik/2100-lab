@@ -4,12 +4,34 @@ import { mount } from '@vue/test-utils'
 import AdminLogin from '@/adminviews/login.vue'
 import BootstrapVue from 'bootstrap-vue'
 import Vue from 'vue'
+import Vuex from 'vuex/types/index'
+
+const $store = new Vuex.Store({
+  state: {
+    status: false,
+    user: {
+      is_new_customer: null,
+      customer_id: '',
+      username: '',
+      avatar: 'default/customers/avatars/2100_lab.jpg'
+    },
+    adminStatus: false,
+    phone: '',
+    money: '',
+    time: '',
+    address: 'http://localhost:8000/media/'
+  }
+})
 
 Vue.use(BootstrapVue)
 
 describe('登录页面单元测试', () => {
   it('标题是后台登录入口', () => {
-    const wrapper = mount(AdminLogin)
+    const wrapper = mount(AdminLogin, {
+      mocks: {
+        $store
+      }
+    })
     expect(wrapper.find('.my-head-second').text()).toEqual('后台登录入口')
   })
 
