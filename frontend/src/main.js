@@ -32,6 +32,7 @@ const store = new Vuex.Store({
       username: '',
       avatar: 'default/customers/avatars/2100_lab.jpg'
     },
+    adminStatus: false,
     phone: '',
     money: '',
     time: '',
@@ -40,7 +41,11 @@ const store = new Vuex.Store({
   mutations: {
     status (state, status = true) {
       state.status = status
-      sessionStorage.setItem('status', 'true')
+      sessionStorage.setItem('status', status ? 'true' : 'false')
+    },
+    adminStatus (state, adminStatus = true) {
+      state.adminStatus = adminStatus
+      sessionStorage.setItem('adminStatus', adminStatus ? 'true' : 'false')
     },
     user (state, data) {
       state.user = data
@@ -94,6 +99,14 @@ new Vue({
       this.$store.commit('time', sessionStorage.getItem('time'))
       this.$store.commit('avatar', sessionStorage.getItem('avatar'))
     }
+    axios
+      .post('http://localhost:8000/api/v1/core/auth/is-authenticated/', {
+        withCredentials: true
+      }).then(res => {
+        if (res.data.is_authenticated) {
+          this.$store.commit('adminStatus')
+        }
+      })
   },
   template: '<App/>'
 }).$mount('#app')

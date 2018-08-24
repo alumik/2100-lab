@@ -17,8 +17,14 @@
   transition: all 0.3s;
 }
 
-#sidebar.active {
-  margin-left: -250px;
+@media (max-width: 1200px) {
+  .sidebar {
+    margin-left: -200px;
+  }
+}
+
+.hide {
+  margin-left: 0;
 }
 
 #sidebar .sidebar-header {
@@ -60,9 +66,3 @@ a[aria-expanded="true"] {
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */
-
-@media (max-width: 1200px) {
-  #sidebar {
-    margin-left: -200px;
-  }
-}

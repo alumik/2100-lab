@@ -1,9 +1,10 @@
 <template>
   <div>
-    <AdminNavbar/>
+    <AdminNavbar @hide="hide"/>
     <div class="my-menu">
       <Menu
         :lists="lists"
+        :hidden="menu_hide"
         @jump="jump"/>
       <div class="container-fluid my-container">
         <div class="my-bread">
@@ -21,7 +22,7 @@ import Menu from '../components/menu'
 import BreadCrumb from '../../components/breadCrumb'
 export default {
   name: 'Basic',
-  components: {BreadCrumb, Menu, AdminNavbar},
+  components: { BreadCrumb, Menu, AdminNavbar },
   props: {
     items: {
       type: Array,
@@ -30,17 +31,57 @@ export default {
   },
   data () {
     return {
+      menu_hide: false,
       lists: [
-        {id: 1, text: this.$t('menu.course'), isActive: false, path: '/admin/course'},
-        {id: 2, text: this.$t('menu.message'), isActive: false, path: '/admin/message'},
-        {id: 3, text: this.$t('menu.user'), isActive: false, path: '/admin/user'},
-        {id: 4, text: this.$t('menu.order'), isActive: false, path: '/admin/order'},
-        {id: 5, text: this.$t('menu.admin'), isActive: false, path: '/admin/adminmanagement'},
-        {id: 6, text: this.$t('menu.data'), isActive: false, path: '/admin/data'},
-        {id: 7, text: this.$t('menu.log'), isActive: false, path: '/admin/log'}
-      ]}
+        {
+          id: 1,
+          text: this.$t('menu.course'),
+          isActive: false,
+          path: '/admin/course'
+        },
+        {
+          id: 2,
+          text: this.$t('menu.message'),
+          isActive: false,
+          path: '/admin/message'
+        },
+        {
+          id: 3,
+          text: this.$t('menu.user'),
+          isActive: false,
+          path: '/admin/user'
+        },
+        {
+          id: 4,
+          text: this.$t('menu.order'),
+          isActive: false,
+          path: '/admin/order'
+        },
+        {
+          id: 5,
+          text: this.$t('menu.admin'),
+          isActive: false,
+          path: '/admin/adminmanagement'
+        },
+        {
+          id: 6,
+          text: this.$t('menu.data'),
+          isActive: false,
+          path: '/admin/data'
+        },
+        {
+          id: 7,
+          text: this.$t('menu.log'),
+          isActive: false,
+          path: '/admin/log'
+        }
+      ]
+    }
   },
   methods: {
+    hide () {
+      this.menu_hide = !this.menu_hide
+    },
     jump (id) {
       for (let list = 0; list < 7; list = list + 1) {
         this.lists[list].isActive = false
@@ -52,18 +93,18 @@ export default {
 </script>
 
 <style scoped>
-  .my-menu {
-    display: flex;
-  }
+.my-menu {
+  display: flex;
+}
 
+.my-container {
+  padding: 0;
+  margin-left: 200px;
+}
+
+@media (max-width: 1200px) {
   .my-container {
-    padding: 0;
-    margin-left: 200px;
+    margin-left: 0;
   }
-
-  @media (max-width: 1200px) {
-    .my-container {
-      margin-left: 0;
-    }
-  }
+}
 </style>

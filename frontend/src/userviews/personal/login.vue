@@ -215,7 +215,7 @@ export default {
                 query: { course_id: this.course_id }
               })
             }
-            this.$router.push({ path: '/personal' })
+            this.$router.push({ path: '/' })
           }
         })
         .catch(error => {
@@ -242,6 +242,7 @@ export default {
 
 #logoimg {
   width: 300px;
+  min-height: 100px;
   margin: 20px auto;
 }
 
