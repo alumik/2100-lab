@@ -23,14 +23,17 @@ class MainPageTests(TestCase):
                 'content': [
                     {
                         'image': 'fake/path/image1.png',
+                        'hero_id': 1,
                         'caption': 'c1'
                     },
                     {
                         'image': 'fake/path/image2.png',
+                        'hero_id': 2,
                         'caption': 'c2'
                     },
                     {
                         'image': 'fake/path/image3.png',
+                        'hero_id': 3,
                         'caption': 'c3'
                     }
                 ]
