@@ -7,8 +7,7 @@
       variant="primary"
       class="navbar">
       <button
-        class="navbar-toggler"
-        @click="$emit('hide')">
+        class="navbar-toggler">
         <span class="navbar-toggler-icon"/>
       </button>
       <b-navbar-brand
@@ -17,6 +16,20 @@
           id="logoimg"
           src="../assets/2100logo.png">
       </b-navbar-brand>
+      <b-navbar-toggle target="nav_collapse"/>
+      <b-collapse
+        id="nav_collapse"
+        is-nav>
+        <b-navbar-nav class="ml-auto">
+          <b-nav-item>{{ $store.state.adminStatus ? '管理员' : '' }}
+          </b-nav-item>
+          <b-nav-item
+            id="logout"
+            @click="log">
+            {{ $store.state.adminStatus ? '注销' : '登录' }}
+          </b-nav-item>
+        </b-navbar-nav>
+      </b-collapse>
     </b-navbar>
     <div class="container">
       <h2 class="my-head-first">2100实验室</h2>
@@ -61,6 +74,11 @@ export default {
       error_message: ''
     }
   },
+  mounted () {
+    if (this.$store.state.adminStatus) {
+      this.$router.push({ path: '/admin/main' })
+    }
+  },
   methods: {
     check (evt) {
       const regix = /^1\d{10}$/
@@ -69,21 +87,24 @@ export default {
         this.error_message = '请输入一个正确的手机号！'
       } else {
         this.error_message = ''
-        axios.post('http://localhost:8000/api/v1/admin/backstage/auth/authenticate-admin/',
-          qs.stringify({
-            phone_number: this.phone_number,
-            password: this.password
-          })
-        ).then(
-          response => {
+        axios
+          .post(
+            'http://localhost:8000/api/v1/admin/backstage/auth/authenticate-admin/',
+            qs.stringify({
+              phone_number: this.phone_number,
+              password: this.password
+            })
+          )
+          .then(response => {
             if (this.phone_number === response.data.username) {
-              this.$router.push({path: '/admin/main'})
+              this.$store.commit('adminStatus')
+              this.$router.push({ path: '/admin/main' })
               evt.preventDefault()
             } else {
               this.error_message = '数据库错误'
             }
-          }).catch(
-          error => {
+          })
+          .catch(error => {
             let errorMessage = error.response.data.message
             if (errorMessage === 'User is already authenticated.') {
               this.error_message = '用户已登录'
@@ -95,55 +116,78 @@ export default {
           })
       }
       evt.preventDefault()
+    },
+    log () {
+      let that = this
+      if (that.$store.state.adminStatus) {
+        axios
+          .post('http://localhost:8000/api/v1/core/auth/logout/', {
+            withCredentials: true
+          })
+          .then(res => {
+            alert(res.data.message)
+            that.$store.commit('adminStatus', false)
+            that.$router.push({ path: '/admin' })
+          })
+          .catch(error => {
+            alert(error.message)
+          })
+      } else {
+        this.$router.push({ path: '/admin' })
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-  .logo {
-    height: 50px;
-    margin: 0;
-    vertical-align: middle;
-  }
+.logo {
+  height: 50px;
+  margin: 0;
+  vertical-align: middle;
+}
 
-  .logo img {
-    height: 35px;
-  }
+.logo img {
+  height: 35px;
+}
 
-  .my-head-first {
-    margin-top: 20%;
-    margin-bottom: 5%;
-  }
+.navbar-dark .navbar-nav .nav-link {
+  color: #999;
+}
 
-  .my-head-second {
-    margin-bottom: 30%;
-  }
+.my-head-first {
+  margin-top: 20%;
+  margin-bottom: 5%;
+}
 
-  .navbar {
-    padding: 10px 5px;
-    background-color: #fff !important;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-    opacity: 0.8;
-  }
+.my-head-second {
+  margin-bottom: 30%;
+}
 
-  .navbar-toggler {
-    background-color: #f00;
-  }
+.navbar {
+  padding: 10px 5px;
+  background-color: #fff !important;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  opacity: 0.8;
+}
 
-  .container {
-    display: block;
-    width: 350px;
-    height: 500px;
-    margin: 100px auto;
-    text-align: center;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 5px 6px 5px rgba(0, 0, 0, 0.1);
-  }
+.navbar-toggler {
+  background-color: #f00;
+}
 
-  #btn {
-    margin-top: 40px;
-    margin-bottom: 20px;
-  }
+.container {
+  display: block;
+  width: 350px;
+  height: 500px;
+  margin: 100px auto;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 5px 6px 5px rgba(0, 0, 0, 0.1);
+}
+
+#btn {
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
 </style>
