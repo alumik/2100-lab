@@ -154,7 +154,7 @@
           <div
             v-if="!course.can_access"
             class="row row-style">
-            <h6>现价 ￥{{ course.price - $store.state.money }}  </h6>
+            <h6>现价 ￥{{ get_now_price() }}  </h6>
             <h6
               v-if="$store.state.money != 0.00">&emsp;&emsp;￥
               <label class="origin-value">{{ course.price }}</label>
@@ -289,7 +289,7 @@ export default{
     time_reminder: function () {
       let that = this
       return '  该课程将于初次点开' +
-        that.change_duration_to_timestamp(that.course.expire_duration) + '小时后不可再观看'
+        that.change_duration_to_timestamp(that.course.expire_duration) + '后不可再观看'
     },
     share_reminder: function () {
       let that = this
@@ -436,7 +436,7 @@ export default{
       }
     },
     open_study_page: function (id) {
-      this.$router.push({name: 'StudyPage', query: {course_id: id}})
+      this.$router.push({name: 'StudyPage', query: {course_id: parseInt(id)}})
     },
     open_log: function (id) {
       this.$router.push({name: 'Login', params: {source: 'coursedetail', course_id: id}})
@@ -461,6 +461,13 @@ export default{
         this.$root.$emit('bv::show::modal', 'study-popup')
       } else {
         this.$root.$emit('bv::show::modal', 'log-popup')
+      }
+    },
+    get_now_price: function () {
+      if (this.$store.state.money > this.course.price) {
+        return 0
+      } else {
+        return this.course.price - this.$store.state.money
       }
     }
   }

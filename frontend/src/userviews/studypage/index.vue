@@ -1,7 +1,5 @@
 <template>
-  <Basic
-    id="studypage"
-    class="width-style">
+  <Basic>
     <b-alert
       :show="assets_test"
       variant="danger"
@@ -27,8 +25,7 @@
       {{ beforedestroy_error_msg }}
     </b-alert>
     <div
-      id="content"
-      class="width-style">
+      id="content">
       <div
         id="media"
         class="media-style">
@@ -170,7 +167,7 @@ export default {
   },
   created: function () {
     let that = this
-    that.query_course_id = that.$route.query.course_id
+    that.query_course_id = parseInt(that.$route.query.course_id)
     axios.get('http://localhost:8000/api/v1/courses/forestage/play/get-course-assets?' +
       'course_id=' + that.query_course_id)
       .then(function (response) {
@@ -215,11 +212,7 @@ export default {
     axios.get('http://localhost:8000/api/v1/courses/forestage/play/save-learning-log/', {params: {
       course_id: that.query_course_id,
       progress: that.audio_current_time
-    }}).then(function (response) {
-      if (response.data.message === 'Success.') {
-        alert('学习记录保存成功 ')
-      }
-    }).catch(function (error) {
+    }}).catch(function (error) {
       if (error.response.data.message === 'Object not found.') {
         that.beforedestroy_test = true
         that.beforedestroy_error_msg = that.$t('error.object_not_found')
