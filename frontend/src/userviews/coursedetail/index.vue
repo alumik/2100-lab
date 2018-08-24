@@ -33,7 +33,7 @@
             v-if="course.price!=0"
             :value="share_reminder"
             readonly
-            class="my-4 modal-input"/>
+            class="my-4 modal-input textarea-style"/>
           <p
             v-else
             class="my-4">
