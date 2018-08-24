@@ -135,7 +135,7 @@ def buy_course(request):
     customer.reward_coin = reward_coin
     customer.save()
 
-    if referer_id != '':
+    if referer_id != '' and int(referer_id) != int(customer.id): 
         referer_id = int(referer_id)
         try:
             referer = get_user_model().objects.get(id=referer_id)
