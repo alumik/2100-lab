@@ -28,6 +28,16 @@ urlpatterns = [
         name='add-course'
     ),
     path(
+        'course-management/add-hero/',
+        views_backstage.add_hero,
+        name='add-hero'
+    ),
+    path(
+        'course-management/delete-hero/',
+        views_backstage.delete_hero,
+        name='delete-hero'
+    ),
+    path(
         'comment-management/get-comment-list/',
         views_backstage.get_comment_list,
         name='get-comment-list'
