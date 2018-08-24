@@ -33,7 +33,7 @@
             v-if="course.price!=0"
             :value="share_reminder"
             readonly
-            class="my-4 modal-input"/>
+            class="my-4 modal-input textarea-style"/>
           <p
             v-else
             class="my-4">
@@ -88,12 +88,12 @@
             <b-col>
               <b-button
                 variant="primary"
-                @click="pay_method_chose(0)">支付宝</b-button>
+                @click="pay_method_chose(1)">支付宝</b-button>
             </b-col>
             <b-col>
               <b-button
                 variant="primary"
-                @click="pay_method_chose(1)">微信</b-button>
+                @click="pay_method_chose(2)">微信</b-button>
             </b-col>
           </b-row>
           <div v-if="pay_method_chosen">
@@ -154,8 +154,11 @@
           <div
             v-if="!course.can_access"
             class="row row-style">
-            <h6>现价 ￥{{ course.price - user_reward_balance }}  ￥</h6>
-            <h6 class="origin-value">{{ course.price }}</h6>
+            <h6>现价 ￥{{ course.price - $store.state.money }}  </h6>
+            <h6
+              v-if="$store.state.money != 0.00">&emsp;&emsp;￥
+              <label class="origin-value">{{ course.price }}</label>
+            </h6>
           </div>
           <div
             class="row time-style">
@@ -301,25 +304,28 @@ export default{
     if (typeof (that.$route.query.referer_id) !== 'undefined') {
       that.referer_id = that.$route.query.referer_id ? that.$route.query.referer_id : ''
     }
-    axios.get('http://localhost:8000/api/v1/courses/forestage/course/get-course-detail/' +
-      '?course_id=' + that.query_course_id)
-      .then(function (response) {
-        that.course = response.data
-        that.course.price = parseFloat(response.data.price)
-        if (that.course.up_voted === true) {
-          that.praise_color = 'green'
-          that.praise_border_color = 'green'
-        } else {
-          that.praise_color = '#007bff'
-          that.praise_border_color = '#007bff'
-        }
-      }).catch(function (error) {
-        if (error.response.data.message === 'Object not found.') {
-          that.$router.push({name: 'PageNotFound'})
-          that.created_test = true
-          that.created_error_msg = that.$t('error.object_not_found')
-        }
-      })
+    axios.get('http://localhost:8000/api/v1/courses/forestage/course/get-course-detail/',
+      {params: {
+        course_id: that.query_course_id,
+        referer_id: that.referer_id
+      }}).then(function (response) {
+      that.course = response.data
+      that.course.price = parseFloat(response.data.price)
+      that.course.reward_percent = parseFloat(response.data.reward_percent)
+      if (that.course.up_voted === true) {
+        that.praise_color = 'green'
+        that.praise_border_color = 'green'
+      } else {
+        that.praise_color = '#007bff'
+        that.praise_border_color = '#007bff'
+      }
+    }).catch(function (error) {
+      if (error.response.data.message === 'Object not found.') {
+        that.$router.push({name: 'PageNotFound'})
+        that.created_test = true
+        that.created_error_msg = that.$t('error.object_not_found')
+      }
+    })
     that.user_status = that.$store.state.status
     that.share_qrcode_url = shareQrcodeHost + '?course_id=' +
       that.query_course_id + '&' + 'referer_id=' + that.$store.state.user.customer_id
@@ -332,15 +338,18 @@ export default{
       let due = new Date(this.course.expire_time)
       let now = new Date()
       let substract = Math.floor((due - now) / 1000)
-      if (substract === 0) {
+      if (substract <= 0) {
         clearInterval(mygenerator)
-        this.$router.push({name: 'BurnedCourse'})
       }
       let days = Math.floor(substract / (3600 * 24))
       let hours = Math.floor((substract - days * (3600 * 24)) / 3600)
       let minutes = Math.floor((substract - days * (3600 * 24) - hours * 3600) / 60)
       let seconds = substract - days * (3600 * 24) - hours * 3600 - minutes * 60
-      this.left_time = days + '天' + hours + '小时' + minutes + '分钟' + seconds + '秒'
+      if (days >= 0 && hours >= 0 && minutes >= 0 && seconds >= 0) {
+        this.left_time = days + '天' + hours + '小时' + minutes + '分钟' + seconds + '秒'
+      } else {
+        this.left_time = '0天0小时0分钟0秒'
+      }
     },
     change_duration_to_timestamp (duration) {
       const hours = Math.floor(duration / 3600)
@@ -360,24 +369,28 @@ export default{
     },
     add_praise () {
       let that = this
-      axios.get('http://localhost:8000/api/v1/courses/forestage/course/up-vote-course/' +
-        '?course_id=' + that.query_course_id)
-        .then(function (response) {
-          if (response.data.up_voted === true) {
-            that.course.up_votes = response.data.up_votes
-            that.praise_color = 'green'
-            that.praise_border_color = 'green'
-          } else if (response.data.up_voted === false) {
-            that.course.up_votes = response.data.up_votes
-            that.praise_color = '#007bff'
-            that.praise_border_color = '#007bff'
-          }
-        }).catch(function (error) {
-          if (error.response.data.message === 'Object not found.') {
-            that.add_praise_test = true
-            that.add_praise_error_msg = that.$t('error.object_not_found')
-          }
-        })
+      if (that.$store.state.status === false) {
+        this.$root.$emit('bv::show::modal', 'log-popup')
+      } else {
+        axios.get('http://localhost:8000/api/v1/courses/forestage/course/up-vote-course/' +
+          '?course_id=' + that.query_course_id)
+          .then(function (response) {
+            if (response.data.up_voted === true) {
+              that.course.up_votes = response.data.up_votes
+              that.praise_color = 'green'
+              that.praise_border_color = 'green'
+            } else if (response.data.up_voted === false) {
+              that.course.up_votes = response.data.up_votes
+              that.praise_color = '#007bff'
+              that.praise_border_color = '#007bff'
+            }
+          }).catch(function (error) {
+            if (error.response.data.message === 'Object not found.') {
+              that.add_praise_test = true
+              that.add_praise_error_msg = that.$t('error.object_not_found')
+            }
+          })
+      }
     },
     hide_share_popup () {
       this.$root.$emit('bv::hide::modal', 'share-popup')
@@ -406,8 +419,7 @@ export default{
         axios.post('http://localhost:8000/api/v1/courses/forestage/course/buy-course/',
           qs.stringify({
             course_id: that.query_course_id,
-            payment_method: that.pay_method,
-            referer_id: that.referer_id
+            payment_method: that.pay_method
           })).then(function (response) {
           if (response.data.message === 'Success.') {
             that.course.can_access = true
@@ -437,6 +449,14 @@ export default{
       }
     },
     start_study: function () {
+      if (this.course.expire_time !== null) {
+        let due = new Date(this.course.expire_time)
+        let now = new Date()
+        let substract = Math.floor((due - now) / 1000)
+        if (substract <= 0) {
+          this.$router.push({name: 'BurnedCourse'})
+        }
+      }
       if (this.$store.state.status === true) {
         this.$root.$emit('bv::show::modal', 'study-popup')
       } else {

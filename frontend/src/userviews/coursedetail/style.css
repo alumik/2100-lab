@@ -85,3 +85,10 @@
   width: 100%;
   border: none;
 }
+
+.textarea-style {
+  height: 60px;
+  resize: none;
+  outline: none;
+}
+

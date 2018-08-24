@@ -44,6 +44,7 @@
           class="audio-style">
           <audio
             ref="player"
+            autoplay
             controls
             preload
             class="audio-player">
@@ -132,12 +133,12 @@ export default {
       now_picture_index: 0,
       audio_current_time: 0,
       audio_duration: null,
+      audio_piece_num: 0,
       introduction_brandFold: true,
       introduction_text_show: '',
       introduction_text_hide: '',
       course: {},
       up_votes: 0,
-      audio_piece_num: 0,
       beforedestroy_test: false,
       beforedestroy_error_msg: '',
       praise_course_color: '#ccc'
@@ -148,13 +149,17 @@ export default {
       if (this.audio_current_time === 0) {
         this.now_picture_index = 0
         this.change_picture()
-      } else if (this.audio_current_time >= this.course.images[this.audio_piece_num].load_time) {
+      } else if (this.audio_current_time >=
+        (this.course.images[this.audio_piece_num].load_time
+          ? this.course.images[this.audio_piece_num].load_time : 0)) {
         this.now_picture_index = this.audio_piece_num - 1
         this.change_picture()
       } else {
         for (var i = 1; i < this.audio_piece_num; i++) {
           var first = this.course.images[i - 1].load_time
+            ? this.course.images[i - 1].load_time : 0
           var second = this.course.images[i].load_time
+            ? this.course.images[i].load_time : 0
           if (this.audio_current_time >= first && this.audio_current_time < second) {
             this.now_picture_index = i - 1
             this.change_picture()
@@ -163,22 +168,14 @@ export default {
       }
     }
   },
-  mounted () {
-    this.audio_current_time = this.course.progress ? this.course.progress : 0
-    this.audio_piece_num = this.course.images ? this.course.images.length : 0
-    this.introduction_text_show = this.course.description ? this.course.description.substring(0, 2) : ''
-    this.introduction_text_hide = this.course.description ? this.course.description.substring(2) : ''
-    this.addEventListeners()
-  },
   created: function () {
     let that = this
     that.query_course_id = that.$route.query.course_id
     axios.get('http://localhost:8000/api/v1/courses/forestage/play/get-course-assets?' +
       'course_id=' + that.query_course_id)
       .then(function (response) {
-        if (response.data.message === 'Success.') {
-          that.course = response.data
-        }
+        that.course = response.data
+        that.$refs.player.currentTime = that.course.progress
       }).catch(function (error) {
         if (error.response.data.message === 'Object not found.') {
           that.$router.push({name: 'PageNotFound'})
@@ -205,6 +202,13 @@ export default {
           that.detail_error_msg = that.$t('error.object_not_found')
         }
       })
+  },
+  mounted () {
+    this.audio_current_time = this.$refs.player.currentTime
+    this.audio_piece_num = this.course.images ? this.course.images.length : 0
+    this.introduction_text_show = this.course.description ? this.course.description.substring(0, 2) : ''
+    this.introduction_text_hide = this.course.description ? this.course.description.substring(2) : ''
+    this.addEventListeners()
   },
   beforeDestroy () {
     let that = this
