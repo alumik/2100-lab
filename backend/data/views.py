@@ -75,4 +75,4 @@ def get_data_by_time(request):
             }
         )
 
-    return JsonResponse(data)
+    return JsonResponse({'content': data})
