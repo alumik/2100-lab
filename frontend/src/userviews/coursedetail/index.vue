@@ -154,21 +154,24 @@
           <div
             v-if="!course.can_access"
             class="row row-style">
-            <h6>现价 ￥{{ get_now_price() }}  </h6>
+            <h6 v-if="!isNaN(get_now_price())">现价 ￥{{ get_now_price() }}  </h6>
             <h6
-              v-if="$store.state.money != 0.00">&emsp;&emsp;￥
-              <label class="origin-value">{{ course.price }}</label>
+              v-if="!isNaN($store.state.money) && $store.state.money != 0.00">&emsp;&emsp;￥
+              <label
+                v-if="!isNaN(course.price)"
+                class="origin-value">{{ course.price }}</label>
             </h6>
           </div>
           <div
             class="row time-style">
-            <h6 v-if="course.expire_duration !==0">
+            <h6 v-if="course.expire_duration !==0 && !isNaN(course.expire_duration)">
               课程时效 {{ change_duration_to_timestamp(course.expire_duration) }}
             </h6>
           </div>
           <div
             class="row time-style">
-            <h6 v-if="course.expire_time !== null">距离失效还有 {{ left_time }}</h6>
+            <h6 v-if="course.expire_time !== null && !isNaN(left_time)">
+              距离失效还有 {{ left_time }}</h6>
           </div>
         </div>
         <b-row class="button-row">
