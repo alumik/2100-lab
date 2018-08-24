@@ -169,6 +169,7 @@ export default {
       .catch(error => {
         alert(error.message)
       })
+    this.phone = ''
   },
   methods: {
     hide: function () {
