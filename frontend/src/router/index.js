@@ -13,6 +13,11 @@ export default new Router({
       component: () => import('@/userviews/burnedcoursepage/index')
     },
     {
+      path: '/404',
+      name: 'PageNotFound',
+      component: () => import('@/userviews/pagenotfound/index')
+    },
+    {
       path: '/allfreecourse',
       name: 'AllFreeCourse',
       component: () => import('@/userviews/allcourselistpage/allFreeCoursePage')
