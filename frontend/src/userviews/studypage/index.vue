@@ -65,11 +65,10 @@
               </b-col>
               <b-col class="vote-style">
                 {{ up_votes }}
-                <img
-                  id="praise-button"
-                  src="../../assets/praise.png"
-                  class="vote-style"
-                  @click="up_vote_course">
+                <a
+                  :style="{color: praise_course_color}"
+                  class="heart-size"
+                  @click="up_vote_course">&#10084;</a>
               </b-col>
             </b-row>
             <div class="delete-margin text-left-style">
@@ -140,7 +139,8 @@ export default {
       up_votes: 0,
       audio_piece_num: 0,
       beforedestroy_test: false,
-      beforedestroy_error_msg: ''
+      beforedestroy_error_msg: '',
+      praise_course_color: '#ccc'
     }
   },
   watch: {
@@ -190,6 +190,11 @@ export default {
       .then(function (response) {
         var data = response.data
         that.up_votes = data.up_votes
+        if (data.up_voted === true) {
+          that.praise_course_color = '#f00'
+        } else if (data.up_voted === false) {
+          that.praise_course_color = '#ccc'
+        }
       }).catch(function (error) {
         that.detail_test = true
         that.detail_error_msg = error
@@ -218,8 +223,12 @@ export default {
       axios.get('http://localhost:8000/api/v1/courses/forestage/course/up-vote-course?' +
       'course_id=' + that.query_course_id)
         .then(function (response) {
-          if (response.up_voted) {
-            that.course.up_votes = response.up_votes
+          if (response.data.up_voted === true) {
+            that.up_votes = response.data.up_votes
+            that.praise_course_color = '#f00'
+          } else if (response.data.up_voted === false) {
+            that.up_votes = response.data.up_votes
+            that.praise_course_color = '#ccc'
           }
         }).catch(function (error) {
           that.up_vote_test = true
@@ -310,5 +319,11 @@ export default {
   .vote-style {
     height: 25px;
     text-align: right;
+  }
+
+  .heart-size {
+    font-size: 15px;
+    color: #ccc;
+    cursor: pointer;
   }
 </style>

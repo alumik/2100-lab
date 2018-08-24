@@ -285,7 +285,8 @@ export default{
   computed: {
     time_reminder: function () {
       let that = this
-      return '  该课程将于初次点开' + that.course.expire_duration + '小时后不可再观看'
+      return '  该课程将于初次点开' +
+        that.change_duration_to_timestamp(that.course.expire_duration) + '小时后不可再观看'
     },
     share_reminder: function () {
       let that = this
@@ -309,6 +310,13 @@ export default{
       .then(function (response) {
         that.course = response.data
         that.course.price = parseFloat(response.data.price)
+        if (that.course.up_voted === true) {
+          that.praise_color = 'green'
+          that.praise_border_color = 'green'
+        } else {
+          that.praise_color = '#007bff'
+          that.praise_border_color = '#007bff'
+        }
       }).catch(function (error) {
         that.created_test = true
         that.created_error_msg = error

@@ -76,17 +76,15 @@
           <div
             id="operator">
             {{ message_list[index-1].up_votes }}
-            <img
-              id="praise-button"
-              src="../../assets/praise.png"
+            <b-img
+              :src="message_list[index-1].up_voted === true ? up_icon_after : up_icon_before"
               class="vote-style "
-              @click="up_vote(index-1,message_list[index-1].comment_id)">
+              @click="up_vote(index-1,message_list[index-1].comment_id)"/>
             &emsp; &emsp;{{ message_list[index-1].down_votes }}
-            <img
-              id="detest-button"
-              src="../../assets/detest.png"
+            <b-img
+              :src="message_list[index-1].down_voted === true ? down_icon_after : down_icon_before"
               class="vote-style "
-              @click="down_vote(index-1,message_list[index-1].comment_id)">
+              @click="down_vote(index-1,message_list[index-1].comment_id)"/>
           </div>
         </div>
       </div>
@@ -154,7 +152,11 @@ export default {
       delete_message_error_msg: '',
       page_limit: 1,
       page: 1,
-      rows: 0
+      rows: 0,
+      up_icon_before: require('../../assets/up-before.png'),
+      up_icon_after: require('../../assets/up-after.png'),
+      down_icon_before: require('../../assets/down-before.png'),
+      down_icon_after: require('../../assets/down-after.png')
     }
   },
   created: function () {
@@ -197,8 +199,10 @@ export default {
         .then(function (response) {
           if (response.data.up_voted === true) {
             that.message_list[index].up_votes = response.data.up_votes
+            that.message_list[index].up_voted = true
           } else if (response.data.up_voted === false) {
             that.message_list[index].up_votes = response.data.up_votes
+            that.message_list[index].up_voted = false
           }
         }).catch(function (error) {
           that.up_vote_test = true
@@ -212,8 +216,10 @@ export default {
         .then(function (response) {
           if (response.data.down_voted === true) {
             that.message_list[index].down_votes = response.data.down_votes
+            that.message_list[index].down_voted = true
           } else if (response.data.down_voted === false) {
             that.message_list[index].down_votes = response.data.down_votes
+            that.message_list[index].down_voted = false
           }
         }).catch(function (error) {
           that.down_vote_test = true
