@@ -91,9 +91,10 @@
               centered
               hide-footer
               title="您确认删除自己的账号吗？">
-              <div>
-                <h3>请交付￥1000.00的违约金</h3>
-              </div>
+              <b-form-input
+                v-model="phone"
+                type="text"
+                placeholder="请输入自己的手机号"/>
               <b-btn
                 variant="outline-danger"
                 block
@@ -220,17 +221,19 @@ export default {
     },
     Delete () {
       let that = this
-      axios
-        .post(
-          'http://localhost:8000/api/v1/customers/forestage/personal-center/delete-customer/'
-        )
-        .then(res => {
-          if (res.data.message === 'Object deleted.') {
-            this.del_disabled = true
-            that.$store.commit('logout')
-            that.$router.push({ path: '/' })
-          }
-        })
+      if (that.$store.state.phone === that.phone) {
+        axios
+          .post(
+            'http://localhost:8000/api/v1/customers/forestage/personal-center/delete-customer/'
+          )
+          .then(res => {
+            if (res.data.message === 'Object deleted.') {
+              this.del_disabled = true
+              that.$store.commit('logout')
+              that.$router.push({ path: '/' })
+            }
+          })
+      }
     }
   }
 }
@@ -299,5 +302,9 @@ img {
 
 .input-group-append .input-group-text {
   width: auto;
+}
+
+[placeholder="请输入自己的手机号"] {
+  margin-bottom: 15px;
 }
 </style>
