@@ -19,14 +19,14 @@
       </div>
       <b-container
         fluid
-        class="p-2 bg-danger row pre-scrollable choose-list">
+        class="bg-danger row pre-scrollable choose-list">
         <b-row
           v-for="img in sortImageDataList"
           :key="img.index"
           class="choose-row">
           <b-col>
             <b-img
-              :src="img.data"
+              :src="img.image"
               fluid
               alt="test-image"
               class="img-thumbnail"
@@ -36,15 +36,15 @@
       </b-container>
       <b-container
         fluid
-        class="p-4 bg-primary row pre-scrollable choose-list">
+        class="bg-primary row pre-scrollable choose-list">
         <b-row
-          v-for="img in chooseImageDataList"
+          v-for="img in choose_image_data_list"
           :key="img.data"
           class="choose-row"
         >
           <b-col>
             <b-img
-              :src="img.data"
+              :src="img.image"
               fluid
               alt="test-image"
               class="img-thumbnail"
@@ -52,6 +52,21 @@
           </b-col>
         </b-row>
       </b-container>
+      <div
+        slot="modal-footer"
+        class="w-100">
+        <b-row class="define-btn">
+          <b-col cols="8"/>
+          <b-col cols="2">
+            <b-button
+              @click="sendModal">上传</b-button>
+          </b-col>
+          <b-col cols="2">
+            <b-button
+              @click="hideModal">取消</b-button>
+          </b-col>
+        </b-row>
+      </div>
     </b-modal>
   </div>
 </template>
@@ -59,52 +74,36 @@
 <script>
 export default {
   name: 'PreSortPicture',
+  props: {
+    choose_image_data_list_origin: {
+      default: () => {},
+      type: Array
+    }
+  },
   data: function () {
     return {
-      chooseImageDataList: [
-        {
-          data: require('../../userviews/components/image/1.jpg'),
-          index: 1
-        },
-        {
-          data: require('../../userviews/components/image/2.jpg'),
-          index: 2
-        },
-        {
-          data: require('../../userviews/components/image/3.jpg'),
-          index: 3
-        },
-        {
-          data: require('../../userviews/components/image/4.jpg'),
-          index: 4
-        },
-        {
-          data: require('../../userviews/components/image/5.jpg'),
-          index: 5
-        },
-        {
-          data: require('../../userviews/components/image/6.jpg'),
-          index: 6
-        },
-        {
-          data: require('../../userviews/components/image/7.jpg'),
-          index: 7
-        }
-      ],
       sortImageDataList: [],
+      choose_image_data_list: [],
       now_index: 0
     }
   },
   methods: {
     showModal () {
+      this.now_index = 0
+      this.choose_image_data_list = []
+      this.sortImageDataList = []
+      this.choose_image_data_list.length = 0
+      for (let i = 0; i < this.choose_image_data_list_origin.length; i++) {
+        this.choose_image_data_list.push(this.choose_image_data_list_origin[i])
+      }
       this.$refs.edit_picture.show()
     },
     dropout (img) {
       let index = img.index
-      for (let i = index; i < this.chooseImageDataList.length; i++) {
-        this.chooseImageDataList[i].index -= 1
+      for (let i = index; i < this.choose_image_data_list.length; i++) {
+        this.choose_image_data_list[i].index -= 1
       }
-      this.chooseImageDataList.splice(img.index - 1, 1)
+      this.choose_image_data_list.splice(img.index - 1, 1)
       img.index = this.now_index + 1
       this.now_index += 1
       this.sortImageDataList.push(img)
@@ -115,8 +114,24 @@ export default {
         this.sortImageDataList[i].index -= 1
       }
       this.sortImageDataList.splice(img.index - 1, 1)
-      img.index = this.chooseImageDataList.length + 1
-      this.chooseImageDataList.push(img)
+      img.index = this.choose_image_data_list.length + 1
+      this.choose_image_data_list.push(img)
+    },
+    sendModal () {
+      this.now_index = 0
+      this.$emit('uploadSortedPic', this.sortImageDataList.slice())
+      this.choose_image_data_list.length = 0
+      this.choose_image_data_list_origin.length = 0
+      this.sortImageDataList.length = 0
+      this.$refs.edit_picture.hide()
+    },
+    hideModal () {
+      this.now_index = 0
+      this.$emit('uploadSortedPic', this.choose_image_data_list_origin.slice())
+      this.choose_image_data_list.length = 0
+      this.choose_image_data_list_origin.length = 0
+      this.sortImageDataList.length = 0
+      this.$refs.edit_picture.hide()
     }
   }
 }
@@ -133,6 +148,8 @@ export default {
     flex-direction: row;
     min-height: 200px;
     max-height: 200px;
+    padding: 0;
+    margin: 0
   }
 
   .choose-row {

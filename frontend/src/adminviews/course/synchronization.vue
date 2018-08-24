@@ -1,10 +1,14 @@
 <template>
-  <Basic
-    :items="items"
-    class="special">
-    <div class="my-content">
+  <div>
+    <b-button @click="show_modal">
+      音图片同步
+    </b-button>
+    <b-modal
+      ref="sync_picture"
+      size="lg"
+      centered
+      no-close-on-esc>
       <h2>音图片同步</h2>
-      <PreSortPicture class="head-btn"/>
       <b-container
         fluid
         class="p-2 pre-scrollable choose-list">
@@ -12,11 +16,11 @@
           deck
           class="choose-row">
           <div
-            v-for="img in imageDataList"
-            :key="img.index"
+            v-for="img in image_data_list"
+            :key="img.id"
             class="card-pic">
             <b-card
-              :img-src="img.data"
+              :img-src="img.image"
               :title="img.index.toString()"
               :border-variant="attr[img.index]"
               img-alt="Image"
@@ -29,21 +33,20 @@
       <b-container class="my-row">
         <b-row>
           <b-col
-            cols="11">
+            cols="10">
             <audio
               ref="player"
+              :src="audio_file_url"
               controls
               preload
+              type="audio/mp3"
               class="audio-player">
-              <source
-                src=""
-                type="audio/mpeg">
               您的浏览器不支持 audio 元素。
             </audio>
           </b-col>
           <b-col
             class="cut-time"
-            cols="1">
+            cols="2">
             <b-btn @click="choose">
               截取时间
             </b-btn>
@@ -62,7 +65,7 @@
           </thead>
           <tbody>
             <tr
-              v-for="data in choose_data"
+              v-for="data in image_data_list"
               :key="data.id"
               align="center">
               <td>{{ data.index }}</td>
@@ -78,8 +81,23 @@
           </tr></tbody>
         </table>
       </div>
-    </div>
-  </Basic>
+      <div
+        slot="modal-footer"
+        class="w-100">
+        <b-row class="define-btn">
+          <b-col cols="8"/>
+          <b-col cols="2">
+            <b-button
+              @click="upload_time_data">上传</b-button>
+          </b-col>
+          <b-col cols="2">
+            <b-button
+              @click="hide_modal">取消</b-button>
+          </b-col>
+        </b-row>
+      </div>
+    </b-modal>
+  </div>
 </template>
 
 <script>
@@ -88,48 +106,21 @@ import PreSortPicture from './pre_sort_picture'
 export default {
   name: 'SyncPicture',
   components: {PreSortPicture, Basic},
+  props: {
+    image_data_list: {
+      default: () => {},
+      type: Array
+    },
+    audio_file_list: {
+      default: () => {},
+      type: Array
+    }
+  },
   data () {
     return {
-      items: [
-        {
-          text: '主页',
-          href: '/admin/main'
-        }, {
-          text: '课程管理',
-          href: '/admin/course'
-        }, {
-          text: this.$route.query.course_id,
-          href: '/admin/course' + this.$route.query.url
-        }, {
-          text: '音图片同步',
-          active: true
-        }],
+      audio_file_url: '',
       attr: ['', 'primary'],
-      now_number: 1,
-      imageDataList: [
-        {
-          data: require('../../userviews/components/image/1.jpg'),
-          index: 1
-        }, {
-          data: require('../../userviews/components/image/2.jpg'),
-          index: 2
-        }, {
-          data: require('../../userviews/components/image/3.jpg'),
-          index: 3
-        }, {
-          data: require('../../userviews/components/image/4.jpg'),
-          index: 4
-        }, {
-          data: require('../../userviews/components/image/5.jpg'),
-          index: 5
-        }, {
-          data: require('../../userviews/components/image/6.jpg'),
-          index: 6
-        }, {
-          data: require('../../userviews/components/image/7.jpg'),
-          index: 7
-        }],
-      choose_data: []
+      now_number: 1
     }
   },
   watch: {
@@ -143,37 +134,34 @@ export default {
   },
   methods: {
     choose () {
-      if (this.now_number < this.imageDataList.length) {
-        this.choose_data.push({
-          index: this.now_number,
-          time: this.$refs.player.currentTime,
-          name: (this.imageDataList[this.now_number - 1].index)
-        })
+      if (this.now_number === 1) {
+        this.$refs.player.play()
+      }
+      if (this.now_number <= this.image_data_list.length) {
+        this.image_data_list[this.now_number - 1].time = this.$refs.player.currentTime
         this.now_number += 1
       }
     },
     click (img) {
       this.now_number = img.index
+    },
+    show_modal () {
+      this.$refs.sync_picture.show()
+      this.audio_file_url = URL.createObjectURL(this.audio_file_list[0])
+    },
+    hide_modal () {
+      this.choose_data.length = 0
+      this.$refs.sync_picture.hide()
+    },
+    upload_time_data () {
+      console.log(this.image_data_list)
+      this.$emit('sync_picture_audio', this.image_data_list)
     }
   }
 }
 </script>
 
 <style scoped>
-  .special {
-    min-width: 1300px;
-  }
-
-  .my-content {
-    margin: 40px;
-    text-align: left;
-  }
-
-  .head-btn {
-    display: inline-block;
-    float: right;
-  }
-
   .my-row {
     margin-top: 40px;
     margin-bottom: 40px;

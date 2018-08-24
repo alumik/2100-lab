@@ -208,12 +208,11 @@
 import axios from 'axios'
 import qs from 'qs'
 import Basic from '../basic/basic'
-import UploadPicture from './upload_picture'
 import Pagination from '../../components/pagination'
 import resizeImage from './resize'
 export default {
   name: 'CourseManagement',
-  components: {Pagination, UploadPicture, Basic},
+  components: {Pagination, Basic},
   data: function () {
     return {
       items: [{
@@ -287,7 +286,6 @@ export default {
         axios.get('http://localhost:8000/api/v1/courses/forestage/main/get-heroes/').then(
           response => {
             this.originImageList = response.data.content
-            console.log(this.originImageList[0])
             for (let i = 0; i < this.originImageList.length; i++) {
               this.originImageList[i].image = this.$store.state.address.concat(this.originImageList[i].image)
             }
@@ -379,23 +377,11 @@ export default {
         formdata.append('heroes', this.fileNameList[i])
         formdata.append('captions', updateText[i])
       }
-      axios.post('http://localhost:8000/api/v1/courses/backstage/course-management/add-hero/', formdata).then(
-        response => {
-          console.log(response.data)
-        }
-      ).catch(
-        error => {
-          console.log(error.response)
-        }
-      )
+      axios.post('http://localhost:8000/api/v1/courses/backstage/course-management/add-hero/', formdata)
       axios.post('http://localhost:8000/api/v1/courses/backstage/course-management/delete-hero/',
         qs.stringify({
           delete_list: this.deleteOriginList
-        }, {arrayFormat: 'repeat'})).then(
-        response => {
-          console.log(response.data)
-        }
-      )
+        }, {arrayFormat: 'repeat'}))
     },
     deleteOriginImg (index) {
       this.deleteOriginList.push(index)
