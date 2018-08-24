@@ -80,12 +80,25 @@
           </b-row>
           <b-row>
             <b-button
+              v-b-modal.modal
               :disabled="del_disabled"
               size="lg"
-              variant="danger"
-              @click="Delete">
+              variant="danger">
               删除账号
             </b-button>
+            <b-modal
+              id="modal"
+              centered
+              hide-footer
+              title="您确认删除自己的账号吗？">
+              <div>
+                <h3>请交付￥1000.00的违约金</h3>
+              </div>
+              <b-btn
+                variant="outline-danger"
+                block
+                @click="Delete">确认删除</b-btn>
+            </b-modal>
           </b-row>
         </div>
       </div>
