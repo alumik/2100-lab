@@ -160,20 +160,7 @@ export default {
     }
   },
   created: function () {
-    let that = this
-    axios.get('http://localhost:8000/api/v1/courses/forestage/play/get-course-comments/',
-      { params: {
-        course_id: that.course_id,
-        page_limit: that.page_limit,
-        page: that.page
-      }})
-      .then(function (response) {
-        that.rows = response.data.count
-        that.message_list = response.data.content
-      }).catch(function (error) {
-        that.created_test = true
-        that.created_error_msg = error.data.message
-      })
+    this.getallmessage()
   },
   methods: {
     getallmessage: function () {
@@ -185,11 +172,22 @@ export default {
           page: that.page
         }})
         .then(function (response) {
-          that.rows = response.data.count
-          that.message_list = response.data.content
+          if (response.data.message === 'Object not found.') {
+            that.getallmessage_test = true
+            that.getallmessage_error_msg = that.$t('error.object_not_found')
+          } else if (response.data.message === 'Access denied.') {
+            that.getallmessage_test = true
+            that.getallmessage_error_msg = that.$t('error.access_denied')
+          } else if (response.data.message === 'Commenting is not allowed.') {
+            that.getallmessage_test = true
+            that.getallmessage_error_msg = that.$t('error.comment_not_allowed')
+          } else {
+            that.rows = response.data.count
+            that.message_list = response.data.content
+          }
         }).catch(function (error) {
           that.getallmessage_test = true
-          that.getallmessage_error_msg = error.data.message
+          that.getallmessage_error_msg = error.response.data.message
         })
     },
     up_vote: function (index, msgCommentId) {
@@ -197,7 +195,13 @@ export default {
       axios.get('http://localhost:8000/api/v1/courses/forestage/play/up-vote-comment?' +
         'comment_id=' + msgCommentId)
         .then(function (response) {
-          if (response.data.up_voted === true) {
+          if (response.data.message === 'Object not found.') {
+            that.up_vote_test = true
+            that.up_vote_error_msg = that.$t('error.object_not_found')
+          } else if (response.data.message === 'Access denied.') {
+            that.up_vote_test = true
+            that.up_vote_error_msg = that.$t('error.access_denied')
+          } else if (response.data.up_voted === true) {
             that.message_list[index].up_votes = response.data.up_votes
             that.message_list[index].up_voted = true
           } else if (response.data.up_voted === false) {
@@ -206,7 +210,7 @@ export default {
           }
         }).catch(function (error) {
           that.up_vote_test = true
-          that.up_vote_error_msg = error.data.message
+          that.up_vote_error_msg = error.response.data.message
         })
     },
     down_vote: function (index, msgCommentId) {
@@ -222,8 +226,13 @@ export default {
             that.message_list[index].down_voted = false
           }
         }).catch(function (error) {
-          that.down_vote_test = true
-          that.down_vote_error_msg = error.data.message
+          if (error.response.data.message === 'Object not found.') {
+            that.down_vote_test = true
+            that.down_vote_error_msg = that.$t('error.object_not_found')
+          } else if (error.response.data.message === 'Access denied.') {
+            that.down_vote_test = true
+            that.down_vote_error_msg = that.$t('error.access_denied')
+          }
         })
     },
     delete_comment: function (commentId) {
@@ -234,13 +243,17 @@ export default {
         }))
         .then(function (response) {
           if (response.data.message === 'Object deleted.') {
+            alert(that.$t('prompt.object_deleted'))
             that.getallmessage()
-          } else {
-            alert(response.data.message)
           }
         }).catch(function (error) {
-          that.delete_message_test = true
-          that.delete_message_error_msg = error
+          if (error.response.data.message === 'Object not found.') {
+            that.delete_message_test = true
+            that.delete_message_error_msg = that.$t('error.object_not_found')
+          } else if (error.response.data.message === 'Access denied.') {
+            that.delete_message_test = true
+            that.delete_message_error_msg = that.$t('error.access_denied')
+          }
         })
     },
     add_comment: function () {
@@ -256,12 +269,18 @@ export default {
         })).then(function (response) {
         if (response.data.message === 'Success.') {
           that.getallmessage()
-        } else {
-          alert(response.data.message)
         }
       }).catch(function (error) {
-        that.add_message_test = true
-        that.add_message_error_msg = error
+        if (error.response.data.message === 'Object not found.') {
+          that.add_message_test = true
+          that.add_message_error_msg = that.$t('error.object_not_found')
+        } else if (error.response.data.message === 'Access denied.') {
+          that.add_message_test = true
+          that.add_message_error_msg = that.$t('error.access_denied')
+        } else if (error.response.data.message === 'comment_not_allowed') {
+          that.add_message_test = true
+          that.add_message_error_msg = that.$t('error.comment_not_allowed')
+        }
       })
       that.new_msg = ''
     },
