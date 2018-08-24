@@ -14,7 +14,8 @@ class Course(SoftDeletionModel):
     up_votes = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         blank=True,
-        related_name='course_up_vote_customer'
+        related_name='course_up_votes',
+        through='CourseUpVotes'
     )
     codename = models.CharField(max_length=50, unique=True)
     price = models.DecimalField(decimal_places=2, max_digits=12, default=0)
@@ -25,6 +26,12 @@ class Course(SoftDeletionModel):
     can_comment = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    learners = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        related_name='learners',
+        through='customers.LearningLog'
+    )
 
     def __str__(self):
         return self.title
@@ -48,6 +55,12 @@ class Course(SoftDeletionModel):
 
     def is_free(self):
         return self.price == 0
+
+
+class CourseUpVotes(models.Model):
+    customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class Image(models.Model):

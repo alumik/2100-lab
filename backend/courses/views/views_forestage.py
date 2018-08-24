@@ -7,7 +7,7 @@ from django.http import JsonResponse
 from core.utils import get_page
 from core.constants import ERROR, INFO
 from customers.models import LearningLog, OrderLog
-from courses.models import Hero, Course, Image, Comment
+from courses.models import Hero, Course, Image, Comment, CourseUpVotes
 from courses.utils import get_courses, can_access, check_learning_log, get_comment_page
 
 
@@ -86,10 +86,13 @@ def up_vote_course(request):
     customer = request.user
     if customer in course.up_votes.all():
         up_voted = False
-        course.up_votes.remove(customer)
+        CourseUpVotes.objects.get(course=course, customer=customer).delete()
     else:
         up_voted = True
-        course.up_votes.add(customer)
+        CourseUpVotes.objects.create(
+            course=course,
+            customer=customer
+        )
     return JsonResponse(
         {
             'up_voted': up_voted,

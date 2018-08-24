@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     'api',
     'core',
+    'data',
     'admins',
     'courses',
     'customers',
