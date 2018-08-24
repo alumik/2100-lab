@@ -286,6 +286,7 @@ export default {
         }))
         .then(function (response) {
           if (response.data.message === 'Success.') {
+            that.search()
             that.success = '您已经成功回复此留言。'
             that.success_count_down = that.dismiss_second
           } else {
@@ -297,7 +298,6 @@ export default {
           that.wrong = '回复失败！' + error
           that.wrong_count_down = that.dismiss_second
         })
-      this.search()
     }
   }
 }

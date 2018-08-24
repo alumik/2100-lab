@@ -4,6 +4,12 @@
     class="my-basic">
     <div class="body">
       <h1>数据分析</h1>
+      <Alert
+        :count_down="wrong_count_down"
+        :instruction="wrong"
+        variant="danger"
+        @decrease="wrong_count_down-1"
+        @zero="wrong_count_down=0"/>
       <b-tabs class="data">
         <b-tab
           title="总体概况"
@@ -63,13 +69,15 @@
                 <h5>课程点赞数TOP5</h5>
                 <ve-histogram
                   :data="praise_top"
-                  :colors="colors1"/>
+                  :colors="colors1"
+                  :settings="praise_top_setting"/>
               </div>
               <div id="charts_learners_top">
                 <h5>学习人数TOP5</h5>
                 <ve-histogram
                   :data="study_top"
-                  :colors="colors2"/>
+                  :colors="colors2"
+                  :settings="study_top_setting"/>
               </div>
             </div>
           </div>
@@ -146,9 +154,11 @@ import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
 import BreadCrumb from '../../components/breadCrumb'
 import Basic from '../basic/basic'
+import axios from 'axios'
+import Alert from '../../components/alert'
 export default {
   name: 'Data',
-  components: {Basic, BreadCrumb, Menu, AdminNavbar},
+  components: {Alert, Basic, BreadCrumb, Menu, AdminNavbar},
   data () {
     return {
       items: [{
@@ -160,9 +170,9 @@ export default {
       }],
       buttons: [
         { id: 0, state: true, text: '今天' },
-        { id: 1, state: false, text: '昨天' },
-        { id: 2, state: false, text: '近一周' },
-        { id: 3, state: false, text: '近一月' }
+        { id: 1, state: false, text: '近一周' },
+        { id: 2, state: false, text: '近一月' },
+        { id: 3, state: false, text: '近半年' }
       ],
       increased_users: 1500,
       sale: 150000,
@@ -171,7 +181,7 @@ export default {
       colors1: ['#ff5722'],
       colors2: ['#448aff'],
       praise_top: {
-        columns: ['课程名', '点赞数'],
+        columns: ['title', 'up_votes'],
         rows: [
           { '课程名': '数学', '点赞数': 1500 },
           { '课程名': '语文', '点赞数': 1300 },
@@ -181,7 +191,7 @@ export default {
         ]
       },
       study_top: {
-        columns: ['课程名', '学习人数'],
+        columns: ['title', 'learners'],
         rows: [
           { '课程名': '数学', '学习人数': 1500 },
           { '课程名': '语文', '学习人数': 1300 },
@@ -189,6 +199,18 @@ export default {
           { '课程名': '物理', '学习人数': 1000 },
           { '课程名': '化学', '学习人数': 800 }
         ]
+      },
+      praise_top_setting: {
+        labelMap: {
+          'title': '课程名',
+          'up_votes': '点赞数'
+        }
+      },
+      study_top_setting: {
+        labelMap: {
+          'title': '课程名',
+          'learners': '学习人数'
+        }
       },
       begin_date: new Date(),
       end_date: new Date(),
@@ -236,8 +258,44 @@ export default {
           { '日期': '2018-08-04', '新增学习人数': 1000 },
           { '日期': '2018-08-05', '新增学习人数': 800 }
         ]
+      },
+      dismiss_second: 5,
+      wrong_count_down: 0,
+      wrong: ''
+    }
+  },
+  created () {
+    const that = this
+    let i
+    for (i = 0; i < that.buttons.length; i++) {
+      if (that.buttons[i].state) {
+        break
       }
     }
+    let days = 1
+    if (i === 0) {
+      days = 1
+    } else if (i === 1) {
+      days = 7
+    } else if (i === 2) {
+      days = 31
+    } else if (i === 3) {
+      days = 182
+    }
+    axios.get('http://localhost:8000/api/v1/data/data-management/get-overall-data/',
+      {params: {days: days}})
+      .then(function (response) {
+        that.increased_users = response.data.customers_count
+        that.sale = response.data.income
+        that.increased_courses = response.data.courses_count
+        that.orders = response.data.orders_count
+        that.praise_top.rows = response.data.top_up_voted_courses
+        that.study_top.rows = response.data.top_learned_courses
+      })
+      .catch(function (error) {
+        that.wrong = '获取数据失败' + error
+        that.wrong_count_down = that.dismiss_second
+      })
   },
   methods: {
     change_button_state: function (val) {
@@ -248,6 +306,37 @@ export default {
           this.buttons[i].state = false
         }
       }
+      const that = this
+      let i
+      for (i = 0; i < that.buttons.length; i++) {
+        if (that.buttons[i].state) {
+          break
+        }
+      }
+      let days = 1
+      if (i === 0) {
+        days = 1
+      } else if (i === 1) {
+        days = 7
+      } else if (i === 2) {
+        days = 31
+      } else if (i === 3) {
+        days = 182
+      }
+      axios.get('http://localhost:8000/api/v1/data/data-management/get-overall-data/',
+        {params: {days: days}})
+        .then(function (response) {
+          that.increased_users = response.data.customers_count
+          that.sale = response.data.income
+          that.increased_courses = response.data.courses_count
+          that.orders = response.data.orders_count
+          that.praise_top.rows = response.data.top_up_voted_courses
+          that.study_top.rows = response.data.top_learned_courses
+        })
+        .catch(function (error) {
+          that.wrong = '获取数据失败' + error
+          that.wrong_count_down = that.dismiss_second
+        })
     }
   }
 }
