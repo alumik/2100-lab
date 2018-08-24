@@ -16,28 +16,32 @@
         </b-col>
       </b-row>
     </b-container>
-    <b-container class="bv-example-row">
-      <b-row>
-        <b-col
-          v-for="course in courselist"
-          :key="course.course_id"
-          class="col-style">
-          <b-card
-            id="course-card"
-            :img-src="example_src"
-            :title="course.title"
-            img-alt="Image"
-            img-top
-            tag="article"
-            class="mb-2 width-style"
-            @click="open_detail_page(course.course_id)">
-            <p class="card-text">
-              {{ course.description.substring(0,30) }}
-            </p>
-          </b-card>
-        </b-col>
-      </b-row>
-    </b-container>
+    <div
+      id="course-list"
+      class="bv-example-row course-list-style">
+      <b-container class="bv-example-row">
+        <b-row>
+          <b-col
+            v-for="course in courselist"
+            :key="course.course_id"
+            class="col-style">
+            <b-card
+              id="course-card"
+              :img-src="example_src"
+              :title="course.title"
+              img-alt="Image"
+              img-top
+              tag="article"
+              class="mb-2 width-style"
+              @click="open_detail_page(course.course_id)">
+              <p class="card-text">
+                {{ course.description?course.description.substring(0,20):'' }}
+              </p>
+            </b-card>
+          </b-col>
+        </b-row>
+      </b-container>
+    </div>
   </body>
 </template>
 
@@ -79,10 +83,6 @@ export default {
 </script>
 
 <style>
-  .col-style {
-    margin-bottom: 20px;
-  }
-
   .text-align-right {
     text-align: right;
   }
@@ -98,5 +98,21 @@ export default {
   .width-style {
     min-width: 10rem;
     max-width: 20rem;
+  }
+
+  .col-style {
+    flex: 1 0 20%;
+    margin-bottom: 20px;
+  }
+
+  #course-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .course-list-style {
+    margin: 30px 0;
   }
 </style>

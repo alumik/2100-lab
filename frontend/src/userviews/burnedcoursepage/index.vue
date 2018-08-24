@@ -15,6 +15,19 @@
 
 <script>
 import Basic from '../components/basic'
+import $ from 'jquery'
+
+$(document).ready(function (e) {
+  if (window.history && window.history.pushState) {
+    $(window).on('popstate', function () {
+      window.history.pushState('forward', null, '/')
+      location.reload()
+      window.history.forward(1)
+    })
+  }
+  window.history.pushState('forward', null, '/404')
+  window.history.forward(1)
+})
 
 export default {
   name: 'BurnedCourse',
