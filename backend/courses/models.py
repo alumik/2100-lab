@@ -19,7 +19,7 @@ class Course(SoftDeletionModel):
     )
     codename = models.CharField(max_length=50, unique=True)
     price = models.DecimalField(decimal_places=2, max_digits=12, default=0)
-    reward_percent = models.DecimalField(decimal_places=2, max_digits=2, default=0)
+    reward_percent = models.DecimalField(decimal_places=2, max_digits=12, default=0)
     thumbnail = models.ImageField(upload_to='uploads/courses/thumbnails/', blank=True)
     audio = models.FileField(upload_to='uploads/courses/audios/', blank=True)
     expire_duration = models.DurationField(default=datetime.timedelta())
@@ -70,6 +70,7 @@ class Image(models.Model):
 
     def as_dict(self):
         return {
+            'image_id': self.id,
             'image_path': str(self.image_path),
             'load_time': self.load_time
         }

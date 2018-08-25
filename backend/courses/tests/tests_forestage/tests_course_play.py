@@ -97,6 +97,7 @@ class CoursePlayTests(TestCase):
             {'course_id': str(course.id)}
         )
         self.assertEqual(response.status_code, 200)
+        response_json_data = json.loads(response.content)
         self.assertJSONEqual(
             str(response.content, encoding='utf8'),
             {
@@ -106,10 +107,12 @@ class CoursePlayTests(TestCase):
                 'audio': '',
                 'images': [
                     {
+                        'image_id': response_json_data['images'][0]['image_id'],
                         'image_path': 'fake/path/to/img2.png',
                         'load_time': 100
                     },
                     {
+                        'image_id': response_json_data['images'][1]['image_id'],
                         'image_path': 'fake/path/to/img1.png',
                         'load_time': 200
                     },
