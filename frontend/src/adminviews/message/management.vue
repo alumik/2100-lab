@@ -158,13 +158,16 @@ export default {
   components: { Alert, Basic, InputModal, ConfirmModal, Pagination },
   data () {
     return {
-      items: [{
-        text: this.$t('message.breadcrumb1'),
-        href: '/admin/main'
-      }, {
-        text: this.$t('message.breadcrumb2'),
-        active: true
-      }],
+      items: [
+        {
+          text: this.$t('message.breadcrumb1'),
+          href: '/admin/main'
+        },
+        {
+          text: this.$t('message.breadcrumb2'),
+          active: true
+        }
+      ],
       rows: 0,
       messages: null,
       titles: [
@@ -196,11 +199,16 @@ export default {
   },
   created () {
     const that = this
-    axios.get('http://localhost:8000/api/v1/courses/backstage/comment-management/get-comment-list/',
-      { params: {
-        page_limit: that.per_page,
-        page: that.page
-      }})
+    axios
+      .get(
+        'http://localhost:8000/api/v1/courses/backstage/comment-management/get-comment-list/',
+        {
+          params: {
+            page_limit: that.per_page,
+            page: that.page
+          }
+        }
+      )
       .then(function (response) {
         that.messages = response.data.content
         that.rows = response.data.count
@@ -214,7 +222,7 @@ export default {
   methods: {
     to_detail: function (val) {
       this.page_jump = true
-      this.$router.push({ name: 'MessageDetail', query: {message_id: val} })
+      this.$router.push({ name: 'MessageDetail', query: { message_id: val } })
     },
     compute_date: function (date) {
       return date.slice(0, 10)
@@ -251,15 +259,20 @@ export default {
       } else {
         state = '2'
       }
-      axios.get('http://localhost:8000/api/v1/courses/backstage/comment-management/get-comment-list/',
-        {params: {
-          username: that.user,
-          course_codename: that.course_code,
-          course_title: that.course_name,
-          is_deleted: state,
-          page_limit: that.per_page,
-          page: that.page
-        }})
+      axios
+        .get(
+          'http://localhost:8000/api/v1/courses/backstage/comment-management/get-comment-list/',
+          {
+            params: {
+              username: that.user,
+              course_codename: that.course_code,
+              course_title: that.course_name,
+              is_deleted: state,
+              page_limit: that.per_page,
+              page: that.page
+            }
+          }
+        )
         .then(function (response) {
           that.messages = response.data.content
           that.rows = response.data.count
@@ -275,10 +288,13 @@ export default {
     },
     delete_message: function () {
       const that = this
-      axios.post('http://localhost:8000/api/v1/courses/backstage/comment-management/delete-comment/',
-        qs.stringify({
-          comment_id: that.delete_id
-        }))
+      axios
+        .post(
+          'http://localhost:8000/api/v1/courses/backstage/comment-management/delete-comment/',
+          qs.stringify({
+            comment_id: that.delete_id
+          })
+        )
         .then(function (response) {
           if (response.data.message === 'Object not found.') {
             that.wrong = '你所删除的留言不存在，删除失败！'
@@ -296,11 +312,14 @@ export default {
     },
     reply_message: function (val) {
       const that = this
-      axios.post('http://localhost:8000/api/v1/courses/backstage/comment-management/add-comment/',
-        qs.stringify({
-          reply_to_id: that.reply_id,
-          comment_content: val
-        }))
+      axios
+        .post(
+          'http://localhost:8000/api/v1/courses/backstage/comment-management/add-comment/',
+          qs.stringify({
+            reply_to_id: that.reply_id,
+            comment_content: val
+          })
+        )
         .then(function (response) {
           if (response.data.message === 'Success.') {
             that.search()
@@ -334,6 +353,7 @@ export default {
     padding-left: 15px;
     color: #23527c;
     text-align: left;
+    border-bottom: 1px solid #eef1f5;
   }
 
   h1 {
@@ -354,11 +374,16 @@ export default {
 
   table {
     margin-bottom: 20px;
+<<<<<<< HEAD
     border-top: 1px solid #d3d9df;
   }
 
   th {
     font-size: 1.2em;
+=======
+    font-size: 1.2em;
+    border-top: 1px solid #d3d9df;
+>>>>>>> Merge the master to resolve the conflicts. Ref #341
   }
 
   td {
@@ -382,6 +407,7 @@ export default {
 
   #delete-button {
     color: #e60000;
+<<<<<<< HEAD
   }
 
   #detail-button:hover {
@@ -394,6 +420,8 @@ export default {
 
   #delete-button:hover {
     background-color: rgba(230, 0, 0, 0.2);
+=======
+>>>>>>> Merge the master to resolve the conflicts. Ref #341
   }
 
   select {
@@ -415,6 +443,10 @@ export default {
     overflow-x: scroll;
   }
 
+<<<<<<< HEAD
+=======
+  .btn:hover,
+>>>>>>> Merge the master to resolve the conflicts. Ref #341
   .btn:active {
     background-color: #d8d8d8;
   }
