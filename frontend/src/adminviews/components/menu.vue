@@ -2,12 +2,14 @@
   <nav
     id="sidebar"
     :class="{hide: menu_hide, 'sidebar': true}">
-    <div class="sidebar-header">{{ $t('menu.header') }}</div>
+    <div
+      class="sidebar-header"
+      @click="$router.push({path: '/admin/main'})">{{ $t('menu.header') }}</div>
     <ul class="components">
       <li
         v-for="list in lists"
         :key="list.id"
-        :class="{active: list.isActive}">
+        :class="{active: $store.state.menu === list.id}">
         <a @click="jump(list.id)">{{ list.text }}</a>
       </li>
     </ul>
@@ -80,6 +82,7 @@ export default {
   methods: {
     jump: function (id) {
       this.$emit('jump', id)
+      this.$store.commit('menu', id)
       this.$router.push({ path: this.lists[id - 1].path })
     }
   }
@@ -89,5 +92,10 @@ export default {
 <style>
 #sidebar {
   position: fixed;
+}
+
+.sidebar-header,
+a {
+  cursor: pointer;
 }
 </style>

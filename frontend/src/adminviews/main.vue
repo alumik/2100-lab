@@ -18,6 +18,9 @@ export default {
         href: '/admin/main'
       }]
     }
+  },
+  mounted () {
+    this.$store.commit('menu', 0)
   }
 }
 </script>
