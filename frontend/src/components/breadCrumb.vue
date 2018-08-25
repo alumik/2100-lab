@@ -57,7 +57,8 @@ export default {
   }
 
   .breadcrumb {
-    background-color: #e9ecf3;
+    background-color: white;
     border-radius: 0;
+    margin: 0;
   }
 </style>

@@ -94,7 +94,6 @@ export default {
 }
 
 .navbar {
-  width: 100vw;
   padding: 10px 5px;
   background-color: #fff !important;
   border-bottom: 1px solid rgba(153, 153, 153, 0.42);

@@ -2,7 +2,7 @@
   <Basic
     :items="items"
     class="my-basic">
-    <div>
+    <div class="body">
       <h1>{{ $t("message.title") }}</h1>
       <Alert
         :count_down="wrong_count_down"
@@ -85,31 +85,49 @@
               <td>{{ compute_message(message.content) }}</td>
               <td id="state"> {{ compute_state(message.is_deleted) }} </td>
               <td class="buttons">
-                <button
-                  id="detail"
-                  type="button"
-                  class="btn btn-xs"
+                <a
+                  id="detail-button"
+                  class="btn"
                   @click="to_detail(message.comment_id + '')">
+                  <simple-line-icons
+                    icon="bubble"
+                    color="#5b9bd1"
+                    class="icon"
+                    size="small"/>
                   {{ $t('message.detail') }}
-                </button>
-                <button
+                </a>
+                <a
                   v-b-modal.reply
-                  type="button"
+                  id="reply-button"
                   class="btn"
                   @click="reply_id=message.comment_id">
+                  <simple-line-icons
+                    icon="pencil"
+                    color="green"
+                    class="icon"
+                    size="small"/>
                   {{ $t('message.reply') }}
-                </button>
-                <button
+                </a>
+                <a
                   v-b-modal.delete
-                  type="button"
+                  id="delete-button"
                   class="btn"
                   @click="delete_id=message.comment_id">
+                  <simple-line-icons
+                    icon="trash"
+                    color="#e60000"
+                    class="icon"
+                    size="small"/>
                   {{ $t('message.delete') }}
-                </button>
+                </a>
               </td>
             </tr>
           </tbody>
         </table>
+        <Pagination
+          :rows="rows"
+          :perpage="per_page"
+          @change="change_page"/>
       </div>
       <InputModal
         id="reply"
@@ -122,10 +140,6 @@
         title="确认删除"
         text="您确定要删除此条留言吗？"
         @click="delete_message"/>
-      <Pagination
-        :rows="rows"
-        :perpage="per_page"
-        @change="change_page"/>
     </div>
   </Basic>
 </template>
@@ -304,11 +318,22 @@ export default {
 </script>
 
 <style scoped>
+  .body {
+    padding: 20px;
+    margin: 70px 20px 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  }
+
   h1 {
+    padding-bottom: 10px;
     padding-left: 15px;
     margin-top: 25px;
     margin-bottom: 25px;
+    color: #23527c;
     text-align: left;
+    border-bottom: 1px solid #eef1f5;
   }
 
   .buttons {
@@ -319,20 +344,31 @@ export default {
   }
 
   table {
+    margin-bottom: 20px;
     font-size: 1.2em;
-    border: 1px solid #d3d9df;
+    border-top: 1px solid #d3d9df;
   }
 
   td {
     vertical-align: middle;
   }
 
-  td button {
-    margin-right: 7px;
-    margin-left: 7px;
-    border-radius: 10px;
-    outline: none;
-    box-shadow: #adb5bd inset;
+  .btn {
+    margin-right: 2px;
+    margin-left: 2px;
+    border: 1px solid #d3d9df;
+  }
+
+  #detail-button {
+    color: #5b9bd1;
+  }
+
+  #reply-button {
+    color: green;
+  }
+
+  #delete-button {
+    color: #e60000;
   }
 
   select {
@@ -352,24 +388,14 @@ export default {
     overflow-x: scroll;
   }
 
-  .btn {
-    color: white;
-    background-color: #8d4e91;
-    border-color: #8d6592;
-    border-radius: 10px;
-    outline: none;
-    box-shadow: #8d6592 inset;
-  }
-
   .btn:hover,
   .btn:active {
-    background-color: #5e0057;
+    background-color: #d8d8d8;
   }
 
   thead tr {
     font-weight: bold;
-    color: white;
-    background-color: #6c757d;
+    color: #999;
   }
 
   .xs-td {

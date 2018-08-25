@@ -6,10 +6,6 @@
     <div
       class="sidebar-header"
       @click="$router.push({path: '/admin/main'})">
-      <simple-line-icons
-        icon="home"
-        class="head-icon"
-        size="small"/>
       {{ $t('menu.header') }}
     </div>
     <ul class="components">
@@ -20,6 +16,7 @@
         <a @click="jump(i)">
           <simple-line-icons
             :icon="icons[i-1]"
+            :color="icon_colors[i-1]"
             class="icon"
             size="small"/>
           {{ lists[i-1].text }}</a>
@@ -87,12 +84,26 @@ export default {
   },
   data () {
     return {
-      icons: ['notebook', 'note', 'people', 'calculator', 'user', 'chart', 'calendar']
+      icons: ['notebook', 'note', 'people', 'calculator', 'user', 'chart', 'calendar'],
+      icon_colors: this.$store.state.icon_colors
     }
   },
   create () {},
   methods: {
     jump: function (id) {
+      let colors = []
+      for (let color of this.icon_colors) {
+        colors.push(color)
+      }
+      for (let i = 0; i < colors.length; i++) {
+        if (i === (id - 1)) {
+          colors[i] = '#5b9bd1'
+        } else {
+          colors[i] = '#999'
+        }
+      }
+      this.icon_colors = colors
+      this.$store.commit('icon_colors', colors)
       this.$emit('jump', id)
       this.$store.commit('menu', id)
       this.$router.push({ path: this.lists[id - 1].path })
@@ -104,8 +115,11 @@ export default {
 <style>
 #sidebar {
   position: fixed;
-  z-index: 9999;
   text-align: left;
+}
+
+.sidebar-header {
+  text-align: center;
 }
 
 .sidebar-header,
@@ -116,10 +130,5 @@ a {
 .icon {
   width: 15px;
   height: 15px;
-}
-
-.head-icon {
-  width: 20px;
-  height: 20px;
 }
 </style>
