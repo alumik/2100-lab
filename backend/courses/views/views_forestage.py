@@ -293,6 +293,7 @@ def down_vote_comment(request):
 def add_comment(request):
     user = request.user
     course_id = request.POST.get('course_id')
+    reply_to_id = request.POST.get('reply_to_id', '')
     comment_content = request.POST.get('content')
 
     try:
@@ -306,9 +307,17 @@ def add_comment(request):
     if (not course.can_comment) or user.is_banned:
         return JsonResponse({'message': ERROR['comment_not_allowed']}, status=403)
 
-    Comment.objects.create(
+    comment = Comment.objects.create(
         user=user,
         course=course,
         content=comment_content
     )
+
+    if reply_to_id != '':
+        try:
+            reply_to = Comment.objects.get(id=int(reply_to_id))
+            reply_to.reply.add(comment)
+        except Comment.DoesNotExist:
+            pass
+
     return JsonResponse({'message': INFO['success']})
