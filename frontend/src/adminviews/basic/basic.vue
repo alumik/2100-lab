@@ -1,10 +1,12 @@
 <template>
   <div>
-    <AdminNavbar @hide="hide"/>
+    <AdminNavbar
+      @hide="hide"/>
     <div class="my-menu">
       <Menu
         :lists="lists"
-        :hidden="menu_hide"
+        :hidden="hidden"
+        @blur="hide"
         @jump="jump"/>
       <div class="container-fluid my-container">
         <div class="my-bread">
@@ -31,7 +33,7 @@ export default {
   },
   data () {
     return {
-      menu_hide: false,
+      hidden: false,
       lists: [
         {
           id: 1,
@@ -78,9 +80,21 @@ export default {
       ]
     }
   },
+  mounted () {
+    let that = this
+    document.addEventListener('click', e => {
+      if (
+        e.target.id !== 'sidebar' &&
+        e.target.id !== 'hide-button' &&
+        e.target.id !== 'hide-span'
+      ) {
+        that.hidden = false
+      }
+    })
+  },
   methods: {
     hide () {
-      this.menu_hide = !this.menu_hide
+      this.hidden = !this.hidden
     },
     jump (id) {
       for (let list = 0; list < 7; list = list + 1) {
@@ -93,20 +107,20 @@ export default {
 </script>
 
 <style scoped>
-  .my-menu {
-    display: flex;
-  }
+.my-menu {
+  display: flex;
+}
 
+.my-container {
+  width: calc(100% - 200px);
+  padding: 0;
+  margin-left: 200px;
+}
+
+@media (max-width: 991px) {
   .my-container {
-    width: calc(100% - 200px);
-    padding: 0;
-    margin-left: 200px;
+    width: 100%;
+    margin-left: 0;
   }
-
-  @media (max-width: 768px) {
-    .my-container {
-      width: 100%;
-      margin-left: 0;
-    }
-  }
+}
 </style>

@@ -2,7 +2,7 @@
     DEMO STYLE
 */
 
-@import "fontFamily.css";
+@import 'fontFamily.css';
 
 /* ---------------------------------------------------
     SIDEBAR STYLE
@@ -13,18 +13,18 @@
   max-width: 200px;
   height: 100%;
   color: #5610a7;
-  background: #f5f5f5;
+  background: rgba(240, 240, 240, 0.95);
   transition: all 0.3s;
+}
+
+@media (max-width: 991px) {
+  .sidebar {
+    margin-left: -200px;
+  }
 }
 
 .hide {
   margin-left: 0;
-}
-
-@media (max-width: 768px) {
-  .sidebar {
-    margin-left: -200px;
-  }
 }
 
 #sidebar .sidebar-header {
@@ -58,7 +58,7 @@ a:focus {
 }
 
 #sidebar ul li.active > a,
-a[aria-expanded="true"] {
+a[aria-expanded='true'] {
   color: #8d4e91;
   background: #fff;
 }

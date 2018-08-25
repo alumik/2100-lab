@@ -6,9 +6,12 @@
     variant="primary"
     class="navbar">
     <button
+      id="hide-button"
       class="navbar-toggler"
       @click="$emit('hide')">
-      <span class="navbar-toggler-icon"/>
+      <span
+        id="hide-span"
+        class="navbar-toggler-icon"/>
     </button>
     <b-navbar-brand
       class="logo">
@@ -39,7 +42,7 @@ export default {
   name: 'AdminNavbar',
   data () {
     return {
-      toggleable: 'md'
+      toggleable: 'lg'
     }
   },
   methods: {
@@ -99,7 +102,7 @@ export default {
 }
 
 .navbar-toggler {
+  margin: 0 15px;
   background-color: #f00;
 }
-
 </style>
