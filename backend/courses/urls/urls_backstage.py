@@ -28,6 +28,11 @@ urlpatterns = [
         name='add-course'
     ),
     path(
+        'course-management/delete-course-images/',
+        views_backstage.delete_course_images,
+        name='delete-course-images'
+    ),
+    path(
         'course-management/add-hero/',
         views_backstage.add_hero,
         name='add-hero'

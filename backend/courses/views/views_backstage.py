@@ -100,7 +100,7 @@ def add_course(request):
         Image.objects.create(
             course=course,
             image_path=image,
-            load_time=load_times[images.index(image)]
+            load_time=int(float(load_times[images.index(image)]))
         )
 
     AdminLog.objects.create(
@@ -109,6 +109,25 @@ def add_course(request):
         object_id=course.id,
     )
     return JsonResponse({'message': INFO['success']})
+
+
+@permission_required('courses.delete_image')
+def delete_course_images(request):
+    delete_list = request.POST.getlist('delete_list', [])
+
+    deleted = []
+    for image_id in delete_list:
+        try:
+            image = Image.objects.get(id=int(image_id))
+            image.delete()
+            deleted.append(int(image_id))
+        except Image.DoesNotExist:
+            pass
+    return JsonResponse(
+        {
+            'deleted': deleted
+        }
+    )
 
 
 @permission_required('courses.view_comment')

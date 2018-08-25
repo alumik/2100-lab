@@ -6,7 +6,7 @@ from django.contrib.auth.models import Group, Permission
 from django.test import TestCase
 from django.urls import reverse
 
-from courses.models import Course, Hero
+from courses.models import Course, Hero, Image
 
 
 class CourseListTests(TestCase):
@@ -121,7 +121,6 @@ class CourseListTests(TestCase):
         )
 
     def test_course_list_two_filter(self):
-        self.maxDiff = None
         self.client.login(phone_number='13312345678', password='123456')
         course = Course.objects.get(codename='SOFT1')
 
@@ -197,20 +196,21 @@ class CourseDetailTests(TestCase):
 
 
 class CourseOperationsTests(TestCase):
+    def setUp(self):
+        get_user_model().objects.create_user(
+            phone_number='13312345678',
+            password='123456',
+            is_staff=True,
+            is_superuser=True
+        )
+
     def test_delete_course(self):
-        admin = get_user_model().objects.create_user(phone_number='13312345678', password='123456')
-        permission = Permission.objects.get(codename='delete_course')
-        admin_group = Group.objects.create(name='course_admin')
-        admin_group.permissions.add(permission)
-        admin_group.save()
-        admin.groups.add(admin_group)
-        admin.save()
+        self.client.login(phone_number='13312345678', password='123456')
         course = Course.objects.create(
             title='t1',
             description='d1',
             codename='SOFT1'
         )
-        self.client.login(phone_number='13312345678', password='123456')
 
         response = self.client.post(
             reverse('api:courses:backstage:delete-course'),
@@ -221,12 +221,6 @@ class CourseOperationsTests(TestCase):
         self.assertTrue(course.deleted_at is not None)
 
     def test_add_course(self):
-        get_user_model().objects.create_user(
-            phone_number='13312345678',
-            password='123456',
-            is_staff=True,
-            is_superuser=True
-        )
         self.client.login(phone_number='13312345678', password='123456')
 
         response = self.client.post(
@@ -247,6 +241,39 @@ class CourseOperationsTests(TestCase):
         self.assertEqual(course.title, 'test_title1')
         self.assertTrue(course.can_comment)
         self.assertEqual(course.reward_percent, Decimal('0.50'))
+
+    def test_delete_course_images(self):
+        self.client.login(phone_number='13312345678', password='123456')
+        course = Course.objects.create(
+            title='t1',
+            description='d1',
+            codename='SOFT1'
+        )
+        image = Image.objects.create(
+            image_path='fake/1.png',
+            course=course,
+            load_time=1
+        )
+
+        response = self.client.get(
+            reverse('api:courses:forestage:get-course-assets'),
+            {'course_id': course.id}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(json.loads(response.content)['images']), 1)
+
+        response = self.client.post(
+            reverse('api:courses:backstage:delete-course-images'),
+            {'delete_list': [image.id]}
+        )
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(
+            reverse('api:courses:forestage:get-course-assets'),
+            {'course_id': course.id}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(json.loads(response.content)['images']), 0)
 
 
 class HeroOperationsTests(TestCase):
