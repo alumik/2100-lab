@@ -174,7 +174,7 @@ export default {
       const that = this
       axios.post('http://localhost:8000/api/v1/courses/backstage/comment-management/add-comment/',
         qs.stringify({
-          course_codename: that.message[2],
+          reply_to_id: that.$route.query.message_id,
           comment_content: val
         }))
         .then(function (response) {
