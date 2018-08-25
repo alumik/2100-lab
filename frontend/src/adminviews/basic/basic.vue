@@ -1,7 +1,6 @@
 <template>
-  <div>
-    <AdminNavbar
-      @hide="hide"/>
+  <div class="basic">
+    <AdminNavbar @hide="hide"/>
     <div class="my-menu">
       <Menu
         :lists="lists"
@@ -107,6 +106,10 @@ export default {
 </script>
 
 <style scoped>
+.basic {
+  background-color: #e9ecf3;
+}
+
 .my-menu {
   display: flex;
 }
