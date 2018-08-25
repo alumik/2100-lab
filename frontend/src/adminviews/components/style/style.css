@@ -17,16 +17,15 @@
   transition: all 0.3s;
 }
 
-/*
-@media (max-width: 1200px) {
-  .sidebar {
+@media (max-width: 768px) {
+  #sidebar {
     margin-left: -200px;
   }
 }
 
 .hide {
   margin-left: 0;
-} */
+}
 
 #sidebar .sidebar-header {
   padding: 20px;

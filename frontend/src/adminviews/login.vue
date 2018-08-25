@@ -70,7 +70,8 @@ export default {
       error_message: ''
     }
   },
-  beforeMount () {
+  mounted () {
+    alert(this.$store.state.adminStatus)
     if (this.$store.state.adminStatus) {
       this.$router.push({ path: '/admin/main' })
     }
