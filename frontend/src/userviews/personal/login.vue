@@ -219,7 +219,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error)
           if (error.response.data.message === 'Different phone number.') {
             that.phoneState = false
           } else if (
