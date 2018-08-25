@@ -71,12 +71,12 @@ export default {
 
 <style scoped>
 #logout {
-  padding-right: 10px;
+  padding-right: 35px;
 }
 
 .logo {
   height: 50px;
-  margin: 0;
+  margin-left: 35px;
   vertical-align: middle;
 }
 
@@ -94,10 +94,9 @@ export default {
 }
 
 .navbar {
-  width: 100vw;
   padding: 10px 5px;
   background-color: #fff !important;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(153, 153, 153, 0.42);
 }
 
 .navbar-toggler {

@@ -107,11 +107,18 @@ export default {
 
 <style scoped>
 .basic {
-  background-color: #e9ecf3;
+  background-color: rgb(240, 243, 250);
 }
 
 .my-menu {
   display: flex;
+}
+
+.my-bread {
+  position: fixed;
+  width: 100%;
+  margin: 0;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 
 .my-container {

@@ -137,9 +137,13 @@ export default {
 </script>
 
 <style scoped>
+#logout {
+  padding-right: 35px;
+}
+
 .logo {
   height: 50px;
-  margin: 0;
+  margin-left: 35px;
   vertical-align: middle;
 }
 

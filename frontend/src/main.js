@@ -38,7 +38,8 @@ const store = new Vuex.Store({
     money: '',
     time: '',
     address: 'http://localhost:8000/media/',
-    menu: 0
+    menu: 0,
+    colors: ['#999', '#999', '#999', '#999', '#999', '#999', '#999']
   },
   mutations: {
     status (state, status = true) {
@@ -76,6 +77,9 @@ const store = new Vuex.Store({
     menu (state, menu) {
       state.menu = menu
       sessionStorage.setItem('menu', menu)
+    },
+    colors (state, colors) {
+      state.colors = colors
     }
   }
 })

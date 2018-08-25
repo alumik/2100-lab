@@ -50,7 +50,7 @@ a:focus {
   padding-top: 10px;
   padding-right: 10px;
   padding-bottom: 10px;
-  padding-left: 20px;
+  padding-left: 36px;
   font-size: 1.1em;
   color: #23527c;
   border-left: 3px solid white;
@@ -60,14 +60,14 @@ a:focus {
 #sidebar ul li a:active {
   color: #5b9bd1;
   cursor: pointer;
-  background: #f2f6f9;
+  background: rgb(240, 243, 250);
   border-left: 3px solid #5c9acf;
 }
 
 #sidebar ul li.active > a,
 a[aria-expanded="true"] {
   color: #5b9bd1;
-  background: #f2f6f9;
+  background: rgb(240, 243, 250);
   border-left: 3px solid #5c9acf;
 }
 
