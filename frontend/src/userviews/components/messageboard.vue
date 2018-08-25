@@ -126,10 +126,8 @@ export default {
   },
   props: {
     course_id: {
-      type: String,
-      default: function () {
-        return 0
-      }
+      type: Number,
+      default: 0
     }
   },
   data () {
@@ -277,7 +275,7 @@ export default {
         } else if (error.response.data.message === 'Access denied.') {
           that.add_message_test = true
           that.add_message_error_msg = that.$t('error.access_denied')
-        } else if (error.response.data.message === 'comment_not_allowed') {
+        } else if (error.response.data.message === 'Comment not allowed.') {
           that.add_message_test = true
           that.add_message_error_msg = that.$t('error.comment_not_allowed')
         }

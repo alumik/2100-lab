@@ -103,7 +103,6 @@ export default {
       })
     axios.get('http://localhost:8000/api/v1/courses/forestage/main/get-heroes/')
       .then(function (response) {
-        console.log(response)
         that.carousellist = response.content
         that.carouselnum = response.count
       }).catch(function (error) {
