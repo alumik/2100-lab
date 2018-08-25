@@ -81,9 +81,9 @@ def add_course(request):
     can_comment = request.POST.get('can_comment') == '1'
     reward_percent = float(request.POST.get('reward_percent'))
     description = request.POST.get('description')
-    images = request.FILES.getlist('images')
+    images = request.FILES.getlist('images', [])
     audio = request.FILES.get('audio')
-    load_times = request.POST.getlist('load_times')
+    load_times = request.POST.getlist('load_times', [])
 
     course = Course.objects.create(
         title=title,
@@ -106,7 +106,7 @@ def add_course(request):
     AdminLog.objects.create(
         admin_user=request.user,
         action_type=ACTION_TYPE['add_course'],
-        object_id=course.id,
+        object_id=course.id
     )
     return JsonResponse({'message': INFO['success']})
 
@@ -128,6 +128,82 @@ def delete_course_images(request):
             'deleted': deleted
         }
     )
+
+
+@permission_required('courses.change_course')
+def edit_course(request):
+    course_id = request.POST.get('course_id')
+
+    try:
+        course = Course.objects.get(id=str(course_id))
+    except Course.DoesNotExist:
+        return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+
+    course.title = request.POST.get('title')
+    course.codename = request.POST.get('codename')
+    course.expire_duration = datetime.timedelta(
+        days=int(request.POST.get('days')),
+        hours=int(request.POST.get('hours'))
+    )
+    course.price = Decimal(float(request.POST.get('price')))
+    course.can_comment = request.POST.get('can_comment') == '1'
+    course.reward_percent = Decimal(float(request.POST.get('reward_percent')))
+    course.description = request.POST.get('description')
+    audio = request.FILES.get('audio')
+    if audio is not None:
+        course.audio = audio
+    course.save()
+    image_files = request.FILES.getlist('image_files', [])
+    image_ids = request.POST.getlist('image_ids', [])
+    load_times_files = request.POST.getlist('load_times_files', [])
+    load_times_ids = request.POST.getlist('load_times_ids', [])
+
+    for image in image_files:
+        Image.objects.create(
+            course=course,
+            image_path=image,
+            load_time=int(float(load_times_files[image_files.index(image)]))
+        )
+
+    for image_id in image_ids:
+        image = Image.objects.get(id=str(image_id))
+        image.load_time = int(float(load_times_ids[image_ids.index(image_id)]))
+        image.save()
+
+    AdminLog.objects.create(
+        admin_user=request.user,
+        action_type=ACTION_TYPE['update_course'],
+        object_id=course.id
+    )
+    return JsonResponse({'message': INFO['success']})
+
+
+@permission_required('courses.change_course')
+def get_course_assets(request):
+    course_id = request.GET.get('course_id')
+
+    try:
+        course = Course.objects.get(id=course_id)
+    except Course.DoesNotExist:
+        return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+
+    images = Image.objects.filter(course=course).all().order_by('load_time')
+    json_data = {
+        'course_id': course.id,
+        'title': course.title,
+        'codename': course.codename,
+        'expire_duration': course.expire_duration.total_seconds(),
+        'price': course.price,
+        'can_comment': course.can_comment,
+        'reward_percent': course.reward_percent,
+        'description': course.description,
+        'audio': str(course.audio),
+        'images': []
+    }
+    for image in images:
+        json_data['images'].append(image.as_dict())
+
+    return JsonResponse(json_data)
 
 
 @permission_required('courses.view_comment')
