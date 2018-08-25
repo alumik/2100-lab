@@ -60,9 +60,9 @@ export default {
         },
         {
           id: 5,
-          text: this.$t('menu.admin'),
+          text: this.$t('menu.log'),
           isActive: false,
-          path: '/admin/adminmanagement'
+          path: '/admin/log'
         },
         {
           id: 6,
@@ -72,9 +72,9 @@ export default {
         },
         {
           id: 7,
-          text: this.$t('menu.log'),
+          text: this.$t('menu.admin'),
           isActive: false,
-          path: '/admin/log'
+          path: '/admin/adminmanagement'
         }
       ]
     }
