@@ -17,14 +17,14 @@
   transition: all 0.3s;
 }
 
-@media (max-width: 768px) {
-  #sidebar {
-    margin-left: -200px;
-  }
-}
-
 .hide {
   margin-left: 0;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    margin-left: -200px;
+  }
 }
 
 #sidebar .sidebar-header {

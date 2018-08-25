@@ -265,6 +265,10 @@ export default {
   padding: 10px 0;
 }
 
+.content > .row {
+  justify-content: space-between;
+}
+
 img {
   flex-grow: 0;
   max-height: 300px;

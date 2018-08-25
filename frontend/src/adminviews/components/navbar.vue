@@ -67,6 +67,10 @@ export default {
 </script>
 
 <style scoped>
+#logout {
+  padding-right: 10px;
+}
+
 .logo {
   height: 50px;
   margin: 0;
@@ -87,6 +91,7 @@ export default {
 }
 
 .navbar {
+  width: 100vw;
   padding: 10px 5px;
   background-color: #fff !important;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
@@ -97,13 +102,4 @@ export default {
   background-color: #f00;
 }
 
-@media (min-width: 1200px) {
-  #nav_collapse {
-    display: -ms-flexbox !important;
-    display: -webkit-box !important;
-    display: flex !important;
-    -ms-flex-preferred-size: auto;
-    flex-basis: auto;
-  }
-}
 </style>
