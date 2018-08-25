@@ -296,8 +296,8 @@ export default {
 </script>
 
 <style scoped>
-  .my-basic {
-    min-width: 800px;
+  .body {
+    overflow-x: scroll;
   }
 
   .tab-content {
@@ -342,6 +342,7 @@ export default {
 
   .search {
     display: flex;
+    flex-wrap: wrap;
     justify-content: flex-start;
     padding-top: 10px;
     padding-bottom: 10px;

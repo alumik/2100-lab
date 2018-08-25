@@ -2,7 +2,7 @@
   <Basic
     :items="items"
     class="my-basic">
-    <div>
+    <div class="body">
       <h1>日志查询</h1>
       <div class="table-div">
         <table class="table">
@@ -198,8 +198,9 @@ export default {
 </script>
 
 <style scoped>
-  .my-basic {
-    min-width: 700px;
+  .body {
+    height: 100%;
+    overflow-x: scroll;
   }
 
   h1,

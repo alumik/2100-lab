@@ -147,10 +147,6 @@ export default {
 </script>
 
 <style scoped>
-  .my-basic {
-    min-width: 800px;
-  }
-
   h1 {
     padding-left: 15px;
     margin-top: 25px;
@@ -161,6 +157,7 @@ export default {
   .table-div {
     padding-right: 15px;
     padding-left: 15px;
+    overflow-x: scroll;
   }
 
   table {

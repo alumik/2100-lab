@@ -223,8 +223,8 @@ export default {
 </script>
 
 <style scoped>
-  .my-basic {
-    min-width: 800px;
+  .body {
+    overflow-x: scroll;
   }
 
   .tab-content {
