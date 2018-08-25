@@ -96,7 +96,7 @@
           <b-card-body>
             <p
               id="message-board"
-              class="card-text width-style">
+              class="card-text">
               <MessageBoard :course_id="query_course_id"/>
             </p>
           </b-card-body>
@@ -172,6 +172,7 @@ export default {
       'course_id=' + that.query_course_id)
       .then(function (response) {
         that.course = response.data
+        console.log(that.course)
         that.$refs.player.currentTime = that.course.progress
       }).catch(function (error) {
         if (error.response.data.message === 'Object not found.') {
@@ -317,10 +318,6 @@ export default {
   .audio-player {
     width: 99%;
     height: 100%;
-  }
-
-  .width-style {
-    width: 100%;
   }
 
   .vote-style {
