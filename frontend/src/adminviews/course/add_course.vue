@@ -213,12 +213,9 @@ export default {
     },
     receive_sync_data (imageDataList) {
       this.image_file_list = imageDataList
-      console.log(this.image_file_list[0])
     },
     upload_all_data () {
       let formdata = new FormData()
-      console.log(this.prices)
-      console.log(this.reward_percent)
       for (let i = 0; i < this.image_file_list.length; i++) {
         formdata.append('images', this.image_file_list[i].file)
         formdata.append('load_times', this.image_file_list[i].time)
