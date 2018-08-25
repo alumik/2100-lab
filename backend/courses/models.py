@@ -90,6 +90,7 @@ class Comment(SoftDeletionModel):
         blank=True,
         related_name='comment_down_vote_customer'
     )
+    reply = models.ManyToManyField('self', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
