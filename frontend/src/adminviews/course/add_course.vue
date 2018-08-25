@@ -9,6 +9,7 @@
             for="coursename">课程名</label>
           <input
             id="coursename"
+            v-model="title"
             class="input form-control col-lg-3"
             type="text">
         </div>
@@ -18,6 +19,7 @@
             for="courseID">课程代码</label>
           <input
             id="courseID"
+            v-model="codename"
             class="input form-control col-lg-3"
             type="text">
         </div>
@@ -52,6 +54,7 @@
                 class="input-group">
                 <input
                   id="flare_time_day"
+                  v-model="days"
                   class="input form-control col-lg-1"
                   type="text">
                 <div class="input-group-prepend">
@@ -65,10 +68,13 @@
                 class="input-group">
                 <input
                   id="flare_time_hour"
+                  v-model="hours"
                   class="input form-control col-lg-1"
                   type="text">
                 <div class="input-group-prepend">
-                  <span class="input-group-text">小时</span>
+                  <span class="input-group-text">
+                    小时
+                  </span>
                 </div>
               </div>
             </div>
@@ -82,10 +88,13 @@
             <div class="input-group">
               <input
                 id="price"
+                v-model="prices"
                 class="input form-control col-lg-1"
                 type="text">
               <div class="input-group-prepend">
-                <span class="input-group-text">元</span>
+                <span class="input-group-text">
+                  元
+                </span>
               </div>
             </div>
           </div>
@@ -93,20 +102,26 @@
         <div class="form-group form-inline">
           <label
             class="form-check-label my-label"
-            for="can_review">可评论</label>
+            for="can_review">
+            可评论
+          </label>
           <div id="can_review">
-            <label for="Yes"><input
-              id="Yes"
-              type="radio"
-              name="optn"
-              value="Yes"
-            >是</label>
-            <label for="No"><input
-              id="No"
-              type="radio"
-              name="optn"
-              value="No"
-            >否</label>
+            <label for="Yes">
+              <input
+                id="Yes"
+                type="radio"
+                name="optn"
+                @click="update_can_comment(1)"
+              >是
+            </label>
+            <label for="No">
+              <input
+                id="No"
+                type="radio"
+                name="optn"
+                @click="update_can_comment(0)"
+              >否
+            </label>
           </div>
         </div>
         <div class="form-inline">
@@ -117,6 +132,7 @@
             <div class="input-group">
               <input
                 id="percent"
+                v-model="reward_percent"
                 class="input form-control col-lg-3"
                 type="text">
               <div class="input-group-prepend">
@@ -133,12 +149,13 @@
             for="intro">简介</label>
           <textarea
             id="intro"
+            v-model="description"
             class="form-control col-lg-2"
             rows="6s"/>
         </div>
         <button
-          type="submit"
-          class="btn my-btn">保存</button>
+          class="btn my-btn"
+          @click="upload_all_data">保存</button>
       </div>
     </div>
   </Basic>
@@ -149,6 +166,7 @@ import Basic from '../basic/basic'
 import UploadSource from './upload_source'
 import PreSortPicture from './pre_sort_picture'
 import SyncPicture from './synchronization'
+import axios from 'axios'
 export default {
   name: 'AddCourse',
   components: {SyncPicture, PreSortPicture, UploadSource, Basic},
@@ -165,10 +183,21 @@ export default {
         active: true
       }],
       audio_file_list: [],
-      image_file_list: []
+      image_file_list: [],
+      title: '',
+      codename: '',
+      days: '',
+      hours: '',
+      prices: '',
+      can_comment: '',
+      reward_percent: '',
+      description: ''
     }
   },
   methods: {
+    update_can_comment: function (data) {
+      this.can_comment = data
+    },
     receive_uploaded_resource: function (uploadPicResourse, audioFileList) {
       if (audioFileList.length === 1) {
         this.audio_file_list[0] = audioFileList[0]
@@ -184,6 +213,34 @@ export default {
     },
     receive_sync_data (imageDataList) {
       this.image_file_list = imageDataList
+      console.log(this.image_file_list[0])
+    },
+    upload_all_data () {
+      let formdata = new FormData()
+      console.log(this.prices)
+      console.log(this.reward_percent)
+      for (let i = 0; i < this.image_file_list.length; i++) {
+        formdata.append('images', this.image_file_list[i].file)
+        formdata.append('load_times', this.image_file_list[i].time)
+      }
+      formdata.append('audio', this.audio_file_list[0])
+      formdata.append('title', this.title)
+      formdata.append('codename', this.codename)
+      formdata.append('days', this.days)
+      formdata.append('hours', this.hours)
+      formdata.append('price', this.prices)
+      formdata.append('can_comment', this.can_comment)
+      formdata.append('reward_percent', this.reward_percent * 0.01)
+      formdata.append('description', this.description)
+      axios.post('http://localhost:8000/api/v1/courses/backstage/course-management/add-course/', formdata).then(
+        response => {
+          console.log(response.data.message)
+        }
+      ).catch(
+        error => {
+          console.log(error)
+        }
+      )
     }
   }
 }
