@@ -175,7 +175,7 @@ class CommentTests(TestCase):
         )
         self.assertEqual(response.status_code, 403)
 
-    def test_add_comment_and_reply(self):
+    def test_add_comment_and_reply_and_get(self):
         self.client.force_login(get_user_model().objects.get(phone_number='13312345678'))
         course = Course.objects.create(
             title='course_comment_and_reply',
@@ -216,3 +216,16 @@ class CommentTests(TestCase):
         self.assertEqual(response_json_data['count'], 1)
         self.assertEqual(response_json_data['content'][0]['reply_count'], 1)
         self.assertEqual(response_json_data['content'][0]['replies'][0]['content'], 'Test reply.')
+
+        response = self.client.get(
+            reverse('api:courses:forestage:get-replies'),
+            {
+                'comment_id': reply_to_id,
+                'page': 1,
+                'page_limit': 1
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        response_json_data = json.loads(response.content)
+        self.assertEqual(response_json_data['count'], 1)
+        self.assertEqual(response_json_data['content'][0]['content'], 'Test reply.')

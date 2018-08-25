@@ -121,20 +121,21 @@ class Comment(SoftDeletionModel):
         }
         replies = Comment.objects.filter(parent=self).order_by('-created_at')[:3]
         for reply in replies:
-            json_data['replies'].append(
-                {
-                    'comment_id': reply.id,
-                    'username': reply.user.username,
-                    'user_id': reply.user.id,
-                    'content': reply.content,
-                    'up_votes': reply.up_votes.count(),
-                    'down_votes': reply.down_votes.count(),
-                    'up_voted': customer in reply.up_votes.all(),
-                    'down_voted': customer in reply.down_votes.all(),
-                    'created_at': reply.created_at
-                }
-            )
+            json_data['replies'].append(reply.as_reply_dict(customer))
         return json_data
+
+    def as_reply_dict(self, customer):
+        return {
+            'comment_id': self.id,
+            'username': self.user.username,
+            'user_id': self.user.id,
+            'content': self.content,
+            'up_votes': self.up_votes.count(),
+            'down_votes': self.down_votes.count(),
+            'up_voted': customer in self.up_votes.all(),
+            'down_voted': customer in self.down_votes.all(),
+            'created_at': self.created_at
+        }
 
     def as_backstage_dict(self):
         return {

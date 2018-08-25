@@ -48,6 +48,11 @@ urlpatterns = [
         name='get-course-comments'
     ),
     path(
+        'play/get-replies/',
+        views_forestage.get_replies,
+        name='get-replies'
+    ),
+    path(
         'play/delete-comment/',
         views_forestage.delete_comment,
         name='delete-comment'
