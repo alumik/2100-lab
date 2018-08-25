@@ -11,30 +11,28 @@
         @decrease="wrong_count_down-1"
         @zero="wrong_count_down=0"/>
       <div class="table-div">
-        <div class="table-div">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <td
-                  v-for="title in titles"
-                  :key="title.id">
-                  {{ title.label }}
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="order in orders"
-                :key="order.id">
-                <td class="lg-td">{{ order.order_no }}</td>
-                <td class="md-td">{{ order.course_codename }}</td>
-                <td class="md-td">{{ order.course_title }}</td>
-                <td class="s-td">{{ order.money }}</td>
-                <td class="s-td">{{ compute_state(order.is_refunded) }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <td
+                v-for="title in titles"
+                :key="title.id">
+                {{ title.label }}
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="order in orders"
+              :key="order.id">
+              <td class="lg-td">{{ order.order_no }}</td>
+              <td class="md-td">{{ order.course_codename }}</td>
+              <td class="md-td">{{ order.course_title }}</td>
+              <td class="s-td">{{ order.money }}</td>
+              <td class="s-td">{{ compute_state(order.is_refunded) }}</td>
+            </tr>
+          </tbody>
+        </table>
         <Pagination
           :rows="rows"
           :perpage="per_page"

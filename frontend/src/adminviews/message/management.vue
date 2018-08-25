@@ -96,7 +96,7 @@
                   v-b-modal.reply
                   type="button"
                   class="btn"
-                  @click="reply_id=message.course_codename">
+                  @click="reply_id=message.comment_id">
                   {{ $t('message.reply') }}
                 </button>
                 <button
@@ -281,7 +281,7 @@ export default {
       const that = this
       axios.post('http://localhost:8000/api/v1/courses/backstage/comment-management/add-comment/',
         qs.stringify({
-          course_codename: that.reply_id,
+          reply_to_id: that.reply_id,
           comment_content: val
         }))
         .then(function (response) {
