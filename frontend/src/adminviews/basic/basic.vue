@@ -102,10 +102,9 @@ export default {
   margin-left: 200px;
 }
 
-/*
-@media (max-width: 1200px) {
+@media (max-width: 768px) {
   .my-container {
     margin-left: 0;
   }
-} */
+}
 </style>
