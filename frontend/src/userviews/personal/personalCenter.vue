@@ -92,7 +92,7 @@
               hide-footer
               title="您确认删除自己的账号吗？">
               <b-form-input
-                v-model="phone"
+                v-model="input_phone"
                 type="text"
                 placeholder="请输入自己的手机号"/>
               <b-btn
@@ -143,7 +143,8 @@ export default {
       phone: this.$store.state.phone,
       money: this.$store.state.money,
       time: this.$store.state.time,
-      del_disabled: false
+      del_disabled: false,
+      input_phone: ''
     }
   },
   watch: {
@@ -221,7 +222,7 @@ export default {
     },
     Delete () {
       let that = this
-      if (that.$store.state.phone === that.phone) {
+      if (that.$store.state.phone === that.input_phone) {
         axios
           .post(
             'http://localhost:8000/api/v1/customers/forestage/personal-center/delete-customer/'
