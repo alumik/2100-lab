@@ -156,3 +156,76 @@ class CommentTests(TestCase):
         self.assertEqual(response.status_code, 200)
         response_json_data = json.loads(response.content)
         self.assertEqual(response_json_data['count'], 2)
+
+    def test_add_comments_not_allowed(self):
+        self.client.force_login(get_user_model().objects.get(phone_number='13312345678'))
+        course = Course.objects.create(
+            title='course_cannot_comment',
+            description='course_cannot_comment',
+            codename='course_cannot_comment',
+            can_comment=False
+        )
+
+        response = self.client.post(
+            reverse('api:courses:forestage:add-comment'),
+            {
+                'course_id': course.id,
+                'content': 'Test comment.'
+            }
+        )
+        self.assertEqual(response.status_code, 403)
+
+    def test_add_comment_and_reply_and_get(self):
+        self.client.force_login(get_user_model().objects.get(phone_number='13312345678'))
+        course = Course.objects.create(
+            title='course_comment_and_reply',
+            description='course_comment_and_reply',
+            codename='course_comment_and_reply'
+        )
+
+        response = self.client.post(
+            reverse('api:courses:forestage:add-comment'),
+            {
+                'course_id': course.id,
+                'content': 'Test comment.'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        reply_to_id = int(json.loads(response.content)['comment_id'])
+
+        response = self.client.post(
+            reverse('api:courses:forestage:add-comment'),
+            {
+                'course_id': course.id,
+                'reply_to_id': reply_to_id,
+                'content': 'Test reply.'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(
+            reverse('api:courses:forestage:get-course-comments'),
+            {
+                'course_id': course.id,
+                'page': 1,
+                'page_limit': 1
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        response_json_data = json.loads(response.content)
+        self.assertEqual(response_json_data['count'], 1)
+        self.assertEqual(response_json_data['content'][0]['reply_count'], 1)
+        self.assertEqual(response_json_data['content'][0]['replies'][0]['content'], 'Test reply.')
+
+        response = self.client.get(
+            reverse('api:courses:forestage:get-replies'),
+            {
+                'comment_id': reply_to_id,
+                'page': 1,
+                'page_limit': 1
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        response_json_data = json.loads(response.content)
+        self.assertEqual(response_json_data['count'], 1)
+        self.assertEqual(response_json_data['content'][0]['content'], 'Test reply.')

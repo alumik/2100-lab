@@ -56,7 +56,6 @@ class CommentListTests(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_comment_list_no_filter(self):
-        self.maxDiff = None
         self.client.login(phone_number='13312345678', password='123456')
         user = get_user_model().objects.get(phone_number='14412345678')
         comment = Comment.all_objects.get(content='90')
@@ -99,7 +98,6 @@ class CommentListTests(TestCase):
         )
 
     def test_comment_list_not_deleted(self):
-        self.maxDiff = None
         self.client.login(phone_number='13312345678', password='123456')
         user = get_user_model().objects.get(phone_number='14412345678')
         comment = Comment.all_objects.get(content='5678')
@@ -142,7 +140,6 @@ class CommentListTests(TestCase):
         )
 
     def test_comment_list_deleted(self):
-        self.maxDiff = None
         self.client.login(phone_number='13312345678', password='123456')
         user = get_user_model().objects.get(phone_number='14412345678')
         comment = Comment.all_objects.get(content='90')
@@ -214,23 +211,32 @@ class CommentListTests(TestCase):
 class CommentOperationTests(TestCase):
     def setUp(self):
         user = get_user_model().objects.create_user(phone_number='14412345678', password='123456')
-        admin = get_user_model().objects.create_user(phone_number='13312345678', password='123456')
-        admin_group = Group.objects.create(name='comment_admin')
-        permission = Permission.objects.get(codename='view_comment')
-        admin_group.permissions.add(permission)
-        permission = Permission.objects.get(codename='add_comment')
-        admin_group.permissions.add(permission)
-        permission = Permission.objects.get(codename='delete_comment')
-        admin_group.permissions.add(permission)
-        admin_group.save()
-        admin.groups.add(admin_group)
-        admin.save()
+        get_user_model().objects.create_user(
+            phone_number='13312345678',
+            password='123456',
+            is_staff=True,
+            is_superuser=True
+        )
         course = Course.objects.create(
             title='t1',
             description='d1',
             codename='SOFT1'
         )
-        Course.objects.create(
+        Comment.objects.create(
+            user=user,
+            course=course,
+            content='1234'
+        )
+        Comment.objects.create(
+            user=user,
+            course=course,
+            content='5678'
+        )
+
+    def test_add_comment_not_allowed(self):
+        self.client.login(phone_number='13312345678', password='123456')
+        user = get_user_model().objects.get(phone_number='13312345678')
+        course = Course.objects.create(
             title='t2',
             description='d2',
             codename='SOFT2',
@@ -239,15 +245,13 @@ class CommentOperationTests(TestCase):
         Comment.objects.create(
             user=user,
             course=course,
-            content='1234'
+            content='reply_to'
         )
-
-    def test_add_comment_not_allowed(self):
-        self.client.login(phone_number='13312345678', password='123456')
+        reply_to = Comment.objects.get(content='reply_to')
         response = self.client.post(
             reverse('api:courses:backstage:add-comment'),
             {
-                'course_codename': 'SOFT2',
+                'reply_to_id': reply_to.id,
                 'comment_content': '12345678'
             }
         )
@@ -255,12 +259,13 @@ class CommentOperationTests(TestCase):
 
     def test_add_comment(self):
         self.client.login(phone_number='13312345678', password='123456')
+        reply_to = Comment.objects.get(content='5678')
 
         response = self.client.post(
             reverse('api:courses:backstage:add-comment'),
             {
-                'course_codename': 'SOFT1',
-                'comment_content': '12345678'
+                'reply_to_id': reply_to.id,
+                'comment_content': 'This is a reply.'
             }
         )
         self.assertEqual(response.status_code, 200)
@@ -285,9 +290,9 @@ class CommentOperationTests(TestCase):
                 'course_codename': '',
                 'course_title': '',
                 'is_deleted': '0',
-                'count': 2,
+                'count': 3,
                 'page': 1,
-                'num_pages': 2,
+                'num_pages': 3,
                 'content': [
                     {
                         'comment_id': response_json_data['content'][0]['comment_id'],
@@ -295,12 +300,13 @@ class CommentOperationTests(TestCase):
                         'username': '13312345678',
                         'course_codename': 'SOFT1',
                         'course_title': 't1',
-                        'content': '12345678',
+                        'content': 'This is a reply.',
                         'is_deleted': False
                     }
                 ]
             }
         )
+        self.assertEqual(Comment.objects.filter(parent=reply_to).count(), 1)
 
     def test_delete_comment(self):
         self.client.login(phone_number='13312345678', password='123456')
@@ -319,7 +325,7 @@ class CommentOperationTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         response_json_data = json.loads(response.content)
-        self.assertEqual(response_json_data['count'], 1)
+        self.assertEqual(response_json_data['count'], 2)
 
         response = self.client.post(
             reverse('api:courses:backstage:delete-comment'),
@@ -342,4 +348,4 @@ class CommentOperationTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         response_json_data = json.loads(response.content)
-        self.assertEqual(response_json_data['count'], 0)
+        self.assertEqual(response_json_data['count'], 1)

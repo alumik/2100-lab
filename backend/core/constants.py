@@ -64,7 +64,7 @@ ADMIN_LOG_TEMPLATE = {
     '10': Template('认证了ID为 ${object_id} 的用户'),
     '11': Template('解除了ID为 ${object_id} 的用户的认证'),
     '12': Template('删除了ID为 ${object_id} 的留言'),
-    '13': Template('回复了ID为 ${new_data} 的课程下的留言，新留言ID为 ${object_id}'),
+    '13': Template('回复了ID为 ${new_data} 的留言，新留言ID为 ${object_id}'),
     '14': Template('新增了ID为 ${object_id} 的课程'),
     '15': Template('修改了ID为 ${object_id} 的课程'),
     '16': Template('删除了ID为 ${object_id} 的课程')

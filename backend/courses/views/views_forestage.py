@@ -8,7 +8,7 @@ from core.utils import get_page
 from core.constants import ERROR, INFO
 from customers.models import LearningLog, OrderLog
 from courses.models import Hero, Course, Image, Comment, CourseUpVotes
-from courses.utils import get_courses, can_access, check_learning_log, get_comment_page
+from courses import utils
 
 
 def get_heroes(request):
@@ -24,8 +24,8 @@ def get_heroes(request):
 
 
 def get_recent_courses(request):
-    free_courses = get_courses('free', 10)
-    paid_courses = get_courses('paid', 10)
+    free_courses = utils.get_courses('free', 10)
+    paid_courses = utils.get_courses('paid', 10)
     json_data = {
         'free_courses': [],
         'paid_courses': []
@@ -38,7 +38,7 @@ def get_recent_courses(request):
 
 
 def get_course_list(request):
-    courses = get_courses(request.GET.get('course_type')).order_by('-updated_at')
+    courses = utils.get_courses(request.GET.get('course_type')).order_by('-updated_at')
     return get_page(request, courses)
 
 
@@ -62,7 +62,7 @@ def get_course_detail(request):
         'up_voted': request.user in course.up_votes.all(),
         'expire_duration': course.expire_duration.total_seconds(),
         'expire_time': None,
-        'can_access': can_access(course, request.user)
+        'can_access': utils.can_access(course, request.user)
     }
     if request.user.is_authenticated:
         try:
@@ -135,7 +135,7 @@ def buy_course(request):
     customer.reward_coin = reward_coin
     customer.save()
 
-    if referer_id != '' and int(referer_id) != int(customer.id): 
+    if referer_id != '' and int(referer_id) != int(customer.id):
         referer_id = int(referer_id)
         try:
             referer = get_user_model().objects.get(id=referer_id)
@@ -166,10 +166,10 @@ def get_course_assets(request):
     except Course.DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
-    if not can_access(course, request.user):
+    if not utils.can_access(course, request.user):
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
-    progress = check_learning_log(course, request.user)
+    progress = utils.check_learning_log(course, request.user)
     images = Image.objects.filter(course=course).all().order_by('load_time')
     json_data = {
         'course_id': course.id,
@@ -192,7 +192,7 @@ def save_learning_log(request):
     except Course.DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
-    if not can_access(course, request.user):
+    if not utils.can_access(course, request.user):
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
     try:
@@ -213,14 +213,17 @@ def get_course_comments(request):
     except Course.DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
-    if not can_access(course, request.user):
+    if not utils.can_access(course, request.user):
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
     if not course.can_comment:
         return JsonResponse({'message': ERROR['comment_not_allowed']}, status=403)
 
-    comments = Comment.objects.filter(course=course).order_by('-created_at')
-    return get_comment_page(request, comments)
+    comments = Comment.objects.filter(
+        course=course,
+        parent__isnull=True
+    ).order_by('-created_at')
+    return utils.get_comment_page(request, comments)
 
 
 @login_required
@@ -246,7 +249,7 @@ def up_vote_comment(request):
     except Course.DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
-    if not can_access(comment.course, customer):
+    if not utils.can_access(comment.course, customer):
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
     if customer in comment.up_votes.all():
@@ -272,7 +275,7 @@ def down_vote_comment(request):
     except Course.DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
-    if not can_access(comment.course, customer):
+    if not utils.can_access(comment.course, customer):
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
     if customer in comment.down_votes.all():
@@ -293,6 +296,7 @@ def down_vote_comment(request):
 def add_comment(request):
     user = request.user
     course_id = request.POST.get('course_id')
+    reply_to_id = request.POST.get('reply_to_id', '')
     comment_content = request.POST.get('content')
 
     try:
@@ -300,15 +304,48 @@ def add_comment(request):
     except Course.DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
-    if not can_access(course, request.user):
+    if not utils.can_access(course, request.user):
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
     if (not course.can_comment) or user.is_banned:
         return JsonResponse({'message': ERROR['comment_not_allowed']}, status=403)
 
-    Comment.objects.create(
+    comment = Comment.objects.create(
         user=user,
         course=course,
         content=comment_content
     )
-    return JsonResponse({'message': INFO['success']})
+
+    if reply_to_id != '':
+        try:
+            reply_to = Comment.objects.get(id=int(reply_to_id))
+            comment.parent = reply_to
+            comment.save()
+        except Comment.DoesNotExist:
+            pass
+
+    return JsonResponse(
+        {
+            'message': INFO['success'],
+            'comment_id': comment.id
+        }
+    )
+
+
+@login_required
+def get_replies(request):
+    comment_id = request.GET.get('comment_id')
+
+    try:
+        comment = Comment.objects.get(id=comment_id)
+    except Course.DoesNotExist:
+        return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+
+    if not utils.can_access(comment.course, request.user):
+        return JsonResponse({'message': ERROR['access_denied']}, status=403)
+
+    if not comment.course.can_comment:
+        return JsonResponse({'message': ERROR['comment_not_allowed']}, status=403)
+
+    replies = Comment.objects.filter(parent=comment).order_by('-created_at')
+    return utils.get_reply_page(request, replies)
