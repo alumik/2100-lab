@@ -98,7 +98,7 @@ export default {
   padding: 10px 5px;
   background-color: #fff !important;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 .navbar-toggler {
