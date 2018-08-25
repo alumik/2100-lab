@@ -78,6 +78,10 @@ export default {
     choose_image_data_list_origin: {
       default: () => {},
       type: Array
+    },
+    is_uploaded: {
+      default: true,
+      type: Boolean
     }
   },
   data: function () {
@@ -85,13 +89,14 @@ export default {
       sortImageDataList: [],
       choose_image_data_list: [],
       now_index: 0,
-      is_uploaded: true
+      is_returned: true
     }
   },
   methods: {
     showModal () {
-      if (this.is_uploaded === true) {
-        this.is_uploaded = false
+      if (this.is_returned === true || this.is_uploaded === true) {
+        this.$emit('update_is_uploaded', this.is_uploaded)
+        this.is_returned = false
         this.now_index = 0
         this.choose_image_data_list = []
         this.sortImageDataList = []
@@ -128,7 +133,7 @@ export default {
         this.choose_image_data_list.length = 0
         this.sortImageDataList.length = 0
         this.$refs.edit_picture.hide()
-        this.is_uploaded = true
+        this.is_returned = true
       }
     },
     hideModal () {

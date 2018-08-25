@@ -75,8 +75,8 @@
                 <button
                   type="button"
                   class="row inner-btn btn-sm"
-                  @click="jump(admin.id)"
-                >详情</button>
+                  @click="delete_some_data(data.index)"
+                >删除</button>
               </td>
           </tr></tbody>
         </table>
@@ -114,6 +114,10 @@ export default {
     audio_file_list: {
       default: () => {},
       type: Array
+    },
+    is_audio_changed: {
+      default: false,
+      type: Boolean
     }
   },
   data () {
@@ -145,16 +149,34 @@ export default {
     click (img) {
       this.now_number = img.index
     },
+    delete_some_data (index) {
+      if (this.image_data_list[index - 1]) {
+        this.image_data_list[index - 1].time = ''
+        this.now_number = index
+      }
+    },
     show_modal () {
-      this.$refs.sync_picture.show()
-      this.audio_file_url = URL.createObjectURL(this.audio_file_list[0])
+      if (this.audio_file_list.length === 1) {
+        if (this.is_audio_changed === true) {
+          this.audio_file_url = URL.createObjectURL(this.audio_file_list[0])
+        } else {
+          this.audio_file_url = this.audio_file_list[0]
+        }
+        this.$refs.sync_picture.show()
+      } else {
+        alert('Upload Audio First')
+      }
     },
     hide_modal () {
-      this.choose_data.length = 0
       this.$refs.sync_picture.hide()
     },
     upload_time_data () {
-      this.$emit('sync_picture_audio', this.image_data_list)
+      console.log(this.now_number)
+      if (this.now_number - 1 === this.image_data_list.length) {
+        this.$emit('sync_picture_audio', this.image_data_list)
+      } else {
+        alert('WORK NOT FINISHED')
+      }
     }
   }
 }

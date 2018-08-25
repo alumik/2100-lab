@@ -32,7 +32,16 @@
           :origin_audio_list="course.origin_audio_file_list"
           @uploadResource="receive_uploaded_resource"/>
         <PreSortPicture
-          :choose_image_data_list_origin="image_file_list"/>
+          :is_uploaded="is_uploaded"
+          :choose_image_data_list_origin="image_file_list"
+          @update_is_uploaded="is_uploaded=false"
+          @uploadSortedPic="receive_sorted_pictures"/>
+        <SyncPicture
+          :audio_file_list="audio_file_list"
+          :image_data_list="image_file_list"
+          :is_audio_changed="is_audio_changed"
+          @sync_picture_audio="receive_sync_data"
+        />
       </div>
       <div class="form-group form-inline">
         <div>
@@ -152,9 +161,10 @@ import Basic from '../basic/basic'
 import axios from 'axios'
 import UploadSourceForEdit from './upload_source_for_edit'
 import PreSortPicture from './pre_sort_picture'
+import SyncPicture from './synchronization'
 export default {
   name: 'EditCourse',
-  components: {PreSortPicture, UploadSourceForEdit, Basic},
+  components: {SyncPicture, PreSortPicture, UploadSourceForEdit, Basic},
   data: function () {
     return {
       items: [{
@@ -185,7 +195,9 @@ export default {
       },
       audio_file_list: [],
       image_file_list: [],
-      delete_origin_image_index_list: []
+      delete_origin_image_index_list: [],
+      is_uploaded: true,
+      is_audio_changed: false
     }
   },
   created () {
@@ -237,6 +249,7 @@ export default {
       }
       if (this.course.origin_audio_file_list.length > 0) {
         this.course.origin_audio_file_list[0] = this.$store.state.address + this.course.origin_audio_file_list[0]
+        this.audio_file_list.push(this.course.origin_audio_file_list[0])
       }
     },
     update_can_comment: function (data) {
@@ -266,7 +279,11 @@ export default {
       )
     },
     receive_uploaded_resource: function (uploadPicResourse, audioFileList, originDeleteImageIndex) {
+      this.is_uploaded = true
       this.image_file_list.length = 0
+      if (audioFileList && audioFileList.length === 1) {
+        this.is_audio_changed = true
+      }
       this.audio_file_list = audioFileList
       for (let i = 1; i <= uploadPicResourse.length; i++) {
         this.image_file_list.push(uploadPicResourse[i - 1])
@@ -293,6 +310,16 @@ export default {
         })
       }
       console.log(this.image_file_list)
+    },
+    receive_sorted_pictures: function (sortImageDataList) {
+      this.image_file_list.length = 0
+      for (let i = 0; i < sortImageDataList.length; i++) {
+        this.image_file_list.push(sortImageDataList[i])
+      }
+      console.log(this.image_file_list)
+    },
+    receive_sync_data: function (imageDataList) {
+      console.log(imageDataList)
     }
   }
 }
