@@ -165,10 +165,4 @@ export default {
 #logout {
   padding: 6px;
 }
-
-@media (min-width: 780px) {
-  button {
-    display: none;
-  }
-}
 </style>

@@ -1,7 +1,8 @@
 <template>
   <nav
     id="sidebar"
-    :class="{hide: menu_hide, 'sidebar': true}">
+    ref="menu"
+    :class="{hide: hidden, 'sidebar': true}">
     <div
       class="sidebar-header"
       @click="$router.push({path: '/admin/main'})">{{ $t('menu.header') }}</div>
@@ -21,7 +22,7 @@ import './style/style.css'
 export default {
   name: 'Menu',
   props: {
-    menu_hide: {
+    hidden: {
       type: Boolean,
       default: true
     },
@@ -73,11 +74,6 @@ export default {
       ]
     }
   },
-  watch: {
-    menu_hide () {
-      console.log(123)
-    }
-  },
   create () {},
   methods: {
     jump: function (id) {
@@ -92,6 +88,7 @@ export default {
 <style>
 #sidebar {
   position: fixed;
+  z-index: 9999;
 }
 
 .sidebar-header,
