@@ -4,5 +4,8 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 
-# media contents
+# Media contents
 media/
+
+# Sphinx documentation
+docs/_build/
