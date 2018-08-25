@@ -363,10 +363,6 @@ export default {
 </script>
 
 <style scoped>
-  .my-basic {
-    min-width: 1000px;
-  }
-
   h1,
   h2 {
     padding-left: 20px;
@@ -375,6 +371,7 @@ export default {
 
   .buttons {
     display: flex;
+    flex-wrap: wrap;
     justify-content: flex-end;
     text-align: right;
   }
@@ -410,6 +407,7 @@ export default {
 
   .title {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     padding-right: 15px;
@@ -420,6 +418,7 @@ export default {
   .table-div {
     padding-right: 15px;
     padding-left: 15px;
+    overflow-x: scroll;
   }
 
   .col-2 {

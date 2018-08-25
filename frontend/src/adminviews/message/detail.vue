@@ -196,12 +196,9 @@ export default {
 </script>
 
 <style scoped>
-  .my-basic {
-    min-width: 1000px;
-  }
-
   .title {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     padding-right: 15px;
@@ -216,6 +213,7 @@ export default {
 
   .buttons {
     display: flex;
+    flex-wrap: wrap;
     justify-content: flex-end;
     text-align: right;
   }

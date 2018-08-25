@@ -93,18 +93,20 @@ export default {
 </script>
 
 <style scoped>
-.my-menu {
-  display: flex;
-}
-
-.my-container {
-  padding: 0;
-  margin-left: 200px;
-}
-
-@media (max-width: 768px) {
-  .my-container {
-    margin-left: 0;
+  .my-menu {
+    display: flex;
   }
-}
+
+  .my-container {
+    width: calc(100% - 200px);
+    padding: 0;
+    margin-left: 200px;
+  }
+
+  @media (max-width: 768px) {
+    .my-container {
+      width: 100%;
+      margin-left: 0;
+    }
+  }
 </style>
