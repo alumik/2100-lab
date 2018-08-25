@@ -40,20 +40,24 @@
         </b-row>
         <b-row class="my-row">
           <div
-            v-for="image in originImageList"
-            :key="image.hero_id"
-            class="img-uploader-preview">
-            <div class="preview-img">
-              <b-img
-                :src="image.image"
-                thumbnail
-                fluid
-                alt="Thumbnail"/>
+            v-if="has_origin_images"
+            class="img-origin-preview-list">
+            <div
+              v-for="image in origin_image_copy_list"
+              :key="image.image_id"
+              class="img-uploader-preview">
+              <div class="preview-img">
+                <b-img
+                  :src="image.image_path"
+                  thumbnail
+                  fluid
+                  alt="Thumbnail"/>
+              </div>
+              <img
+                src="../../assets/logo.png"
+                class="img-uploader-delete-btn"
+                @click="deleteOriginImg(image.image_id)">
             </div>
-            <img
-              src="../../assets/logo.png"
-              class="img-uploader-delete-btn"
-              @click="deleteOriginImg(image.hero_id)">
           </div>
           <div
             ref="uploader"
@@ -128,11 +132,19 @@
 <script>
 import resizeImage from './resize'
 export default {
-  name: 'UploadSource',
+  name: 'UploadSourceForEdit',
   props: {
     course_id: {
       type: String,
       default: '新增课程'
+    },
+    origin_image_list: {
+      type: Array,
+      default: () => {}
+    },
+    origin_audio_list: {
+      type: Array,
+      default: () => {}
     }
   },
   data () {
@@ -140,14 +152,18 @@ export default {
       audioFileList: [],
       audio_name: '',
       placeholder: '请选择上传文件',
-      originImageList: [],
       imageDataList: [],
-      imageFileList: []
+      imageFileList: [],
+      origin_image_copy_list: [],
+      origin_delete_image_index: []
     }
   },
   computed: {
     hasImages () {
       return this.imageDataList.length > 0
+    },
+    has_origin_images () {
+      return this.origin_image_copy_list.length > 0
     }
   },
   methods: {
@@ -158,6 +174,7 @@ export default {
         this.audioFileList.length = 0
         this.audioFileList.push(files[0])
         this.audio_name = files[0].name
+        console.log('update')
       }
     },
     handlePicFileChange () {
@@ -189,10 +206,35 @@ export default {
       this.imageDataList.splice(index, 1)
       this.imageFileList.splice(index, 1)
     },
+    deleteOriginImg (index) {
+      console.log(index)
+      let i = 0
+      for (i = 0; i < this.origin_image_copy_list.length; i++) {
+        if (this.origin_image_copy_list[i].image_id === index) {
+          break
+        }
+      }
+      this.origin_image_copy_list.splice(i, 1)
+      this.origin_delete_image_index.push(index)
+      console.log(this.origin_image_copy_list)
+      console.log(this.origin_delete_image_index)
+    },
     showModal () {
+      this.origin_image_copy_list.length = 0
+      if (this.origin_audio_list.length === 1) {
+        this.audio_name = this.origin_audio_list[0]
+      }
+      if (this.origin_image_list.length > 0) {
+        for (let i = 0; i < this.origin_image_list.length; i++) {
+          this.origin_image_copy_list.push(this.origin_image_list[i])
+        }
+      }
+      console.log(this.audio_name)
+      console.log(this.origin_audio_list)
       this.$refs.upload_source.show()
     },
     hideModal () {
+      this.origin_delete_image_index.length = 0
       this.$refs.upload_source.hide()
     },
     openAudioEntrance () {
@@ -209,147 +251,160 @@ export default {
         })
       }
       this.$refs.upload_source.hide()
-      this.$emit('uploadResource', uploadPicResourse, this.audioFileList)
+      this.$emit('uploadResource', uploadPicResourse, this.audioFileList, this.origin_delete_image_index)
     }
   }
 }
 </script>
 
 <style scoped>
-  .button-group {
-    display: flex;
-    flex-direction: row;
-    justify-content: left;
-    max-width: 8rem;
-  }
+.button-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  max-width: 8rem;
+}
 
-  .audio-input {
-    width: 100%;
-  }
+.audio-input {
+  width: 100%;
+}
 
-  .define-btn {
-    display: flex;
-    flex-direction: row;
-    justify-content: right;
-  }
+.define-btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+}
 
-  .my-container {
-    width: 100%;
-    padding: 0;
-    margin: 0;
-  }
+.my-container {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
 
-  #upload-file {
-    display: none;
-  }
+#upload-file {
+  display: none;
+}
 
-  .input-image {
-    display: none;
-  }
+.input-image {
+  display: none;
+}
 
-  .img-uploader {
-    position: relative;
-    width: 100%;
-    min-width: 260px;
-    max-width: 800px;
-    height: calc(150px + 25px * 2);
-    margin-right: 2%;
-    margin-left: 2%;
-    background: #ebebeb;
-    border-radius: 5px;
-  }
+.img-uploader {
+  position: relative;
+  width: 100%;
+  min-width: 260px;
+  max-width: 800px;
+  height: calc(150px + 25px * 2);
+  margin-right: 2%;
+  margin-left: 2%;
+  background: #ebebeb;
+  border-radius: 5px;
+}
 
-  .img-uploader-placeholder {
-    position: absolute;
-    top: 50%;
-    width: 100%;
-    margin: 0;
-    font-size: 15px;
-    color: #aaa;
-    text-align: center;
-    transform: translate(0%, -50%);
-  }
+.img-uploader-placeholder {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  margin: 0;
+  font-size: 15px;
+  color: #aaa;
+  text-align: center;
+  transform: translate(0%, -50%);
+}
 
-  .img-uploader-preview-list {
-    width: 100%;
-    height: calc(150px + 18px * 2);
-    overflow: hidden;
-    overflow-x: auto;
-    text-align: center;
-    white-space: nowrap;
-    -webkit-backface-visibility: hidden;
-    -webkit-overflow-scrolling: touch;
-  }
+.img-uploader-preview-list {
+  width: 100%;
+  height: calc(150px + 18px * 2);
+  overflow: hidden;
+  overflow-x: auto;
+  text-align: center;
+  white-space: nowrap;
+  -webkit-backface-visibility: hidden;
+  -webkit-overflow-scrolling: touch;
+}
 
-  .img-uploader-preview {
-    z-index: 2;
-    display: inline-block;
-    min-height: 150px;
-    margin: 10px;
-    background: #333;
-    border-radius: 10px;
-    transition: 0.3s cubic-bezier(0.3, 0, 0.2, 1);
-  }
+.img-origin-preview-list {
+  width: 95%;
+  height: calc(150px + 18px * 2);
+  margin-bottom: 10px;
+  margin-left: 2.5%;
+  overflow: hidden;
+  overflow-x: auto;
+  text-align: center;
+  white-space: nowrap;
+  -webkit-backface-visibility: hidden;
+  -webkit-overflow-scrolling: touch;
+}
 
-  .img-uploader-mask {
-    position: absolute;
-    bottom: 0;
-    display: none;
-    width: 150px;
-    text-align: center;
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: 1px;
-  }
+.img-uploader-preview {
+  z-index: 2;
+  display: inline-block;
+  min-height: 150px;
+  margin: 10px;
+  background: #333;
+  border-radius: 10px;
+  transition: 0.3s cubic-bezier(0.3, 0, 0.2, 1);
+}
 
-  .img-uploader-preview:hover {
-    transform: scale(1.02);
-  }
+.img-uploader-mask {
+  position: absolute;
+  bottom: 0;
+  display: none;
+  width: 150px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 1px;
+}
 
-  .img-uploader-preview:hover .img-uploader-mask {
-    display: block;
-  }
+.img-uploader-preview:hover {
+  transform: scale(1.02);
+}
 
-  .img-uploader-delete-btn {
-    position: absolute;
-    top: 0;
-    right: 0;
-    display: none;
-    width: 25px;
-    height: 25px;
-    margin: 5px;
-  }
+.img-uploader-preview:hover .img-uploader-mask {
+  display: block;
+}
 
-  .img-uploader-preview:hover .img-uploader-delete-btn {
-    display: block;
-  }
+.img-uploader-delete-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: none;
+  width: 25px;
+  height: 25px;
+  margin: 5px;
+}
 
-  .img-uploader-preview .preview-img {
-    width: 150px;
-    height: 150px;
-    overflow: hidden;
-  }
+.img-uploader-preview:hover .img-uploader-delete-btn {
+  display: block;
+}
 
-  .img-uploader-label {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    margin-bottom: 0;
-    cursor: pointer;
-  }
+.img-uploader-preview .preview-img {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+}
 
-  .img-uploader-file-name {
-    display: inline-block;
-    max-width: 90%;
-    padding-top: 10px;
-    margin: 0;
-    overflow: hidden;
-    font-size: 5px;
-    color: white;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    cursor: pointer;
-  }
+.img-uploader-label {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  margin-bottom: 0;
+  cursor: pointer;
+}
+
+.img-uploader-file-name {
+  display: inline-block;
+  max-width: 90%;
+  padding-top: 10px;
+  margin: 0;
+  overflow: hidden;
+  font-size: 5px;
+  color: white;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
 </style>

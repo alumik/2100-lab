@@ -78,23 +78,32 @@ export default {
     choose_image_data_list_origin: {
       default: () => {},
       type: Array
+    },
+    is_uploaded: {
+      default: true,
+      type: Boolean
     }
   },
   data: function () {
     return {
       sortImageDataList: [],
       choose_image_data_list: [],
-      now_index: 0
+      now_index: 0,
+      is_returned: true
     }
   },
   methods: {
     showModal () {
-      this.now_index = 0
-      this.choose_image_data_list = []
-      this.sortImageDataList = []
-      this.choose_image_data_list.length = 0
-      for (let i = 0; i < this.choose_image_data_list_origin.length; i++) {
-        this.choose_image_data_list.push(this.choose_image_data_list_origin[i])
+      if (this.is_returned === true || this.is_uploaded === true) {
+        this.$emit('update_is_uploaded', this.is_uploaded)
+        this.is_returned = false
+        this.now_index = 0
+        this.choose_image_data_list = []
+        this.sortImageDataList = []
+        this.choose_image_data_list.length = 0
+        for (let i = 0; i < this.choose_image_data_list_origin.length; i++) {
+          this.choose_image_data_list.push(this.choose_image_data_list_origin[i])
+        }
       }
       this.$refs.edit_picture.show()
     },
@@ -118,19 +127,16 @@ export default {
       this.choose_image_data_list.push(img)
     },
     sendModal () {
-      this.now_index = 0
-      this.$emit('uploadSortedPic', this.sortImageDataList.slice())
-      this.choose_image_data_list.length = 0
-      this.choose_image_data_list_origin.length = 0
-      this.sortImageDataList.length = 0
-      this.$refs.edit_picture.hide()
+      if (this.sortImageDataList.length === this.choose_image_data_list_origin.length) {
+        this.now_index = 0
+        this.$emit('uploadSortedPic', this.sortImageDataList.slice())
+        this.choose_image_data_list.length = 0
+        this.sortImageDataList.length = 0
+        this.$refs.edit_picture.hide()
+        this.is_returned = true
+      }
     },
     hideModal () {
-      this.now_index = 0
-      this.$emit('uploadSortedPic', this.choose_image_data_list_origin.slice())
-      this.choose_image_data_list.length = 0
-      this.choose_image_data_list_origin.length = 0
-      this.sortImageDataList.length = 0
       this.$refs.edit_picture.hide()
     }
   }

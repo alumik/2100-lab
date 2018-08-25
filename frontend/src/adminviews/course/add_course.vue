@@ -32,11 +32,14 @@
             @uploadResource="receive_uploaded_resource"/>
           <PreSortPicture
             :choose_image_data_list_origin="image_file_list.slice()"
+            :is_uploaded="is_uploaded"
+            @update_is_uploaded="is_uploaded=false"
             @uploadSortedPic="receive_sorted_pictures"
           />
           <SyncPicture
             :audio_file_list="audio_file_list"
             :image_data_list="image_file_list"
+            :is_audio_changed="true"
             @sync_picture_audio="receive_sync_data"
           />
         </div>
@@ -191,7 +194,8 @@ export default {
       prices: '',
       can_comment: '',
       reward_percent: '',
-      description: ''
+      description: '',
+      is_uploaded: true
     }
   },
   methods: {
@@ -199,6 +203,7 @@ export default {
       this.can_comment = data
     },
     receive_uploaded_resource: function (uploadPicResourse, audioFileList) {
+      this.is_uploaded = true
       if (audioFileList.length === 1) {
         this.audio_file_list[0] = audioFileList[0]
       }
@@ -213,12 +218,9 @@ export default {
     },
     receive_sync_data (imageDataList) {
       this.image_file_list = imageDataList
-      console.log(this.image_file_list[0])
     },
     upload_all_data () {
       let formdata = new FormData()
-      console.log(this.prices)
-      console.log(this.reward_percent)
       for (let i = 0; i < this.image_file_list.length; i++) {
         formdata.append('images', this.image_file_list[i].file)
         formdata.append('load_times', this.image_file_list[i].time)
