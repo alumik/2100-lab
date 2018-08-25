@@ -1,7 +1,7 @@
 <template>
-  <div
-    id="message-board">
-    <div>
+  <div id="message-board">
+    <div v-if="!can_comment">该课程以禁止评论！</div>
+    <div v-if="can_comment">
       <b-alert
         :show="created_test"
         variant="danger"
@@ -88,28 +88,28 @@
           </div>
         </div>
       </div>
-    </div>
-    <div>
-      <textarea
-        id="input-message"
-        v-model="new_msg"
-        class="textarea-style"
-        placeholder="请输入留言"
-        @keyup.enter="add_comment"/>
-      <br>
-      <div
-        id="commit-button"
-        class="commit-button-style">
-        <b-button
-          @click="add_comment">评论</b-button>
+      <div>
+        <textarea
+          id="input-message"
+          v-model="new_msg"
+          class="textarea-style"
+          placeholder="请输入留言"
+          @keyup.enter="add_comment"/>
+        <br>
+        <div
+          id="commit-button"
+          class="commit-button-style">
+          <b-button
+            @click="add_comment">评论</b-button>
+        </div>
       </div>
-    </div>
-    <div>
-      <Pagination
-        id="pagination"
-        :rows="rows"
-        :perpage="page_limit"
-        @change="change_page"/>
+      <div>
+        <Pagination
+          id="pagination"
+          :rows="rows"
+          :perpage="page_limit"
+          @change="change_page"/>
+      </div>
     </div>
   </div>
 </template>
@@ -154,7 +154,8 @@ export default {
       up_icon_before: require('../../assets/up-before.png'),
       up_icon_after: require('../../assets/up-after.png'),
       down_icon_before: require('../../assets/down-before.png'),
-      down_icon_after: require('../../assets/down-after.png')
+      down_icon_after: require('../../assets/down-after.png'),
+      can_comment: false
     }
   },
   created: function () {
@@ -170,22 +171,17 @@ export default {
           page: that.page
         }})
         .then(function (response) {
-          if (response.data.message === 'Object not found.') {
+          that.rows = response.data.count
+          that.message_list = response.data.content
+          that.can_comment = true
+        }).catch(function (error) {
+          if (error.response.data.message === 'Object not found.') {
             that.getallmessage_test = true
             that.getallmessage_error_msg = that.$t('error.object_not_found')
-          } else if (response.data.message === 'Access denied.') {
+          } else if (error.response.data.message === 'Access denied.') {
             that.getallmessage_test = true
             that.getallmessage_error_msg = that.$t('error.access_denied')
-          } else if (response.data.message === 'Commenting is not allowed.') {
-            that.getallmessage_test = true
-            that.getallmessage_error_msg = that.$t('error.comment_not_allowed')
-          } else {
-            that.rows = response.data.count
-            that.message_list = response.data.content
           }
-        }).catch(function (error) {
-          that.getallmessage_test = true
-          that.getallmessage_error_msg = error.response.data.message
         })
     },
     up_vote: function (index, msgCommentId) {
@@ -275,9 +271,9 @@ export default {
         } else if (error.response.data.message === 'Access denied.') {
           that.add_message_test = true
           that.add_message_error_msg = that.$t('error.access_denied')
-        } else if (error.response.data.message === 'Comment not allowed.') {
+        } else if (error.response.data.message === 'Commenting is not allowed.') {
           that.add_message_test = true
-          that.add_message_error_msg = that.$t('error.comment_not_allowed')
+          that.add_message_error_msg = that.$t('prompt.user_comment_not_allowed')
         }
       })
       that.new_msg = ''

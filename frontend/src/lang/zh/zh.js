@@ -30,10 +30,10 @@ module.exports = {
   error: {
     object_not_found: '您访问的信息不存在',
     course_already_purchased: '课程已购买',
-    access_denied: '您的访问被拒绝',
-    comment_not_allowed: '您没有评论的权限'
+    access_denied: '您的访问被拒绝'
   },
   prompt: {
-    object_deleted: '删除成功'
+    object_deleted: '删除成功',
+    user_comment_not_allowed: '您已被禁言'
   }
 }

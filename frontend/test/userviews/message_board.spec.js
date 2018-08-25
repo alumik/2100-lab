@@ -16,17 +16,17 @@ describe('留言板单元测试', () => {
     expect(wrapper.contains('#message-board')).toBe(true)
   })
 
-  it('留言分页', () => {
-    expect(wrapper.contains(Pagination)).toBe(true)
-  })
+  // it('留言分页', () => {
+  //   expect(wrapper.contains(Pagination)).toBe(true)
+  // })
 
   it('留言数量', () => {
     expect(wrapper.findAll('#piece-of-message').length).toEqual(numOfMessage)
   })
 
-  it('留言输入', () => {
-    expect(wrapper.contains('#input-message')).toBe(true)
-  })
+  // it('留言输入', () => {
+  //   expect(wrapper.contains('#input-message')).toBe(true)
+  // })
 
   // it('点击“点赞”按钮点赞数加1', () => {
   //   const praiseNum = wrapper.vm.message_list[0].num_of_praise

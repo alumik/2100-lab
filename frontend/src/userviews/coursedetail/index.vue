@@ -170,7 +170,7 @@
           </div>
           <div
             class="row time-style">
-            <h6 v-if="course.expire_time !== null && !isNaN(left_time)">
+            <h6 v-if="course.expire_time !== null">
               距离失效还有 {{ left_time }}</h6>
           </div>
         </div>

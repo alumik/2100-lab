@@ -41,14 +41,12 @@
           class="audio-style">
           <audio
             ref="player"
+            :src="audio_src"
             autoplay
             controls
             preload
-            class="audio-player">
-            <source
-              src=""
-              type="audio/mpeg">
-          </audio>
+            type="audio/mpeg"
+            class="audio-player"/>
         </div>
       </div>
       <div role="tablist">
@@ -96,7 +94,7 @@
           <b-card-body>
             <p
               id="message-board"
-              class="card-text width-style">
+              class="card-text">
               <MessageBoard :course_id="query_course_id"/>
             </p>
           </b-card-body>
@@ -138,7 +136,8 @@ export default {
       up_votes: 0,
       beforedestroy_test: false,
       beforedestroy_error_msg: '',
-      praise_course_color: '#ccc'
+      praise_course_color: '#ccc',
+      audio_src: ''
     }
   },
   watch: {
@@ -147,16 +146,13 @@ export default {
         this.now_picture_index = 0
         this.change_picture()
       } else if (this.audio_current_time >=
-        (this.course.images[this.audio_piece_num].load_time
-          ? this.course.images[this.audio_piece_num].load_time : 0)) {
+        this.course.images[this.audio_piece_num - 1].load_time) {
         this.now_picture_index = this.audio_piece_num - 1
         this.change_picture()
       } else {
         for (var i = 1; i < this.audio_piece_num; i++) {
           var first = this.course.images[i - 1].load_time
-            ? this.course.images[i - 1].load_time : 0
           var second = this.course.images[i].load_time
-            ? this.course.images[i].load_time : 0
           if (this.audio_current_time >= first && this.audio_current_time < second) {
             this.now_picture_index = i - 1
             this.change_picture()
@@ -172,6 +168,12 @@ export default {
       'course_id=' + that.query_course_id)
       .then(function (response) {
         that.course = response.data
+        that.audio_src = that.$store.state.address + that.course.audio
+        that.audio_piece_num = that.course.images.length
+        for (var i = 0; i < that.course.images.length; i++) {
+          that.course.images[i].image_path = that.$store.state.address +
+              that.course.images[i].image_path
+        }
         that.$refs.player.currentTime = that.course.progress
       }).catch(function (error) {
         if (error.response.data.message === 'Object not found.') {
@@ -202,7 +204,6 @@ export default {
   },
   mounted () {
     this.audio_current_time = this.$refs.player.currentTime
-    this.audio_piece_num = this.course.images ? this.course.images.length : 0
     this.introduction_text_show = this.course.description ? this.course.description.substring(0, 2) : ''
     this.introduction_text_hide = this.course.description ? this.course.description.substring(2) : ''
     this.addEventListeners()
@@ -246,7 +247,9 @@ export default {
       this.introduction_brandFold = !this.introduction_brandFold
     },
     change_picture: function () {
-      this.now_picture = this.course.images[this.now_picture_index].image_path
+      let that = this
+      that.now_picture = that.course.images[this.now_picture_index].image_path
+        ? that.course.images[that.now_picture_index].image_path : ''
     },
     addEventListeners: function () {
       const self = this
@@ -317,10 +320,6 @@ export default {
   .audio-player {
     width: 99%;
     height: 100%;
-  }
-
-  .width-style {
-    width: 100%;
   }
 
   .vote-style {
