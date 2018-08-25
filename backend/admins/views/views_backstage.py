@@ -1,3 +1,5 @@
+"""管理员模块后台操作"""
+
 from datetime import datetime
 import re
 import time
@@ -15,6 +17,57 @@ from admins.models import AdminLog
 
 
 def authenticate_admin(request):
+    """管理员登录
+
+    **传入参数/方法**
+
+    ::
+
+        POST phone_number 电话号码
+        POST password 密码
+
+    **返回值**
+
+    *错误：用户已登录* HTTP400
+
+    .. code:: javascript
+
+        {
+            message: 'User is already authenticated.'
+        }
+
+    *错误：电话号码或密码错误* HTTP400
+
+    .. code:: javascript
+
+        {
+            message: 'Invalid phone number or password.'
+        }
+
+    *错误：用户没有管理员权限* HTTP403
+
+    .. code:: javascript
+
+        {
+            message: 'Access denied.'
+        }
+
+    *成功：* HTTP200
+
+    .. code:: javascript
+
+        {
+            admin_id: 1,          // 管理员ID
+            username: 'John',     // 管理员用户名
+            admin_groups: [
+                'customer_admin',
+                'order_admin'
+                ...
+            ]                     // 管理员权限组
+        }
+
+    """
+
     if request.user.is_authenticated:
         return JsonResponse({'message': ERROR['user_is_already_authenticated']}, status=400)
 
@@ -45,6 +98,8 @@ def authenticate_admin(request):
 
 @login_required
 def get_admin_list(request):
+    """获取所有管理员列表"""
+
     if not request.user.is_superuser:
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
@@ -64,6 +119,8 @@ def get_admin_list(request):
 
 @login_required
 def get_admin_detail(request):
+    """获取管理员详情"""
+
     if not request.user.is_superuser:
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
@@ -92,6 +149,8 @@ def get_admin_detail(request):
 
 @login_required
 def change_admin_username(request):
+    """修改管理员用户名"""
+
     if not request.user.is_superuser:
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
@@ -125,6 +184,8 @@ def change_admin_username(request):
 
 @login_required
 def change_admin_password(request):
+    """修改管理员密码"""
+
     if not request.user.is_superuser:
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
@@ -148,6 +209,8 @@ def change_admin_password(request):
 
 @login_required
 def delete_admin(request):
+    """删除管理员"""
+
     if not request.user.is_superuser:
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
@@ -173,6 +236,8 @@ def delete_admin(request):
 
 @login_required
 def add_admin(request):
+    """添加管理员"""
+
     if not request.user.is_superuser:
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
@@ -206,6 +271,8 @@ def add_admin(request):
 
 @login_required
 def change_admin_groups(request):
+    """修改管理员权限组"""
+
     if not request.user.is_superuser:
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
@@ -243,6 +310,8 @@ def change_admin_groups(request):
 
 @permission_required('admins.view_adminlog')
 def get_admin_log(request):
+    """获取管理员操作日志"""
+
     admin_username = request.GET.get('admin_username', '')
     start_timestamp = request.GET.get('start_timestamp', round(time.time()))
     end_timestamp = request.GET.get('end_timestamp', round(time.time()))
