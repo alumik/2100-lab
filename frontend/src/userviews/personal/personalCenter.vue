@@ -8,7 +8,7 @@
       <div class="info">
         <BreadCrumb :items="items"/>
         <div class="content">
-          <b-row>
+          <b-row class="avatar_related">
             <b-img
               :src="avatar"
               thumbnail
@@ -161,6 +161,7 @@ export default {
       .then(res => {
         this.avatar = this.$store.state.address + res.data.avatar
         this.$store.commit('money', (this.money = res.data.reward_coin))
+        this.$store.commit('avatar', res.data.avatar)
         this.time = res.data.date_joined
           .toString()
           .substring(0, 19)
@@ -263,10 +264,12 @@ export default {
 .row {
   align-items: flex-end;
   padding: 10px 0;
+  margin-bottom: 10px;
 }
 
-.content > .row {
+.avatar_related {
   justify-content: space-between;
+  margin-bottom: 50px;
 }
 
 img {

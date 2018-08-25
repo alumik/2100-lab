@@ -102,7 +102,7 @@ new Vue({
   store,
   i18n,
   components: { App, SimpleLineIcons },
-  mounted () {
+  created () {
     if (sessionStorage.getItem('status') === 'true') {
       this.$store.commit('status')
       this.$store.commit('user', JSON.parse(sessionStorage.getItem('user')))
@@ -111,14 +111,14 @@ new Vue({
       this.$store.commit('time', sessionStorage.getItem('time'))
       this.$store.commit('avatar', sessionStorage.getItem('avatar'))
     }
-    axios
-      .post('http://localhost:8000/api/v1/core/auth/is-authenticated/', {
-        withCredentials: true
-      }).then(res => {
-        if (res.data.is_authenticated) {
-          this.$store.commit('adminStatus')
-        }
-      })
+    // axios
+    //   .post('http://localhost:8000/api/v1/core/auth/is-authenticated/', {
+    //     withCredentials: true
+    //   }).then(res => {
+    //     if (res.data.is_authenticated && state.adminStatus) {
+    //       this.$store.commit('adminStatus')
+    //     }
+    //   })
   },
   template: '<App/>'
 }).$mount('#app')
