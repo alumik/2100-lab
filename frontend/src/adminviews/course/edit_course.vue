@@ -162,6 +162,7 @@ import axios from 'axios'
 import UploadSourceForEdit from './upload_source_for_edit'
 import PreSortPicture from './pre_sort_picture'
 import SyncPicture from './synchronization'
+import qs from 'qs'
 export default {
   name: 'EditCourse',
   components: {SyncPicture, PreSortPicture, UploadSourceForEdit, Basic},
@@ -253,38 +254,16 @@ export default {
       }
     },
     update_can_comment: function (data) {
-      console.log(this.course.can_comment)
       this.course.can_comment = data
-      console.log(this.course.can_comment)
-    },
-    upload_all_data: function () {
-      let formdata = new FormData()
-      formdata.append('course_id', this.course_id)
-      formdata.append('title', this.course.title)
-      formdata.append('codename', this.course.codename)
-      formdata.append('days', this.course.expire_duration_day)
-      formdata.append('hours', this.course.expire_duration_hour)
-      formdata.append('price', this.course.price)
-      formdata.append('can_comment', this.course.can_comment)
-      formdata.append('reward_percent', this.course.reward_percent * 0.01)
-      formdata.append('description', this.course.description)
-      axios.post('http://localhost:8000/api/v1/courses/backstage/course-management/edit-course/', formdata).then(
-        response => {
-          console.log(response.data.message)
-        }
-      ).catch(
-        error => {
-          console.log(error)
-        }
-      )
     },
     receive_uploaded_resource: function (uploadPicResourse, audioFileList, originDeleteImageIndex) {
       this.is_uploaded = true
       this.image_file_list.length = 0
-      if (audioFileList && audioFileList.length === 1) {
+      if (audioFileList && audioFileList.length === 1 && audioFileList[0]) {
         this.is_audio_changed = true
+        this.audio_file_list = audioFileList
+        this.course.origin_audio_file_list[0] = audioFileList[0].name
       }
-      this.audio_file_list = audioFileList
       for (let i = 1; i <= uploadPicResourse.length; i++) {
         this.image_file_list.push(uploadPicResourse[i - 1])
       }
@@ -296,7 +275,6 @@ export default {
         for (let ii = 0; ii < this.course.origin_image_file_list.length; ii++) {
           if (this.course.origin_image_file_list[ii].image_id === originDeleteImageIndex[i - 1]) {
             this.course.origin_image_file_list.splice(ii, 1)
-            console.log(this.course.origin_image_file_list)
             break
           }
         }
@@ -309,17 +287,60 @@ export default {
           'time': ''
         })
       }
-      console.log(this.image_file_list)
     },
     receive_sorted_pictures: function (sortImageDataList) {
       this.image_file_list.length = 0
       for (let i = 0; i < sortImageDataList.length; i++) {
         this.image_file_list.push(sortImageDataList[i])
       }
-      console.log(this.image_file_list)
     },
     receive_sync_data: function (imageDataList) {
-      console.log(imageDataList)
+    },
+    upload_all_data: function () {
+      let formdata = new FormData()
+      formdata.append('course_id', this.course_id)
+      formdata.append('title', this.course.title)
+      formdata.append('codename', this.course.codename)
+      formdata.append('days', this.course.expire_duration_day)
+      formdata.append('hours', this.course.expire_duration_hour)
+      formdata.append('price', this.course.price)
+      formdata.append('can_comment', this.course.can_comment)
+      formdata.append('reward_percent', this.course.reward_percent * 0.01)
+      formdata.append('description', this.course.description)
+      if (this.is_audio_changed === true) {
+        formdata.append('audio', this.audio_file_list[0])
+      }
+      for (let i = 0; i < this.image_file_list.length; i++) {
+        let obj = this.image_file_list[i]
+        if (obj.image.slice(0, 4) === 'http' && obj.time !== '') {
+          formdata.append('image_ids', obj.origin_index)
+          formdata.append('load_times_ids', obj.time)
+        } else if (obj.image.slice(0, 4) === 'data' && obj.time !== '') {
+          formdata.append('image_files', obj.file)
+          formdata.append('load_times_files', obj.time)
+        }
+      }
+      axios.post('http://localhost:8000/api/v1/courses/backstage/course-management/edit-course/', formdata).then(
+        response => {
+          console.log(response.data.message)
+        }
+      ).catch(
+        error => {
+          console.log(error)
+        }
+      )
+      axios.post('http://localhost:8000/api/v1/courses/backstage/course-management/delete-course-images/',
+        qs.stringify({
+          'delete_list': this.delete_origin_image_index_list
+        }, {arrayFormat: 'repeat'})).then(
+        response => {
+          console.log(response.data.message)
+        }
+      ).catch(
+        error => {
+          console.log(error)
+        }
+      )
     }
   }
 }

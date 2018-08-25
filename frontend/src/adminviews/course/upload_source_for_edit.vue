@@ -174,6 +174,7 @@ export default {
         this.audioFileList.length = 0
         this.audioFileList.push(files[0])
         this.audio_name = files[0].name
+        console.log('update')
       }
     },
     handlePicFileChange () {

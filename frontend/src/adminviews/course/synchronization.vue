@@ -124,7 +124,8 @@ export default {
     return {
       audio_file_url: '',
       attr: ['', 'primary'],
-      now_number: 1
+      now_number: 1,
+      work_done: false
     }
   },
   watch: {
@@ -156,6 +157,11 @@ export default {
       }
     },
     show_modal () {
+      for (;this.now_number <= this.image_data_list.length; this.now_number++) {
+        if (this.image_data_list[this.now_number - 1].time === '') {
+          break
+        }
+      }
       if (this.audio_file_list.length === 1) {
         if (this.is_audio_changed === true) {
           this.audio_file_url = URL.createObjectURL(this.audio_file_list[0])
@@ -169,11 +175,13 @@ export default {
     },
     hide_modal () {
       this.$refs.sync_picture.hide()
+      this.$refs.player.pause()
     },
     upload_time_data () {
-      console.log(this.now_number)
       if (this.now_number - 1 === this.image_data_list.length) {
         this.$emit('sync_picture_audio', this.image_data_list)
+        this.$refs.sync_picture.hide()
+        this.$refs.player.pause()
       } else {
         alert('WORK NOT FINISHED')
       }
