@@ -60,7 +60,7 @@ export default {
           id: 6,
           text: this.$t('menu.data'),
           isActive: false,
-          path: '/admin/data'
+          path: '/admin/data/total'
         },
         {
           id: 7,

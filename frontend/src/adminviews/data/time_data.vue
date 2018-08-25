@@ -13,78 +13,10 @@
       <b-tabs
         class="data"
         @input="change_tab">
+        <b-tab title="总体概况"/>
         <b-tab
-          title="总体概况"
+          title="时间对比"
           active>
-          <div class="tab-content">
-            <b-button-group
-              class="title">
-              <b-button
-                v-for="btn in buttons"
-                :key="btn.id"
-                :pressed.sync="btn.state"
-                variant="outline-secondary"
-                @click="change_button_state(btn.id)">
-                {{ btn.text }}
-              </b-button>
-            </b-button-group>
-            <div class="statistics">
-              <div class="statistics1">
-                <div class="number">
-                  <h5>{{ increased_users }}</h5>
-                  <p>新增用户数</p>
-                </div>
-                <img
-                  class="image"
-                  src="../../assets/logo.png">
-              </div>
-              <div class="statistics2">
-                <div class="number">
-                  <h5>{{ sale }}</h5>
-                  <p>销售额</p>
-                </div>
-                <img
-                  class="image"
-                  src="../../assets/logo.png">
-              </div>
-              <div class="statistics3">
-                <div class="number">
-                  <h5>{{ increased_courses }}</h5>
-                  <p>新增课程数</p>
-                </div>
-                <img
-                  class="image"
-                  src="../../assets/logo.png">
-              </div>
-              <div class="statistics4">
-                <div class="number">
-                  <h5>{{ orders }}</h5>
-                  <p>订单数</p>
-                </div>
-                <img
-                  class="image"
-                  src="../../assets/logo.png">
-              </div>
-            </div>
-            <div class="charts">
-              <div id="charts-praise_top">
-                <h5>课程点赞数TOP5</h5>
-                <ve-histogram
-                  :data="praise_top"
-                  :colors="colors1"
-                  :settings="praise_top_setting"/>
-              </div>
-              <div id="charts_learners_top">
-                <h5>学习人数TOP5</h5>
-                <ve-histogram
-                  :data="study_top"
-                  :colors="colors2"
-                  :settings="study_top_setting"/>
-              </div>
-            </div>
-          </div>
-        </b-tab>
-        <b-tab title="时间对比" >
           <div class="tab-content">
             <div class="search">
               <div class="col-md-2">
@@ -121,7 +53,7 @@
                   <b-button
                     id="search"
                     variant="outline-secondary"
-                    @click="search2">
+                    @click="search">
                     查询
                   </b-button>
                 </div>
@@ -132,26 +64,42 @@
                 <h5>新增用户数</h5>
                 <ve-line
                   :data="charts_users"
-                  :colors="colors1"/>
+                  :colors="colors1">
+                  <div
+                    v-show="data_empty"
+                    class="data-empty">请输入查询条件</div>
+                </ve-line>
               </div>
               <div class="money">
                 <h5>销售额</h5>
                 <ve-line
                   :data="charts_money"
                   :settings="money_settings"
-                  :colors="colors2"/>
+                  :colors="colors2">
+                  <div
+                    v-show="data_empty"
+                    class="data-empty">请输入查询条件</div>
+                </ve-line>
               </div>
               <div class="courses">
                 <h5>新增课程数</h5>
                 <ve-histogram
                   :data="charts_courses"
-                  :colors="colors1"/>
+                  :colors="colors1">
+                  <div
+                    v-show="data_empty"
+                    class="data-empty">请输入查询条件</div>
+                </ve-histogram>
               </div>
               <div class="courses">
                 <h5>新增订单数</h5>
                 <ve-histogram
                   :data="charts_orders"
-                  :colors="colors2"/>
+                  :colors="colors2">
+                  <div
+                    v-show="data_empty"
+                    class="data-empty">请输入查询条件</div>
+                </ve-histogram>
               </div>
             </div>
           </div>
@@ -169,7 +117,7 @@ import Basic from '../basic/basic'
 import axios from 'axios'
 import Alert from '../../components/alert'
 export default {
-  name: 'Data',
+  name: 'TimeData',
   components: {Alert, Basic, BreadCrumb, Menu, AdminNavbar},
   data () {
     return {
@@ -180,38 +128,8 @@ export default {
         text: '数据分析',
         active: true
       }],
-      buttons: [
-        { id: 0, state: true, text: '今天' },
-        { id: 1, state: false, text: '近一周' },
-        { id: 2, state: false, text: '近一月' },
-        { id: 3, state: false, text: '近半年' }
-      ],
-      increased_users: 0,
-      sale: 0,
-      increased_courses: 0,
-      orders: 0,
       colors1: ['#ff5722'],
       colors2: ['#448aff'],
-      praise_top: {
-        columns: ['title', 'up_votes'],
-        rows: []
-      },
-      study_top: {
-        columns: ['title', 'learners'],
-        rows: []
-      },
-      praise_top_setting: {
-        labelMap: {
-          'title': '课程名',
-          'up_votes': '点赞数'
-        }
-      },
-      study_top_setting: {
-        labelMap: {
-          'title': '课程名',
-          'learners': '学习人数'
-        }
-      },
       begin_date: new Date(),
       end_date: new Date(),
       options: {
@@ -239,45 +157,15 @@ export default {
       },
       dismiss_second: 5,
       wrong_count_down: 0,
-      wrong: ''
+      wrong: '',
+      data_empty: true
     }
-  },
-  created () {
-    const that = this
-    let i
-    for (i = 0; i < that.buttons.length; i++) {
-      if (that.buttons[i].state) {
-        break
-      }
-    }
-    let days = 1
-    if (i === 0) {
-      days = 1
-    } else if (i === 1) {
-      days = 7
-    } else if (i === 2) {
-      days = 31
-    } else if (i === 3) {
-      days = 182
-    }
-    axios.get('http://localhost:8000/api/v1/data/data-management/get-overall-data/',
-      {params: {days: days}})
-      .then(function (response) {
-        that.increased_users = response.data.customers_count
-        that.sale = response.data.income
-        that.increased_courses = response.data.courses_count
-        that.orders = response.data.orders_count
-        that.praise_top.rows = response.data.top_up_voted_courses
-        that.study_top.rows = response.data.top_learned_courses
-      })
-      .catch(function (error) {
-        that.wrong = '获取数据失败' + error
-        that.wrong_count_down = that.dismiss_second
-      })
   },
   methods: {
     change_tab: function (val) {
-      // console.log(val)
+      if (val === 0) {
+        this.$router.push('/admin/data/total')
+      }
     },
     get_days: function () {
       let i
@@ -305,7 +193,7 @@ export default {
       let month = (this.month === '') ? 0 : parseFloat(this.month)
       let day = (this.day === '') ? 0 : parseFloat(this.day)
       if ((this.day !== '' && day % 1 !== 0) ||
-        (this.month !== '' && month % 1 !== 0)) {
+          (this.month !== '' && month % 1 !== 0)) {
         return -2
       } else {
         return 30 * month + day
@@ -323,29 +211,6 @@ export default {
         return temp
       }
     },
-    search1: function () {
-      const that = this
-      let days = this.get_days()
-      axios.get('http://localhost:8000/api/v1/data/data-management/get-overall-data/',
-        {params: {days: days}})
-        .then(function (response) {
-          if (response.data.message === 'Access denied.') {
-            that.wrong = '您没有权限获取数据！'
-            that.wrong_count_down = that.dismiss_second
-          } else {
-            that.increased_users = response.data.customers_count
-            that.sale = response.data.income
-            that.increased_courses = response.data.courses_count
-            that.orders = response.data.orders_count
-            that.praise_top.rows = response.data.top_up_voted_courses
-            that.study_top.rows = response.data.top_learned_courses
-          }
-        })
-        .catch(function (error) {
-          that.wrong = '获取数据失败' + error
-          that.wrong_count_down = that.dismiss_second
-        })
-    },
     check_date: function () {
       let step = this.get_step()
       if (step === -1 || step === 0) {
@@ -359,7 +224,7 @@ export default {
       }
       let time = this.get_start_end_time()
       if (time === -1 ||
-        (step * 24 * 60 * 60) > (time[1] - time[0])) {
+          (step * 24 * 60 * 60) > (time[1] - time[0])) {
         this.wrong = '您所输入的时间有误'
         this.wrong_count_down = this.dismiss_second
         return -1
@@ -371,6 +236,10 @@ export default {
       return temp
     },
     get_data: function (val) {
+      this.charts_users.rows = []
+      this.charts_money.rows = []
+      this.charts_courses.rows = []
+      this.charts_orders.rows = []
       for (let i = val.length - 1; i >= 0; i--) {
         this.charts_users.rows.push(
           {
@@ -398,7 +267,7 @@ export default {
         )
       }
     },
-    search2: function () {
+    search: function () {
       const that = this
       let data = this.check_date()
       if (data === -1) {
@@ -414,22 +283,13 @@ export default {
           })
           .then(function (response) {
             that.get_data(response.data.content)
+            that.data_empty = false
           })
           .catch(function (error) {
             that.wrong = '获取信息失败！' + error
             that.wrong_count_down = that.dismiss_second
           })
       }
-    },
-    change_button_state: function (val) {
-      for (let i = 0; i < this.buttons.length; i++) {
-        if (i === val) {
-          this.buttons[i].state = true
-        } else {
-          this.buttons[i].state = false
-        }
-      }
-      this.search1()
     }
   }
 }
@@ -443,25 +303,6 @@ export default {
   .tab-content {
     padding: 20px;
     text-align: left;
-  }
-
-  .statistics {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
-
-  .statistics > div {
-    display: flex;
-    justify-content: space-between;
-    width: 300px;
-    height: 100px;
-    padding: 20px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    border: 1px solid #ced4da;
   }
 
   .charts {
@@ -484,11 +325,6 @@ export default {
 
   p {
     text-align: center;
-  }
-
-  .image {
-    width: 50px;
-    height: 50px;
   }
 
   .data {
@@ -537,5 +373,19 @@ export default {
   #search {
     height: 30px;
     font-size: 0.8em;
+  }
+
+  .data-empty {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #888;
+    background-color: rgba(255, 255, 255, 0.7);
   }
 </style>

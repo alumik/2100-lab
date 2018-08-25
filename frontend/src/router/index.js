@@ -178,9 +178,14 @@ export default new Router({
       component: () => import('@/adminviews/log/detail')
     },
     {
-      path: '/admin/data',
-      name: 'Data',
-      component: () => import('@/adminviews/data/data')
+      path: '/admin/data/total',
+      name: 'TotalData',
+      component: () => import('@/adminviews/data/total_data')
+    },
+    {
+      path: '/admin/data/time',
+      name: 'TimeData',
+      component: () => import('@/adminviews/data/time_data')
     }
   ]
 })
