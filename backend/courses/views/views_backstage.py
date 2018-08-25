@@ -258,28 +258,31 @@ def get_comment_detail(request):
 
 @permission_required('courses.add_comment')
 def add_comment(request):
+    reply_to_id = request.POST.get('reply_to_id', '-1')
     comment_content = request.POST.get('comment_content')
-    course_codename = request.POST.get('course_codename')
 
     try:
-        course = Course.objects.get(codename=course_codename)
-    except Course.DoesNotExist:
+        reply_to = Comment.objects.get(id=int(reply_to_id))
+    except Comment.DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
+    course = reply_to.course
     if not course.can_comment:
         return JsonResponse({'message': ERROR['comment_not_allowed']}, status=403)
 
-    comment = Comment.objects.create(
+    reply = Comment.objects.create(
         user=request.user,
         course=course,
         content=comment_content
     )
+    reply_to.reply.add(reply)
+    reply_to.save()
 
     AdminLog.objects.create(
         admin_user=request.user,
         action_type=ACTION_TYPE['reply_comment'],
-        new_data=course.id,
-        object_id=comment.id
+        new_data=reply_to.id,
+        object_id=reply.id
     )
 
     return JsonResponse({'message': INFO['success']})

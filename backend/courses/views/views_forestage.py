@@ -135,7 +135,7 @@ def buy_course(request):
     customer.reward_coin = reward_coin
     customer.save()
 
-    if referer_id != '' and int(referer_id) != int(customer.id): 
+    if referer_id != '' and int(referer_id) != int(customer.id):
         referer_id = int(referer_id)
         try:
             referer = get_user_model().objects.get(id=referer_id)
@@ -317,6 +317,7 @@ def add_comment(request):
         try:
             reply_to = Comment.objects.get(id=int(reply_to_id))
             reply_to.reply.add(comment)
+            reply_to.save()
         except Comment.DoesNotExist:
             pass
 
