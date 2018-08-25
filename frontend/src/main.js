@@ -13,6 +13,7 @@ import VCharts from 'v-charts'
 import axios from 'axios'
 import Vuex from 'vuex'
 import VueI18n from 'vue-i18n'
+import SimpleLineIcons from 'vue-simple-line'
 
 Vue.component(VueQrcode.name, VueQrcode)
 Vue.use(BootstrapVue)
@@ -87,6 +88,8 @@ const i18n = new VueI18n({
   }
 })
 
+Vue.component('simple-line-icons', SimpleLineIcons)
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
@@ -94,7 +97,7 @@ new Vue({
   axios,
   store,
   i18n,
-  components: { App },
+  components: { App, SimpleLineIcons },
   mounted () {
     if (sessionStorage.getItem('status') === 'true') {
       this.$store.commit('status')

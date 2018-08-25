@@ -5,13 +5,24 @@
     :class="{hide: hidden, 'sidebar': true}">
     <div
       class="sidebar-header"
-      @click="$router.push({path: '/admin/main'})">{{ $t('menu.header') }}</div>
+      @click="$router.push({path: '/admin/main'})">
+      <simple-line-icons
+        icon="home"
+        class="head-icon"
+        size="small"/>
+      {{ $t('menu.header') }}
+    </div>
     <ul class="components">
       <li
-        v-for="list in lists"
-        :key="list.id"
-        :class="{active: $store.state.menu === list.id}">
-        <a @click="jump(list.id)">{{ list.text }}</a>
+        v-for="i in lists.length"
+        :key="i"
+        :class="{active: $store.state.menu === i}">
+        <a @click="jump(i)">
+          <simple-line-icons
+            :icon="icons[i-1]"
+            class="icon"
+            size="small"/>
+          {{ lists[i-1].text }}</a>
       </li>
     </ul>
   </nav>
@@ -55,9 +66,9 @@ export default {
         },
         {
           id: 5,
-          text: this.$t('menu.admin'),
+          text: this.$t('menu.log'),
           isActive: false,
-          path: '/admin/adminmanagement'
+          path: '/admin/log'
         },
         {
           id: 6,
@@ -67,11 +78,16 @@ export default {
         },
         {
           id: 7,
-          text: this.$t('menu.log'),
+          text: this.$t('menu.admin'),
           isActive: false,
-          path: '/admin/log'
+          path: '/admin/adminmanagement'
         }
       ]
+    }
+  },
+  data () {
+    return {
+      icons: ['notebook', 'note', 'people', 'calculator', 'user', 'chart', 'calendar']
     }
   },
   create () {},
@@ -89,10 +105,21 @@ export default {
 #sidebar {
   position: fixed;
   z-index: 9999;
+  text-align: left;
 }
 
 .sidebar-header,
 a {
   cursor: pointer;
+}
+
+.icon {
+  width: 15px;
+  height: 15px;
+}
+
+.head-icon {
+  width: 20px;
+  height: 20px;
 }
 </style>
