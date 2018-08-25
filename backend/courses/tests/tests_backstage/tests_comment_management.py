@@ -306,7 +306,7 @@ class CommentOperationTests(TestCase):
                 ]
             }
         )
-        self.assertEqual(reply_to.reply.count(), 1)
+        self.assertEqual(Comment.objects.filter(parent=reply_to).count(), 1)
 
     def test_delete_comment(self):
         self.client.login(phone_number='13312345678', password='123456')

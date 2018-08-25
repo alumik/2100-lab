@@ -219,7 +219,10 @@ def get_course_comments(request):
     if not course.can_comment:
         return JsonResponse({'message': ERROR['comment_not_allowed']}, status=403)
 
-    comments = Comment.objects.filter(course=course).order_by('-created_at')
+    comments = Comment.objects.filter(
+        course=course,
+        parent__isnull=True
+    ).order_by('-created_at')
     return get_comment_page(request, comments)
 
 
@@ -316,9 +319,14 @@ def add_comment(request):
     if reply_to_id != '':
         try:
             reply_to = Comment.objects.get(id=int(reply_to_id))
-            reply_to.reply.add(comment)
-            reply_to.save()
+            comment.parent = reply_to
+            comment.save()
         except Comment.DoesNotExist:
             pass
 
-    return JsonResponse({'message': INFO['success']})
+    return JsonResponse(
+        {
+            'message': INFO['success'],
+            'comment_id': comment.id
+        }
+    )

@@ -273,10 +273,9 @@ def add_comment(request):
     reply = Comment.objects.create(
         user=request.user,
         course=course,
-        content=comment_content
+        content=comment_content,
+        parent=reply_to
     )
-    reply_to.reply.add(reply)
-    reply_to.save()
 
     AdminLog.objects.create(
         admin_user=request.user,

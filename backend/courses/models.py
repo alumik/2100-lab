@@ -90,7 +90,12 @@ class Comment(SoftDeletionModel):
         blank=True,
         related_name='comment_down_vote_customer'
     )
-    reply = models.ManyToManyField('self', blank=True)
+    parent = models.ForeignKey(
+        'self',
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -99,10 +104,10 @@ class Comment(SoftDeletionModel):
         return self.content[:50] + '...'
 
     def as_dict(self, customer):
-        return {
+        json_data = {
             'comment_id': self.id,
             'username': self.user.username,
-            'user_id': customer.id,
+            'user_id': self.user.id,
             'avatar': str(self.user.avatar),
             'course_id': self.course.id,
             'content': self.content,
@@ -110,8 +115,26 @@ class Comment(SoftDeletionModel):
             'down_votes': self.down_votes.count(),
             'up_voted': customer in self.up_votes.all(),
             'down_voted': customer in self.down_votes.all(),
-            'created_at': self.created_at
+            'created_at': self.created_at,
+            'reply_count': Comment.objects.filter(parent=self).count(),
+            'replies': []
         }
+        replies = Comment.objects.filter(parent=self).order_by('-created_at')[:3]
+        for reply in replies:
+            json_data['replies'].append(
+                {
+                    'comment_id': reply.id,
+                    'username': reply.user.username,
+                    'user_id': reply.user.id,
+                    'content': reply.content,
+                    'up_votes': reply.up_votes.count(),
+                    'down_votes': reply.down_votes.count(),
+                    'up_voted': customer in reply.up_votes.all(),
+                    'down_voted': customer in reply.down_votes.all(),
+                    'created_at': reply.created_at
+                }
+            )
+        return json_data
 
     def as_backstage_dict(self):
         return {
