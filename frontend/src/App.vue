@@ -9,7 +9,6 @@ import axios from 'axios'
 export default {
   name: 'App',
   async created () {
-    alert(999)
     let response = await axios.post(
       'http://localhost:8000/api/v1/core/auth/is-authenticated/',
       {

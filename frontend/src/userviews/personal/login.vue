@@ -236,12 +236,9 @@ export default {
     )
     let status = response.data.is_authenticated
     next(vm => {
-      // console.log(vm.$store.state.status)
       if (status) {
-        alert(1)
         next('/')
       } else {
-        alert(2)
         next()
       }
     })
