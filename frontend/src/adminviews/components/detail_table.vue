@@ -38,7 +38,10 @@ export default {
   }
 
   table {
-    font-size: 1.5em;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    border-top: 1px solid #d3d9df;
+    border-bottom: 1px solid #d3d9df;
   }
 
   .col-3 {

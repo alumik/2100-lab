@@ -219,11 +219,9 @@ export default {
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    padding: 0 15px 10px 15px;
-    margin-top: 25px;
-    margin-bottom: 25px;
+    padding: 0 15px 0 15px;
+    margin: 25px 0;
     color: #23527c;
-    border-bottom: 1px solid #eef1f5;
   }
 
   h1 {
@@ -231,6 +229,7 @@ export default {
   }
 
   td {
+    font-size: 1rem;
     vertical-align: middle;
   }
 
