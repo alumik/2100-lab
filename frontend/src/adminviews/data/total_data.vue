@@ -5,6 +5,7 @@
     <div class="body">
       <h1>数据分析</h1>
       <Alert
+        id="alert"
         :count_down="wrong_count_down"
         :instruction="wrong"
         variant="danger"
