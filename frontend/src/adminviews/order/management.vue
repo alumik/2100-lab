@@ -1,7 +1,5 @@
 <template>
-  <Basic
-    :items="items"
-    class="my-basic">
+  <Basic :items="items">
     <div class="body">
       <h1>订单列表</h1>
       <h6>第 {{ page }}/{{ num_pages }} 页，共 {{ rows }} 条数据</h6>
@@ -267,6 +265,12 @@ h6 {
   font-weight: bold;
 }
 
+.table-div {
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow-x: scroll;
+}
+
 table {
   margin-bottom: 20px;
   border-top: 1px solid #d3d9df;
@@ -290,7 +294,8 @@ td {
   border: 1px solid #d3d9df;
 }
 
-#detail-button:hover {
+#detail-button:hover,
+#detail-button:active {
   background-color: rgba(91, 155, 209, 0.2);
 }
 
@@ -305,12 +310,6 @@ select {
 
 option {
   font-size: 18px;
-}
-
-.table-div {
-  padding-right: 15px;
-  padding-left: 15px;
-  overflow-x: scroll;
 }
 
 thead tr {

@@ -1,7 +1,5 @@
 <template>
-  <Basic
-    :items="items"
-    class="my-basic">
+  <Basic :items="items">
     <div class="body">
       <div class="title">
         <h1>留言详情</h1>

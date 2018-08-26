@@ -1,7 +1,5 @@
 <template>
-  <Basic
-    :items="items"
-    class="my-basic">
+  <Basic :items="items">
     <div class="body">
       <div class="title">
         <h1>订单详情</h1>
@@ -212,10 +210,10 @@ export default {
   justify-content: space-between;
   padding: 0 15px 0 15px;
   margin: 25px 0;
-  color: #23527c;
 }
 
 h1 {
+  color: #204269;
   text-align: left;
 }
 

@@ -1,16 +1,15 @@
 <template>
-  <Basic
-    :items="items"
-    class="my-basic">
-    <div>
+  <Basic :items="items">
+    <div class="body">
       <h1>用户列表</h1>
+      <h6>第 {{ page }}/{{ num_pages }} 页，共 {{ rows }} 条数据</h6>
+      <Alert
+        :count_down="wrong_count_down"
+        :instruction="wrong"
+        variant="danger"
+        @decrease="wrong_count_down-1"
+        @zero="wrong_count_down=0"/>
       <div class="table-div">
-        <Alert
-          :count_down="wrong_count_down"
-          :instruction="wrong"
-          variant="danger"
-          @decrease="wrong_count_down-1"
-          @zero="wrong_count_down=0"/>
         <table class="table table-striped">
           <thead>
             <tr>
@@ -88,21 +87,29 @@
               <td>{{ get_type(user.is_vip) }}</td>
               <td>{{ get_state(user.is_banned) }}</td>
               <td>
-                <button
-                  type="button"
+                <a
+                  id="detail-button"
                   class="btn"
                   @click="to_detail(user.customer_id + '')">
+                  <simple-line-icons
+                    icon="bubble"
+                    color="#5b9bd1"
+                    class="icon"
+                    size="small"/>
                   详情
-                </button>
+                </a>
               </td>
             </tr>
           </tbody>
         </table>
+        <b-pagination
+          :total-rows="rows"
+          :per-page="per_page"
+          v-model="page"
+          align="center"
+          size="md"
+          @input="change_page"/>
       </div>
-      <Pagination
-        :rows="rows"
-        :perpage="per_page"
-        @change="change_page"/>
     </div>
   </Basic>
 </template>
@@ -118,13 +125,16 @@ export default {
   components: { Alert, Basic, Pagination },
   data () {
     return {
-      items: [{
-        text: '主页',
-        href: '/admin/main'
-      }, {
-        text: '用户管理',
-        active: 'true'
-      }],
+      items: [
+        {
+          text: '主页',
+          href: '/admin/main'
+        },
+        {
+          text: '用户管理',
+          active: 'true'
+        }
+      ],
       titles: [
         { label: '用户ID' },
         { label: '用户名' },
@@ -142,19 +152,25 @@ export default {
       state: '',
       page_jump: false,
       page: 1,
-      per_page: 10,
+      per_page: 20,
       dismiss_second: 5,
       wrong_count_down: 0,
-      wrong: ''
+      wrong: '',
+      num_pages: 0
     }
   },
   created () {
     const that = this
-    axios.get('http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-list/',
-      { params: {
-        page_limit: that.per_page,
-        page: that.page
-      }})
+    axios
+      .get(
+        'http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-list/',
+        {
+          params: {
+            page_limit: that.per_page,
+            page: that.page
+          }
+        }
+      )
       .then(function (response) {
         that.users = response.data.content
         that.rows = response.data.count
@@ -184,7 +200,6 @@ export default {
       this.$router.push({ name: 'UserDetail', query: { user_id: val } })
     },
     change_page: function (page) {
-      this.page = page
       this.search()
     },
     search: function () {
@@ -205,16 +220,21 @@ export default {
       } else {
         state = '2'
       }
-      axios.get('http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-list/',
-        {params: {
-          customer_id: that.user_id,
-          username: that.user_name,
-          phone_number: that.phone,
-          is_vip: type,
-          is_banned: state,
-          page_limit: that.per_page,
-          page: that.page
-        }})
+      axios
+        .get(
+          'http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-list/',
+          {
+            params: {
+              customer_id: that.user_id,
+              username: that.user_name,
+              phone_number: that.phone,
+              is_vip: type,
+              is_banned: state,
+              page_limit: that.per_page,
+              page: that.page
+            }
+          }
+        )
         .then(function (response) {
           that.users = response.data.content
           that.rows = response.data.count
@@ -229,69 +249,87 @@ export default {
 </script>
 
 <style scoped>
-  h1 {
-    padding-left: 20px;
-    margin-top: 25px;
-    margin-bottom: 25px;
-    text-align: left;
-  }
+.body {
+  padding: 20px;
+  margin: 70px 20px 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
 
-  .table-div {
-    padding-right: 15px;
-    padding-left: 15px;
-    overflow-x: scroll;
-  }
+h1,
+h6 {
+  padding-left: 15px;
+  color: #23527c;
+  text-align: left;
+}
 
-  table {
-    font-size: 1.2em;
-    text-align: center;
-    border: 1px solid #d3d9df;
-  }
+h1 {
+  margin: 25px 0;
+}
 
-  td {
-    vertical-align: middle;
-  }
+h6 {
+  margin-bottom: 15px;
+  font-weight: bold;
+}
 
-  .btn {
-    color: white;
-    background-color: #8d4e91;
-    border-color: #8d6592;
-    border-radius: 10px;
-    outline: none;
-    box-shadow: #8d6592 inset;
-  }
+.table-div {
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow-x: scroll;
+}
 
-  .btn:hover,
-  .btn:active {
-    background-color: #5e0057;
-  }
+table {
+  margin-bottom: 20px;
+  border-top: 1px solid #d3d9df;
+}
 
-  select {
-    width: 160px;
-    height: 30px;
-    border-radius: 5px;
-    outline: none;
-  }
+td {
+  font-size: 1rem;
+  vertical-align: middle;
+}
 
-  option {
-    font-size: 18px;
-  }
+.btn {
+  margin-right: 2px;
+  margin-left: 2px;
+  border: 1px solid #d3d9df;
+}
 
-  thead tr {
-    font-weight: bold;
-    color: white;
-    background-color: #6c757d;
-  }
+#detail-button {
+  margin-right: 2px;
+  margin-left: 2px;
+  color: #5b9bd1;
+  border: 1px solid #d3d9df;
+}
 
-  .s-td {
-    width: 120px;
-  }
+#detail-button:hover,
+#detail-button:active {
+  background-color: rgba(91, 155, 209, 0.2);
+}
 
-  .md-td {
-    width: 180px;
-  }
+select {
+  width: 130px;
+  height: 30px;
+  color: #2c3e50;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  outline: none;
+}
 
-  .lg-td {
-    width: 200px;
-  }
+option {
+  font-size: 18px;
+}
+
+thead tr {
+  font-weight: bold;
+  color: #999;
+}
+
+.s-td {
+  width: 120px;
+}
+
+.md-td {
+  width: 180px;
+}
 </style>
