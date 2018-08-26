@@ -41,11 +41,6 @@
               id="save-btn"
               class="btn"
               @click="submit_message">
-              <simple-line-icons
-                id="add-icon"
-                icon="user-follow"
-                color="white"
-                class="icon"/>
               保存
             </a>
           </b-form-group>
@@ -131,7 +126,8 @@ export default {
       .then(response => {
         for (let permission of response.data.admin_groups) {
           if (permission === 'super_admin') {
-            continue
+            this.toggle_all(true)
+            break
           }
           this.selected.push(this.transfer_permission(permission))
         }

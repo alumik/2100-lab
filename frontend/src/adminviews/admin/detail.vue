@@ -186,10 +186,14 @@ export default {
             this.admin.admin_groups = '超级管理员权限'
             break
           } else {
-            this.admin.admin_groups =
-              this.admin.admin_groups +
-              ' ' +
-              this.transfer_permission(permission)
+            if (this.admin.admin_groups === '') {
+              this.admin.admin_groups = this.transfer_permission(permission)
+            } else {
+              this.admin.admin_groups =
+                this.admin.admin_groups +
+                ',' +
+                this.transfer_permission(permission)
+            }
           }
         }
       })
@@ -306,7 +310,7 @@ h1 {
 #distribution-btn {
   margin-left: 15px;
   color: white;
-  background-color: #06f;
+  background-color: royalblue;
 }
 
 #distribution-btn:hover {
@@ -316,7 +320,7 @@ h1 {
 #change-password-btn {
   margin-left: 15px;
   color: white;
-  background-color: #06f;
+  background-color: royalblue;
 }
 
 #change-password-btn:hover {
@@ -326,7 +330,7 @@ h1 {
 #change-username-btn {
   margin-left: 15px;
   color: white;
-  background-color: #06f;
+  background-color: royalblue;
 }
 
 #change-username-btn:hover {

@@ -113,6 +113,7 @@
               <input
                 id="Yes"
                 type="radio"
+                checked
                 name="optn"
                 @click="update_can_comment(1)"
               >是

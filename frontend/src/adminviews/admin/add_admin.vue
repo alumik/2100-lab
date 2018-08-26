@@ -49,11 +49,6 @@
           id="save-btn"
           class="btn"
           @click="check_format">
-          <simple-line-icons
-            id="add-icon"
-            icon="pin"
-            color="white"
-            class="icon"/>
           保存
         </a>
       </div>

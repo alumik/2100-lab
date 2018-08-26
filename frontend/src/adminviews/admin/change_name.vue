@@ -34,11 +34,6 @@
           id="save-btn"
           class="btn"
           @click="submit_message">
-          <simple-line-icons
-            id="add-icon"
-            icon="pin"
-            color="white"
-            class="icon"/>
           保存
         </a>
       </div>
