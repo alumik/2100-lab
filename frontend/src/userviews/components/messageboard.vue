@@ -307,8 +307,9 @@ export default {
   },
   methods: {
     change_list_page: function (page) {
-      this.modal_page = page
-      this.get_replies(this.get_all_reply_id)
+      let that = this
+      that.modal_page = page
+      that.get_replies(that.get_all_reply_id)
     },
     hide_reply_list_popup: function () {
       this.$root.$emit('bv::hide::modal', 'reply-list-popup')
@@ -572,8 +573,8 @@ export default {
           if (response.data.message === 'Object deleted.') {
             alert(that.$t('prompt.object_deleted'))
             that.replies.splice(index, 1)
+            that.get_replies(that.get_all_reply_id)
             that.getallmessage()
-            that.get_replies()
           }
         })
         .catch(function (error) {

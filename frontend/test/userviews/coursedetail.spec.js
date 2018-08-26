@@ -12,7 +12,10 @@ Vue.use(BootstrapVue)
 
 const $route = {
   path: '/coursedetail',
-  query: { course_id: 1 }
+  query: {
+    course_id: 1,
+    page: 1
+  }
 }
 
 const $store = new Vuex.Store({
