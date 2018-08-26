@@ -169,7 +169,7 @@
           <a
             id="course"
             class="btn"
-            @click="to_order">
+            @click="to_course">
             <simple-line-icons
               icon="bubble"
               color="#5b9bd1"

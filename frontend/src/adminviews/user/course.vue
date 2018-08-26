@@ -1,9 +1,8 @@
 <template>
-  <Basic
-    :items="items"
-    class="my-basic">
-    <div>
+  <Basic :items="items">
+    <div class="body">
       <h1>相关课程</h1>
+      <h6>第 {{ page }}/{{ num_pages }} 页，共 {{ rows }} 条数据</h6>
       <Alert
         :count_down="wrong_count_down"
         :instruction="wrong"
@@ -33,11 +32,11 @@
             </tr>
           </tbody>
         </table>
+        <Pagination
+          :rows="rows"
+          :perpage="per_page"
+          @change="change_page"/>
       </div>
-      <Pagination
-        :rows="rows"
-        :perpage="per_page"
-        @change="change_page"/>
     </div>
   </Basic>
 </template>
@@ -52,19 +51,24 @@ export default {
   components: { Alert, Basic, Pagination },
   data () {
     return {
-      items: [{
-        text: '主页',
-        href: '/admin/main'
-      }, {
-        text: '用户管理',
-        href: '/admin/user'
-      }, {
-        text: this.$route.query.user_id,
-        href: '/admin/user/detail'
-      }, {
-        text: '相关课程',
-        active: true
-      }],
+      items: [
+        {
+          text: '主页',
+          href: '/admin/main'
+        },
+        {
+          text: '用户管理',
+          href: '/admin/user'
+        },
+        {
+          text: this.$route.query.user_id,
+          href: '/admin/user/detail?user_id=' + this.$route.query.user_id
+        },
+        {
+          text: '相关课程',
+          active: true
+        }
+      ],
       titles: [
         { label: '课程代码' },
         { label: '课程名' },
@@ -75,20 +79,26 @@ export default {
       logs: [],
       rows: 10,
       page: 1,
-      per_page: 2,
+      per_page: 20,
       wrong_count_down: 0,
       dismiss_second: 5,
-      wrong: ''
+      wrong: '',
+      num_pages: 0
     }
   },
   created () {
     const that = this
-    axios.get('http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-learning-log-list/',
-      {params: {
-        customer_id: that.$route.query.user_id,
-        page: that.page,
-        page_limit: that.per_page
-      }})
+    axios
+      .get(
+        'http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-learning-log-list/',
+        {
+          params: {
+            customer_id: that.$route.query.user_id,
+            page: that.page,
+            page_limit: that.per_page
+          }
+        }
+      )
       .then(function (response) {
         if (response.data.message === 'Object not found.') {
           that.wrong = '无法查找到此用户的学习记录！'
@@ -96,6 +106,7 @@ export default {
         } else {
           that.logs = response.data.content
           that.rows = response.data.count
+          that.page_nums = response.data.page_nums
         }
       })
       .catch(function (error) {
@@ -107,12 +118,17 @@ export default {
     change_page: function (page) {
       this.page = page
       const that = this
-      axios.get('http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-learning-log-list/',
-        {params: {
-          customer_id: that.$route.query.user_id,
-          page: that.page,
-          page_limit: that.per_page
-        }})
+      axios
+        .get(
+          'http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-learning-log-list/',
+          {
+            params: {
+              customer_id: that.$route.query.user_id,
+              page: that.page,
+              page_limit: that.per_page
+            }
+          }
+        )
         .then(function (response) {
           if (response.data.message === 'Object not found.') {
             that.wrong = '无法查找到此用户的学习记录！'
@@ -142,39 +158,56 @@ export default {
 </script>
 
 <style scoped>
-  h1 {
-    padding-left: 20px;
-    margin-top: 25px;
-    margin-bottom: 25px;
-    text-align: left;
-  }
+.body {
+  padding: 20px;
+  margin: 70px 20px 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
 
-  table {
-    font-size: 1.5em;
-    text-align: center;
-  }
+h1,
+h6 {
+  padding-left: 15px;
+  color: #23527c;
+  text-align: left;
+}
 
-  .table-div {
-    padding-right: 15px;
-    padding-left: 15px;
-    overflow-x: scroll;
-  }
+h1 {
+  margin: 25px 0;
+}
 
-  thead tr {
-    font-weight: bold;
-    color: white;
-    background-color: #6c757d;
-  }
+h6 {
+  margin-bottom: 15px;
+  font-weight: bold;
+}
 
-  td {
-    vertical-align: middle;
-  }
+.table-div {
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow-x: scroll;
+}
 
-  .s-td {
-    width: 200px;
-  }
+table {
+  margin-bottom: 20px;
+  border-top: 1px solid #d3d9df;
+}
 
-  .lg-td {
-    width: 250px;
-  }
+td {
+  font-size: 1rem;
+  vertical-align: middle;
+}
+
+thead tr {
+  font-weight: bold;
+  color: #999;
+}
+
+.s-td {
+  width: 200px;
+}
+
+.lg-td {
+  width: 250px;
+}
 </style>
