@@ -251,7 +251,7 @@ export default {
   justify-content: space-between;
   padding: 0 15px 0 15px;
   margin: 25px 0;
-  color: #23527c;
+  color: #204269;
 }
 
 h1 {

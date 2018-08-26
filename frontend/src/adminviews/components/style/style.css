@@ -49,16 +49,20 @@ a:focus {
   display: block;
   padding: 10px 10px 10px 36px;
   font-size: 1.1em;
-  color: #23527c;
+  color: #204269;
+  cursor: pointer;
   border-left: 3px solid white;
 }
 
-#sidebar ul li a:hover,
 #sidebar ul li a:active {
   color: #5b9bd1;
-  cursor: pointer;
   background: rgb(240, 243, 250);
   border-left: 3px solid #5c9acf;
+}
+
+#sidebar ul li a:hover {
+  background: rgb(236, 239, 246);
+  border-left: 3px solid rgb(236, 239, 246);
 }
 
 #sidebar ul li.active > a,

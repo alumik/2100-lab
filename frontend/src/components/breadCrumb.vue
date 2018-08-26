@@ -46,7 +46,7 @@ export default {
 
   .link a:focus,
   .link a:hover {
-    color: #23527c;
+    color: #204269;
   }
 
   .link::after {

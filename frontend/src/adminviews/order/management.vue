@@ -254,7 +254,7 @@ export default {
 h1,
 h6 {
   padding-left: 15px;
-  color: #23527c;
+  color: #204269;
   text-align: left;
 }
 

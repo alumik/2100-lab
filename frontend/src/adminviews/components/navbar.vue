@@ -81,7 +81,7 @@ export default {
 }
 
 .logo img {
-  height: 35px;
+  height: 45px;
 }
 
 .navbar-dark .navbar-nav .nav-link {
