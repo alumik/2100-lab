@@ -1,6 +1,7 @@
 <template>
   <Basic>
     <b-alert
+      id="created_test_alert"
       :show="created_test"
       variant="danger"
       dismissible
@@ -9,6 +10,7 @@
       {{ created_error_msg }}
     </b-alert>
     <b-alert
+      id="add_praise_alert"
       :show="add_praise_test"
       variant="danger"
       dismissible
@@ -31,6 +33,7 @@
           title="分享二维码">
           <textarea
             v-if="course.price!=0"
+            id="share-popup-textarea"
             :value="share_reminder"
             readonly
             class="my-4 modal-input textarea-style"/>
@@ -40,14 +43,18 @@
             &emsp; &emsp;分享该课程的二维码，和小伙伴一起学习吧~
           </p>
           <qrcode
+            id="share-qrcode"
             :options="{ size: 200 }"
             value="share_qrcode_url"
             class="qrcode-style"/>
           <div class="modal-style">
-            <b-btn @click="hide_share_popup">
+            <b-btn
+              id="share-popup-cancel-button"
+              @click="hide_share_popup">
               取消
             </b-btn>
             <b-btn
+              id="share-popup-finish-button"
               variant="primary"
               @click="hide_share_popup">
               完成分享
@@ -120,13 +127,17 @@
           hide-footer
           title="注意!">
           <input
+            id="time_reminder"
             :value="time_reminder"
             readonly
             class="modal-input">
           <div class="modal-style">
-            <b-btn @click="hide_study_popup">
+            <b-btn
+              id="study-popup-cancel-button"
+              @click="hide_study_popup">
               取消</b-btn>
             <b-btn
+              id="study-popup-start-button"
               variant="primary"
               @click="open_study_page(course.course_id)">
               我知道了</b-btn>
@@ -138,7 +149,7 @@
       id="profile"
       class="row profile-style">
       <div
-        id="image"
+        id="course-image"
         class="course-img-style">
         <b-img
           :src="course_img_src_example"
@@ -272,7 +283,6 @@ export default {
       connection_err_msg: 'Server access failed. ',
       course_img_src_example: 'https://picsum.photos/1024/480/?image=54',
       pay_qrcode_url: 'http://www.jisuanke.com',
-      user_reward_balance: 50,
       share_instruction:
         '        小可爱，你可以通过分享该二维码和' +
         '小朋友一起学习有趣的实验哦~ 分享付费课程给好朋友，如果' +

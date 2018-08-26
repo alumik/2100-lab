@@ -1,11 +1,11 @@
 <template>
   <Basic>
     <div
-      id="burnedcourse">
+      id="pagenotfound">
       <div id="gif">
         <img src="../../assets/404.gif">
       </div>
-      <div>
+      <div id="remind">
         <h4>Oops! 您访问的页面不存在</h4>
         <h4>如有问题请联系客服：15222276167</h4>
       </div>

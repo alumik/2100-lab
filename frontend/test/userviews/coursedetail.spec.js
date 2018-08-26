@@ -41,12 +41,28 @@ describe('课程详情页单元测试', () => {
     }
   })
 
+  it('包含页面标题', () => {
+    expect(wrapper.contains('#page-title')).toBe(true)
+  })
+
+  it('包含信息获取出错警告', () => {
+    expect(wrapper.contains('#created_test_alert')).toBe(true)
+  })
+
+  it('包含点赞出错警告', () => {
+    expect(wrapper.contains('#add_praise_alert')).toBe(true)
+  })
+
   it('标题是课程名称', () => {
     expect(wrapper.contains('.content-style')).toBe(true)
   })
 
   it('包含导航栏', () => {
     expect(wrapper.contains(Basic)).toBe(true)
+  })
+
+  it('包含课程图片', () => {
+    expect(wrapper.contains('#course-image')).toBe(true)
   })
 
   it('测试按钮数量', () => {
@@ -71,9 +87,36 @@ describe('课程详情页单元测试', () => {
     expect(wrapper.contains('#share-popup')).toBe(true)
   })
 
-  it('点击分享按钮弹出模态框', () => {
+  it('分享模态框渲染提示语句', () => {
+    wrapper.find('#share-button').trigger('click')
+    expect(wrapper.contains('#share-popup-textarea')).toBe(true)
+  })
+
+  it('分享模态框渲染分享二维码', () => {
+    wrapper.find('#share-button').trigger('click')
+    expect(wrapper.contains('#share-qrcode')).toBe(true)
+  })
+
+  it('分享模态框渲染取消按钮', () => {
+    wrapper.find('#share-button').trigger('click')
+    expect(wrapper.contains('#share-popup-cancel-button')).toBe(true)
+  })
+
+  it('分享模态框渲染取消按钮', () => {
+    wrapper.find('#share-button').trigger('click')
+    expect(wrapper.contains('#share-popup-finish-button')).toBe(true)
+  })
+
+  it('点击学习按钮弹出模态框', () => {
     wrapper.find('#study-button').trigger('click')
     expect(wrapper.contains('#study-popup')).toBe(true)
+  })
+
+  it('点击学习按钮渲染模态框', () => {
+    wrapper.vm.start_study()
+    expect(wrapper.contains('#time_reminder')).toBe(true)
+    expect(wrapper.contains('#study-popup-cancel-button')).toBe(true)
+    expect(wrapper.contains('#study-popup-start-button')).toBe(true)
   })
 
   it('课程简介渲染', () => {

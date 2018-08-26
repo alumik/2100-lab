@@ -6,6 +6,7 @@
         hide-footer
         title="回复留言">
         <textarea
+          id="reply-input"
           v-model="new_reply"
           class="textarea-style"
           placeholder="请输入回复"
@@ -29,6 +30,7 @@
         title="全部回复">
         <div
           v-for="i in replies.length"
+          id="replies-list"
           :key="i">
           <br>
           <div>
@@ -71,6 +73,7 @@
         </div>
         <div>
           <Pagination
+            id="popup-pagination"
             :rows="modal_rows"
             :perpage="modal_page_limit"
             @change="change_list_page"/>
@@ -153,15 +156,20 @@
                 <label class="time-style">&emsp;{{ message_list[index-1].created_at }}评论</label>
               </b-col>
               <b-col>
-                <label @click="want_reply(message_list[index-1].comment_id)">
+                <label
+                  id="reply-button"
+                  @click="want_reply(message_list[index-1].comment_id)">
                   回复
                 </label>
-                <label @click="watch_all_replies(message_list[index-1].comment_id)">
+                <label
+                  id="watch-more"
+                  @click="watch_all_replies(message_list[index-1].comment_id)">
                   更多回复
                 </label>
               </b-col>
               <b-col
                 v-if="message_list[index-1].username === $store.state.user.username"
+                id="delete-button"
                 class="delete-comment"
                 @click="delete_comment(message_list[index-1].comment_id)">
                 <label>×</label>
@@ -173,11 +181,13 @@
             <b-col>
               {{ message_list[index-1].up_votes }}
               <b-img
+                id="praise-button"
                 :src="message_list[index-1].up_voted === true ? up_icon_after : up_icon_before"
                 class="vote-style "
                 @click="up_vote(index-1,message_list[index-1].comment_id)"/>
               &emsp; &emsp;{{ message_list[index-1].down_votes }}
               <b-img
+                id="detest-button"
                 :src="message_list[index-1].down_voted === true ? down_icon_after : down_icon_before"
                 class="vote-style "
                 @click="down_vote(index-1,message_list[index-1].comment_id)"/>
