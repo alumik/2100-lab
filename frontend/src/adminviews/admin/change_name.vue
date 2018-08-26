@@ -120,8 +120,8 @@ export default {
           )
           .then(response => {
             this.wrong_count_down = 0
-            this.success_count_down = 0
-            this.error_message = response.data.new_username
+            this.success_count_down = 3
+            this.error_message = '修改姓名成功，新用户名为：' + response.data.new_username
             setTimeout(this.router_push, 3000)
           })
           .catch(error => {
