@@ -70,6 +70,12 @@
           </b-row>
         </div>
         <div>
+          <Pagination
+            :rows="modal_rows"
+            :perpage="modal_page_limit"
+            @change="change_list_page"/>
+        </div>
+        <div>
           <b-btn @click="hide_reply_list_popup">
             返回
           </b-btn>
@@ -280,6 +286,9 @@ export default {
       page_limit: 1,
       page: 1,
       rows: 0,
+      modal_page_limit: 2,
+      modal_page: 1,
+      modal_rows: 0,
       up_icon_before: require('../../assets/up-before.png'),
       up_icon_after: require('../../assets/up-after.png'),
       down_icon_before: require('../../assets/down-before.png'),
@@ -297,6 +306,10 @@ export default {
     this.getallmessage()
   },
   methods: {
+    change_list_page: function (page) {
+      this.modal_page = page
+      this.get_replies(this.get_all_reply_id)
+    },
     hide_reply_list_popup: function () {
       this.$root.$emit('bv::hide::modal', 'reply-list-popup')
     },
@@ -509,13 +522,16 @@ export default {
       let that = this
       axios
         .get(
-          'http://localhost:8000/api/v1/courses/forestage/play/get-replies/?' +
-          'comment_id=' +
-          commentId
-        )
+          'http://localhost:8000/api/v1/courses/forestage/play/get-replies/', {
+            params: {
+              comment_id: commentId,
+              page_limit: that.modal_page_limit,
+              page: that.modal_page
+            }
+          })
         .then(function (response) {
-          console.log(response)
           that.replies = response.data.content
+          that.modal_rows = response.data.count
         })
     },
     delete_comment: function (commentId) {
@@ -555,8 +571,9 @@ export default {
         .then(function (response) {
           if (response.data.message === 'Object deleted.') {
             alert(that.$t('prompt.object_deleted'))
-            that.getallmessage()
             that.replies.splice(index, 1)
+            that.getallmessage()
+            that.get_replies()
           }
         })
         .catch(function (error) {
