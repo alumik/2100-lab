@@ -22,6 +22,60 @@
         </div>
       </b-modal>
     </div>
+    <div>
+      <b-modal
+        id="reply-list-popup"
+        hide-footer
+        title="全部回复">
+        <div
+          v-for="i in replies.length"
+          :key="i">
+          <br>
+          <div>
+            <b-row>
+              <b-col
+                class="text-align-left"
+                cols="4">
+                {{ replies[i-1].username }}
+              </b-col>
+              <b-col cols="6">
+                <label class="time-style">&emsp;
+                  {{ replies[i-1].created_at }}评论
+                </label>
+              </b-col>
+              <b-col
+                v-if="replies[i-1].username === $store.state.user.username"
+                class="delete-comment"
+                @click="delete_list_comment(i-1,replies[i-1].comment_id)">
+                <label>×</label>
+              </b-col>
+            </b-row>
+            <b-row class="text-align-left">
+              <p class="message-content">{{ replies[i-1].content }}</p>
+            </b-row>
+          </div>
+          <b-row class="text-align-right">
+            <b-col>
+              {{ replies[i-1].up_votes }}
+              <b-img
+                :src="replies[i-1].up_voted === true ? up_icon_after : up_icon_before"
+                class="vote-style "
+                @click="modal_up_vote_reply(i-1, replies[i-1].comment_id)"/>
+              &emsp; &emsp;{{ replies[i-1].down_votes }}
+              <b-img
+                :src="replies[i-1].down_voted === true ? down_icon_after : down_icon_before"
+                class="vote-style "
+                @click="modal_down_vote_reply(i-1, replies[i-1].comment_id)"/>
+            </b-col>
+          </b-row>
+        </div>
+        <div>
+          <b-btn @click="hide_reply_list_popup">
+            返回
+          </b-btn>
+        </div>
+      </b-modal>
+    </div>
     <div v-if="!can_comment">该课程以禁止评论！</div>
     <div v-if="can_comment">
       <b-alert
@@ -93,8 +147,11 @@
                 <label class="time-style">&emsp;{{ message_list[index-1].created_at }}评论</label>
               </b-col>
               <b-col>
-                <label @click="want_reply(message_list[index-1].comment_id,)">
+                <label @click="want_reply(message_list[index-1].comment_id)">
                   回复
+                </label>
+                <label @click="watch_all_replies(message_list[index-1].comment_id)">
+                  更多回复
                 </label>
               </b-col>
               <b-col
@@ -123,7 +180,7 @@
           <b-row>
             <b-col>
               <div
-                v-for="i in [1,2]"
+                v-for="i in message_list[index-1].replies.length"
                 :key="i">
                 <div>
                   <b-row>
@@ -148,12 +205,12 @@
                     <b-img
                       :src="message_list[index-1].replies[i-1].up_voted === true ? up_icon_after : up_icon_before"
                       class="vote-style "
-                      @click="up_vote_reply(index-1, i-1, message_list[index-1].replies[i-1].comment_id)"/>
+                      @click="up_vote_child_reply(index-1, i-1, message_list[index-1].replies[i-1].comment_id)"/>
                     &emsp; &emsp;{{ message_list[index-1].replies[i-1].down_votes }}
                     <b-img
                       :src="message_list[index-1].replies[i-1].down_voted === true ? down_icon_after : down_icon_before"
                       class="vote-style "
-                      @click="down_vote_reply(index-1, i-1, message_list[index-1].replies[i-1].comment_id)"/>
+                      @click="down_vote_child_reply(index-1, i-1, message_list[index-1].replies[i-1].comment_id)"/>
                   </b-col>
                 </b-row>
               </div>
@@ -229,13 +286,20 @@ export default {
       down_icon_after: require('../../assets/down-after.png'),
       can_comment: true,
       reply_comment_id: 0,
-      new_reply: ''
+      new_reply: '',
+      child_reply_num: 0,
+      get_all_reply_id: 0,
+      replies: []
     }
   },
   created: function () {
+    this.page = this.$route.query.page
     this.getallmessage()
   },
   methods: {
+    hide_reply_list_popup: function () {
+      this.$root.$emit('bv::hide::modal', 'reply-list-popup')
+    },
     hide_reply_popup: function () {
       this.$root.$emit('bv::hide::modal', 'reply-popup')
     },
@@ -257,7 +321,6 @@ export default {
           }
         )
         .then(function (response) {
-          console.log(response.data)
           that.rows = response.data.count
           that.message_list = response.data.content
           that.can_comment = true
@@ -281,7 +344,6 @@ export default {
             msgCommentId
         )
         .then(function (response) {
-          console.log(response)
           if (response.data.message === 'Object not found.') {
             that.up_vote_test = true
             that.up_vote_error_msg = that.$t('error.object_not_found')
@@ -301,7 +363,7 @@ export default {
           that.up_vote_error_msg = error.response.data.message
         })
     },
-    up_vote_reply: function (index, replyIndex, msgCommentId) {
+    up_vote_child_reply: function (index, replyIndex, msgCommentId) {
       let that = this
       axios
         .get(
@@ -329,6 +391,34 @@ export default {
           that.up_vote_error_msg = error.response.data.message
         })
     },
+    modal_up_vote_reply: function (replyIndex, msgCommentId) {
+      let that = this
+      axios
+        .get(
+          'http://localhost:8000/api/v1/courses/forestage/play/up-vote-comment?' +
+          'comment_id=' +
+          msgCommentId
+        )
+        .then(function (response) {
+          if (response.data.message === 'Object not found.') {
+            that.up_vote_test = true
+            that.up_vote_error_msg = that.$t('error.object_not_found')
+          } else if (response.data.message === 'Access denied.') {
+            that.up_vote_test = true
+            that.up_vote_error_msg = that.$t('error.access_denied')
+          } else if (response.data.up_voted === true) {
+            that.replies[replyIndex].up_votes = response.data.up_votes
+            that.replies[replyIndex].up_voted = true
+          } else if (response.data.up_voted === false) {
+            that.replies[replyIndex].up_votes = response.data.up_votes
+            that.replies[replyIndex].up_voted = false
+          }
+        })
+        .catch(function (error) {
+          that.up_vote_test = true
+          that.up_vote_error_msg = error.response.data.message
+        })
+    },
     down_vote: function (index, msgCommentId) {
       let that = this
       axios
@@ -338,7 +428,6 @@ export default {
             msgCommentId
         )
         .then(function (response) {
-          console.log(response)
           if (response.data.down_voted === true) {
             that.message_list[index].down_votes = response.data.down_votes
             that.message_list[index].down_voted = true
@@ -357,7 +446,7 @@ export default {
           }
         })
     },
-    down_vote_reply: function (index, replyIndex, msgCommentId) {
+    down_vote_child_reply: function (index, replyIndex, msgCommentId) {
       let that = this
       axios
         .get(
@@ -384,6 +473,51 @@ export default {
           }
         })
     },
+    modal_down_vote_reply: function (replyIndex, msgCommentId) {
+      let that = this
+      axios
+        .get(
+          'http://localhost:8000/api/v1/courses/forestage/play/down-vote-comment?' +
+          'comment_id=' +
+          msgCommentId
+        )
+        .then(function (response) {
+          if (response.data.down_voted === true) {
+            that.replies[replyIndex].down_votes = response.data.down_votes
+            that.replies[replyIndex].down_voted = true
+          } else if (response.data.down_voted === false) {
+            that.replies[replyIndex].down_votes = response.data.down_votes
+            that.replies[replyIndex].down_voted = false
+          }
+        })
+        .catch(function (error) {
+          if (error.response.data.message === 'Object not found.') {
+            that.down_vote_test = true
+            that.down_vote_error_msg = that.$t('error.object_not_found')
+          } else if (error.response.data.message === 'Access denied.') {
+            that.down_vote_test = true
+            that.down_vote_error_msg = that.$t('error.access_denied')
+          }
+        })
+    },
+    watch_all_replies: function (commentId) {
+      this.get_all_reply_id = commentId
+      this.get_replies(commentId)
+      this.$root.$emit('bv::show::modal', 'reply-list-popup')
+    },
+    get_replies: function (commentId) {
+      let that = this
+      axios
+        .get(
+          'http://localhost:8000/api/v1/courses/forestage/play/get-replies/?' +
+          'comment_id=' +
+          commentId
+        )
+        .then(function (response) {
+          console.log(response)
+          that.replies = response.data.content
+        })
+    },
     delete_comment: function (commentId) {
       let that = this
       axios
@@ -397,6 +531,32 @@ export default {
           if (response.data.message === 'Object deleted.') {
             alert(that.$t('prompt.object_deleted'))
             that.getallmessage()
+          }
+        })
+        .catch(function (error) {
+          if (error.response.data.message === 'Object not found.') {
+            that.delete_message_test = true
+            that.delete_message_error_msg = that.$t('error.object_not_found')
+          } else if (error.response.data.message === 'Access denied.') {
+            that.delete_message_test = true
+            that.delete_message_error_msg = that.$t('error.access_denied')
+          }
+        })
+    },
+    delete_list_comment: function (index, commentId) {
+      let that = this
+      axios
+        .post(
+          'http://localhost:8000/api/v1/courses/forestage/play/delete-comment/',
+          qs.stringify({
+            comment_id: commentId
+          })
+        )
+        .then(function (response) {
+          if (response.data.message === 'Object deleted.') {
+            alert(that.$t('prompt.object_deleted'))
+            that.getallmessage()
+            that.replies.splice(index, 1)
           }
         })
         .catch(function (error) {
