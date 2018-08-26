@@ -16,10 +16,6 @@ describe('用户管理页面单元测试', () => {
     expect(wrapper.contains(Basic)).toBe(true)
   })
 
-  it('测试是否包含分页导航', () => {
-    expect(wrapper.contains(Pagination)).toBe(true)
-  })
-
   it('测试输入框渲染数量', () => {
     expect(wrapper.findAll("[type = 'text']").length).toEqual(3)
   })

@@ -1,63 +1,90 @@
 <template>
-  <Basic
-    :items="items"
-    class="my-basic">
-    <div>
+  <Basic :items="items">
+    <div class="body">
       <div class="title">
         <h1>用户详情</h1>
         <div class="buttons">
-          <button
-            v-b-modal.redo_authenticate
+          <a
             v-if="is_vip"
-            type="button"
-            class="btn btn-lg"
+            id="authenticated-button"
+            class="btn"
             @click="authenticate_user">
+            <simple-line-icons
+              icon="action-undo"
+              color="black"
+              class="icon"
+              size="small"/>
             取消认证
-          </button>
-          <button
+          </a>
+          <a
             v-b-modal.authenticate
             v-else
-            type="button"
-            class="btn btn-lg">
+            id="authenticate-button"
+            class="btn">
+            <simple-line-icons
+              icon="user-following"
+              color="white"
+              class="icon"
+              size="small"/>
             认证用户
-          </button>
+          </a>
           <ConfirmModal
             id="authenticate"
             title="确认认证"
             text="您确定要认证此用户吗？"
             @click="authenticate_user"/>
-          <button
+          <a
             v-if="is_banned"
-            type="button"
-            class="btn btn-lg"
+            id="banned-button"
+            class="btn"
             @click="ban_user">
+            <simple-line-icons
+              icon="action-undo"
+              color="black"
+              class="icon"
+              size="small"/>
             取消禁言
-          </button>
-          <button
+          </a>
+          <a
             v-b-modal.ban
             v-else
-            type="button"
-            class="btn btn-lg">
+            id="ban-button"
+            class="btn">
+            <simple-line-icons
+              icon="action-undo"
+              color="white"
+              class="icon"
+              size="small"/>
             禁言用户
-          </button>
+          </a>
           <ConfirmModal
             id="ban"
             title="确认禁言"
             text="您确定要禁言此用户吗？"
             @click="ban_user"/>
-          <button
+          <a
             v-if="is_deleted"
-            type="button"
-            class="btn btn-lg">
+            id="deleted-button"
+            class="btn">
+            <simple-line-icons
+              icon="trash"
+              color="black"
+              class="icon"
+              size="small"/>
             已删除
-          </button>
-          <button
+          </a>
+          <a
             v-b-modal.delete
             v-else
-            type="button"
-            class="btn btn-lg">
+            id="delete-button"
+            class="btn">
+            <simple-line-icons
+              icon="trash"
+              color="white"
+              class="icon"
+              size="small"/>
             删除用户
-          </button>
+          </a>
           <ConfirmModal
             id="delete"
             title="确认删除"
@@ -81,8 +108,8 @@
         <table class="table table-bordered">
           <tbody class="w-100">
             <tr class="row mx-0">
-              <td class="col-2">头像</td>
-              <td class="col-10">
+              <td class="col-3">头像</td>
+              <td class="col-9">
                 <img src="http://localhost:8000/media/default/customers/avatars/2100_lab.jpg">
               </td>
             </tr>
@@ -90,21 +117,25 @@
               v-for="n in titles.length"
               :key="n"
               class="row mx-0">
-              <td class="col-2">{{ titles[n-1] }}</td>
-              <td class="col-10">{{ user[n-1] }}</td>
+              <td class="col-3">{{ titles[n-1] }}</td>
+              <td class="col-9">{{ user[n-1] }}</td>
             </tr>
           </tbody>
         </table>
       </div>
       <div class="title">
         <h2>相关订单</h2>
-        <button
+        <a
           id="order"
-          type="button"
           class="btn"
           @click="to_order">
+          <simple-line-icons
+            icon="bubble"
+            color="#5b9bd1"
+            class="icon"
+            size="small"/>
           查看更多
-        </button>
+        </a>
       </div>
       <div class="table-div">
         <table
@@ -135,13 +166,17 @@
       <div class="title">
         <h2>相关课程</h2>
         <div class="buttons">
-          <button
+          <a
             id="course"
-            type="button"
             class="btn"
             @click="to_course">
+            <simple-line-icons
+              icon="bubble"
+              color="#5b9bd1"
+              class="icon"
+              size="small"/>
             查看更多
-          </button>
+          </a>
         </div>
       </div>
       <div class="table-div">
@@ -185,21 +220,25 @@ import axios from 'axios'
 import qs from 'qs'
 export default {
   name: 'UserDetail',
-  components: {Alert, Basic, ConfirmModal, BreadCrumb, AdminNavbar, Menu},
+  components: { Alert, Basic, ConfirmModal, BreadCrumb, AdminNavbar, Menu },
   data () {
     return {
       titles: ['用户名', '手机号码', '奖励金', '注册时间', '修改时间'],
       user: new Array(5),
-      items: [{
-        text: '主页',
-        href: '/admin/main'
-      }, {
-        text: '用户管理',
-        href: '/admin/user'
-      }, {
-        text: this.$route.query.user_id,
-        active: true
-      }],
+      items: [
+        {
+          text: '主页',
+          href: '/admin/main'
+        },
+        {
+          text: '用户管理',
+          href: '/admin/user'
+        },
+        {
+          text: this.$route.query.user_id,
+          active: true
+        }
+      ],
       order_titles: [
         { label: '订单编号' },
         { label: '课程代码' },
@@ -230,10 +269,15 @@ export default {
   },
   created () {
     const that = this
-    axios.get('http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-detail/',
-      {params: {
-        customer_id: that.$route.query.user_id
-      }})
+    axios
+      .get(
+        'http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-detail/',
+        {
+          params: {
+            customer_id: that.$route.query.user_id
+          }
+        }
+      )
       .then(function (response) {
         if (response.data.message === 'Object not found.') {
           that.wrong = '无法查找到此用户的详情信息！'
@@ -281,18 +325,27 @@ export default {
     },
     to_course: function () {
       this.page_jump_course = true
-      this.$router.push({ name: 'Course', query: { user_id: this.$route.query.user_id } })
+      this.$router.push({
+        name: 'Course',
+        query: { user_id: this.$route.query.user_id }
+      })
     },
     to_order () {
       this.page_jump_order = true
-      this.$router.push({ name: 'Order', query: { user_id: this.$route.query.user_id } })
+      this.$router.push({
+        name: 'Order',
+        query: { user_id: this.$route.query.user_id }
+      })
     },
     authenticate_user: function () {
       const that = this
-      axios.post('http://localhost:8000/api/v1/customers/backstage/customer-management/toggle-vip/',
-        qs.stringify({
-          customer_id: that.$route.query.user_id
-        }))
+      axios
+        .post(
+          'http://localhost:8000/api/v1/customers/backstage/customer-management/toggle-vip/',
+          qs.stringify({
+            customer_id: that.$route.query.user_id
+          })
+        )
         .then(function (response) {
           if (response.data.message === 'Object not found.') {
             that.wrong = '无法更改此用户认证信息！'
@@ -314,10 +367,13 @@ export default {
     },
     ban_user: function () {
       const that = this
-      axios.post('http://localhost:8000/api/v1/customers/backstage/customer-management/toggle-banned/',
-        qs.stringify({
-          customer_id: that.$route.query.user_id
-        }))
+      axios
+        .post(
+          'http://localhost:8000/api/v1/customers/backstage/customer-management/toggle-banned/',
+          qs.stringify({
+            customer_id: that.$route.query.user_id
+          })
+        )
         .then(function (response) {
           if (response.data.message === 'Object not found.') {
             that.wrong = '无法禁言此用户！'
@@ -339,10 +395,13 @@ export default {
     },
     delete_user: function () {
       const that = this
-      axios.post('http://localhost:8000/api/v1/customers/backstage/customer-management/delete-customer/',
-        qs.stringify({
-          customer_id: that.$route.query.user_id
-        }))
+      axios
+        .post(
+          'http://localhost:8000/api/v1/customers/backstage/customer-management/delete-customer/',
+          qs.stringify({
+            customer_id: that.$route.query.user_id
+          })
+        )
         .then(function (response) {
           if (response.data.message === 'Object not found.') {
             that.wrong = '无法删除此用户！'
@@ -363,93 +422,126 @@ export default {
 </script>
 
 <style scoped>
-  h1,
-  h2 {
-    padding-left: 20px;
-    text-align: left;
-  }
+.body {
+  padding: 20px;
+  margin: 70px 20px 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
 
-  .buttons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    text-align: right;
-  }
+.title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px 0 15px;
+  margin: 25px 0;
+}
 
-  table {
-    font-size: 1.5em;
-    text-align: center;
-  }
+h1,
+h2 {
+  color: #204269;
+  text-align: left;
+}
 
-  img {
-    width: 40px;
-  }
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  text-align: right;
+}
 
-  #order-table,
-  #study-table {
-    border: 1px solid #d3d9df;
-  }
+.btn {
+  margin-left: 3px;
+  color: white;
+  border: 1px solid #d3d9df;
+}
 
-  .btn {
-    margin-right: 10px;
-    color: white;
-    background-color: #8d4e91;
-    border-color: #8d6592;
-    border-radius: 10px;
-    outline: none;
-    box-shadow: #8d6592 inset;
-  }
+.table-div {
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow-x: scroll;
+}
 
-  .btn:hover,
-  .btn:active {
-    background-color: #5e0057;
-  }
+table {
+  margin-bottom: 20px;
+  border-top: 1px solid #d3d9df;
+}
 
-  .title {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    padding-right: 15px;
-    margin-top: 25px;
-    margin-bottom: 25px;
-  }
+td {
+  font-size: 1rem;
+  vertical-align: middle;
+}
 
-  .table-div {
-    padding-right: 15px;
-    padding-left: 15px;
-    overflow-x: scroll;
-  }
+img {
+  width: 40px;
+}
 
-  .col-2 {
-    font-weight: bold;
-    color: white;
-    background-color: #6c757d;
-  }
+.col-3 {
+  font-weight: bold;
+  color: #337ab7;
+  background-color: #f3f4f6;
+}
 
-  .col-10 {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
+.col-9 {
+  color: #748085;
+}
 
-  thead tr {
-    font-weight: bold;
-    color: white;
-    background-color: #6c757d;
-  }
+thead tr {
+  font-weight: bold;
+  color: #999;
+}
 
-  td {
-    vertical-align: middle;
-  }
+#authenticate-button {
+  color: white;
+  background-color: #f37b1d;
+}
 
-  .s-td {
-    width: 150px;
-  }
+#authenticate-button:hover,
+#authenticate-button:active {
+  color: white;
+  background-color: #e0690c;
+}
 
-  .md-td {
-    width: 250px;
-  }
+#ban-button,
+#delete-button {
+  color: white;
+  background-color: #dd514c;
+}
 
-  .lg-td {
-    width: 500px;
-  }
+#ban-button:hover,
+#ban-button:active,
+#delete-button:hover,
+#delete-button:active {
+  color: white;
+  background-color: #ba2d28;
+}
+
+#course,
+#order {
+  margin-right: 2px;
+  margin-left: 2px;
+  color: #5b9bd1;
+  border: 1px solid #d3d9df;
+}
+
+#course:hover,
+#course:active,
+#order:hover,
+#order:active {
+  background-color: rgba(91, 155, 209, 0.2);
+}
+
+.s-td {
+  width: 150px;
+}
+
+.md-td {
+  width: 250px;
+}
+
+.lg-td {
+  width: 500px;
+}
 </style>

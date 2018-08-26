@@ -29,7 +29,7 @@ describe('用户详情页面单元测试', () => {
   })
 
   it('测试按钮渲染数量', () => {
-    expect(wrapper.findAll('button').length).toEqual(5)
+    expect(wrapper.findAll('a').length).toEqual(5)
   })
 
   it('测试是否能够正确跳转到相关页面', () => {
