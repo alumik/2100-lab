@@ -94,6 +94,7 @@ export default {
   },
   methods: {
     showModal () {
+      console.log(this.choose_image_data_list_origin)
       if (this.is_returned === true || this.is_uploaded === true) {
         this.$emit('update_is_uploaded', this.is_uploaded)
         this.is_returned = false
@@ -102,7 +103,9 @@ export default {
         this.sortImageDataList = []
         this.choose_image_data_list.length = 0
         for (let i = 0; i < this.choose_image_data_list_origin.length; i++) {
-          this.choose_image_data_list.push(this.choose_image_data_list_origin[i])
+          this.choose_image_data_list.push(
+            this.choose_image_data_list_origin[i]
+          )
         }
       }
       this.$refs.edit_picture.show()
@@ -127,7 +130,10 @@ export default {
       this.choose_image_data_list.push(img)
     },
     sendModal () {
-      if (this.sortImageDataList.length === this.choose_image_data_list_origin.length) {
+      if (
+        this.sortImageDataList.length ===
+        this.choose_image_data_list_origin.length
+      ) {
         this.now_index = 0
         this.$emit('uploadSortedPic', this.sortImageDataList.slice())
         this.choose_image_data_list.length = 0
@@ -137,13 +143,10 @@ export default {
       }
     },
     hideModal () {
-<<<<<<< HEAD
       this.is_uploaded = true
       for (let i = 1; i <= this.choose_image_data_list_origin.length; i++) {
         this.choose_image_data_list_origin[i - 1].index = i
       }
-=======
->>>>>>> Merge the master to resolve the conflicts. Ref #341
       this.$refs.edit_picture.hide()
     }
   }
