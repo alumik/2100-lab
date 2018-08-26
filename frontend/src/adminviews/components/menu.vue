@@ -88,17 +88,13 @@ export default {
         'notebook',
         'note',
         'people',
-        'calculator',
-        'user',
+        'docs',
+        'calendar',
         'chart',
-        'calendar'
+        'user'
       ],
       colors: this.$store.state.colors
     }
-  },
-  computed: {},
-  mounted () {
-    // alert(this.$store.state.menu)
   },
   methods: {
     jump: function (id) {
@@ -110,7 +106,7 @@ export default {
         if (i === id - 1) {
           colors[i] = '#5b9bd1'
         } else {
-          colors[i] = '#999'
+          colors[i] = '#204269'
         }
       }
       this.colors = colors

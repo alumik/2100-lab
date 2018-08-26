@@ -39,7 +39,15 @@ const store = new Vuex.Store({
     time: '',
     address: 'http://localhost:8000/media/',
     menu: 0,
-    colors: ['#999', '#999', '#999', '#999', '#999', '#999', '#999']
+    colors: [
+      '#204269',
+      '#204269',
+      '#204269',
+      '#204269',
+      '#204269',
+      '#204269',
+      '#204269'
+    ]
   },
   mutations: {
     status (state, status = true) {
