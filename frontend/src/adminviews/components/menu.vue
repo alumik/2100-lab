@@ -12,7 +12,7 @@
       <li
         v-for="i in lists.length"
         :key="i"
-        :class="{active: $store.state.menu === i}">
+        :class="{ active: $store.state.menu.toString() === i.toString() }">
         <a @click="jump(i)">
           <simple-line-icons
             :icon="icons[i-1]"
@@ -84,11 +84,22 @@ export default {
   },
   data () {
     return {
-      icons: ['notebook', 'note', 'people', 'calculator', 'user', 'chart', 'calendar'],
+      icons: [
+        'notebook',
+        'note',
+        'people',
+        'calculator',
+        'user',
+        'chart',
+        'calendar'
+      ],
       colors: this.$store.state.colors
     }
   },
-  create () {},
+  computed: {},
+  mounted () {
+    // alert(this.$store.state.menu)
+  },
   methods: {
     jump: function (id) {
       let colors = []
@@ -96,15 +107,14 @@ export default {
         colors.push(color)
       }
       for (let i = 0; i < colors.length; i++) {
-        if (i === (id - 1)) {
+        if (i === id - 1) {
           colors[i] = '#5b9bd1'
         } else {
           colors[i] = '#999'
         }
       }
       this.colors = colors
-      this.$store.commit('' +
-        'colors', colors)
+      this.$store.commit('' + 'colors', colors)
       this.$emit('jump', id)
       this.$store.commit('menu', id)
       this.$router.push({ path: this.lists[id - 1].path })

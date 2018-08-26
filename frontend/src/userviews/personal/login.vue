@@ -125,9 +125,11 @@ export default {
       }
     }
   },
-  mounted () {
+  created () {
     if (this.$route.params.source === 'coursedetail') {
       this.course_id = this.$route.params.course_id
+    } else if (this.$store.state.status) {
+      this.$router.push({path: '/'})
     }
   },
   methods: {
@@ -144,7 +146,6 @@ export default {
         )
         .then(response => {
           alert(response.data.verification_code)
-          // that.$store.commit('new_customer', response.data.is_customer)
           that.new_customer = response.data.is_new_customer
           that.status = '再次发送 '
           this.log_disabled = false

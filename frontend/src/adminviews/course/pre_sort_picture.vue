@@ -103,7 +103,9 @@ export default {
         this.sortImageDataList = []
         this.choose_image_data_list.length = 0
         for (let i = 0; i < this.choose_image_data_list_origin.length; i++) {
-          this.choose_image_data_list.push(this.choose_image_data_list_origin[i])
+          this.choose_image_data_list.push(
+            this.choose_image_data_list_origin[i]
+          )
         }
       }
       this.$refs.edit_picture.show()
@@ -128,7 +130,10 @@ export default {
       this.choose_image_data_list.push(img)
     },
     sendModal () {
-      if (this.sortImageDataList.length === this.choose_image_data_list_origin.length) {
+      if (
+        this.sortImageDataList.length ===
+        this.choose_image_data_list_origin.length
+      ) {
         this.now_index = 0
         this.$emit('uploadSortedPic', this.sortImageDataList.slice())
         this.choose_image_data_list.length = 0
