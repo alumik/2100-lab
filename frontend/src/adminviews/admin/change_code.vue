@@ -109,17 +109,26 @@ export default {
             })
           )
           .then(response => {
+            this.wrong_count_down = 0
+            this.success_count_down = 0
             this.error_message = response.data.message
-            this.$router.push({
-              name: 'AdminDetail',
-              query: { admin_id: this.admin_id }
-            })
+            this.error_message = '修改密码成功'
+            this.success_count_down = 3
+            setTimeout(this.router_push, 3000)
           })
           .catch(error => {
+            this.wrong_count_down = 0
+            this.success_count_down = 0
             this.error_message = error.response.message
             this.wrong_count_down = 5
           })
       }
+    },
+    router_push () {
+      this.$router.push({
+        name: 'AdminDetail',
+        query: { admin_id: this.$route.query.admin_id }
+      })
     }
   }
 }
