@@ -1,3 +1,4 @@
+"""课程模块模型"""
 # pylint: disable=E1101
 
 import datetime
@@ -9,6 +10,8 @@ from core.models import SoftDeletionModel
 
 
 class Course(SoftDeletionModel):
+    """课程模型"""
+
     title = models.CharField(max_length=100)
     description = models.TextField()
     up_votes = models.ManyToManyField(
@@ -37,6 +40,8 @@ class Course(SoftDeletionModel):
         return self.title
 
     def as_dict(self):
+        """获取字典"""
+
         return {
             'course_id': self.id,
             'thumbnail': str(self.thumbnail),
@@ -45,6 +50,8 @@ class Course(SoftDeletionModel):
         }
 
     def as_backstage_dict(self):
+        """获取后台字典"""
+
         return {
             'course_id': self.id,
             'codename': self.codename,
@@ -54,21 +61,29 @@ class Course(SoftDeletionModel):
         }
 
     def is_free(self):
+        """判断课程是否为免费"""
+
         return self.price == 0
 
 
 class CourseUpVotes(models.Model):
+    """课程点赞记录模型"""
+
     customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
 
 class Image(models.Model):
+    """课程图片资源模型"""
+
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     image_path = models.ImageField(upload_to='uploads/courses/images/')
     load_time = models.IntegerField(default=0)
 
     def as_dict(self):
+        """获取字典"""
+
         return {
             'image_id': self.id,
             'image_path': str(self.image_path),
@@ -77,6 +92,8 @@ class Image(models.Model):
 
 
 class Comment(SoftDeletionModel):
+    """评论和回复模型"""
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     content = models.TextField()
@@ -104,6 +121,8 @@ class Comment(SoftDeletionModel):
         return self.content[:50] + '...'
 
     def as_dict(self, customer):
+        """获取字典"""
+
         json_data = {
             'comment_id': self.id,
             'username': self.user.username,
@@ -125,6 +144,8 @@ class Comment(SoftDeletionModel):
         return json_data
 
     def as_reply_dict(self, customer):
+        """获取回复字典"""
+
         return {
             'comment_id': self.id,
             'username': self.user.username,
@@ -138,6 +159,8 @@ class Comment(SoftDeletionModel):
         }
 
     def as_backstage_dict(self):
+        """获取后台字典"""
+
         return {
             'comment_id': self.id,
             'created_at': self.created_at,
@@ -150,10 +173,14 @@ class Comment(SoftDeletionModel):
 
 
 class Hero(models.Model):
+    """头图模型"""
+
     image = models.ImageField(upload_to='uploads/common/heroes/')
     caption = models.CharField(max_length=255, blank=True)
 
     def as_dict(self):
+        """获取字典"""
+
         return {
             'hero_id': self.id,
             'image': str(self.image),

@@ -1,9 +1,13 @@
+"""用户模块工具函数"""
+
 from qcloudsms_py import SmsSingleSender
 from qcloudsms_py.httpclient import HTTPError
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 
 def tencent_cloud_message(phone_number, verification_code):
+    """腾讯云发送短信接口"""
+
     appid = 1400131309
     appkey = "7901df2b3113f98f1a9ad266ca07c9db"
     phone_numbers = phone_number
@@ -28,6 +32,8 @@ def tencent_cloud_message(phone_number, verification_code):
 
 
 def get_customer_page(request, items):
+    """用户分页工具函数"""
+
     count = items.count()
     page = request.GET.get('page')
     paginator = Paginator(items, request.GET.get('page_limit', 10))

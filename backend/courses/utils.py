@@ -1,3 +1,5 @@
+"""课程模块工具函数"""
+
 from django.utils import timezone
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import JsonResponse
@@ -7,6 +9,8 @@ from courses.models import Course
 
 
 def get_courses(course_type, limit=None):
+    """获取课程"""
+
     if course_type == 'free':
         courses = Course.objects.filter(price='0.00').order_by('-updated_at')
     elif course_type == 'paid':
@@ -19,6 +23,8 @@ def get_courses(course_type, limit=None):
 
 
 def can_access(course, customer):
+    """判断课程是否能够访问"""
+
     if course.is_free():
         return True
     try:
@@ -29,6 +35,8 @@ def can_access(course, customer):
 
 
 def check_learning_log(course, customer):
+    """检查是否有学习记录，有就更新，没有就创建"""
+
     try:
         learning_log = LearningLog.objects.get(course=course, customer=customer)
         learning_log.latest_learn = timezone.now()
@@ -43,6 +51,8 @@ def check_learning_log(course, customer):
 
 
 def get_comment_page(request, items):
+    """评论分页工具函数"""
+
     count = items.count()
     page = request.GET.get('page')
     paginator = Paginator(items, request.GET.get('page_limit', 10))
@@ -65,6 +75,8 @@ def get_comment_page(request, items):
 
 
 def get_reply_page(request, items):
+    """回复分页工具函数"""
+
     count = items.count()
     page = request.GET.get('page')
     paginator = Paginator(items, request.GET.get('page_limit', 10))

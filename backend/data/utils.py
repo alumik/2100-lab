@@ -1,5 +1,6 @@
+"""数据分析模块工具函数"""
+
 from decimal import Decimal
-import decimal
 
 from django.contrib.auth import get_user_model
 from django.db.models import Count
@@ -9,6 +10,8 @@ from courses.models import Course, CourseUpVotes
 
 
 def get_customers_count(start_time, end_time):
+    """获取一段时间内的新增用户数"""
+
     return get_user_model().all_objects.filter(
         date_joined__gte=start_time,
         date_joined__lte=end_time,
@@ -17,6 +20,8 @@ def get_customers_count(start_time, end_time):
 
 
 def get_income(start_time, end_time):
+    """获取一段时间内的新增收入"""
+
     orders = OrderLog.objects.filter(
         created_at__gte=start_time,
         created_at__lte=end_time,
@@ -29,6 +34,8 @@ def get_income(start_time, end_time):
 
 
 def get_courses_count(start_time, end_time):
+    """获取一段时间内的新增课程数"""
+
     return Course.objects.filter(
         created_at__gte=start_time,
         created_at__lte=end_time
@@ -36,6 +43,8 @@ def get_courses_count(start_time, end_time):
 
 
 def get_orders_count(start_time, end_time):
+    """获取一段时间内的新增订单数"""
+
     return OrderLog.objects.filter(
         created_at__gte=start_time,
         created_at__lte=end_time
@@ -43,6 +52,8 @@ def get_orders_count(start_time, end_time):
 
 
 def get_top_up_voted_courses(start_time, end_time):
+    """获取近一段时间内点赞最多的五门课程"""
+
     courses_up_votes = CourseUpVotes.objects.filter(
         created_at__gte=start_time,
         created_at__lte=end_time
@@ -61,6 +72,8 @@ def get_top_up_voted_courses(start_time, end_time):
 
 
 def get_top_learned_courses(start_time, end_time):
+    """获取近一段时间内学习最多的五门课程"""
+
     learning_logs = LearningLog.objects.filter(
         latest_learn__gte=start_time,
         latest_learn__lte=end_time

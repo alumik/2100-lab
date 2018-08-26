@@ -1,3 +1,4 @@
+"""用户模块模型"""
 # pylint: disable=E1101
 
 from django.conf import settings
@@ -7,6 +8,8 @@ from courses.models import Course
 
 
 class LearningLog(models.Model):
+    """学习记录模型"""
+
     customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     progress = models.IntegerField(default=0)
@@ -17,6 +20,8 @@ class LearningLog(models.Model):
         unique_together = ('customer', 'course')
 
     def as_dict(self):
+        """获取字典"""
+
         return {
             'course_codename': self.course.codename,
             'course_title': self.course.title,
@@ -26,6 +31,8 @@ class LearningLog(models.Model):
         }
 
     def as_brief_dict(self):
+        """获取简略字典"""
+
         return {
             'course_codename': self.course.codename,
             'course_title': self.course.title,
@@ -36,6 +43,8 @@ class LearningLog(models.Model):
 
 
 class OrderLog(models.Model):
+    """订单记录模型"""
+
     order_no = models.CharField(max_length=50, unique=True)
     customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
@@ -46,6 +55,8 @@ class OrderLog(models.Model):
     refunded_at = models.DateTimeField(blank=True, null=True)
 
     def as_dict(self):
+        """获取字典"""
+
         return {
             'order_no': self.order_no,
             'course_codename': self.course.codename,
@@ -57,6 +68,8 @@ class OrderLog(models.Model):
         }
 
     def as_backstage_dict(self):
+        """获取后台字典"""
+
         return {
             'order_id': self.id,
             'order_no': self.order_no,
@@ -68,6 +81,8 @@ class OrderLog(models.Model):
         }
 
     def as_brief_dict(self):
+        """获取建议字典"""
+
         return {
             'order_no': self.order_no,
             'course_codename': self.course.codename,

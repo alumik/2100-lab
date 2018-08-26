@@ -1,7 +1,11 @@
+"""管理员模块工具函数"""
+
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 
 def get_admin_page(request, items):
+    """管理员列表分页工具函数"""
+
     count = items.count()
     page = request.GET.get('page')
     paginator = Paginator(items, request.GET.get('page_limit', 10))

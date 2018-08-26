@@ -1,9 +1,15 @@
+"""创建权限组并分配对应权限"""
+
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import Group, Permission
 
 
 class Command(BaseCommand):
+    """控制台命令类"""
+
     def handle(self, *args, **options):
+        """创建权限组并分配对应权限"""
+
         course_admin = Group.objects.create(name='course_admin')
         comment_admin = Group.objects.create(name='comment_admin')
         customer_admin = Group.objects.create(name='customer_admin')
@@ -14,10 +20,16 @@ class Command(BaseCommand):
         course_admin.permissions.add(*list(Permission.objects.filter(codename__contains='hero')))
         course_admin.permissions.add(*list(Permission.objects.filter(codename__contains='image')))
 
-        comment_admin.permissions.add(*list(Permission.objects.filter(codename__contains='comment')))
+        comment_admin.permissions.add(
+            *list(Permission.objects.filter(codename__contains='comment'))
+        )
 
-        customer_admin.permissions.add(*list(Permission.objects.filter(codename__contains='customuser')))
-        customer_admin.permissions.add(*list(Permission.objects.filter(codename__contains='learninglog')))
+        customer_admin.permissions.add(
+            *list(Permission.objects.filter(codename__contains='customuser'))
+        )
+        customer_admin.permissions.add(
+            *list(Permission.objects.filter(codename__contains='learninglog'))
+        )
 
         order_admin.permissions.add(*list(Permission.objects.filter(codename__contains='orderlog')))
 
