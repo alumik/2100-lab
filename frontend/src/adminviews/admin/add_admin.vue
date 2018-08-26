@@ -1,7 +1,7 @@
 <template>
   <Basic :items="items">
     <div class="my-content">
-      <h2>新增管理员</h2>
+      <h1>新增管理员</h1>
       <Alert
         :count_down="wrong_count_down"
         :instruction="error_message"
@@ -45,10 +45,17 @@
             class="form-control col-lg-3"
             type="password">
         </div>
-        <button
-          class="btn btn-sm"
-          @click="checkFormat"
-        >保存</button>
+        <a
+          id="save-btn"
+          class="btn"
+          @click="checkFormat">
+          <simple-line-icons
+            id="add-icon"
+            icon="pin"
+            color="white"
+            class="icon"/>
+          保存
+        </a>
       </div>
     </div>
   </Basic>
@@ -61,19 +68,23 @@ import qs from 'qs'
 import Alert from '../../components/alert'
 export default {
   name: 'AddAdmin',
-  components: {Alert, Basic},
+  components: { Alert, Basic },
   data: function () {
     return {
-      items: [{
-        text: '主页',
-        href: '/admin/main'
-      }, {
-        text: '管理员管理',
-        href: '/admin/adminmanagement'
-      }, {
-        text: '新增管理员',
-        active: true
-      }],
+      items: [
+        {
+          text: '主页',
+          href: '/admin/main'
+        },
+        {
+          text: '管理员管理',
+          href: '/admin/adminmanagement'
+        },
+        {
+          text: '新增管理员',
+          active: true
+        }
+      ],
       admin: {
         phone_number: null,
         password: null,
@@ -112,11 +123,15 @@ export default {
     },
     sendMessage: function () {
       let _this = this
-      axios.post('http://localhost:8000/api/v1/admin/backstage/admin-management/add-admin/', qs.stringify({
-        phone_number: this.admin.phone_number,
-        password: this.admin.password
-      })).then(
-        response => {
+      axios
+        .post(
+          'http://localhost:8000/api/v1/admin/backstage/admin-management/add-admin/',
+          qs.stringify({
+            phone_number: this.admin.phone_number,
+            password: this.admin.password
+          })
+        )
+        .then(response => {
           let that = this
           if (response.data.new_admin_id) {
             _this.error_message = '添加成功'
@@ -124,42 +139,58 @@ export default {
             _this.admin.password = ''
             _this.admin.password_again = ''
             this.success_count_down = 5
-            setTimeout(function () { that.$router.push({name: 'AdminManagement'}) }, 5000)
+            setTimeout(function () {
+              that.$router.push({ name: 'AdminManagement' })
+            }, 5000)
           }
-        }
-      ).catch(
-        error => {
+        })
+        .catch(error => {
           _this.error_message = error.response.message
           this.wrong_count_down = 5
-        }
-      )
+        })
     }
   }
 }
 </script>
 
 <style scoped>
-  .my-content {
-    margin: 40px;
-    text-align: left;
-  }
+.my-content {
+  padding: 20px;
+  margin: 70px 20px 20px;
+  text-align: left;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
 
-  .form-group {
-    margin-top: 25px;
-  }
+h1 {
+  padding-left: 15px;
+  margin: 25px 0;
+  color: #204269;
+  text-align: left;
+}
 
-  .btn {
-    margin-top: 25px;
-    color: white;
-    background-color: #8d4e91;
-    border-color: #8d6592;
-    border-radius: 10px;
-    outline: none;
-    box-shadow: #8d6592 inset;
-  }
+.form-group {
+  padding-left: 15px;
+  margin-top: 25px;
+}
 
-  .btn:hover,
-  .btn:active {
-    background-color: #5e0057;
-  }
+#save-btn {
+  color: white;
+}
+
+.btn {
+  margin-top: 40px;
+  margin-right: 3px;
+  margin-left: 15px;
+  color: white;
+  text-align: right;
+  background-color: #449c44;
+  border: 1px solid #d3d9df;
+}
+
+.btn:hover,
+.btn:active {
+  background-color: #4db14d;
+}
 </style>

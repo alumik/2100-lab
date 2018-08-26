@@ -3,7 +3,7 @@
   <Basic :items="items">
     <div class="my-content">
       <div>
-        <h2>分配权限</h2>
+        <h1>分配权限</h1>
         <Alert
           :count_down="wrong_count_down"
           :instruction="error_message"
@@ -21,11 +21,11 @@
           <h4 class="my-text">权限选择：</h4>
           <b-form-group class="my-form-group">
             <b-form-checkbox
-              v-model="allSelected"
+              v-model="all_selected"
               aria-controls="flavours"
               @change="toggleAll"
             >
-              <h4>{{ allSelected ? '取消全选' : '全选' }}</h4>
+              <h4>{{ all_selected ? '取消全选' : '全选' }}</h4>
             </b-form-checkbox>
             <b-form-checkbox-group
               id="flavors"
@@ -37,10 +37,17 @@
               class="ml-4"
               aria-label="Individual flavours"
             />
-            <b-button
+            <a
+              id="save-btn"
               class="btn"
-              @click="submitMessage"
-            >提交</b-button>
+              @click="submitMessage">
+              <simple-line-icons
+                id="add-icon"
+                icon="user-follow"
+                color="white"
+                class="icon"/>
+              保存
+            </a>
           </b-form-group>
         </div>
       </div>
@@ -55,54 +62,77 @@ import qs from 'qs'
 import Alert from '../../components/alert'
 export default {
   name: 'DistributeAuthority',
-  components: {Alert, Basic},
+  components: { Alert, Basic },
   data: function () {
     return {
-      items: [{
-        text: '主页',
-        href: '/admin/main'
-      }, {
-        text: '管理员管理',
-        href: '/admin/adminmanagement'
-      }, {
-        text: this.$route.query.admin_id.toString(),
-        href: '/admin/adminmanagement/detail?admin_id=' + this.$route.query.admin_id.toString()
-      }, {
-        text: '分配权限',
-        active: true
-      }],
+      items: [
+        {
+          text: '主页',
+          href: '/admin/main'
+        },
+        {
+          text: '管理员管理',
+          href: '/admin/adminmanagement'
+        },
+        {
+          text: this.$route.query.admin_id.toString(),
+          href:
+            '/admin/adminmanagement/detail?admin_id=' +
+            this.$route.query.admin_id.toString()
+        },
+        {
+          text: '分配权限',
+          active: true
+        }
+      ],
       admin_id: '',
-      flavours: ['评论管理权限', '课程管理权限', '客户管理权限', '日志管理权限', '订单管理权限'],
+      flavours: [
+        '评论管理权限',
+        '课程管理权限',
+        '客户管理权限',
+        '日志管理权限',
+        '订单管理权限'
+      ],
       selected: [],
       error_message: '',
       wrong_count_down: 0,
       success_count_down: 0,
-      allSelected: false
+      all_selected: false
     }
   },
   watch: {
     selected () {
-      if (this.allSelected === true && this.selected.length !== this.flavours.length) {
-        this.allSelected = false
+      if (
+        this.all_selected === true &&
+        this.selected.length !== this.flavours.length
+      ) {
+        this.all_selected = false
       }
-      if (this.allSelected === false && this.selected.length === this.flavours.length) {
-        this.allSelected = true
+      if (
+        this.all_selected === false &&
+        this.selected.length === this.flavours.length
+      ) {
+        this.all_selected = true
       }
     }
   },
   mounted () {
     this.admin_id = this.$route.query.admin_id
-    axios.get('http://localhost:8000/api/v1/admin/backstage/admin-management/get-admin-detail/', {
-      params: {
-        admin_id: this.admin_id
-      }
-    }).then(
-      response => {
+    axios
+      .get(
+        'http://localhost:8000/api/v1/admin/backstage/admin-management/get-admin-detail/',
+        {
+          params: {
+            admin_id: this.admin_id
+          }
+        }
+      )
+      .then(response => {
         for (let permission of response.data.admin_groups) {
           this.selected.push(this.transferPermission(permission))
         }
-      }).catch(
-      error => {
+      })
+      .catch(error => {
         this.error_message = '读取数据出错' + error.response.data.message
         this.wrong_count_down = 5
       })
@@ -144,52 +174,75 @@ export default {
       for (let sel of this.selected) {
         adminGroups.push(this.reversePermission(sel))
       }
-      axios.post('http://localhost:8000/api/v1/admin/backstage/admin-management/change-admin-groups/',
-        qs.stringify({
-          new_admin_groups: adminGroups,
-          admin_id: this.admin_id
-        }, {arrayFormat: 'repeat'})).then(
-        response => {
+      axios
+        .post(
+          'http://localhost:8000/api/v1/admin/backstage/admin-management/change-admin-groups/',
+          qs.stringify(
+            {
+              new_admin_groups: adminGroups,
+              admin_id: this.admin_id
+            },
+            { arrayFormat: 'repeat' }
+          )
+        )
+        .then(response => {
           this.error_message = response.data.message
-          this.$router.push({name: 'AdminDetail', query: {'admin_id': this.admin_id}})
-        }
-      ).catch(
-        error => {
+          this.$router.push({
+            name: 'AdminDetail',
+            query: { admin_id: this.admin_id }
+          })
+        })
+        .catch(error => {
           this.error_message = error.response.message
           this.wrong_count_down = 5
-        }
-      )
+        })
     }
   }
 }
 </script>
 
 <style scoped>
-  .my-content {
-    margin: 40px;
-    text-align: left;
-  }
+.my-content {
+  padding: 20px;
+  margin: 70px 20px 20px;
+  text-align: left;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
 
-  .my-form-group {
-    margin-top: 40px;
-  }
+h1 {
+  margin: 25px 15px;
+  color: #204269;
+  text-align: left;
+}
 
-  .my-text {
-    margin-top: 50px;
-  }
+.my-form-group {
+  margin-top: 40px;
+  margin-left: 15px;
+}
 
-  .btn {
-    margin-top: 250px;
-    color: white;
-    background-color: #8d4e91;
-    border-color: #8d6592;
-    border-radius: 10px;
-    outline: none;
-    box-shadow: #8d6592 inset;
-  }
+.my-text {
+  margin-top: 50px;
+  margin-left: 15px;
+}
 
-  .btn:hover,
-  .btn:active {
-    background-color: #5e0057;
-  }
+#save-btn {
+  color: white;
+}
+
+.btn {
+  margin-top: 250px;
+  margin-right: 3px;
+  margin-left: 3px;
+  color: white;
+  border: 1px solid #d3d9df;
+  text-align: right;
+  background-color: #0c0;
+}
+
+.btn:hover,
+.btn:active {
+  background-color: #090;
+}
 </style>
