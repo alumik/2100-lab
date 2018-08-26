@@ -18,7 +18,7 @@
 //       username: '',
 //       avatar: 'default/customers/avatars/2100_lab.jpg'
 //     },
-//     adminStatus: false,
+//     status: false,
 //     phone: '',
 //     money: '',
 //     time: '',

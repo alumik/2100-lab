@@ -137,7 +137,7 @@ export default {
       nameState: true,
       avatar: '',
       file: null,
-      value: this.$store.state.user.username,
+      value: this.$store.state.username,
       disabled: true,
       status: '修改',
       phone: this.$store.state.phone,
@@ -187,7 +187,7 @@ export default {
           data
         )
         .then(res => {
-          that.$store.state.user.avatar = res.data.new_avatar
+          that.$store.state.avatar = res.data.new_avatar
           this.$store.commit('avatar', res.data.new_avatar)
           that.avatar = this.$store.state.address + res.data.new_avatar
           alert('头像上传成功')
@@ -209,12 +209,7 @@ export default {
             this.status = '修改'
             this.disabled = !this.disabled
             // console.log(res.data.new_username)
-            this.$store.commit('user', {
-              is_new_customer: this.$store.state.user.is_new_customer,
-              customer_id: this.$store.state.user.customer_id,
-              username: this.value,
-              avatar: this.$store.state.user.avatar
-            })
+            this.$store.commit('username', this.value)
           })
           .catch(() => {
             that.nameState = false

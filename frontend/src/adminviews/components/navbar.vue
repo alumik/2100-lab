@@ -25,11 +25,11 @@
         id="nav_collapse"
         is-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-item>{{ $store.state.adminStatus ? $store.state.adminName : '' }}
+          <b-nav-item>{{ $store.state.status ? $store.state.username : '' }}
           </b-nav-item>
           <b-nav-item
             @click="log">
-            {{ $store.state.adminStatus ? '注销' : '登录' }}
+            {{ $store.state.status ? '注销' : '登录' }}
           </b-nav-item>
         </b-navbar-nav>
       </b-collapse>
@@ -48,14 +48,14 @@ export default {
   },
   methods: {
     log () {
-      if (this.$store.state.adminStatus) {
+      if (this.$store.state.status) {
         axios
           .post('http://localhost:8000/api/v1/core/auth/logout/', {
             withCredentials: true
           })
           .then(res => {
             alert(res.data.message)
-            this.$store.commit('adminStatus', false)
+            this.$store.commit('status', false)
             this.$router.push({ path: '/admin' })
           })
           .catch(error => {

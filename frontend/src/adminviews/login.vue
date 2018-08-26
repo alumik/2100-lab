@@ -17,12 +17,12 @@
         id="nav_collapse"
         is-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-item>{{ $store.state.adminStatus ? '管理员' : '' }}
+          <b-nav-item>{{ $store.state.status ? '管理员' : '' }}
           </b-nav-item>
           <b-nav-item
             id="logout"
             @click="log">
-            {{ $store.state.adminStatus ? '注销' : '登录' }}
+            {{ $store.state.status ? '注销' : '登录' }}
           </b-nav-item>
         </b-navbar-nav>
       </b-collapse>
@@ -71,7 +71,7 @@ export default {
     }
   },
   created () {
-    if (this.$store.state.adminStatus) {
+    if (this.$store.state.status) {
       this.$router.push({ path: '/admin/main' })
     }
   },
@@ -92,8 +92,8 @@ export default {
             })
           )
           .then(response => {
-            this.$store.commit('adminStatus')
-            this.$store.commit('adminName', response.data.username)
+            this.$store.commit('status')
+            this.$store.commit('username', response.data.username)
             this.$router.push({ path: '/admin/main' })
             // evt.preventDefault()
             // this.error_message = '数据库错误'
@@ -115,14 +115,14 @@ export default {
     },
     log () {
       let that = this
-      if (that.$store.state.adminStatus) {
+      if (that.$store.state.status) {
         axios
           .post('http://localhost:8000/api/v1/core/auth/logout/', {
             withCredentials: true
           })
           .then(res => {
             alert(res.data.message)
-            that.$store.commit('adminStatus', false)
+            that.$store.commit('status', false)
             that.$router.push({ path: '/admin' })
           })
           .catch(error => {
