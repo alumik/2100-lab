@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import AdminDetail from '@/adminviews/admin/detail.vue'
 import BootstrapVue from 'bootstrap-vue'
 import Vue from 'vue'
@@ -15,10 +15,9 @@ const $route = {
 describe('管理员详情模块单元测验', () => {
   const wrapper = shallowMount(AdminDetail, {
     mocks: {
-      $route,
+      $route
     }
   })
-
 
   it('标题是"管理员详情"', () => {
     expect(wrapper.find('h1').text()).toEqual('管理员详情')

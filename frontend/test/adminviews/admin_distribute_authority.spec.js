@@ -25,7 +25,6 @@ describe('分配权限模块单元测验', () => {
     expect(wrapper.vm.selected).toEqual([])
   })
 
-
   it('转换信息测试1_1', () => {
     let s = wrapper.vm.transfer_permission('comment_admin')
     expect(s).toEqual('评论管理权限')
