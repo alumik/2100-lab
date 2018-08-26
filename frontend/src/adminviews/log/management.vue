@@ -114,8 +114,7 @@ export default {
       begin_date: new Date(),
       end_date: new Date(),
       options: {
-        format: 'YYYY/MM/DD h:mm:ss',
-        useCurrent: true
+        format: 'YYYY/MM/DD'
       },
       admin_id: '',
       select1: [],
