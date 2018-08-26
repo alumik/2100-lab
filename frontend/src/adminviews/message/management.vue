@@ -237,7 +237,7 @@ export default {
     compute_username: function (name) {
       let index = name.search('_deleted_')
       if (index !== -1) {
-        return name.slice(0, index) + '\n' + '（已删除）'
+        return name.slice(0, index) + '（已删除）'
       } else {
         return name
       }
@@ -428,10 +428,6 @@ option {
   padding-right: 15px;
   padding-left: 15px;
   overflow-x: scroll;
-}
-
-.btn:active {
-  background-color: #d8d8d8;
 }
 
 thead tr {
