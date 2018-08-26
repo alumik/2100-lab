@@ -168,25 +168,6 @@ export default {
         this.$router.push('/admin/data/total')
       }
     },
-    get_days: function () {
-      let i
-      for (i = 0; i < this.buttons.length; i++) {
-        if (this.buttons[i].state) {
-          break
-        }
-      }
-      let days = 1
-      if (i === 0) {
-        days = 1
-      } else if (i === 1) {
-        days = 7
-      } else if (i === 2) {
-        days = 31
-      } else if (i === 3) {
-        days = 182
-      }
-      return days
-    },
     get_step: function () {
       if (this.day === '' && this.month === '') {
         return -1

@@ -106,7 +106,11 @@ export default {
         } else {
           that.orders = response.data.content
           that.rows = response.data.count
-          that.page_nums = response.data.page_nums
+          if (response.data.num_pages === 0) {
+            that.num_pages = 1
+          } else {
+            that.num_pages = response.data.num_pages
+          }
         }
       })
       .catch(function (error) {
@@ -143,6 +147,11 @@ export default {
           } else {
             that.orders = response.data.content
             that.rows = response.data.count
+            if (response.data.num_pages === 0) {
+              that.num_pages = 1
+            } else {
+              that.num_pages = response.data.num_pages
+            }
           }
         })
         .catch(function (error) {

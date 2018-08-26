@@ -171,7 +171,11 @@ export default {
       .then(function (response) {
         that.orders = response.data.content
         that.rows = response.data.count
-        that.num_pages = response.data.num_pages
+        if (response.data.num_pages === 0) {
+          that.num_pages = 1
+        } else {
+          that.num_pages = response.data.num_pages
+        }
       })
       .catch(function (error) {
         that.wrong = '加载订单失败！' + error
@@ -222,6 +226,11 @@ export default {
         .then(function (response) {
           that.orders = response.data.content
           that.rows = response.data.count
+          if (response.data.num_pages === 0) {
+            that.num_pages = 1
+          } else {
+            that.num_pages = response.data.num_pages
+          }
         })
         .catch(function (error) {
           that.wrong = '查询订单失败！' + error
