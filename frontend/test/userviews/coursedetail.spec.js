@@ -14,7 +14,7 @@ const $route = {
   path: '/coursedetail',
   query: {
     course_id: 1,
-    page: 1
+    referer_id: 1
   }
 }
 

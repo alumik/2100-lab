@@ -6,7 +6,10 @@ import StudyPage from '@/userviews/studypage/index.vue'
 
 const $route = {
   path: '/studypage',
-  query: { course_id: 1 }
+  query: {
+    course_id: 1,
+    page: 1
+  }
 }
 
 describe('学习页面单元测验', () => {

@@ -8,17 +8,28 @@ import Vue from 'vue'
 
 Vue.use(BootstrapVue)
 
+const $route = {
+  path: '/coursedetail',
+  query: {
+    referer_id: 1
+  }
+}
+
 describe('留言板单元测试', () => {
-  const wrapper = shallowMount(MessageBoard)
+  const wrapper = shallowMount(MessageBoard, {
+    mocks: {
+      $route
+    }
+  })
   const numOfMessage = wrapper.vm.message_list.length
 
   it('留言板', () => {
     expect(wrapper.contains('#message-board')).toBe(true)
   })
 
-  // it('留言分页', () => {
-  //   expect(wrapper.contains(Pagination)).toBe(true)
-  // })
+  it('留言分页', () => {
+    expect(wrapper.contains(Pagination)).toBe(true)
+  })
 
   it('留言数量', () => {
     expect(wrapper.findAll('#piece-of-message').length).toEqual(numOfMessage)

@@ -484,10 +484,14 @@ export default {
       }
     },
     open_study_page: function (id) {
+<<<<<<< HEAD
       this.$router.push({
         name: 'StudyPage',
         query: { course_id: parseInt(id) }
       })
+=======
+      this.$router.push({name: 'StudyPage', query: {course_id: parseInt(id)}})
+>>>>>>> Change the test files to adjust the changes. Ref #344
     },
     open_log: function (id) {
       this.$router.push({
