@@ -1,16 +1,19 @@
 <template>
   <b-navbar
+    id="user-navbar"
     :sticky="true"
     toggleable="md"
     type="dark"
     variant="primary"
     class="my-navbar">
     <button
+      id="hamburger"
       class="navbar-toggler"
       @click="$emit('hide')">
       <span class="navbar-toggler-icon"/>
     </button>
     <b-navbar-brand
+      id="logo"
       class="logo"
       @click="home">
       <img
@@ -23,6 +26,7 @@
       is-nav>
       <b-navbar-nav class="ml-auto">
         <b-nav-item
+          id="userlogo"
           @click="personal">
           <img
             v-if="$store.state.status"
