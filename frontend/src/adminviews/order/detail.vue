@@ -2,23 +2,34 @@
   <Basic
     :items="items"
     class="my-basic">
-    <div>
+    <div class="body">
       <div class="title">
         <h1>订单详情</h1>
         <div class="buttons">
-          <button
+          <a
+            v-b-modal.reply
             v-if="is_refunded"
-            type="button"
-            class="btn btn-lg">
+            id="refunded-button"
+            class="btn">
+            <simple-line-icons
+              icon="wallet"
+              color="white"
+              class="icon"
+              size="small"/>
             已退款
-          </button>
-          <button
+          </a>
+          <a
             v-b-modal.refund
             v-else
-            type="button"
-            class="btn btn-lg">
+            id="refund-button"
+            class="btn">
+            <simple-line-icons
+              icon="action-undo"
+              color="white"
+              class="icon"
+              size="small"/>
             退款
-          </button>
+          </a>
           <ConfirmModal
             id="refund"
             title="确认退款"
@@ -57,21 +68,42 @@ import Alert from '../../components/alert'
 import qs from 'qs'
 export default {
   name: 'OrderDetail',
-  components: {Alert, DetailTable, Basic, ConfirmModal, AdminNavbar, BreadCrumb, Menu},
+  components: {
+    Alert,
+    DetailTable,
+    Basic,
+    ConfirmModal,
+    AdminNavbar,
+    BreadCrumb,
+    Menu
+  },
   data () {
     return {
-      items: [{
-        text: '主页',
-        href: '/admin/main'
-      }, {
-        text: '订单管理',
-        href: '/admin/order'
-      }, {
-        text: this.$route.query.order_id,
-        active: true
-      }],
+      items: [
+        {
+          text: '主页',
+          href: '/admin/main'
+        },
+        {
+          text: '订单管理',
+          href: '/admin/order'
+        },
+        {
+          text: this.$route.query.order_id,
+          active: true
+        }
+      ],
       order: [],
-      titles: [ '订单编号', '课程代码', '课程名', '用户名', '成交时间', '退款时间', '金额', '状态' ],
+      titles: [
+        '订单编号',
+        '课程代码',
+        '课程名',
+        '用户名',
+        '成交时间',
+        '退款时间',
+        '金额',
+        '状态'
+      ],
       dismiss_second: 5,
       wrong_count_down: 0,
       wrong: '',
@@ -82,10 +114,15 @@ export default {
   },
   created () {
     const that = this
-    axios.get('http://localhost:8000/api/v1/customers/backstage/order-management/get-order-detail/',
-      {params: {
-        order_id: that.$route.query.order_id
-      }})
+    axios
+      .get(
+        'http://localhost:8000/api/v1/customers/backstage/order-management/get-order-detail/',
+        {
+          params: {
+            order_id: that.$route.query.order_id
+          }
+        }
+      )
       .then(function (response) {
         that.order = that.compute_order(response.data)
         that.is_refunded = response.data.is_refunded
@@ -98,8 +135,11 @@ export default {
   methods: {
     refund: function () {
       const that = this
-      axios.post('http://localhost:8000/api/v1/customers/backstage/order-management/order-refund/',
-        qs.stringify({ order_id: that.$route.query.order_id }))
+      axios
+        .post(
+          'http://localhost:8000/api/v1/customers/backstage/order-management/order-refund/',
+          qs.stringify({ order_id: that.$route.query.order_id })
+        )
         .then(function (response) {
           if (response.data.message === 'Success.') {
             that.success = '您已经成功退款。'
@@ -114,10 +154,15 @@ export default {
           that.wrong = '退款失败！' + error
           that.wrong_count_down = that.dismiss_second
         })
-      axios.get('http://localhost:8000/api/v1/customers/backstage/order-management/get-order-detail/',
-        {params: {
-          order_id: that.$route.query.order_id
-        }})
+      axios
+        .get(
+          'http://localhost:8000/api/v1/customers/backstage/order-management/get-order-detail/',
+          {
+            params: {
+              order_id: that.$route.query.order_id
+            }
+          }
+        )
         .then(function (response) {
           that.order = that.compute_order(response.data)
           that.is_refunded = response.data.is_refunded
@@ -135,7 +180,7 @@ export default {
       temp[3] = val.customer_username
       temp[4] = (val.created_at + '').slice(0, 10)
       if (val.refunded_at === null) {
-        temp[5] = ''
+        temp[5] = '-'
       } else {
         temp[5] = (val.refunded_at + '').slice(0, 10)
       }
@@ -152,44 +197,57 @@ export default {
 </script>
 
 <style scoped>
-  .title {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    padding-right: 15px;
-    margin-top: 25px;
-    margin-bottom: 25px;
-  }
+.body {
+  padding: 20px;
+  margin: 70px 20px 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
 
-  h1 {
-    padding-left: 15px;
-    text-align: left;
-  }
+.title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px 0 15px;
+  margin: 25px 0;
+  color: #23527c;
+}
 
-  .buttons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    text-align: right;
-  }
+h1 {
+  text-align: left;
+}
 
-  table {
-    font-size: 1.5em;
-    text-align: center;
-  }
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  text-align: right;
+}
 
-  .btn {
-    color: white;
-    background-color: #8d4e91;
-    border-color: #8d6592;
-    border-radius: 10px;
-    outline: none;
-    box-shadow: #8d6592 inset;
-  }
+.btn {
+  margin-left: 3px;
+  border: 1px solid #d3d9df;
+}
 
-  .btn:hover,
-  .btn:active {
-    background-color: #5e0057;
-  }
+#refunded-button {
+  color: white;
+  background-color: #dd514c;
+}
+
+#refunded-button:hover,
+#refunded-button:active {
+  background-color: #ba2d28;
+}
+
+#refund-button {
+  color: white;
+  background-color: #4db14d;
+}
+
+#refund-button:hover,
+#refund-button:active {
+  background-color: #449c44;
+}
 </style>
