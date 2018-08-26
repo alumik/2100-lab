@@ -118,11 +118,12 @@ export default {
   position: fixed;
   width: 100%;
   margin: 0;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
 .my-container {
   width: calc(100% - 200px);
+  min-height: calc(100vh - 71px);
   padding: 0;
   margin-left: 200px;
 }

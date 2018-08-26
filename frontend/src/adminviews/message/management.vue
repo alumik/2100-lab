@@ -4,6 +4,7 @@
     class="my-basic">
     <div class="body">
       <h1>{{ $t("message.title") }}</h1>
+      <h6>第 {{ page }}/{{ num_pages }} 页，共 {{ rows }} 条数据</h6>
       <Alert
         :count_down="wrong_count_down"
         :instruction="wrong"
@@ -181,7 +182,7 @@ export default {
       state: '',
       reply: '',
       page_jump: false,
-      per_page: 10,
+      per_page: 20,
       page: 1,
       wrong: '',
       success: '',
@@ -189,7 +190,8 @@ export default {
       wrong_count_down: 0,
       success_count_down: 0,
       delete_id: '',
-      reply_id: ''
+      reply_id: '',
+      num_pages: 0
     }
   },
   created () {
@@ -202,6 +204,7 @@ export default {
       .then(function (response) {
         that.messages = response.data.content
         that.rows = response.data.count
+        that.num_pages = response.data.num_pages
       })
       .catch(function (error) {
         that.wrong = '加载留言失败！' + error
@@ -326,30 +329,40 @@ export default {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
   }
 
-  h1 {
-    padding-bottom: 10px;
+  h1,
+  h6 {
     padding-left: 15px;
-    margin-top: 25px;
-    margin-bottom: 25px;
     color: #23527c;
     text-align: left;
-    border-bottom: 1px solid #eef1f5;
+  }
+
+  h1 {
+    margin: 25px 0;
+  }
+
+  h6 {
+    margin-bottom: 15px;
+    font-weight: bold;
   }
 
   .buttons {
     display: flex;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     padding-left: 30px;
   }
 
   table {
     margin-bottom: 20px;
-    font-size: 1.2em;
     border-top: 1px solid #d3d9df;
   }
 
+  th {
+    font-size: 1.2em;
+  }
+
   td {
+    font-size: 1rem;
     vertical-align: middle;
   }
 
@@ -371,9 +384,23 @@ export default {
     color: #e60000;
   }
 
+  #detail-button:hover {
+    background-color: rgba(91, 155, 209, 0.2);
+  }
+
+  #reply-button:hover {
+    background-color: rgba(0, 128, 0, 0.2);
+  }
+
+  #delete-button:hover {
+    background-color: rgba(230, 0, 0, 0.2);
+  }
+
   select {
     width: 130px;
     height: 30px;
+    color: #2c3e50;
+    border: 1px solid #ced4da;
     border-radius: 5px;
     outline: none;
   }
@@ -388,7 +415,6 @@ export default {
     overflow-x: scroll;
   }
 
-  .btn:hover,
   .btn:active {
     background-color: #d8d8d8;
   }
