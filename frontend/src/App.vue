@@ -8,19 +8,27 @@
 import axios from 'axios'
 export default {
   name: 'App',
-  destroyed () {
-    if (this.$store.state.status) {
-      axios
-        .post('http://localhost:8000/api/v1/core/auth/logout/', {
-          withCredentials: true
-        })
-        .then(res => {
-          this.$store.commit('status', false)
-        })
-        .catch(error => {
-          alert(error)
-        })
-    }
+  created () {
+    alert('created')
+    axios
+      .post('http://localhost:8000/api/v1/core/auth/is-authenticated/', {
+        withCredentials: true
+      })
+      .then(res => {
+        if (res.data.is_authenticated) {
+          axios
+            .get(
+              'http://localhost:8000/api/v1/customers/forestage/personal-center/get-customer-detail/'
+            )
+            .then(res => {
+              this.$store.commit('status')
+              this.$store.commit('user', res.data)
+            })
+            .catch(error => {
+              alert(error.message)
+            })
+        }
+      })
   }
 }
 </script>

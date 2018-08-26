@@ -31,7 +31,7 @@
           <img
             v-if="$store.state.status"
             id="userimg"
-            :src="avatar">{{ $store.state.status ? $store.state.username : '' }}
+            :src="avatar">{{ $store.state.status ? $store.state.user.username : '' }}
         </b-nav-item>
         <b-nav-item
           id="logout"
@@ -53,7 +53,7 @@ export default {
   },
   computed: {
     avatar () {
-      return this.$store.state.address + this.$store.state.avatar
+      return this.$store.state.address + this.$store.state.user.avatar
     }
   },
   created () {

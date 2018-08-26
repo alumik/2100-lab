@@ -166,8 +166,6 @@ export default {
     },
     handleOk (evt) {
       this.$store.commit('status')
-      this.$store.commit('username', this.user_data)
-      this.$store.commit('phone', this.phone)
       if (this.course_id !== -1) {
         this.$router.push({
           path: '/coursedetail',
@@ -202,7 +200,6 @@ export default {
                 this.content = res.data.content
               })
             this.modalShow = !this.modalShow
-            this.user_data = response.data
           } else {
             this.$store.commit('status')
             this.$store.commit('username', response.data.username)

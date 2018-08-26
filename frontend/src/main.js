@@ -27,11 +27,17 @@ axios.defaults.withCredentials = true
 const store = new Vuex.Store({
   state: {
     status: false,
-    avatar: 'default/customers/avatars/2100_lab.jpg',
-    username: '',
-    phone: '',
-    money: '',
-    time: '',
+    user: {
+      user_id: '',
+      username: '',
+      phone_number: '',
+      avatar: 'default/customers/avatars/2100_lab.jpg',
+      reward_coin: '',
+      is_vip: '',
+      is_banned: '',
+      date_joined: '',
+      updated_at: ''
+    },
     address: 'http://localhost:8000/media/',
     menu: 0,
     colors: [
@@ -49,25 +55,25 @@ const store = new Vuex.Store({
       state.status = status
       sessionStorage.setItem('status', status ? 'true' : 'false')
     },
+    user (state, user) {
+      state.user = user
+    },
     username (state, username) {
-      state.username = username
-      sessionStorage.setItem('username', username)
+      state.user.username = username
     },
     phone (state, number) {
-      state.phone = number
+      state.user.phone = number
       sessionStorage.setItem('phone', number)
     },
     money (state, money) {
       state.money = money
       sessionStorage.setItem('money', money)
     },
-    time (state, time) {
-      state.time = time
-      sessionStorage.setItem('time', time)
+    date_joined (state, time) {
+      state.user.date_joined = time
     },
     avatar (state, avatar) {
-      state.avatar = avatar
-      sessionStorage.setItem('avatar', avatar)
+      state.user.avatar = avatar
     },
     logout (state) {
       state.status = false
@@ -105,37 +111,5 @@ new Vue({
   store,
   i18n,
   components: { App, SimpleLineIcons },
-  created () {
-    axios
-      .post('http://localhost:8000/api/v1/core/auth/is-authenticated/', {
-        withCredentials: true
-      })
-      .then(res => {
-        if (res.data.is_authenticated) {
-          // axios
-          //   .get(
-          //     'http://localhost:8000/api/v1/customers/forestage/personal-center/get-customer-detail/'
-          //   )
-          //   .then(res => {
-          //     this.avatar = this.$store.state.address + res.data.avatar
-          //     this.$store.commit('money', (this.money = res.data.reward_coin))
-          //     this.$store.commit('avatar', res.data.avatar)
-          //     this.time = res.data.date_joined
-          //       .toString()
-          //       .substring(0, 19)
-          //       .replace('T', ' ')
-          //     this.$store.commit('time', this.time)
-          //   })
-          this.$store.commit('status')
-          this.$store.commit('username', sessionStorage.getItem('username'))
-          this.$store.commit('phone', sessionStorage.getItem('phone'))
-          this.$store.commit('money', sessionStorage.getItem('money'))
-          this.$store.commit('time', sessionStorage.getItem('time'))
-          this.$store.commit('avatar', sessionStorage.getItem('avatar'))
-          this.$store.commit('menu', sessionStorage.getItem('menu'))
-          this.$store.commit('colors', sessionStorage.getItem('colors'))
-        }
-      })
-  },
   template: '<App/>'
 }).$mount('#app')
