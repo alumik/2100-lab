@@ -94,6 +94,7 @@ export default {
   },
   methods: {
     showModal () {
+      console.log(this.choose_image_data_list_origin)
       if (this.is_returned === true || this.is_uploaded === true) {
         this.$emit('update_is_uploaded', this.is_uploaded)
         this.is_returned = false
@@ -137,6 +138,10 @@ export default {
       }
     },
     hideModal () {
+      this.is_uploaded = true
+      for (let i = 1; i <= this.choose_image_data_list_origin.length; i++) {
+        this.choose_image_data_list_origin[i - 1].index = i
+      }
       this.$refs.edit_picture.hide()
     }
   }
