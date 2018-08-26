@@ -183,6 +183,7 @@ export default {
         )
         .then(response => {
           this.rows = response.data.count
+          this.num_pages = response.data.num_pages
           let _admins = []
           for (let data of response.data.content) {
             _admins.push({

@@ -300,9 +300,11 @@ h1 {
 .button-group {
   display: inline-block;
   float: right;
+  margin-bottom: 5px;
 }
 
 #distribution-btn {
+  margin-left: 15px;
   color: white;
   background-color: #06f;
 }
@@ -312,6 +314,7 @@ h1 {
 }
 
 #change-password-btn {
+  margin-left: 15px;
   color: white;
   background-color: #06f;
 }
@@ -321,6 +324,7 @@ h1 {
 }
 
 #change-username-btn {
+  margin-left: 15px;
   color: white;
   background-color: #06f;
 }
@@ -331,6 +335,7 @@ h1 {
 
 #delete-user-btn {
   margin-right: 15px;
+  margin-left: 15px;
   color: white;
   background-color: #dd514c;
 }
