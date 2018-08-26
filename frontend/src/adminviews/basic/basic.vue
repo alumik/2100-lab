@@ -97,7 +97,9 @@ export default {
     jump (id) {
       for (let list = 0; list < 7; list = list + 1) {
         this.lists[list].isActive = false
+        this.$store.state.colors[list] = '#204269'
       }
+      this.$store.state.colors[id - 1] = '#5b9bd1'
       this.lists[id - 1].isActive = true
     }
   }
@@ -115,7 +117,7 @@ export default {
 
 .my-bread {
   position: fixed;
-  z-index: 999;
+  z-index: 2;
   width: 100%;
   margin: 0;
   box-shadow: 1px 3px 3px rgba(0, 0, 0, 0.2);

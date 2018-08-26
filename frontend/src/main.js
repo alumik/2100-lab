@@ -27,13 +27,8 @@ axios.defaults.withCredentials = true
 const store = new Vuex.Store({
   state: {
     status: false,
-    user: {
-      is_new_customer: null,
-      customer_id: '',
-      username: '',
-      avatar: 'default/customers/avatars/2100_lab.jpg'
-    },
-    adminStatus: false,
+    avatar: 'default/customers/avatars/2100_lab.jpg',
+    username: '',
     phone: '',
     money: '',
     time: '',
@@ -54,13 +49,9 @@ const store = new Vuex.Store({
       state.status = status
       sessionStorage.setItem('status', status ? 'true' : 'false')
     },
-    adminStatus (state, adminStatus = true) {
-      state.adminStatus = adminStatus
-      sessionStorage.setItem('adminStatus', adminStatus ? 'true' : 'false')
-    },
-    user (state, data) {
-      state.user = data
-      sessionStorage.setItem('user', JSON.stringify(data))
+    username (state, username) {
+      state.username = username
+      sessionStorage.setItem('username', username)
     },
     phone (state, number) {
       state.phone = number
@@ -75,7 +66,7 @@ const store = new Vuex.Store({
       sessionStorage.setItem('time', time)
     },
     avatar (state, avatar) {
-      state.user.avatar = avatar
+      state.avatar = avatar
       sessionStorage.setItem('avatar', avatar)
     },
     logout (state) {
@@ -86,8 +77,12 @@ const store = new Vuex.Store({
       state.menu = menu
       sessionStorage.setItem('menu', menu)
     },
-    colors (state, colors) {
-      state.colors = colors
+    colors (state, id) {
+      for (let i = 0; i < 7; i++) {
+        state.colors[i] = '#204269'
+      }
+      state.colors[id] = '#5b9bd1'
+      sessionStorage.setItem('colors', id)
     }
   }
 })
@@ -111,22 +106,34 @@ new Vue({
   i18n,
   components: { App, SimpleLineIcons },
   created () {
-    if (sessionStorage.getItem('status') === 'true') {
-      this.$store.commit('status')
-      this.$store.commit('user', JSON.parse(sessionStorage.getItem('user')))
-      this.$store.commit('phone', sessionStorage.getItem('phone'))
-      this.$store.commit('money', sessionStorage.getItem('money'))
-      this.$store.commit('time', sessionStorage.getItem('time'))
-      this.$store.commit('avatar', sessionStorage.getItem('avatar'))
-      this.$store.commit('menu', sessionStorage.getItem('menu'))
-    }
     axios
       .post('http://localhost:8000/api/v1/core/auth/is-authenticated/', {
         withCredentials: true
-      }).then(res => {
+      })
+      .then(res => {
         if (res.data.is_authenticated) {
-          this.$store.commit('adminStatus')
+          // axios
+          //   .get(
+          //     'http://localhost:8000/api/v1/customers/forestage/personal-center/get-customer-detail/'
+          //   )
+          //   .then(res => {
+          //     this.avatar = this.$store.state.address + res.data.avatar
+          //     this.$store.commit('money', (this.money = res.data.reward_coin))
+          //     this.$store.commit('avatar', res.data.avatar)
+          //     this.time = res.data.date_joined
+          //       .toString()
+          //       .substring(0, 19)
+          //       .replace('T', ' ')
+          //     this.$store.commit('time', this.time)
+          //   })
+          this.$store.commit('status')
+          this.$store.commit('username', sessionStorage.getItem('username'))
+          this.$store.commit('phone', sessionStorage.getItem('phone'))
+          this.$store.commit('money', sessionStorage.getItem('money'))
+          this.$store.commit('time', sessionStorage.getItem('time'))
+          this.$store.commit('avatar', sessionStorage.getItem('avatar'))
           this.$store.commit('menu', sessionStorage.getItem('menu'))
+          this.$store.commit('colors', sessionStorage.getItem('colors'))
         }
       })
   },

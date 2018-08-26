@@ -1,0 +1,7 @@
+{
+    "eslintIntegration": true,
+    "stylelintIntegration": true,
+    "singleQuote": true,
+    "semi": false,
+    "bracketSpacing": true
+}

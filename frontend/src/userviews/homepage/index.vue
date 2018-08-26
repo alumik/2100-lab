@@ -93,19 +93,25 @@ export default {
   },
   created: function () {
     let that = this
-    axios.get('http://localhost:8000/api/v1/courses/forestage/course/get-recent-courses')
+    axios
+      .get(
+        'http://localhost:8000/api/v1/courses/forestage/course/get-recent-courses'
+      )
       .then(function (response) {
         that.freecourselist = response.data.free_courses
         that.paidcourselist = response.data.paid_courses
-      }).catch(function (error) {
+      })
+      .catch(function (error) {
         that.created_test = true
         that.created_error_msg = error
       })
-    axios.get('http://localhost:8000/api/v1/courses/forestage/main/get-heroes/')
+    axios
+      .get('http://localhost:8000/api/v1/courses/forestage/main/get-heroes/')
       .then(function (response) {
         that.carousellist = response.content
         that.carouselnum = response.count
-      }).catch(function (error) {
+      })
+      .catch(function (error) {
         that.carousel_test = true
         that.carousel_error_msg = error
       })
@@ -114,21 +120,21 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  .homepage-container {
-    margin-right: 0;
-    margin-left: 0;
-    border-width: 0.2rem;
-  }
+.homepage-container {
+  margin-right: 0;
+  margin-left: 0;
+  border-width: 0.2rem;
+}
 
-  .navbar-style {
-    position: fixed;
-    z-index: 999;
-    width: 100%;
-  }
+.navbar-style {
+  position: fixed;
+  z-index: 999;
+  width: 100%;
+}
 
-  .recommend-list {
-    width: 100%;
-    padding: 1rem;
-    margin: 0;
-  }
+.recommend-list {
+  width: 100%;
+  padding: 1rem;
+  margin: 0;
+}
 </style>

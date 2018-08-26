@@ -6,7 +6,6 @@
           id="logoimg"
           src="../../assets/2100logo.png">
       </b-navbar-brand>
-      <!--<h2>2100实验室</h2>-->
       <b-input-group prepend="手机号">
         <b-form-input
           v-model="phone"
@@ -90,8 +89,7 @@ export default {
       modalShow: false,
       accept: '',
       content: '',
-      course_id: -1,
-      user_data: {}
+      course_id: -1
     }
   },
   computed: {
@@ -168,7 +166,7 @@ export default {
     },
     handleOk (evt) {
       this.$store.commit('status')
-      this.$store.commit('user', this.user_data)
+      this.$store.commit('username', this.user_data)
       this.$store.commit('phone', this.phone)
       if (this.course_id !== -1) {
         this.$router.push({
@@ -207,7 +205,7 @@ export default {
             this.user_data = response.data
           } else {
             this.$store.commit('status')
-            this.$store.commit('user', response.data)
+            this.$store.commit('username', response.data.username)
             this.$store.commit('phone', this.phone)
             this.$store.commit('avatar', response.data.avatar)
             if (this.course_id !== -1) {
