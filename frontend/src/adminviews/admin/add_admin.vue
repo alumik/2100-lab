@@ -48,7 +48,7 @@
         <a
           id="save-btn"
           class="btn"
-          @click="checkFormat">
+          @click="check_format">
           <simple-line-icons
             id="add-icon"
             icon="pin"
@@ -96,32 +96,32 @@ export default {
     }
   },
   methods: {
-    checkFormat: function () {
+    check_format: function () {
       this.error_message = ''
       if (this.admin.phone_number === null) {
-        this.error_message = '请输入手机号！'
+        this.error_message = '请输入手机号'
         this.wrong_count_down = 5
         return
       }
       const regix = /^1\d{10}$/
       let result = this.admin.phone_number.match(regix)
       if (result === null) {
-        this.error_message = '请输入一个正确的手机号！'
+        this.error_message = '请输入一个正确的手机号'
         this.wrong_count_down = 5
       } else if (this.admin.password === null) {
-        this.error_message = '请输入密码！'
+        this.error_message = '请输入密码'
         this.wrong_count_down = 5
       } else if (this.admin.password_again === null) {
-        this.error_message = '请再次输入密码！'
+        this.error_message = '请再次输入密码'
         this.wrong_count_down = 5
       } else if (this.admin.password !== this.admin.password_again) {
-        this.error_message = '两次输入密码不相符，请重新输入！'
+        this.error_message = '两次输入密码不相符，请重新输入'
         this.wrong_count_down = 5
       } else {
-        this.sendMessage()
+        this.send_message()
       }
     },
-    sendMessage: function () {
+    send_message: function () {
       let _this = this
       axios
         .post(

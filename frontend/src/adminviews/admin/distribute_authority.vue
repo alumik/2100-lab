@@ -23,7 +23,7 @@
             <b-form-checkbox
               v-model="all_selected"
               aria-controls="flavours"
-              @change="toggleAll"
+              @change="toggle_all"
             >
               <h4>{{ all_selected ? '取消全选' : '全选' }}</h4>
             </b-form-checkbox>
@@ -40,7 +40,7 @@
             <a
               id="save-btn"
               class="btn"
-              @click="submitMessage">
+              @click="submit_message">
               <simple-line-icons
                 id="add-icon"
                 icon="user-follow"
@@ -97,7 +97,8 @@ export default {
       error_message: '',
       wrong_count_down: 0,
       success_count_down: 0,
-      all_selected: false
+      all_selected: false,
+      test_router: false
     }
   },
   watch: {
@@ -129,7 +130,7 @@ export default {
       )
       .then(response => {
         for (let permission of response.data.admin_groups) {
-          this.selected.push(this.transferPermission(permission))
+          this.selected.push(this.transfer_permission(permission))
         }
       })
       .catch(error => {
@@ -138,10 +139,10 @@ export default {
       })
   },
   methods: {
-    toggleAll (checked) {
+    toggle_all (checked) {
       this.selected = checked ? this.flavours.slice() : []
     },
-    transferPermission (permission) {
+    transfer_permission (permission) {
       switch (permission) {
         case 'comment_admin':
           return '评论管理权限'
@@ -155,7 +156,7 @@ export default {
           return '订单管理权限'
       }
     },
-    reversePermission (sel) {
+    reverse_permission (sel) {
       switch (sel) {
         case '评论管理权限':
           return 'comment_admin'
@@ -169,10 +170,10 @@ export default {
           return 'order_admin'
       }
     },
-    submitMessage () {
+    submit_message () {
       let adminGroups = []
       for (let sel of this.selected) {
-        adminGroups.push(this.reversePermission(sel))
+        adminGroups.push(this.reverse_permission(sel))
       }
       axios
         .post(
