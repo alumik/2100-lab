@@ -5,7 +5,6 @@
       <Menu
         :lists="lists"
         :hidden="hidden"
-        @blur="hide"
         @jump="jump"/>
       <div class="container-fluid my-container">
         <div class="my-bread">

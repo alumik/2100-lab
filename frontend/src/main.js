@@ -110,6 +110,7 @@ new Vue({
       this.$store.commit('money', sessionStorage.getItem('money'))
       this.$store.commit('time', sessionStorage.getItem('time'))
       this.$store.commit('avatar', sessionStorage.getItem('avatar'))
+      this.$store.commit('menu', sessionStorage.getItem('menu'))
     }
     axios
       .post('http://localhost:8000/api/v1/core/auth/is-authenticated/', {
@@ -117,6 +118,7 @@ new Vue({
       }).then(res => {
         if (res.data.is_authenticated) {
           this.$store.commit('adminStatus')
+          this.$store.commit('menu', sessionStorage.getItem('menu'))
         }
       })
   },

@@ -90,6 +90,7 @@ export default {
           })
           .then(res => {
             // console.log(res.data.message)
+            alert('您已登出')
             that.$store.commit('status', false)
             that.$router.push({ path: '/' })
           })
