@@ -98,19 +98,7 @@ export default {
   },
   methods: {
     jump: function (id) {
-      let colors = []
-      for (let color of this.colors) {
-        colors.push(color)
-      }
-      for (let i = 0; i < colors.length; i++) {
-        if (i === id - 1) {
-          colors[i] = '#5b9bd1'
-        } else {
-          colors[i] = '#204269'
-        }
-      }
-      this.colors = colors
-      this.$store.commit('' + 'colors', colors)
+      this.$store.commit('colors', id - 1)
       this.$emit('jump', id)
       this.$store.commit('menu', id)
       this.$router.push({ path: this.lists[id - 1].path })

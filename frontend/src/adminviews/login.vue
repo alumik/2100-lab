@@ -71,7 +71,6 @@ export default {
     }
   },
   created () {
-    alert(this.$store.state.adminStatus)
     if (this.$store.state.adminStatus) {
       this.$router.push({ path: '/admin/main' })
     }
@@ -94,6 +93,7 @@ export default {
           )
           .then(response => {
             this.$store.commit('adminStatus')
+            this.$store.commit('adminName', response.data.username)
             this.$router.push({ path: '/admin/main' })
             // evt.preventDefault()
             // this.error_message = '数据库错误'

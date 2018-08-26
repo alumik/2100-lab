@@ -34,6 +34,7 @@ const store = new Vuex.Store({
       avatar: 'default/customers/avatars/2100_lab.jpg'
     },
     adminStatus: false,
+    adminName: '',
     phone: '',
     money: '',
     time: '',
@@ -57,6 +58,10 @@ const store = new Vuex.Store({
     adminStatus (state, adminStatus = true) {
       state.adminStatus = adminStatus
       sessionStorage.setItem('adminStatus', adminStatus ? 'true' : 'false')
+    },
+    adminName (state, adminName) {
+      state.adminName = adminName
+      sessionStorage.setItem('adminName', adminName)
     },
     user (state, data) {
       state.user = data
@@ -86,8 +91,12 @@ const store = new Vuex.Store({
       state.menu = menu
       sessionStorage.setItem('menu', menu)
     },
-    colors (state, colors) {
-      state.colors = colors
+    colors (state, id) {
+      for (let i = 0; i < 7; i++) {
+        state.colors[i] = '#204269'
+      }
+      state.colors[id] = '#5b9bd1'
+      sessionStorage.setItem('colors', id)
     }
   }
 })
@@ -123,10 +132,13 @@ new Vue({
     axios
       .post('http://localhost:8000/api/v1/core/auth/is-authenticated/', {
         withCredentials: true
-      }).then(res => {
+      })
+      .then(res => {
         if (res.data.is_authenticated) {
           this.$store.commit('adminStatus')
+          this.$store.commit('adminName')
           this.$store.commit('menu', sessionStorage.getItem('menu'))
+          this.$store.commit('colors', sessionStorage.getItem('colors'))
         }
       })
   },

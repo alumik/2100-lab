@@ -2,37 +2,38 @@
   <b-navbar
     :sticky="true"
     :toggleable="toggleable"
-    type="dark"
+    type="light"
     variant="primary"
     class="navbar">
-    <button
-      id="hide-button"
-      class="navbar-toggler"
-      @click="$emit('hide')">
-      <span
-        id="hide-span"
-        class="navbar-toggler-icon"/>
-    </button>
-    <b-navbar-brand
-      class="logo">
-      <img
-        id="logoimg"
-        src="../../assets/2100logo.png">
-    </b-navbar-brand>
-    <b-navbar-toggle target="nav_collapse"/>
-    <b-collapse
-      id="nav_collapse"
-      is-nav>
-      <b-navbar-nav class="ml-auto">
-        <b-nav-item>{{ $store.state.adminStatus ? '管理员' : '' }}
-        </b-nav-item>
-        <b-nav-item
-          id="logout"
-          @click="log">
-          {{ $store.state.adminStatus ? '注销' : '登录' }}
-        </b-nav-item>
-      </b-navbar-nav>
-    </b-collapse>
+    <div class="container-fluid">
+      <button
+        id="hide-button"
+        class="navbar-toggler"
+        @click="$emit('hide')">
+        <span
+          id="hide-span"
+          class="navbar-toggler-icon"/>
+      </button>
+      <b-navbar-brand
+        class="logo">
+        <img
+          id="logoimg"
+          src="../../assets/2100logo.png">
+      </b-navbar-brand>
+      <b-navbar-toggle target="nav_collapse"/>
+      <b-collapse
+        id="nav_collapse"
+        is-nav>
+        <b-navbar-nav class="ml-auto">
+          <b-nav-item>{{ $store.state.adminStatus ? $store.state.adminName : '' }}
+          </b-nav-item>
+          <b-nav-item
+            @click="log">
+            {{ $store.state.adminStatus ? '注销' : '登录' }}
+          </b-nav-item>
+        </b-navbar-nav>
+      </b-collapse>
+    </div>
   </b-navbar>
 </template>
 
@@ -70,13 +71,9 @@ export default {
 </script>
 
 <style scoped>
-#logout {
-  padding-right: 35px;
-}
-
 .logo {
   height: 50px;
-  margin-left: 35px;
+  margin-left: 30px;
   vertical-align: middle;
 }
 
@@ -84,13 +81,13 @@ export default {
   height: 45px;
 }
 
-.navbar-dark .navbar-nav .nav-link {
+.navbar-light .navbar-nav .nav-link {
   color: #999;
 }
 
-.navbar-dark .navbar-nav .nav-link:hover,
-.navbar-dark .navbar-nav .nav-link:focus {
-  color: #f00;
+.navbar-light .navbar-nav .nav-link:hover,
+.navbar-light .navbar-nav .nav-link:focus {
+  color: #5b9bd1;
 }
 
 .navbar {
@@ -99,8 +96,9 @@ export default {
   border-bottom: 1px solid rgba(153, 153, 153, 0.42);
 }
 
-.navbar-toggler {
+.navbar-light .navbar-toggler {
   margin: 0 15px;
-  background-color: #f00;
+  border: none;
+  outline: none;
 }
 </style>

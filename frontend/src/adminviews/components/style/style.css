@@ -9,11 +9,13 @@
 ----------------------------------------------------- */
 
 #sidebar {
+  z-index: 3;
   min-width: 200px;
   max-width: 200px;
   height: 100%;
   color: #5c9acf;
   background: white;
+  opacity: 0.95;
   transition: all 0.3s;
 }
 
@@ -66,7 +68,7 @@ a:focus {
 }
 
 #sidebar ul li.active > a,
-a[aria-expanded="true"] {
+a[aria-expanded='true'] {
   color: #5b9bd1;
   background: rgb(240, 243, 250);
   border-left: 3px solid #5c9acf;
