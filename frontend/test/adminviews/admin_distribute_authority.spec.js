@@ -16,6 +16,6 @@ describe('分配权限模块单元测验', () => {
   })
 
   it('标题是"分配权限"', () => {
-    expect(wrapper.find('h2').text()).toEqual('分配权限')
+    expect(wrapper.find('h1').text()).toEqual('分配权限')
   })
 })

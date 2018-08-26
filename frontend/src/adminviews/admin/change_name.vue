@@ -1,7 +1,7 @@
 <template>
   <Basic :items="items">
     <div class="my-content">
-      <h2>修改管理员名</h2>
+      <h1>修改管理员名</h1>
       <Alert
         :count_down="wrong_count_down"
         :instruction="error_message"
@@ -16,9 +16,9 @@
         @zero="success_count_down=0"/>
       <div>
         <div class="form-group">
-          <label
+          <h4
             class="form-check-label"
-            for="newname">原管理员名：{{ old_name }}</label>
+            for="newname">原管理员名：{{ old_name }}</h4>
         </div>
         <div class="form-group">
           <label
@@ -30,10 +30,17 @@
             class="input form-control col-lg-3"
             type="text">
         </div>
-        <button
-          class="btn btn-sm"
-          @click="submitMessage"
-        >保存</button>
+        <a
+          id="save-btn"
+          class="btn"
+          @click="submitMessage">
+          <simple-line-icons
+            id="add-icon"
+            icon="pin"
+            color="white"
+            class="icon"/>
+          保存
+        </a>
       </div>
     </div>
   </Basic>
@@ -46,22 +53,29 @@ import qs from 'qs'
 import Alert from '../../components/alert'
 export default {
   name: 'ChangeName',
-  components: {Alert, Basic},
+  components: { Alert, Basic },
   data: function () {
     return {
-      items: [{
-        text: '主页',
-        href: '/admin/main'
-      }, {
-        text: '管理员管理',
-        href: '/admin/adminmanagement'
-      }, {
-        text: this.$route.query.admin_id.toString(),
-        href: '/admin/adminmanagement/detail?admin_id=' + this.$route.query.admin_id.toString()
-      }, {
-        text: '修改管理员名',
-        active: true
-      }],
+      items: [
+        {
+          text: '主页',
+          href: '/admin/main'
+        },
+        {
+          text: '管理员管理',
+          href: '/admin/adminmanagement'
+        },
+        {
+          text: this.$route.query.admin_id.toString(),
+          href:
+            '/admin/adminmanagement/detail?admin_id=' +
+            this.$route.query.admin_id.toString()
+        },
+        {
+          text: '修改管理员名',
+          active: true
+        }
+      ],
       new_name: null,
       old_name: null,
       wrong_count_down: 0,
@@ -70,20 +84,22 @@ export default {
     }
   },
   created () {
-    axios.get('http://localhost:8000/api/v1/admin/backstage/admin-management/get-admin-detail/', {
-      params: {
-        admin_id: this.$route.query.admin_id
-      }
-    }).then(
-      response => {
+    axios
+      .get(
+        'http://localhost:8000/api/v1/admin/backstage/admin-management/get-admin-detail/',
+        {
+          params: {
+            admin_id: this.$route.query.admin_id
+          }
+        }
+      )
+      .then(response => {
         this.old_name = response.data.username
-      }
-    ).catch(
-      error => {
+      })
+      .catch(error => {
         this.error_message = '读取数据出错' + error.response.data.message
         this.wrong_count_down = 5
-      }
-    )
+      })
   },
   methods: {
     submitMessage: function () {
@@ -94,20 +110,25 @@ export default {
         this.error_message = '新旧名字一致'
         this.wrong_count_down = 5
       } else {
-        axios.post('http://localhost:8000/api/v1/admin/backstage/admin-management/change-admin-username/', qs.stringify({
-          admin_id: this.$route.query.admin_id,
-          new_username: this.new_name
-        })).then(
-          response => {
+        axios
+          .post(
+            'http://localhost:8000/api/v1/admin/backstage/admin-management/change-admin-username/',
+            qs.stringify({
+              admin_id: this.$route.query.admin_id,
+              new_username: this.new_name
+            })
+          )
+          .then(response => {
             this.error_message = response.data.new_username
-            this.$router.push({name: 'AdminDetail', query: {'admin_id': this.$route.query.admin_id}})
-          }
-        ).catch(
-          error => {
+            this.$router.push({
+              name: 'AdminDetail',
+              query: { admin_id: this.$route.query.admin_id }
+            })
+          })
+          .catch(error => {
             this.error_message = error.response.message
             this.wrong_count_down = 5
-          }
-        )
+          })
       }
     }
   }
@@ -115,27 +136,48 @@ export default {
 </script>
 
 <style scoped>
-  .my-content {
-    margin: 40px;
-    text-align: left;
-  }
+.my-content {
+  padding: 20px;
+  margin: 70px 20px 20px;
+  text-align: left;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
 
-  .form-group {
-    margin-top: 60px;
-  }
+h1 {
+  margin: 25px 15px;
+  color: #204269;
+  text-align: left;
+}
 
-  .btn {
-    margin-top: 25px;
-    color: white;
-    background-color: #8d4e91;
-    border-color: #8d6592;
-    border-radius: 10px;
-    outline: none;
-    box-shadow: #8d6592 inset;
-  }
+label {
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: bold;
+}
 
-  .btn:hover,
-  .btn:active {
-    background-color: #5e0057;
-  }
+.form-group {
+  margin-top: 60px;
+  margin-left: 15px;
+}
+
+#save-btn {
+  color: white;
+}
+
+.btn {
+  margin-top: 40px;
+  margin-right: 3px;
+  margin-left: 15px;
+  color: white;
+  text-align: right;
+  background-color: #449c44;
+  border: 1px solid #d3d9df;
+}
+
+.btn:hover,
+.btn:active {
+  background-color: #4db14d;
+}
 </style>

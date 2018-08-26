@@ -16,7 +16,7 @@ describe('修改管理员名模块单元测验', () => {
   })
 
   it('标题是"修改管理员名"', () => {
-    expect(wrapper.find('h2').text()).toEqual('修改管理员名')
+    expect(wrapper.find('h1').text()).toEqual('修改管理员名')
   })
 
   it('输入新管理员名', () => {

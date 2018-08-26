@@ -1,49 +1,63 @@
 <template>
   <Basic :items="items">
     <div class="my-content">
-      <h2>管理员详情</h2>
-      <Alert
-        :count_down="wrong_count_down"
-        :instruction="error_message"
-        variant="danger"
-        @decrease="wrong_count_down-1"
-        @zero="wrong_count_down=0"/>
-      <Alert
-        :count_down="success_count_down"
-        :instruction="error_message"
-        variant="success"
-        @decrease="success_count_down-1"
-        @zero="success_count_down=0"/>
-      <div class="button_group">
-        <button
-          type="button"
-          class="row btn btn-sm"
-          @click="jump(1)"
-        >分配权限</button>
-        <button
-          type="button"
-          class="row btn btn-sm"
-          @click="jump(2)"
-        >修改密码</button>
-        <button
-          type="button"
-          class="row btn btn-sm"
-          @click="jump(3)"
-        >修改管理员名</button>
-        <button
-          v-b-modal.delete
-          type="button"
-          class="row btn btn-sm"
-        >删除管理员</button>
-        <ConfirmModal
-          id="delete"
-          title="确认删除"
-          text="您确定要删除该管理员吗？"
-          @click="deleteMessage"/>
+      <div class="my-head">
+        <h1>管理员详情</h1>
+        <div class="button-group">
+          <a
+            id="distribution-btn"
+            class="btn"
+            @click="jump(1)">
+            <simple-line-icons
+              icon="plus"
+              color="white"
+              class="icon"/>
+            分配权限
+          </a>
+          <a
+            id="change-password-btn"
+            class="btn"
+            @click="jump(2)">
+            <simple-line-icons
+              icon="note"
+              color="white"
+              class="icon"/>
+            修改密码
+          </a>
+          <a
+            id="change-username-btn"
+            class="btn"
+            @click="jump(3)">
+            <simple-line-icons
+              icon="tag"
+              color="white"
+              class="icon"/>
+            修改管理员名
+          </a>
+          <a
+            id="delete-user-btn"
+            class="btn"
+            @click="show_delete_modal">
+            <simple-line-icons
+              icon="exclamation"
+              color="white"
+              class="icon"/>
+            删除管理员
+          </a>
+          <b-modal
+            ref="modal"
+            title="确认删除"
+            ok-title="确认"
+            cancel-title="取消"
+            centered
+            @ok="click_ok">
+            <p>您确定要删除该管理员吗？</p>
+          </b-modal>
+        </div>
       </div>
-      <div class="table_div">
+      <div class="table-div">
         <table
-          class="table table-striped table-hover"
+          class="table table-striped"
           width="100%">
           <tbody>
             <tr>
@@ -90,6 +104,18 @@
         </table>
       </div>
     </div>
+    <Alert
+      :count_down="wrong_count_down"
+      :instruction="error_message"
+      variant="danger"
+      @decrease="wrong_count_down-1"
+      @zero="wrong_count_down=0"/>
+    <Alert
+      :count_down="success_count_down"
+      :instruction="error_message"
+      variant="success"
+      @decrease="success_count_down-1"
+      @zero="success_count_down=0"/>
   </Basic>
 </template>
 
@@ -101,26 +127,30 @@ import qs from 'qs'
 import Alert from '../../components/alert'
 export default {
   name: 'AdminDetail',
-  components: {Alert, ConfirmModal, Basic},
+  components: { Alert, ConfirmModal, Basic },
   data: function () {
     return {
-      items: [{
-        text: '主页',
-        href: '/admin/main'
-      }, {
-        text: '管理员管理',
-        href: '/admin/adminmanagement'
-      }, {
-        text: this.$route.query.admin_id.toString(),
-        active: true
-      }],
+      items: [
+        {
+          text: '主页',
+          href: '/admin/main'
+        },
+        {
+          text: '管理员管理',
+          href: '/admin/adminmanagement'
+        },
+        {
+          text: this.$route.query.admin_id.toString(),
+          active: true
+        }
+      ],
       admin: {
-        'admin_id': '',
-        'username': '',
-        'phone_number': '',
-        'date_joined': '',
-        'updated_at': '',
-        'admin_groups': ''
+        admin_id: '',
+        username: '',
+        phone_number: '',
+        date_joined: '',
+        updated_at: '',
+        admin_groups: ''
       },
       admin_id: -1,
       error_message: '',
@@ -131,31 +161,41 @@ export default {
   },
   created () {
     this.admin_id = this.$route.query.admin_id
-    axios.get('http://localhost:8000/api/v1/admin/backstage/admin-management/get-admin-detail/', {
-      params: {
-        admin_id: this.admin_id
-      }
-    }).then(
-      response => {
+    axios
+      .get(
+        'http://localhost:8000/api/v1/admin/backstage/admin-management/get-admin-detail/',
+        {
+          params: {
+            admin_id: this.admin_id
+          }
+        }
+      )
+      .then(response => {
         this.admin.admin_id = response.data.admin_id
         this.admin.username = response.data.username
         this.admin.phone_number = response.data.phone_number
-        this.admin.date_joined = response.data.date_joined.replace('T', ' ').substring(0, 19)
-        this.admin.updated_at = response.data.updated_at.replace('T', ' ').substring(0, 19)
+        this.admin.date_joined = response.data.date_joined
+          .replace('T', ' ')
+          .substring(0, 19)
+        this.admin.updated_at = response.data.updated_at
+          .replace('T', ' ')
+          .substring(0, 19)
         for (let permission of response.data.admin_groups) {
           if (permission === 'super_admin') {
             this.admin.admin_groups = '超级管理员权限'
             break
           } else {
-            this.admin.admin_groups = this.admin.admin_groups + ' ' + this.transferPermission(permission)
+            this.admin.admin_groups =
+              this.admin.admin_groups +
+              ' ' +
+              this.transferPermission(permission)
           }
         }
-      }).catch(
-      error => {
+      })
+      .catch(error => {
         this.error_message = '读取数据出错' + error.response.data.message
         this.wrong_count_down = 5
-      }
-    )
+      })
   },
   methods: {
     transferPermission (permission) {
@@ -177,65 +217,136 @@ export default {
     jump: function (id) {
       if (id === 1) {
         this.test_router = 1
-        this.$router.push({name: 'DistributeAuthority', query: {admin_id: this.admin_id}})
+        this.$router.push({
+          name: 'DistributeAuthority',
+          query: { admin_id: this.admin_id }
+        })
       } else if (id === 2) {
         this.test_router = 2
-        this.$router.push({name: 'ChangeCode', query: {admin_id: this.admin_id}})
+        this.$router.push({
+          name: 'ChangeCode',
+          query: { admin_id: this.admin_id }
+        })
       } else if (id === 3) {
         this.test_router = 3
-        this.$router.push({name: 'ChangeName', query: {admin_id: this.admin_id}})
+        this.$router.push({
+          name: 'ChangeName',
+          query: { admin_id: this.admin_id }
+        })
       }
     },
-    deleteMessage: function () {
-      axios.post('http://localhost:8000/api/v1/admin/backstage/admin-management/delete-admin/',
-        qs.stringify({
-          admin_id: this.admin_id
-        })).then(
-        response => {
-          this.$router.push({name: 'AdminManagement'})
-        }).catch(
-        error => {
+    show_delete_modal () {
+      this.$refs.modal.show()
+    },
+    click_ok: function () {
+      this.$refs.modal.hide()
+      axios
+        .post(
+          'http://localhost:8000/api/v1/admin/backstage/admin-management/delete-admin/',
+          qs.stringify({
+            admin_id: this.admin_id
+          })
+        )
+        .then(response => {
+          this.$router.push({ name: 'AdminManagement' })
+        })
+        .catch(error => {
           this.error_message = error.response.message
           this.wrong_count_down = 5
-        }
-      )
+        })
     }
   }
 }
 </script>
 
 <style scoped>
-  .my-content {
-    margin: 40px;
-    text-align: left;
-  }
+.my-content {
+  padding: 20px;
+  margin: 70px 20px 20px;
+  text-align: left;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
 
-  .head-td {
-    width: 35%;
-  }
+h1 {
+  padding-left: 15px;
+  margin: 25px 0;
+  color: #204269;
+  text-align: left;
+}
 
-  .content-td {
-    width: 65%;
-  }
+.my-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
 
-  .button_group {
-    display: inline-block;
-    float: right;
-    margin-bottom: 20px;
-  }
+.head-td {
+  width: 35%;
+}
 
-  .btn {
-    margin-right: 25px;
-    color: white;
-    background-color: #8d4e91;
-    border-color: #8d6592;
-    border-radius: 10px;
-    outline: none;
-    box-shadow: #8d6592 inset;
-  }
+.content-td {
+  width: 65%;
+}
 
-  .btn:hover,
-  .btn:active {
-    background-color: #5e0057;
-  }
+.table-div {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.button-group {
+  display: inline-block;
+  float: right;
+}
+
+#distribution-btn {
+  color: white;
+  background-color: #06f;
+}
+
+#distribution-btn:hover {
+  background-color: #00f;
+}
+
+#change-password-btn {
+  color: white;
+  background-color: #06f;
+}
+
+#change-password-btn:hover {
+  background-color: #00f;
+}
+
+#change-username-btn {
+  color: white;
+  background-color: #06f;
+}
+
+#change-username-btn:hover {
+  background-color: #00f;
+}
+
+#delete-user-btn {
+  margin-right: 15px;
+  color: white;
+  background-color: #dd514c;
+}
+
+#delete-user-btn:hover {
+  background-color: #ba2d28;
+}
+
+.btn {
+  color: white;
+  text-align: right;
+  background-color: #449c44;
+  border: 1px solid #d3d9df;
+}
+
+.btn:hover,
+.btn:active {
+  background-color: #4db14d;
+}
 </style>

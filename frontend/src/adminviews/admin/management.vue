@@ -1,27 +1,23 @@
 <template>
   <Basic :items="items">
     <div class="my-content">
-      <h2>管理员列表</h2>
-      <Alert
-        :count_down="wrong_count_down"
-        :instruction="error_message"
-        variant="danger"
-        @decrease="wrong_count_down-1"
-        @zero="wrong_count_down=0"/>
-      <Alert
-        :count_down="success_count_down"
-        :instruction="error_message"
-        variant="success"
-        @decrease="success_count_down-1"
-        @zero="success_count_down=0"/>
-      <button
-        id="head-btn"
-        type="button"
-        class="btn btn-sm"
-        @click="jump(-1)"
-      >新增管理员</button>
+      <h1>管理员列表</h1>
+      <div class="my-head-btn">
+        <h6>第 {{ page }}/{{ num_pages }} 页，共 {{ rows }} 条数据</h6>
+        <a
+          id="head-btn"
+          class="btn"
+          @click="jump(-1)">
+          <simple-line-icons
+            id="add-icon"
+            icon="user-follow"
+            color="white"
+            class="icon"/>
+          新增管理员
+        </a>
+      </div>
       <div class="table-div">
-        <table class="table table-striped table-hover">
+        <table class="table table-striped">
           <thead>
             <tr>
               <th scope="col">管理员名称</th>
@@ -36,7 +32,7 @@
                   <input
                     v-model="username"
                     type="text"
-                    class="form-control col-xs-2"
+                    class="form-control my-in-input"
                     placeholder=""
                     @keyup.enter="change">
               </div></td>
@@ -45,7 +41,7 @@
                   <input
                     v-model="phone_number"
                     type="text"
-                    class="form-control col-xs-2"
+                    class="form-control my-in-input"
                     placeholder=""
                     @keyup.enter="change">
                 </div>
@@ -57,11 +53,19 @@
               :key="admin.id">
               <td>{{ admin.username }}</td>
               <td>{{ admin.phone_number }}</td>
-              <button
-                type="button"
-                class="row inner-btn btn-sm"
-                @click="jump(admin.id)"
-              >详情</button>
+              <td class="buttons">
+                <a
+                  id="detail-button"
+                  class="btn"
+                  @click="jump(admin.id)">
+                  <simple-line-icons
+                    icon="bubble"
+                    color="#5b9bd1"
+                    class="icon"
+                    size="small"/>
+                  详情
+                </a>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -70,6 +74,18 @@
         :rows="rows"
         :perpage="per_limit"
         @change="changePage"/>
+      <Alert
+        :count_down="wrong_count_down"
+        :instruction="error_message"
+        variant="danger"
+        @decrease="wrong_count_down-1"
+        @zero="wrong_count_down=0"/>
+      <Alert
+        :count_down="success_count_down"
+        :instruction="error_message"
+        variant="success"
+        @decrease="success_count_down-1"
+        @zero="success_count_down=0"/>
     </div>
   </Basic>
 </template>
@@ -81,16 +97,19 @@ import axios from 'axios'
 import Alert from '../../components/alert'
 export default {
   name: 'AdminManagement',
-  components: {Alert, Pagination, Basic},
+  components: { Alert, Pagination, Basic },
   data: function () {
     return {
-      items: [{
-        text: '主页',
-        href: '/admin/main'
-      }, {
-        text: '管理员管理',
-        active: true
-      }],
+      items: [
+        {
+          text: '主页',
+          href: '/admin/main'
+        },
+        {
+          text: '管理员管理',
+          active: true
+        }
+      ],
       admins: [],
       username: '',
       phone_number: '',
@@ -101,68 +120,83 @@ export default {
       wrong_count_down: 0,
       success_count_down: 0,
       query_id: -1,
-      test_add_admin: false
+      test_add_admin: false,
+      num_pages: 0
     }
   },
   created: function () {
-    axios.get('http://localhost:8000/api/v1/admin/backstage/admin-management/get-admin-list/', {
-      params: {
-        username: '',
-        phone_number: '',
-        page_limit: this.per_limit,
-        page: 1
-      }
-    }).then(
-      response => {
+    axios
+      .get(
+        'http://localhost:8000/api/v1/admin/backstage/admin-management/get-admin-list/',
+        {
+          params: {
+            username: '',
+            phone_number: '',
+            page_limit: this.per_limit,
+            page: 1
+          }
+        }
+      )
+      .then(response => {
         this.rows = response.data.count
+        this.num_pages = response.data.num_pages
         let _admins = []
         for (let data of response.data.content) {
-          _admins.push({'id': data['admin_id'], 'username': data['username'], 'phone_number': data['phone_number']})
+          _admins.push({
+            id: data['admin_id'],
+            username: data['username'],
+            phone_number: data['phone_number']
+          })
         }
         this.admins = _admins
-      }).catch(
-      error => {
+      })
+      .catch(error => {
         this.error_message = '读取数据出错' + error
         this.wrong_count_down = 5
-      }
-    )
+      })
   },
   methods: {
     jump: function (id) {
       if (id === -1) {
         this.test_add_admin = true
-        this.$router.push({name: 'AddAdmin'})
+        this.$router.push({ name: 'AddAdmin' })
       } else {
         this.query_id = id
-        this.$router.push({name: 'AdminDetail', query: {'admin_id': this.query_id}})
+        this.$router.push({
+          name: 'AdminDetail',
+          query: { admin_id: this.query_id }
+        })
       }
     },
     change: function () {
-      axios.get('http://localhost:8000/api/v1/admin/backstage/admin-management/get-admin-list/', {
-        params: {
-          username: this.username,
-          phone_number: this.phone_number,
-          page_limit: this.per_limit,
-          page: this.page
-        }
-      }).then(
-        response => {
+      axios
+        .get(
+          'http://localhost:8000/api/v1/admin/backstage/admin-management/get-admin-list/',
+          {
+            params: {
+              username: this.username,
+              phone_number: this.phone_number,
+              page_limit: this.per_limit,
+              page: this.page
+            }
+          }
+        )
+        .then(response => {
           this.rows = response.data.count
           let _admins = []
           for (let data of response.data.content) {
             _admins.push({
-              'id': data['admin_id'],
-              'username': data['username'],
-              'phone_number': data['phone_number']
+              id: data['admin_id'],
+              username: data['username'],
+              phone_number: data['phone_number']
             })
           }
           this.admins = _admins
-        }).catch(
-        error => {
+        })
+        .catch(error => {
           this.error_message = '读取数据出错' + error.response.data.message
           this.wrong_count_down = 5
-        }
-      )
+        })
     },
     changePage: function (currentpage) {
       this.page = currentpage
@@ -173,55 +207,100 @@ export default {
 </script>
 
 <style scoped>
-  .my-content {
-    margin: 40px;
-    text-align: left;
-  }
+.my-content {
+  padding: 20px;
+  margin: 70px 20px 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
 
-  #head-btn {
-    display: inline-block;
-    float: right;
-    margin-bottom: 20px;
-  }
+.my-head-btn {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin: 25px 0;
+  color: #23527c;
+}
 
-  .inner-btn {
-    margin-top: 2%;
-    margin-left: 38%;
-  }
+#head-btn {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  margin: 0;
+  color: white;
+  text-align: right;
+  background-color: #449c44;
+}
 
-  .table-div {
-    text-align: center;
-  }
+#head-btn:hover,
+#head-btn:active {
+  background-color: #4db14d;
+}
 
-  .table {
-    border: 1px solid #d3d9df;
-  }
+#add-icon {
+  margin-top: 3px;
+}
 
-  th {
-    min-width: 100px;
-  }
+.my-in-input {
+  width: 50px;
+  margin-right: 10%;
+  margin-left: 10%;
+}
 
-  thead tr {
-    font-weight: bold;
-    color: white;
-    background-color: #6c757d;
-  }
+.btn {
+  margin-right: 3px;
+  margin-left: 3px;
+  border: 1px solid #d3d9df;
+}
 
-  #head-btn,
-  .inner-btn {
-    color: white;
-    background-color: #8d4e91;
-    border-color: #8d6592;
-    border-radius: 10px;
-    outline: none;
-    box-shadow: #8d6592 inset;
-  }
+#detail-button {
+  color: #5b9bd1;
+}
 
-  #head-btn:hover,
-  .inner-btn:hover,
-  #head-btn:active,
-  .inner-btn:active {
-    background-color: #5e0057;
-  }
+.btn:hover,
+.btn:active {
+  background-color: rgba(91, 155, 209, 0.2);
+}
 
+.table-div {
+  padding-left: 15px;
+  overflow-x: scroll;
+}
+
+table {
+  margin-bottom: 20px;
+  border-top: 1px solid #d3d9df;
+}
+
+td {
+  vertical-align: middle;
+}
+
+h1 {
+  margin: 25px 0;
+  text-align: left;
+}
+
+h6 {
+  margin-bottom: 15px;
+  font-weight: bold;
+  color: #23527c;
+}
+
+h1,
+h6 {
+  padding-left: 15px;
+  color: #204269;
+}
+
+th {
+  min-width: 100px;
+}
+
+thead tr {
+  font-weight: bold;
+  color: #999;
+}
 </style>
