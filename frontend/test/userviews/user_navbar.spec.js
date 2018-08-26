@@ -4,7 +4,7 @@ import UserNavbar from '@/userviews/components/navbar'
 import {shallowMount} from '@vue/test-utils'
 import BootstrapVue from 'bootstrap-vue'
 import Vue from 'vue'
-import Vuex from "vuex";
+import Vuex from 'vuex'
 
 Vue.use(BootstrapVue)
 
@@ -24,7 +24,7 @@ const $store = new Vuex.Store({
 })
 
 describe('用户端导航栏测试', () => {
-  const wrapper = shallowMount(UserNavbar,  {
+  const wrapper = shallowMount(UserNavbar, {
     mocks: {
       $store
     }

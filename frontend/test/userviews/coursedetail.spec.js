@@ -59,7 +59,7 @@ describe('课程详情页单元测试', () => {
 
   it('包含导航栏', () => {
     expect(wrapper.contains(Basic)).toBe(true)
-})
+  })
 
   it('包含课程图片', () => {
     expect(wrapper.contains('#course-image')).toBe(true)
