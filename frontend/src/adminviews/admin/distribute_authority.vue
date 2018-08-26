@@ -130,6 +130,9 @@ export default {
       )
       .then(response => {
         for (let permission of response.data.admin_groups) {
+          if (permission === 'super_admin') {
+            continue
+          }
           this.selected.push(this.transfer_permission(permission))
         }
       })
