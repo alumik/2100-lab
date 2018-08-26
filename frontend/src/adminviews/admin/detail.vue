@@ -45,6 +45,7 @@
             删除管理员
           </a>
           <b-modal
+            id="modal"
             ref="modal"
             title="确认删除"
             ok-title="确认"
@@ -188,7 +189,7 @@ export default {
             this.admin.admin_groups =
               this.admin.admin_groups +
               ' ' +
-              this.transferPermission(permission)
+              this.transfer_permission(permission)
           }
         }
       })
@@ -198,7 +199,7 @@ export default {
       })
   },
   methods: {
-    transferPermission (permission) {
+    transfer_permission (permission) {
       switch (permission) {
         case 'comment_admin':
           return '用户评论管理权限'

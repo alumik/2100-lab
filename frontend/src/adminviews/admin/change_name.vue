@@ -33,7 +33,7 @@
         <a
           id="save-btn"
           class="btn"
-          @click="submitMessage">
+          @click="submit_message">
           <simple-line-icons
             id="add-icon"
             icon="pin"
@@ -102,7 +102,7 @@ export default {
       })
   },
   methods: {
-    submitMessage: function () {
+    submit_message: function () {
       if (this.new_name === null) {
         this.error_message = '请输入新名字'
         this.wrong_count_down = 5

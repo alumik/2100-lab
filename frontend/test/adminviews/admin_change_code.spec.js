@@ -30,4 +30,19 @@ describe('修改管理员名模块单元测验', () => {
     wrapper.find('#newpasswordagain').setValue('123456789')
     expect(wrapper.vm.new_password_again).toEqual('123456789')
   })
+
+  it('未输入新密码', () => {
+    wrapper.vm.new_password = null
+    expect(wrapper.vm.new_password).toEqual(null)
+    wrapper.vm.submit_message()
+    expect(wrapper.vm.error_message).toEqual('请输入新密码')
+  })
+
+  it('未再次输入新密码', () => {
+    wrapper.vm.new_password = '123'
+    wrapper.vm.new_password_again = null
+    expect(wrapper.vm.new_password_again).toEqual(null)
+    wrapper.vm.submit_message()
+    expect(wrapper.vm.error_message).toEqual('请再次输入新密码')
+  })
 })

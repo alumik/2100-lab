@@ -24,4 +24,11 @@ describe('修改管理员名模块单元测验', () => {
     wrapper.find('#newname').setValue('123456789')
     expect(wrapper.vm.new_name).toEqual('123456789')
   })
+
+  it('输入空用户名', () => {
+    wrapper.vm.new_name = null
+    expect(wrapper.vm.new_name).toEqual(null)
+    wrapper.vm.submit_message()
+    expect(wrapper.vm.error_message).toEqual('请输入新名字')
+  })
 })

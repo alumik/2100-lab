@@ -73,7 +73,7 @@
       <Pagination
         :rows="rows"
         :perpage="per_limit"
-        @change="changePage"/>
+        @change="change_page"/>
       <Alert
         :count_down="wrong_count_down"
         :instruction="error_message"
@@ -120,7 +120,7 @@ export default {
       wrong_count_down: 0,
       success_count_down: 0,
       query_id: -1,
-      test_add_admin: false,
+      test_router: false,
       num_pages: 0
     }
   },
@@ -158,7 +158,7 @@ export default {
   methods: {
     jump: function (id) {
       if (id === -1) {
-        this.test_add_admin = true
+        this.test_router = true
         this.$router.push({ name: 'AddAdmin' })
       } else {
         this.query_id = id
@@ -198,7 +198,7 @@ export default {
           this.wrong_count_down = 5
         })
     },
-    changePage: function (currentpage) {
+    change_page: function (currentpage) {
       this.page = currentpage
       this.change()
     }
