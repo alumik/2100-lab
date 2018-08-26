@@ -236,9 +236,9 @@ h1 {
   margin-right: 3px;
   margin-left: 3px;
   color: white;
-  border: 1px solid #d3d9df;
   text-align: right;
   background-color: #0c0;
+  border: 1px solid #d3d9df;
 }
 
 .btn:hover,
