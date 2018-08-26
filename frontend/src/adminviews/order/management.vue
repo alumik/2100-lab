@@ -151,7 +151,7 @@ export default {
       state: '',
       page_jump: false,
       page: 1,
-      per_page: 10,
+      per_page: 15,
       dismiss_second: 5,
       wrong_count_down: 0,
       wrong: '',

@@ -9,7 +9,7 @@
           <a
             v-b-modal.reply
             id="reply-button"
-            class="btn btn-lg"
+            class="btn"
             @click="reply_id=message.comment_id">
             <simple-line-icons
               icon="pencil"
@@ -26,7 +26,7 @@
           <a
             v-b-modal.delete
             id="delete-button"
-            class="btn btn-lg">
+            class="btn">
             <simple-line-icons
               icon="trash"
               color="white"
@@ -72,17 +72,31 @@ export default {
   components: { Alert, DetailTable, Basic, InputModal, ConfirmModal },
   data () {
     return {
-      items: [{
-        text: '主页',
-        href: '/admin/main'
-      }, {
-        text: '留言管理',
-        href: '/admin/message'
-      }, {
-        text: this.$route.query.message_id,
-        active: true
-      }],
-      titles: ['留言日期', '用户', '课程代码', '课程名', '点赞数', '点踩数', '状态', '删除日期', '内容'],
+      items: [
+        {
+          text: '主页',
+          href: '/admin/main'
+        },
+        {
+          text: '留言管理',
+          href: '/admin/message'
+        },
+        {
+          text: this.$route.query.message_id,
+          active: true
+        }
+      ],
+      titles: [
+        '留言日期',
+        '用户',
+        '课程代码',
+        '课程名',
+        '点赞数',
+        '点踩数',
+        '状态',
+        '删除日期',
+        '内容'
+      ],
       message: [],
       dismiss_second: 5,
       wrong_count_down: 0,
@@ -93,10 +107,15 @@ export default {
   },
   created () {
     const that = this
-    axios.get('http://localhost:8000/api/v1/courses/backstage/comment-management/get-comment-detail/',
-      {params: {
-        comment_id: that.$route.query.message_id
-      }})
+    axios
+      .get(
+        'http://localhost:8000/api/v1/courses/backstage/comment-management/get-comment-detail/',
+        {
+          params: {
+            comment_id: that.$route.query.message_id
+          }
+        }
+      )
       .then(function (response) {
         that.message = that.computed_message(response.data)
       })
@@ -108,10 +127,15 @@ export default {
   methods: {
     search: function () {
       const that = this
-      axios.get('http://localhost:8000/api/v1/courses/backstage/comment-management/get-comment-detail/',
-        {params: {
-          comment_id: that.$route.query.message_id
-        }})
+      axios
+        .get(
+          'http://localhost:8000/api/v1/courses/backstage/comment-management/get-comment-detail/',
+          {
+            params: {
+              comment_id: that.$route.query.message_id
+            }
+          }
+        )
         .then(function (response) {
           that.message = that.computed_message(response.data)
         })
@@ -150,7 +174,7 @@ export default {
         temp[6] = '未删除'
       }
       if (val.deleted_at === null) {
-        temp[7] = ''
+        temp[7] = '-'
       } else {
         temp[7] = (val.deleted_at + '').slice(0, 10)
       }
@@ -159,10 +183,13 @@ export default {
     },
     delete_message: function () {
       const that = this
-      axios.post('http://localhost:8000/api/v1/courses/backstage/comment-management/delete-comment/',
-        qs.stringify({
-          comment_id: that.$route.query.message_id
-        }))
+      axios
+        .post(
+          'http://localhost:8000/api/v1/courses/backstage/comment-management/delete-comment/',
+          qs.stringify({
+            comment_id: that.$route.query.message_id
+          })
+        )
         .then(function (response) {
           if (response.data.message === 'Object not found.') {
             that.wrong = '你所删除的留言不存在，删除失败！'
@@ -182,11 +209,14 @@ export default {
     },
     reply_message: function (val) {
       const that = this
-      axios.post('http://localhost:8000/api/v1/courses/backstage/comment-management/add-comment/',
-        qs.stringify({
-          reply_to_id: that.$route.query.message_id,
-          comment_content: val
-        }))
+      axios
+        .post(
+          'http://localhost:8000/api/v1/courses/backstage/comment-management/add-comment/',
+          qs.stringify({
+            reply_to_id: that.$route.query.message_id,
+            comment_content: val
+          })
+        )
         .then(function (response) {
           if (response.data.message === 'Success.') {
             that.success = '您已经成功回复此留言。'
@@ -206,63 +236,57 @@ export default {
 </script>
 
 <style scoped>
-  .body {
-    padding: 20px;
-    margin: 70px 20px 20px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-  }
+.body {
+  padding: 20px;
+  margin: 70px 20px 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
 
-  .title {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 15px 0 15px;
-    margin: 25px 0;
-    color: #23527c;
-  }
+.title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px 0 15px;
+  margin: 25px 0;
+  color: #23527c;
+}
 
-  h1 {
-    text-align: left;
-  }
+h1 {
+  text-align: left;
+}
 
-  td {
-    font-size: 1rem;
-    vertical-align: middle;
-  }
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  text-align: right;
+}
 
-  .buttons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    text-align: right;
-  }
+.btn {
+  margin-left: 3px;
+  border: 1px solid #d3d9df;
+}
 
-  .btn {
-    margin-right: 3px;
-    margin-left: 3px;
-    border: 1px solid #d3d9df;
-  }
+#reply-button {
+  color: white;
+  background-color: #4db14d;
+}
 
-  #reply-button {
-    color: white;
-    background-color: #4db14d;
-  }
+#reply-button:hover,
+#reply-button:active {
+  background-color: #449c44;
+}
 
-  #reply-button:hover,
-  #reply-button:active {
-    background-color: #449c44;
-  }
+#delete-button {
+  color: white;
+  background-color: #dd514c;
+}
 
-  #delete-button {
-    color: white;
-    background-color: #dd514c;
-  }
-
-  #delete-button:hover,
-  #delete-button:active {
-    background-color: #ba2d28;
-  }
+#delete-button:hover,
+#delete-button:active {
+  background-color: #ba2d28;
+}
 </style>

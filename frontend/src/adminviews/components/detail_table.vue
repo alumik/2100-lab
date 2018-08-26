@@ -44,6 +44,10 @@ export default {
     border-bottom: 1px solid #d3d9df;
   }
 
+  td {
+    vertical-align: middle;
+  }
+
   .col-3 {
     font-weight: bold;
     color: #337ab7;
