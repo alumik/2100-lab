@@ -31,7 +31,7 @@
   padding: 20px;
   font-size: 1.25rem;
   background: white;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1) inset;
+  border-bottom: 1px solid #eee;
 }
 
 #sidebar ul.components {
@@ -47,10 +47,7 @@ a:focus {
 
 #sidebar ul li a {
   display: block;
-  padding-top: 10px;
-  padding-right: 10px;
-  padding-bottom: 10px;
-  padding-left: 36px;
+  padding: 10px 10px 10px 36px;
   font-size: 1.1em;
   color: #23527c;
   border-left: 3px solid white;
