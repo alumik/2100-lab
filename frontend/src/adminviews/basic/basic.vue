@@ -97,7 +97,9 @@ export default {
     jump (id) {
       for (let list = 0; list < 7; list = list + 1) {
         this.lists[list].isActive = false
+        this.$store.state.colors[list] = '#204269'
       }
+      this.$store.state.colors[id - 1] = '#5b9bd1'
       this.lists[id - 1].isActive = true
     }
   }

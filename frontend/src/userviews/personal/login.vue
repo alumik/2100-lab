@@ -89,8 +89,7 @@ export default {
       modalShow: false,
       accept: '',
       content: '',
-      course_id: -1,
-      user_data: {}
+      course_id: -1
     }
   },
   computed: {
@@ -167,7 +166,7 @@ export default {
     },
     handleOk (evt) {
       this.$store.commit('status')
-      this.$store.commit('user', this.user_data)
+      this.$store.commit('username', this.user_data)
       this.$store.commit('phone', this.phone)
       if (this.course_id !== -1) {
         this.$router.push({

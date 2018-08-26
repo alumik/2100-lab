@@ -112,6 +112,20 @@ new Vue({
       })
       .then(res => {
         if (res.data.is_authenticated) {
+          // axios
+          //   .get(
+          //     'http://localhost:8000/api/v1/customers/forestage/personal-center/get-customer-detail/'
+          //   )
+          //   .then(res => {
+          //     this.avatar = this.$store.state.address + res.data.avatar
+          //     this.$store.commit('money', (this.money = res.data.reward_coin))
+          //     this.$store.commit('avatar', res.data.avatar)
+          //     this.time = res.data.date_joined
+          //       .toString()
+          //       .substring(0, 19)
+          //       .replace('T', ' ')
+          //     this.$store.commit('time', this.time)
+          //   })
           this.$store.commit('status')
           this.$store.commit('username', sessionStorage.getItem('username'))
           this.$store.commit('phone', sessionStorage.getItem('phone'))

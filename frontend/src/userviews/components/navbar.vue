@@ -49,8 +49,7 @@ import axios from 'axios'
 export default {
   name: 'UserNavbar',
   data () {
-    return {
-    }
+    return {}
   },
   computed: {
     avatar () {
@@ -69,7 +68,20 @@ export default {
     //     }
     //   })
   },
-  mounted () {},
+  mounted () {
+    if (this.$store.state.status) {
+      axios
+        .get(
+          'http://localhost:8000/api/v1/customers/forestage/personal-center/get-customer-detail/'
+        )
+        .then(res => {
+          this.$store.commit('avatar', res.data.avatar)
+        })
+        .catch(error => {
+          alert(error.message)
+        })
+    }
+  },
   methods: {
     home () {
       this.$router.push({ path: '/' })

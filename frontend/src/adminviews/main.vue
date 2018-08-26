@@ -21,6 +21,7 @@ export default {
   },
   mounted () {
     this.$store.commit('menu', 0)
+    this.$store.commit('colors', -1)
   }
 }
 </script>

@@ -75,6 +75,11 @@ export default {
       this.$router.push({ path: '/admin/main' })
     }
   },
+  mounted () {
+    if (this.$store.state.status) {
+      this.$router.push({ path: '/admin/main' })
+    }
+  },
   methods: {
     check (evt) {
       const regix = /^1\d{10}$/

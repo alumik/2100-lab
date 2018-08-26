@@ -98,8 +98,8 @@ export default {
   },
   methods: {
     jump: function (id) {
-      this.$store.commit('colors', id - 1)
       this.$emit('jump', id)
+      this.$store.commit('colors', id - 1)
       this.$store.commit('menu', id)
       this.$router.push({ path: this.lists[id - 1].path })
     }
