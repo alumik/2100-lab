@@ -29,6 +29,6 @@ describe('留言详情页面单元测试', () => {
   })
 
   it('测试按钮渲染数量', () => {
-    expect(wrapper.findAll('button').length).toEqual(2)
+    expect(wrapper.findAll('a').length).toEqual(2)
   })
 })

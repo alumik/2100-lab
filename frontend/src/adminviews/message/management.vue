@@ -376,10 +376,6 @@ table {
   border-top: 1px solid #d3d9df;
 }
 
-th {
-  font-size: 1.2em;
-}
-
 td {
   font-size: 1rem;
   vertical-align: middle;

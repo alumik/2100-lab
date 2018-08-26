@@ -2,27 +2,37 @@
   <Basic
     :items="items"
     class="my-basic">
-    <div>
+    <div class="body">
       <div class="title">
         <h1>留言详情</h1>
         <div class="buttons">
-          <button
+          <a
             v-b-modal.reply
-            type="button"
-            class="btn btn-lg">
-            回复留言
-          </button>
+            id="reply-button"
+            class="btn btn-lg"
+            @click="reply_id=message.comment_id">
+            <simple-line-icons
+              icon="pencil"
+              color="white"
+              class="icon"
+              size="small"/>
+            回复
+          </a>
           <InputModal
             id="reply"
             title="回复留言"
             placeholder="请输入你要回复的内容"
             @click="reply_message"/>
-          <button
+          <a
             v-b-modal.delete
-            type="button"
+            id="delete-button"
             class="btn btn-lg">
-            删除留言
-          </button>
+            <simple-line-icons
+              icon="trash"
+              color="white"
+              class="icon"
+              size="small"/>
+            删除</a>
           <ConfirmModal
             id="delete"
             title="确认删除"
@@ -196,19 +206,31 @@ export default {
 </script>
 
 <style scoped>
+  .body {
+    padding: 20px;
+    margin: 70px 20px 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  }
+
   .title {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    padding-right: 15px;
-    margin-top: 25px;
-    margin-bottom: 25px;
+    padding: 0 15px 0 15px;
+    margin: 25px 0;
+    color: #23527c;
   }
 
   h1 {
-    padding-left: 15px;
     text-align: left;
+  }
+
+  td {
+    font-size: 1rem;
+    vertical-align: middle;
   }
 
   .buttons {
@@ -218,22 +240,29 @@ export default {
     text-align: right;
   }
 
-  td {
-    vertical-align: middle;
-  }
-
   .btn {
-    margin-right: 10px;
-    color: white;
-    background-color: #8d4e91;
-    border-color: #8d6592;
-    border-radius: 10px;
-    outline: none;
-    box-shadow: #8d6592 inset;
+    margin-right: 3px;
+    margin-left: 3px;
+    border: 1px solid #d3d9df;
   }
 
-  .btn:hover,
-  .btn:active {
-    background-color: #5e0057;
+  #reply-button {
+    color: white;
+    background-color: #4db14d;
+  }
+
+  #reply-button:hover,
+  #reply-button:active {
+    background-color: #449c44;
+  }
+
+  #delete-button {
+    color: white;
+    background-color: #dd514c;
+  }
+
+  #delete-button:hover,
+  #delete-button:active {
+    background-color: #ba2d28;
   }
 </style>
