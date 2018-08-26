@@ -30,7 +30,7 @@ describe('订单管理页面单元测试', () => {
 
   it('测试按钮渲染数量', () => {
     const length = wrapper.findAll('tr').length
-    expect(wrapper.findAll('button').length).toEqual(length - 2)
+    expect(wrapper.findAll('.btn').length).toEqual(length - 2)
   })
 
   it('测试改变下拉菜单选项绑定数据是否改变', () => {
