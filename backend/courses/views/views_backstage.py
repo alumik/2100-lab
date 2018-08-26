@@ -1,3 +1,5 @@
+"""课程模块后台操作"""
+
 from decimal import Decimal
 import datetime
 
@@ -12,6 +14,8 @@ from admins.models import AdminLog
 
 @permission_required('courses.view_course')
 def get_course_list(request):
+    """获取课程列表"""
+
     codename = request.GET.get('codename', '')
     title = request.GET.get('title', '')
 
@@ -27,6 +31,7 @@ def get_course_list(request):
 
 @permission_required('courses.view_course')
 def get_course_detail(request):
+    """获取课程详情"""
     course_id = request.GET.get('course_id')
 
     try:
@@ -52,6 +57,8 @@ def get_course_detail(request):
 
 @permission_required('courses.delete_course')
 def delete_course(request):
+    """删除课程"""
+
     course_id = request.POST.get('course_id')
 
     try:
@@ -71,6 +78,8 @@ def delete_course(request):
 
 @permission_required('courses.add_course')
 def add_course(request):
+    """添加课程"""
+
     title = request.POST.get('title')
     codename = request.POST.get('codename')
     expire_duration = datetime.timedelta(
@@ -113,6 +122,8 @@ def add_course(request):
 
 @permission_required('courses.delete_image')
 def delete_course_images(request):
+    """删除课程"""
+
     delete_list = request.POST.getlist('delete_list', [])
 
     deleted = []
@@ -132,6 +143,8 @@ def delete_course_images(request):
 
 @permission_required('courses.change_course')
 def edit_course(request):
+    """编辑课程"""
+
     course_id = request.POST.get('course_id')
 
     try:
@@ -180,6 +193,8 @@ def edit_course(request):
 
 @permission_required('courses.change_course')
 def get_course_assets(request):
+    """获取课程播放资源"""
+
     course_id = request.GET.get('course_id')
 
     try:
@@ -208,6 +223,8 @@ def get_course_assets(request):
 
 @permission_required('courses.view_comment')
 def get_comment_list(request):
+    """获取评论列表"""
+
     username = request.GET.get('username', '')
     course_codename = request.GET.get('course_codename', '')
     course_title = request.GET.get('course_title', '')
@@ -233,6 +250,8 @@ def get_comment_list(request):
 
 @permission_required('courses.view_comment')
 def get_comment_detail(request):
+    """获取评论详情"""
+
     comment_id = request.GET.get('comment_id')
 
     try:
@@ -258,6 +277,8 @@ def get_comment_detail(request):
 
 @permission_required('courses.add_comment')
 def add_comment(request):
+    """回复评论"""
+
     reply_to_id = request.POST.get('reply_to_id', '-1')
     comment_content = request.POST.get('comment_content')
 
@@ -289,6 +310,8 @@ def add_comment(request):
 
 @permission_required('courses.delete_comment')
 def delete_comment(request):
+    """删除评论"""
+
     comment_id = request.POST.get('comment_id')
 
     try:
@@ -308,6 +331,8 @@ def delete_comment(request):
 
 @permission_required('courses.add_hero')
 def add_hero(request):
+    """添加头图"""
+
     heroes = request.FILES.getlist('heroes', [])
     captions = request.POST.getlist('captions', [])
 
@@ -322,6 +347,8 @@ def add_hero(request):
 
 @permission_required('courses.delete_hero')
 def delete_hero(request):
+    """删除头图"""
+
     delete_list = request.POST.getlist('delete_list', [])
 
     deleted = []

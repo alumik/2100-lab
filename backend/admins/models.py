@@ -1,3 +1,4 @@
+"""管理员模块模型"""
 # pylint: disable=E1101
 
 from django.conf import settings

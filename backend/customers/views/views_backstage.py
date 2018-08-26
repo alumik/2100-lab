@@ -1,3 +1,5 @@
+"""用户模块后台功能"""
+
 import time
 
 from django.contrib.auth.decorators import permission_required
@@ -14,6 +16,8 @@ from admins.models import AdminLog
 
 @permission_required('customers.view_orderlog')
 def get_order_list(request):
+    """获取订单列表"""
+
     order_no = request.GET.get('order_no', '')
     course_codename = request.GET.get('course_codename', '')
     course_title = request.GET.get('course_title', '')
@@ -42,6 +46,8 @@ def get_order_list(request):
 
 @permission_required('customers.view_orderlog')
 def get_order_detail(request):
+    """获取订单详情"""
+
     order_id = request.GET.get('order_id')
 
     try:
@@ -66,6 +72,8 @@ def get_order_detail(request):
 
 @permission_required('customers.change_orderlog')
 def order_refund(request):
+    """订单退款"""
+
     order_id = request.POST.get('order_id')
 
     try:
@@ -94,6 +102,8 @@ def order_refund(request):
 
 @permission_required('core.view_customuser')
 def get_customer_list(request):
+    """获取用户列表"""
+
     customer_id = request.GET.get('customer_id', '')
     username = request.GET.get('username', '')
     phone_number = request.GET.get('phone_number', '')
@@ -128,6 +138,8 @@ def get_customer_list(request):
 
 @permission_required('core.view_customuser')
 def get_customer_detail(request):
+    """获取用户详情"""
+
     customer_id = request.GET.get('customer_id')
 
     try:
@@ -171,6 +183,8 @@ def get_customer_detail(request):
 
 @permission_required('core.view_customuser')
 def get_customer_order_list(request):
+    """获取用户订单列表"""
+
     customer_id = request.GET.get('customer_id')
 
     try:
@@ -184,6 +198,8 @@ def get_customer_order_list(request):
 
 @permission_required('core.view_customuser')
 def get_customer_learning_log_list(request):
+    """获取用户学习记录列表"""
+
     customer_id = request.GET.get('customer_id')
 
     try:
@@ -197,6 +213,8 @@ def get_customer_learning_log_list(request):
 
 @permission_required('core.change_customuser')
 def toggle_vip(request):
+    """切换认证用户状态"""
+
     customer_id = request.POST.get('customer_id')
 
     try:
@@ -224,6 +242,8 @@ def toggle_vip(request):
 
 @permission_required('core.change_customuser')
 def toggle_banned(request):
+    """切换用户经验状态"""
+
     customer_id = request.POST.get('customer_id')
 
     try:
@@ -251,6 +271,8 @@ def toggle_banned(request):
 
 @permission_required('core.delete_customuser')
 def delete_customer(request):
+    """删除用户"""
+
     customer_id = request.POST.get('customer_id')
 
     try:

@@ -1,3 +1,5 @@
+"""用户模块前台函数"""
+
 import re
 import random
 import time
@@ -15,6 +17,11 @@ from customers.models import LearningLog, OrderLog
 
 
 def get_verification_code(request):
+    """获取短信验证码
+
+    注：发送短信部分在测试时会被注释掉以防止测试时发送错误短信。
+    """
+
     phone_number = request.POST.get('phone_number')
     match = re.search(r'^1\d{10}$', phone_number)
     if match:
@@ -44,6 +51,8 @@ def get_verification_code(request):
 
 
 def get_generate_time(request):
+    """获取上一个短信验证码生成时间"""
+
     json_data = {'generate_time': ''}
     if 'generate_time' in request.session:
         json_data['generate_time'] = request.session['generate_time']
@@ -51,6 +60,8 @@ def get_generate_time(request):
 
 
 def authenticate_customer(request):
+    """认证用户"""
+
     phone_number = request.POST.get('phone_number')
     verification_code = request.POST.get('verification_code')
 
@@ -80,11 +91,15 @@ def authenticate_customer(request):
 
 
 def get_eula(request):
+    """获取用户许可协议"""
+
     return JsonResponse({'content': 'Test EULA.'})
 
 
 @login_required
 def change_username(request):
+    """修改用户名"""
+
     user = request.user
     username = request.POST.get('username')
     try:
@@ -100,6 +115,8 @@ def change_username(request):
 
 @login_required
 def change_avatar(request):
+    """修改头像"""
+
     new_avatar = request.FILES.get('new_avatar')
 
     customer = request.user
@@ -115,28 +132,38 @@ def change_avatar(request):
 
 @login_required
 def get_customer_detail(request):
+    """获取用户详情"""
+
     return JsonResponse(request.user.as_dict())
 
 
 @login_required
 def get_reward_coin(request):
+    """获取奖励金余额"""
+
     return JsonResponse({'reward_coin': request.user.reward_coin})
 
 
 @login_required
 def get_learning_logs(request):
+    """获取用户学习记录列表"""
+
     learning_logs = LearningLog.objects.filter(customer=request.user).order_by('-latest_learn')
     return get_page(request, learning_logs)
 
 
 @login_required
 def get_order_logs(request):
+    """获取用户订单记录列表"""
+
     order_logs = OrderLog.objects.filter(customer=request.user).order_by('-created_at')
     return get_page(request, order_logs)
 
 
 @login_required
 def delete_customer(request):
+    """用户删除自己"""
+
     user = request.user
     logout(request)
     delete_str = '_deleted_' + str(int(round(time.time() * 1000)))

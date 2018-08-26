@@ -1,3 +1,5 @@
+"""课程模块前台操作"""
+
 import uuid
 
 from django.contrib.auth.decorators import login_required
@@ -12,6 +14,8 @@ from courses import utils
 
 
 def get_heroes(request):
+    """获取头图"""
+
     heroes = Hero.objects.all()
     count = heroes.count()
     json_data = {
@@ -24,6 +28,8 @@ def get_heroes(request):
 
 
 def get_recent_courses(request):
+    """获取最近课程"""
+
     free_courses = utils.get_courses('free', 10)
     paid_courses = utils.get_courses('paid', 10)
     json_data = {
@@ -38,11 +44,15 @@ def get_recent_courses(request):
 
 
 def get_course_list(request):
+    """获取课程列表"""
+
     courses = utils.get_courses(request.GET.get('course_type')).order_by('-updated_at')
     return get_page(request, courses)
 
 
 def get_course_detail(request):
+    """获取课程详情"""
+
     course_id = request.GET.get('course_id')
     request.session['referer_id'] = request.GET.get('referer_id', '')
 
@@ -77,6 +87,8 @@ def get_course_detail(request):
 
 @login_required
 def up_vote_course(request):
+    """点赞课程"""
+
     course_id = request.GET.get('course_id')
     try:
         course = Course.objects.get(id=course_id)
@@ -103,6 +115,8 @@ def up_vote_course(request):
 
 @login_required
 def buy_course(request):
+    """购买课程并完成分销"""
+
     course_id = request.POST.get('course_id')
     payment_method = request.POST.get('payment_method')
     customer = request.user
@@ -159,6 +173,8 @@ def buy_course(request):
 
 @login_required
 def get_course_assets(request):
+    """获取课程资源"""
+
     course_id = request.GET.get('course_id')
 
     try:
@@ -187,6 +203,8 @@ def get_course_assets(request):
 
 @login_required
 def save_learning_log(request):
+    """保存学习进度"""
+
     try:
         course = Course.objects.get(id=request.GET.get('course_id'))
     except Course.DoesNotExist:
@@ -208,6 +226,8 @@ def save_learning_log(request):
 
 @login_required
 def get_course_comments(request):
+    """获取课程下的评论"""
+
     try:
         course = Course.objects.get(id=request.GET.get('course_id'))
     except Course.DoesNotExist:
@@ -228,6 +248,8 @@ def get_course_comments(request):
 
 @login_required
 def delete_comment(request):
+    """删除评论"""
+
     try:
         comment = Comment.objects.get(id=request.POST.get('comment_id'))
     except Comment.DoesNotExist:
@@ -242,6 +264,8 @@ def delete_comment(request):
 
 @login_required
 def up_vote_comment(request):
+    """点赞评论"""
+
     customer = request.user
 
     try:
@@ -268,6 +292,8 @@ def up_vote_comment(request):
 
 @login_required
 def down_vote_comment(request):
+    """点踩课程"""
+
     customer = request.user
 
     try:
@@ -294,6 +320,8 @@ def down_vote_comment(request):
 
 @login_required
 def add_comment(request):
+    """添加评论"""
+
     user = request.user
     course_id = request.POST.get('course_id')
     reply_to_id = request.POST.get('reply_to_id', '')
@@ -334,6 +362,8 @@ def add_comment(request):
 
 @login_required
 def get_replies(request):
+    """获取回复"""
+
     comment_id = request.GET.get('comment_id')
 
     try:

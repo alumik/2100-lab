@@ -19,6 +19,12 @@ from admins.models import AdminLog
 def authenticate_admin(request):
     """管理员登录
 
+    **示例URL**
+
+    ::
+
+        localhost/api/v1/admin/backstage/auth/authenticate-admin/
+
     **传入参数/方法**
 
     ::
@@ -58,7 +64,7 @@ def authenticate_admin(request):
 
         {
             admin_id: 1,          // 管理员ID
-            username: 'John',     // 管理员用户名
+            username: 'John',     // 管理员名称
             admin_groups: [
                 'customer_admin',
                 'order_admin'
@@ -98,7 +104,54 @@ def authenticate_admin(request):
 
 @login_required
 def get_admin_list(request):
-    """获取所有管理员列表"""
+    """获取所有管理员列表
+
+    **示例URL**
+
+    ::
+
+        localhost/api/v1/admin/backstage/admin-management/get-admin-list/
+
+    **传入参数/方法**
+
+    ::
+
+        GET phone_number 管理员电话号码筛选字段
+        GET username 管理员名称筛选字段
+        GET page 当前页码
+        GET page_limit 一页数量
+
+    **返回值**
+
+    *错误：管理员权限不足* HTTP403
+
+    .. code:: javascript
+
+        {
+            message: 'Access denied.'
+        }
+
+    *成功：* HTTP200
+
+    .. code:: javascript
+
+        {
+            phone_number: '123',                  // 管理员电话号码筛选字段
+            username: 'John',                     // 管理员名称筛选字段
+            count: 8,                             // 总条目数
+            page: 1,                              // 当前页码
+            num_pages: 12,                        // 总页码数
+            content: [
+                {
+                    'admin_id': 12, // 管理员ID
+                    'username': 'John Smith'      // 管理员名称
+                    'phone_number': '12345678901' // 管理员电话号码
+                }
+                ...
+            ]                                     // 该页内容
+        }
+
+    """
 
     if not request.user.is_superuser:
         return JsonResponse({'message': ERROR['access_denied']}, status=403)

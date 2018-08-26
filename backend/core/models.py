@@ -1,3 +1,4 @@
+"""核心功能模型"""
 # pylint: disable=E1101
 
 from django.contrib.auth.models import AbstractUser, BaseUserManager
@@ -6,16 +7,26 @@ from django.utils import timezone
 
 
 class SoftDeletionQuerySet(models.query.QuerySet):
+    """软删除查询集"""
+
     def delete(self):
+        """软删除对象"""
+
         return super(SoftDeletionQuerySet, self).update(deleted_at=timezone.now())
 
     def hard_delete(self):
+        """硬删除对象"""
+
         return super(SoftDeletionQuerySet, self).delete()
 
     def alive(self):
+        """获取未删除对象"""
+
         return self.filter(deleted_at=None)
 
     def dead(self):
+        """获取已删除对象"""
+
         return self.exclude(deleted_at=None)
 
 
@@ -34,6 +45,8 @@ class SoftDeletionManager(models.Manager):
 
 
 class SoftDeletionModel(models.Model):
+    """软删除模型"""
+
     deleted_at = models.DateTimeField(blank=True, null=True)
 
     objects = SoftDeletionManager()
@@ -43,17 +56,25 @@ class SoftDeletionModel(models.Model):
         abstract = True
 
     def delete(self, using=None, keep_parents=False):
+        """软删除对象"""
+
         self.deleted_at = timezone.now()
         self.save()
 
     def hard_delete(self):
+        """硬删除对象"""
+
         super(SoftDeletionModel, self).delete()
 
 
 class UserManager(BaseUserManager):
+    """用户管理类"""
+
     use_in_migrations = True
 
     def _create_user(self, phone_number, password, **extra_fields):
+        """创建用户工具函数"""
+
         if not phone_number:
             raise ValueError('The given phone number must be set')
         user = self.model(username=str(phone_number), phone_number=phone_number, **extra_fields)
@@ -62,11 +83,15 @@ class UserManager(BaseUserManager):
         return user
 
     def create_user(self, phone_number, password=None, **extra_fields):
+        """创建普通用户"""
+
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
         return self._create_user(phone_number, password, **extra_fields)
 
     def create_superuser(self, phone_number, password, **extra_fields):
+        """创建超级管理员"""
+
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
@@ -78,10 +103,14 @@ class UserManager(BaseUserManager):
         return self._create_user(phone_number, password, **extra_fields)
 
     def get_queryset(self):
+        """获取查询集"""
+
         return SoftDeletionQuerySet(self.model).filter(deleted_at=None)
 
 
 class CustomUser(SoftDeletionModel, AbstractUser):
+    """自定义用户模型"""
+
     phone_number = models.CharField(max_length=150, unique=True)
     avatar = models.ImageField(
         upload_to='uploads/customers/avatars/',
@@ -101,6 +130,8 @@ class CustomUser(SoftDeletionModel, AbstractUser):
         return self.username
 
     def as_dict(self):
+        """获取普通字典"""
+
         return {
             'user_id': self.id,
             'username': self.username,
@@ -114,6 +145,8 @@ class CustomUser(SoftDeletionModel, AbstractUser):
         }
 
     def as_admin_dict(self):
+        """获取管理员字典"""
+
         return {
             'admin_id': self.id,
             'username': self.username,
@@ -121,6 +154,8 @@ class CustomUser(SoftDeletionModel, AbstractUser):
         }
 
     def as_customer_dict(self):
+        """获取用户字典"""
+
         return {
             'customer_id': self.id,
             'username': self.username,

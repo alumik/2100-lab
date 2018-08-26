@@ -1,8 +1,12 @@
+"""核心功能工具函数"""
+
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import JsonResponse
 
 
 def get_page(request, items):
+    """分页工具函数"""
+
     count = items.count()
     page = request.GET.get('page')
     paginator = Paginator(items, request.GET.get('page_limit', 10))
@@ -25,6 +29,8 @@ def get_page(request, items):
 
 
 def get_backstage_page(request, items):
+    """后台分页工具函数"""
+
     count = items.count()
     page = request.GET.get('page')
     paginator = Paginator(items, request.GET.get('page_limit', 10))
@@ -44,6 +50,8 @@ def get_backstage_page(request, items):
 
 
 def get_brief_page(request, items):
+    """简短信息分页工具函数"""
+
     count = items.count()
     page = request.GET.get('page')
     paginator = Paginator(items, request.GET.get('page_limit', 10))

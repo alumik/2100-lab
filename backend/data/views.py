@@ -1,3 +1,5 @@
+"""数据分析模块操作"""
+
 from datetime import datetime
 import time
 import pytz
@@ -12,6 +14,8 @@ from core.constants import ERROR
 
 @login_required
 def get_overall_data(request):
+    """数据分析第一页：获取总体数据"""
+
     if not request.user.is_superuser:
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
@@ -41,6 +45,8 @@ def get_overall_data(request):
 
 @login_required
 def get_data_by_time(request):
+    """数据分析第二页：获取时间对比数据"""
+
     if not request.user.is_superuser:
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
