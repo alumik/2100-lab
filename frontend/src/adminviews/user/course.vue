@@ -36,11 +36,11 @@
             </tr>
           </tbody>
         </table>
-        <Pagination
-          :rows="rows"
-          :perpage="per_page"
-          @change="change_page"/>
       </div>
+      <Pagination
+        :rows="rows"
+        :perpage="per_page"
+        @change="change_page"/>
     </div>
   </Basic>
 </template>
@@ -83,7 +83,7 @@ export default {
       logs: [],
       rows: 10,
       page: 1,
-      per_page: 20,
+      per_page: 15,
       wrong_count_down: 0,
       dismiss_second: 5,
       wrong: '',
@@ -190,8 +190,8 @@ h6 {
 }
 
 .table-div {
-  padding-right: 15px;
-  padding-left: 15px;
+  padding: 0 15px;
+  margin-bottom: 25px;
   overflow-x: auto;
 }
 

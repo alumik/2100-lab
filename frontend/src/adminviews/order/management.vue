@@ -106,11 +106,11 @@
             </tr>
           </tbody>
         </table>
-        <Pagination
-          :rows="rows"
-          :perpage="per_page"
-          @change="change_page"/>
       </div>
+      <Pagination
+        :rows="rows"
+        :perpage="per_page"
+        @change="change_page"/>
     </div>
   </Basic>
 </template>
@@ -274,6 +274,7 @@ h6 {
 
 .table-div {
   padding: 0 15px;
+  margin-bottom: 25px;
   overflow-x: auto;
 }
 

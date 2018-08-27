@@ -127,11 +127,11 @@
             </tr>
           </tbody>
         </table>
-        <Pagination
-          :rows="rows"
-          :perpage="per_page"
-          @change="change_page"/>
       </div>
+      <Pagination
+        :rows="rows"
+        :perpage="per_page"
+        @change="change_page"/>
       <InputModal
         id="reply"
         :input="reply"
@@ -187,7 +187,7 @@ export default {
       state: '',
       reply: '',
       page_jump: false,
-      per_page: 20,
+      per_page: 15,
       page: 1,
       wrong: '',
       success: '',
@@ -375,8 +375,8 @@ h6 {
 }
 
 .table-div {
-  padding-right: 15px;
-  padding-left: 15px;
+  padding: 0 15px;
+  margin-bottom: 25px;
   overflow-x: auto;
 }
 

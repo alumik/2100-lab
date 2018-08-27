@@ -117,7 +117,7 @@ export default {
       phone_number: '',
       page: 1,
       rows: 0,
-      per_limit: 8,
+      per_limit: 15,
       error_message: '',
       wrong_count_down: 0,
       success_count_down: 0,
@@ -264,6 +264,7 @@ export default {
 
 .table-div {
   padding: 0 15px;
+  margin-bottom: 25px;
   overflow-x: auto;
 }
 
