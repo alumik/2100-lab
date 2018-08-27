@@ -523,7 +523,7 @@ h6 {
 
 .table-div {
   padding-left: 15px;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 #detail-button {

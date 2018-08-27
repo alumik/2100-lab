@@ -174,19 +174,23 @@ import SyncPicture from './synchronization'
 import axios from 'axios'
 export default {
   name: 'AddCourse',
-  components: {SyncPicture, PreSortPicture, UploadSource, Basic},
+  components: { SyncPicture, PreSortPicture, UploadSource, Basic },
   data: function () {
     return {
-      items: [{
-        text: '主页',
-        href: '/admin/main'
-      }, {
-        text: '课程管理',
-        href: '/admin/course'
-      }, {
-        text: '新增课程',
-        active: true
-      }],
+      items: [
+        {
+          text: '主页',
+          href: '/admin/main'
+        },
+        {
+          text: '课程管理',
+          href: '/admin/course'
+        },
+        {
+          text: '新增课程',
+          active: true
+        }
+      ],
       audio_file_list: [],
       image_file_list: [],
       title: '',
@@ -236,15 +240,17 @@ export default {
       formdata.append('can_comment', this.can_comment)
       formdata.append('reward_percent', this.reward_percent * 0.01)
       formdata.append('description', this.description)
-      axios.post('http://localhost:8000/api/v1/courses/backstage/course-management/add-course/', formdata).then(
-        response => {
+      axios
+        .post(
+          'http://localhost:8000/api/v1/courses/backstage/course-management/add-course/',
+          formdata
+        )
+        .then(response => {
           console.log(response.data.message)
-        }
-      ).catch(
-        error => {
+        })
+        .catch(error => {
           console.log(error)
-        }
-      )
+        })
     }
   }
 }

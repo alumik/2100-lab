@@ -172,30 +172,7 @@ export default {
         }
       )
       .then(response => {
-        this.admin.admin_id = response.data.admin_id
-        this.admin.username = response.data.username
-        this.admin.phone_number = response.data.phone_number
-        this.admin.date_joined = response.data.date_joined
-          .replace('T', ' ')
-          .substring(0, 19)
-        this.admin.updated_at = response.data.updated_at
-          .replace('T', ' ')
-          .substring(0, 19)
-        for (let permission of response.data.admin_groups) {
-          if (permission === 'super_admin') {
-            this.admin.admin_groups = '超级管理员权限'
-            break
-          } else {
-            if (this.admin.admin_groups === '') {
-              this.admin.admin_groups = this.transfer_permission(permission)
-            } else {
-              this.admin.admin_groups =
-                this.admin.admin_groups +
-                ',' +
-                this.transfer_permission(permission)
-            }
-          }
-        }
+        this.initial_data(response)
       })
       .catch(error => {
         this.error_message = '读取数据出错' + error.response.data.message
@@ -203,6 +180,32 @@ export default {
       })
   },
   methods: {
+    initial_data (response) {
+      this.admin.admin_id = response.data.admin_id
+      this.admin.username = response.data.username
+      this.admin.phone_number = response.data.phone_number
+      this.admin.date_joined = response.data.date_joined
+        .replace('T', ' ')
+        .substring(0, 19)
+      this.admin.updated_at = response.data.updated_at
+        .replace('T', ' ')
+        .substring(0, 19)
+      for (let permission of response.data.admin_groups) {
+        if (permission === 'super_admin') {
+          this.admin.admin_groups = '超级管理员权限'
+          break
+        } else {
+          if (this.admin.admin_groups === '') {
+            this.admin.admin_groups = this.transfer_permission(permission)
+          } else {
+            this.admin.admin_groups =
+              this.admin.admin_groups +
+              ',' +
+              this.transfer_permission(permission)
+          }
+        }
+      }
+    },
     transfer_permission (permission) {
       switch (permission) {
         case 'comment_admin':
