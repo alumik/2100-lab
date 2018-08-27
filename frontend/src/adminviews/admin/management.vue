@@ -30,20 +30,20 @@
           <tbody>
             <tr>
               <td>
-                <div class="input-group">
+                <div class="input-group-sm my-input">
                   <input
                     v-model="username"
                     type="text"
-                    class="form-control my-in-input"
+                    class="form-control"
                     placeholder=""
                     @keyup.enter="change">
               </div></td>
               <td>
-                <div class="input-group">
+                <div class="input-group-sm my-input">
                   <input
                     v-model="phone_number"
                     type="text"
-                    class="form-control my-in-input"
+                    class="form-control"
                     placeholder=""
                     @keyup.enter="change">
                 </div>
@@ -241,10 +241,9 @@ export default {
   margin-top: 3px;
 }
 
-.my-in-input {
-  width: 50px;
-  margin-right: 10%;
-  margin-left: 10%;
+.my-input {
+  display: inline-block;
+  max-width: 200px;
 }
 
 .btn {

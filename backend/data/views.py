@@ -59,7 +59,7 @@ def get_data_by_time(request):
     data = []
 
     right_time = end_time
-    while right_time - timezone.timedelta(days=int(time_step)) > start_time:
+    while right_time - timezone.timedelta(days=int(time_step)) >= start_time:
         left_time = right_time - timezone.timedelta(days=int(time_step))
 
         customers_count = utils.get_customers_count(left_time, right_time)

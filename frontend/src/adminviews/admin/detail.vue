@@ -1,61 +1,63 @@
 <template>
   <Basic :items="items">
     <div class="my-content">
-      <div class="my-head">
-        <h1>管理员详情</h1>
-        <div class="button-group">
-          <a
-            id="distribution-btn"
-            class="btn"
-            @click="jump(1)">
-            <simple-line-icons
-              icon="plus"
-              color="white"
-              class="icon"/>
-            分配权限
-          </a>
-          <a
-            id="change-password-btn"
-            class="btn"
-            @click="jump(2)">
-            <simple-line-icons
-              icon="note"
-              color="white"
-              class="icon"/>
-            修改密码
-          </a>
-          <a
-            id="change-username-btn"
-            class="btn"
-            @click="jump(3)">
-            <simple-line-icons
-              icon="tag"
-              color="white"
-              class="icon"/>
-            修改管理员名
-          </a>
-          <a
-            id="delete-user-btn"
-            class="btn"
-            @click="show_delete_modal">
-            <simple-line-icons
-              icon="exclamation"
-              color="white"
-              class="icon"/>
-            删除管理员
-          </a>
-          <b-modal
-            id="modal"
-            ref="modal"
-            title="确认删除"
-            ok-title="确认"
-            cancel-title="取消"
-            centered
-            @ok="click_ok">
-            <p>您确定要删除该管理员吗？</p>
-          </b-modal>
+      <div class="head-container">
+        <div class="head-title">
+          <h1>管理员详情</h1>
+          <div class="button-group">
+            <a
+              id="distribution-btn"
+              class="btn"
+              @click="jump(1)">
+              <simple-line-icons
+                icon="plus"
+                color="white"
+                class="icon"/>
+              分配权限
+            </a>
+            <a
+              id="change-password-btn"
+              class="btn"
+              @click="jump(2)">
+              <simple-line-icons
+                icon="note"
+                color="white"
+                class="icon"/>
+              修改密码
+            </a>
+            <a
+              id="change-username-btn"
+              class="btn"
+              @click="jump(3)">
+              <simple-line-icons
+                icon="tag"
+                color="white"
+                class="icon"/>
+              修改管理员名
+            </a>
+            <a
+              id="delete-user-btn"
+              class="btn"
+              @click="show_delete_modal">
+              <simple-line-icons
+                icon="exclamation"
+                color="white"
+                class="icon"/>
+              删除管理员
+            </a>
+          </div>
         </div>
       </div>
+      <b-modal
+        id="modal"
+        ref="modal"
+        title="确认删除"
+        ok-title="确认"
+        cancel-title="取消"
+        centered
+        @ok="click_ok">
+        <p>您确定要删除该管理员吗？</p>
+      </b-modal>
       <div class="table-div">
         <table
           class="table table-striped"
@@ -278,17 +280,8 @@ export default {
 }
 
 h1 {
-  padding-left: 15px;
   color: #204269;
   text-align: left;
-}
-
-.my-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  margin: 25px 0;
 }
 
 .head-td {
@@ -356,5 +349,19 @@ h1 {
 .btn:hover,
 .btn:active {
   background-color: #449c44;
+}
+
+.head-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin: 25px 0;
+}
+
+.head-container {
+  padding: 0 15px;
+  margin-bottom: 15px;
+  text-align: left;
 }
 </style>

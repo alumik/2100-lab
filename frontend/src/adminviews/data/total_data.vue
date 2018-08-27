@@ -3,7 +3,11 @@
     :items="items"
     class="my-basic">
     <div class="body">
-      <h1>数据分析</h1>
+      <div class="head-container">
+        <div class="head-title">
+          <h1>数据分析</h1>
+        </div>
+      </div>
       <Alert
         id="alert"
         :count_down="wrong_count_down"
@@ -24,7 +28,7 @@
                 v-for="btn in buttons"
                 :key="btn.id"
                 :pressed.sync="btn.state"
-                variant="outline-secondary"
+                class="time-btn"
                 @click="change_button_state(btn.id)">
                 {{ btn.text }}
               </b-button>
@@ -35,36 +39,24 @@
                   <h5>{{ increased_users }}</h5>
                   <p>新增用户数</p>
                 </div>
-                <img
-                  class="image"
-                  src="../../assets/logo.png">
               </div>
               <div class="statistics2">
                 <div class="number">
                   <h5>{{ sale }}</h5>
                   <p>销售额</p>
                 </div>
-                <img
-                  class="image"
-                  src="../../assets/logo.png">
               </div>
               <div class="statistics3">
                 <div class="number">
                   <h5>{{ increased_courses }}</h5>
                   <p>新增课程数</p>
                 </div>
-                <img
-                  class="image"
-                  src="../../assets/logo.png">
               </div>
               <div class="statistics4">
                 <div class="number">
                   <h5>{{ orders }}</h5>
                   <p>订单数</p>
                 </div>
-                <img
-                  class="image"
-                  src="../../assets/logo.png">
               </div>
             </div>
             <div class="charts">
@@ -123,8 +115,8 @@ export default {
       sale: 0,
       increased_courses: 0,
       orders: 0,
-      colors1: ['#ff5722'],
-      colors2: ['#448aff'],
+      colors1: ['#5b9bd1'],
+      colors2: ['#cd4c46'],
       praise_top: {
         columns: ['title', 'up_votes'],
         rows: []
@@ -262,34 +254,40 @@ export default {
 }
 
 h1 {
-  padding-left: 15px;
-  margin: 25px 0;
   color: #204269;
   text-align: left;
 }
 
 .tab-content {
-  padding: 20px;
   text-align: left;
 }
 
 .statistics {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: space-between;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin: 50px -10px;
 }
 
 .statistics > div {
   display: flex;
-  justify-content: space-between;
-  width: 300px;
+  flex: 1 1 180px;
+  justify-content: center;
   height: 100px;
   padding: 20px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  border: 1px solid #ced4da;
+  margin: 10px;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+@media (max-width: 600px) {
+  .statistics {
+    flex-wrap: wrap;
+  }
+
+  .statistics > div {
+    flex: 1 1 500px;
+  }
 }
 
 .charts {
@@ -320,9 +318,7 @@ p {
 }
 
 .data {
-  margin-right: 20px;
-  margin-left: 20px;
-  border: 1px solid #f3f5ee;
+  margin: 0 15px;
 }
 
 .col-md-2 > div {
@@ -332,8 +328,35 @@ p {
   vertical-align: middle;
 }
 
-.tab-content > div {
-  margin-top: 20px;
-  margin-bottom: 20px;
+.title {
+  margin-top: 25px;
+}
+
+.time-btn,
+.time-btn:not(:disabled) {
+  margin-right: 5px;
+  color: #204269;
+  background-color: transparent;
+  border: none;
+  border-radius: 5px !important;
+  box-shadow: none !important;
+}
+
+.time-btn:not(:disabled).active,
+.time-btn:hover,
+.time-btn:focus {
+  color: white;
+  background-color: #5b9bd1 !important;
+}
+
+.head-title {
+  display: flex;
+  margin: 25px 0;
+}
+
+.head-container {
+  padding: 0 15px;
+  margin-bottom: 15px;
+  text-align: left;
 }
 </style>

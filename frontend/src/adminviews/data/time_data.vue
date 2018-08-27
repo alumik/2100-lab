@@ -3,7 +3,11 @@
     :items="items"
     class="my-basic">
     <div class="body">
-      <h1>数据分析</h1>
+      <div class="head-container">
+        <div class="head-title">
+          <h1>数据分析</h1>
+        </div>
+      </div>
       <Alert
         id="alert"
         :count_down="wrong_count_down"
@@ -34,16 +38,14 @@
                   :config="options"
                   class="date-picker"/>
               </div>
-              <div class="col-md-2">
+              <div class="col-md-3">
                 <div>步长</div>
                 <div class="step">
                   <b-input-group
-                    size="sm"
                     append="月">
                     <b-form-input v-model="month"/>
                   </b-input-group>
                   <b-input-group
-                    size="sm"
                     append="日">
                     <b-form-input v-model="day"/>
                   </b-input-group>
@@ -132,10 +134,10 @@ export default {
           active: true
         }
       ],
-      colors1: ['#ff5722'],
-      colors2: ['#448aff'],
-      begin_date: new Date(new Date().getTime() - 24 * 60 * 60 * 1000),
+      colors1: ['#cd4c46'],
+      colors2: ['#5b9bd1'],
       end_date: new Date(),
+      begin_date: new Date(new Date().getTime() - 24 * 60 * 60 * 1000),
       options: {
         format: 'YYYY/MM/DD',
         useCurrent: true
@@ -210,7 +212,7 @@ export default {
         return -1
       }
       let time = this.get_start_end_time()
-      if (time === -1 || step * 24 * 60 * 60 > time[1] - time[0]) {
+      if (time === -1 || step * 24 * 60 * 60 - 1 > time[1] - time[0]) {
         this.wrong = '您所输入的时间有误'
         this.wrong_count_down = this.dismiss_second
         return -1
@@ -287,7 +289,6 @@ export default {
 }
 
 .tab-content {
-  padding: 20px;
   text-align: left;
 }
 
@@ -314,15 +315,11 @@ p {
 }
 
 .data {
-  margin-right: 20px;
-  margin-left: 20px;
-  border: 1px solid #f3f5ee;
+  margin: 0 15px;
 }
 
 h1 {
-  padding-left: 15px;
-  margin-top: 25px;
-  margin-bottom: 25px;
+  color: #204269;
   text-align: left;
 }
 
@@ -330,36 +327,50 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  border-top: 1px solid #ced4da;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  margin-bottom: 50px;
   border-bottom: 1px solid #ced4da;
 }
 
 .col-md-2 > div,
 .col-md-2 > .date-picker {
   width: 150px;
-  height: 31px;
+  height: 38px;
   text-align: center;
   vertical-align: middle;
+}
+
+.col-md-3 > div {
+  z-index: 1;
+  width: 250px;
+  height: 38px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.input-group > .form-control:focus {
+  z-index: 1;
 }
 
 .step {
   display: flex;
 }
 
-.tab-content > div {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
 .search-button {
-  padding-top: 30px;
+  padding-top: 38px;
 }
 
 #search {
-  height: 30px;
-  font-size: 0.8em;
+  height: 38px;
+  color: white;
+  background-color: #337ab7;
+  border: 1px solid #d3d9df;
+  box-shadow: none !important;
+}
+
+#search:hover {
+  background-color: #286090;
 }
 
 .data-empty {
@@ -374,5 +385,16 @@ h1 {
   font-size: 14px;
   color: #888;
   background-color: rgba(255, 255, 255, 0.7);
+}
+
+.head-title {
+  display: flex;
+  margin: 25px 0;
+}
+
+.head-container {
+  padding: 0 15px;
+  margin-bottom: 15px;
+  text-align: left;
 }
 </style>
