@@ -34,7 +34,7 @@ export default {
   .table-div {
     padding-right: 15px;
     padding-left: 15px;
-    overflow-x: scroll;
+    overflow-x: auto;
   }
 
   table {

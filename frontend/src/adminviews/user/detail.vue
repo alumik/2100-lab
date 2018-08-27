@@ -105,7 +105,9 @@
         @decrease="success_count_down-1"
         @zero="success_count_down=0"/>
       <div class="table-div">
-        <table class="table table-bordered">
+        <table
+          id="detail-table"
+          class="table">
           <tbody class="w-100">
             <tr class="row mx-0">
               <td class="col-3">头像</td>
@@ -140,7 +142,7 @@
       <div class="table-div">
         <table
           id="order-table"
-          class="table table-striped table">
+          class="table table-striped">
           <thead>
             <tr>
               <td
@@ -461,12 +463,16 @@ h2 {
 .table-div {
   padding-right: 15px;
   padding-left: 15px;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 table {
   margin-bottom: 20px;
   border-top: 1px solid #d3d9df;
+}
+
+#detail-table {
+  border-bottom: 1px solid #d3d9df;
 }
 
 td {

@@ -276,7 +276,7 @@ h6 {
 
 .table-div {
   padding: 0 15px;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 table {

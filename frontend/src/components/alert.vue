@@ -48,12 +48,8 @@ export default {
 
 <style scoped>
   .alert-div {
-    padding-right: 350px;
-    padding-left: 350px;
-  }
-
-  .my-alert {
-    min-width: 400px;
-    max-width: 1000px;
+    position: fixed;
+    top: 25%;
+    left: 45%;
   }
 </style>
