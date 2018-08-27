@@ -120,7 +120,8 @@ export default {
   z-index: 2;
   width: 100%;
   margin: 0;
-  box-shadow: 1px 3px 3px rgba(0, 0, 0, 0.2);
+  border-left: 3px solid #5c9acf;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
 }
 
 .my-container {

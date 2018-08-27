@@ -30,10 +30,10 @@
 }
 
 #sidebar .sidebar-header {
-  padding: 20px;
+  padding: 20px 0 20px 45px;
   font-size: 1.25rem;
+  text-align: left;
   background: white;
-  border-bottom: 1px solid #eee;
 }
 
 #sidebar ul.components {
