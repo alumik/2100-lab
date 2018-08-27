@@ -5,8 +5,8 @@ from decimal import Decimal
 from django.contrib.auth import get_user_model
 from django.db.models import Count
 
-from customers.models import OrderLog, LearningLog
 from courses.models import Course, CourseUpVotes
+from customers.models import OrderLog, LearningLog
 
 
 def get_customers_count(start_time, end_time):

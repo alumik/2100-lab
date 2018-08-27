@@ -1,15 +1,15 @@
 """数据分析模块操作"""
 
 from datetime import datetime
-import time
 import pytz
+import time
 
 from django.contrib.auth.decorators import login_required
-from django.utils import timezone
 from django.http import JsonResponse
+from django.utils import timezone
 
-from data import utils
 from core.constants import ERROR
+from data import utils
 
 
 @login_required
