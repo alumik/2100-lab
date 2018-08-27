@@ -82,11 +82,11 @@ export default {
       ],
       admin_id: '',
       flavours: [
-        '评论管理权限',
         '课程管理权限',
-        '客户管理权限',
-        '日志管理权限',
-        '订单管理权限'
+        '留言管理权限',
+        '用户管理权限',
+        '订单管理权限',
+        '日志管理权限'
       ],
       selected: [],
       error_message: '',
@@ -144,11 +144,11 @@ export default {
     transfer_permission (permission) {
       switch (permission) {
         case 'comment_admin':
-          return '评论管理权限'
+          return '留言管理权限'
         case 'course_admin':
           return '课程管理权限'
         case 'customer_admin':
-          return '客户管理权限'
+          return '用户管理权限'
         case 'log_admin':
           return '日志管理权限'
         case 'order_admin':
@@ -157,11 +157,11 @@ export default {
     },
     reverse_permission (sel) {
       switch (sel) {
-        case '评论管理权限':
+        case '留言管理权限':
           return 'comment_admin'
         case '课程管理权限':
           return 'course_admin'
-        case '客户管理权限':
+        case '用户管理权限':
           return 'customer_admin'
         case '日志管理权限':
           return 'log_admin'

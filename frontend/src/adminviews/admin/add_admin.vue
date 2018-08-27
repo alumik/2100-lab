@@ -92,7 +92,6 @@ export default {
   },
   methods: {
     check_format: function () {
-      this.error_message = ''
       if (this.admin.phone_number === null) {
         this.error_message = '请输入手机号'
         this.wrong_count_down = 5
@@ -127,15 +126,13 @@ export default {
         )
         .then(response => {
           let _this = this
-          this.wrong_count_down = 0
-          this.success_count_down = 0
-          if (response.data.new_admin_id) {
-            _this.error_message = '添加成功'
-            this.success_count_down = 3
-            setTimeout(function () {
-              _this.$router.push({ name: 'AdminManagement' })
-            }, 3000)
-          }
+          _this.wrong_count_down = 0
+          _this.success_count_down = 0
+          _this.error_message = '添加成功'
+          _this.success_count_down = 3
+          setTimeout(function () {
+            _this.$router.push({ name: 'AdminManagement' })
+          }, 3000)
         })
         .catch(error => {
           let _this = this

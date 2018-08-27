@@ -7,7 +7,7 @@ describe('管理员管理模块单元测验', () => {
   const wrapper = shallowMount(CourseManagement)
 
   it('标题是"课程列表"', () => {
-    expect(wrapper.find('h2').text()).toEqual('课程列表')
+    expect(wrapper.find('h1').text()).toEqual('课程列表')
   })
 
   it('渲染查询输入框', () => {

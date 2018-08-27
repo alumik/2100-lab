@@ -141,7 +141,7 @@ export default {
       )
       .then(response => {
         this.rows = response.data.count
-        this.num_pages = response.data.num_pages
+        this.num_pages = this.update_num_pages(response.data.num_pages)
         let _admins = []
         for (let data of response.data.content) {
           _admins.push({
@@ -185,7 +185,7 @@ export default {
         )
         .then(response => {
           this.rows = response.data.count
-          this.num_pages = response.data.num_pages
+          this.num_pages = this.update_num_pages(response.data.num_pages)
           let _admins = []
           for (let data of response.data.content) {
             _admins.push({
@@ -204,6 +204,13 @@ export default {
     change_page: function (currentpage) {
       this.page = currentpage
       this.change()
+    },
+    update_num_pages: function (page) {
+      if (page === 0) {
+        return 1
+      } else {
+        return page
+      }
     }
   }
 }
