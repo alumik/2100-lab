@@ -45,7 +45,7 @@ describe('全部课程单元测试', () => {
   })
 
   it('列表名渲染', () => {
-    expect(wrapper.contains('#page-title')).toBe(true)
+    expect(wrapper.contains('h4')).toBe(true)
   })
 
   it('课程列表渲染', () => {
@@ -53,7 +53,7 @@ describe('全部课程单元测试', () => {
   })
 
   it('课程图片渲染', () => {
-    expect(wrapper.findAll('#course-img').length).toEqual(wrapper.vm.course_list.length)
+    expect(wrapper.findAll('.image').length).toEqual(wrapper.vm.course_list.length)
   })
 
   it('分页渲染', () => {

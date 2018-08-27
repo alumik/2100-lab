@@ -1,35 +1,28 @@
 <template>
   <div>
-    <div
-      id="page-title"
-      class="title-style">
-      <h5>{{ page_title }}</h5>
-    </div>
-    <div
-      id="course-list"
-      class="bv-example-row course-list-style">
-      <b-container class="bv-example-row">
-        <b-row>
-          <b-col
-            v-for="course in course_list"
-            :key="course.course_id"
-            class="col-style">
-            <b-card
-              id="course-img"
-              :img-src="example_src"
-              :title="course.title"
-              img-alt="Image"
-              img-top
-              tag="article"
-              class="mb-2 width-style"
-              @click="open_detail_page(course.course_id)">
-              <p class="card-text">
-                {{ course.description?course.description.substring(0,20):'' }}
-              </p>
-            </b-card>
-          </b-col>
-        </b-row>
-      </b-container>
+    <div class="body container">
+      <h4>{{ page_title }}</h4>
+      <div
+        v-for="course in course_list"
+        id="course-list"
+        :key="course.course_id">
+        <div
+          class="course"
+          @click="open_detail_page(course.course_id)">
+          <img
+            :src="example_src"
+            class="image">
+          <div class="introduction">
+            <h5>{{ course.title }}</h5>
+            <p id="text-one">
+              {{ compute_message(course.description, 120) }}
+            </p>
+            <p id="text-two">
+              {{ compute_message(course.description, 12) }}
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="pagination-style">
       <Pagination
@@ -80,45 +73,103 @@ export default {
   },
   methods: {
     open_detail_page: function (id) {
-      this.$router.push({name: 'CourseDetail', query: {course_id: id}})
+      this.$router.push({ name: 'CourseDetail', query: { course_id: id } })
     },
     change_page: function (page) {
       this.$emit('change_page', page)
+    },
+    compute_message: function (message, val) {
+      if (message) {
+        if (message.length > val) {
+          return message.slice(0, val) + '...'
+        } else {
+          return message
+        }
+      } else {
+        return ''
+      }
     }
   }
 }
 </script>
 
 <style>
-  .title-style {
-    margin-top: 30px;
-    margin-left: 60px;
+.container {
+  padding: 20px 0 20px 0;
+}
+
+h4 {
+  margin: 20px 0 20px 0;
+  text-align: left;
+  vertical-align: center;
+}
+
+.course {
+  display: flex;
+  align-items: center;
+  padding: 20px 0 20px 0;
+  cursor: pointer;
+  border-top: 1px solid #e6e6e6;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.image {
+  width: 300px;
+  height: 200px;
+  margin-right: 50px;
+  overflow-x: hidden;
+}
+
+.introduction {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 900px;
+  height: 200px;
+  text-align: left;
+}
+
+h5,
+#text-one {
+  padding: 2px 0 2px 0;
+  margin: 20px;
+}
+
+#text-two {
+  display: none;
+}
+
+@media (max-width: 800px) {
+  .course {
+    height: 100px;
+  }
+
+  .image {
+    width: 120px;
+    height: 80px;
+    margin-left: 5px;
+  }
+
+  .introduction {
+    justify-content: center;
+    width: 220px;
+    height: 100px;
     text-align: left;
   }
 
-  #course-list {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
+  h5 {
+    width: 240px;
+    margin: 3px 2px 3px 2px;
   }
 
-  .course-list-style {
-    margin: 30px 0;
+  #text-two {
+    display: block;
+    width: 240px;
+    margin: 3px 2px 3px 2px;
   }
 
-  .pagination-style {
-    display: flex;
-    justify-content: center;
+  #text-one {
+    display: none;
   }
-
-  .width-style {
-    min-width: 10rem;
-    max-width: 20rem;
-  }
-
-  .col-style {
-    flex: 1 0 33%;
-    margin-bottom: 20px;
-  }
+}
 </style>
