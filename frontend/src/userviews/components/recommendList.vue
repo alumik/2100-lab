@@ -18,6 +18,7 @@
         <b-row>
           <b-col
             v-for="course in courselist"
+            id="course-card"
             :key="course.course_id"
             sm="6"
             md="4"
