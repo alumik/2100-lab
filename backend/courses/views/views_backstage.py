@@ -171,6 +171,7 @@ def edit_course(request):
         course.audio = audio
     thumbnail = request.FILES.get('thumbnail')
     if thumbnail is not None:
+        course.thumbnail.delete()
         course.thumbnail = thumbnail
     course.save()
     image_files = request.FILES.getlist('image_files', [])
