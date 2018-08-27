@@ -1,43 +1,43 @@
 <template>
   <body>
-    <hr>
-    <b-container class="text-color">
-      <b-row>
-        <b-col
-          cols="8"
-          class="text-align-left">
-          <label id="list-title">{{ course_type === 'free' ? '免费课程':'付费课程' }}</label>
-        </b-col>
-        <b-col
-          class="text-align-right">
-          <label
-            id="watch-more"
-            @click="watch_more">更多</label>
-        </b-col>
-      </b-row>
-    </b-container>
+    <div class="remind">
+      <label id="list-title">{{ course_type === 'free' ? '免费':'付费' }}</label>
+      <div
+        class="watch-more">
+        <label
+          id="watch-more"
+          @click="watch_more">更多</label>
+      </div>
+    </div>
     <div
       id="course-list"
-      class="bv-example-row course-list-style">
-      <b-container class="bv-example-row">
+      class="course-list-style">
+      <b-container
+        fluid
+        class="bv-example-row">
         <b-row>
           <b-col
             v-for="course in courselist"
+            id="course-card"
             :key="course.course_id"
-            class="col-style">
-            <b-card
-              id="course-card"
-              :img-src="example_src"
-              :title="course.title"
-              img-alt="Image"
-              img-top
-              tag="article"
-              class="mb-2 width-style"
-              @click="open_detail_page(course.course_id)">
-              <p class="card-text">
-                {{ course.description?course.description.substring(0,20):'' }}
-              </p>
-            </b-card>
+            sm="6"
+            md="4"
+            lg="3"
+            class="col-style"
+            @click="open_detail_page(course.course_id)">
+            <div style="border-radius: 25px;">
+              <img
+                :src="example_src"
+                class="course-image">
+              <div style="padding: 15px;">
+                <h5 class="card-title">
+                  {{ course.title }}
+                </h5>
+                <p class="card-text card-text-height">
+                  &emsp;&emsp;{{ course.description }}
+                </p>
+              </div>
+            </div>
           </b-col>
         </b-row>
       </b-container>
@@ -64,7 +64,7 @@ export default {
   },
   data () {
     return {
-      example_src: 'https://picsum.photos/400/300/?image=32'
+      example_src: 'https://picsum.photos/400/300/?image=79'
     }
   },
   methods: {
@@ -83,26 +83,61 @@ export default {
 </script>
 
 <style>
-  .text-align-right {
-    text-align: right;
+  .remind {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
   }
 
-  .text-align-left {
-    text-align: left;
+  #list-title {
+    padding-left: 1rem;
+    margin-left: 1.2rem;
+    font-size: 2rem;
+    font-weight: bold;
+    border-left: 3px solid #ccc;
   }
 
-  .text-color {
-    color: #999;
+  .course-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 15px 15px 0 0;
   }
 
-  .width-style {
-    min-width: 10rem;
-    max-width: 20rem;
+  #watch-more {
+    padding-top: 1rem;
+    padding-right: 2rem;
+    font-weight: bold;
+    cursor: pointer;
   }
 
   .col-style {
     flex: 1 0 20%;
-    margin-bottom: 20px;
+    min-width: 15rem;
+    min-height: 18rem;
+    padding: 0;
+    margin: 2rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  .col-style:hover {
+    -ms-transform: translate(0, -20px); /* IE 9 */
+    -webkit-transform: translate(0, -20px); /* Safari and Chrome */
+    transform: translate(0, -20px);
+  }
+
+  .card-text-height {
+    max-height: 5.5rem;
+    overflow: hidden;
+    font-size: 15px;
+  }
+
+  .card-title {
+    height: 1.5rem;
+    overflow: hidden;
+    font-weight: bold;
   }
 
   #course-list {
@@ -113,6 +148,6 @@ export default {
   }
 
   .course-list-style {
-    margin: 30px 0;
+    margin: 0;
   }
 </style>
