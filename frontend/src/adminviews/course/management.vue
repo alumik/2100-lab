@@ -170,21 +170,21 @@
           <tbody>
             <tr>
               <td>
-                <div class="input-group">
+                <div class="input-group-sm my-input">
                   <input
                     v-model="codename"
                     type="text"
-                    class="form-control my-in-input"
+                    class="form-control"
                     placeholder=""
                     @keyup.enter="change">
                 </div>
               </td>
               <td>
-                <div class="input-group">
+                <div class="input-group-sm">
                   <input
                     v-model="title"
                     type="text"
-                    class="form-control my-in-input"
+                    class="form-control"
                     placeholder=""
                     @keyup.enter="change">
                 </div>
@@ -534,10 +534,9 @@ h6 {
   background-color: #286090;
 }
 
-.my-in-input {
-  width: 50px;
-  margin-right: 10%;
-  margin-left: 10%;
+.my-input {
+  display: inline-block;
+  max-width: 200px;
 }
 
 .table-div {

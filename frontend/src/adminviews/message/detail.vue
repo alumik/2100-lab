@@ -1,43 +1,45 @@
 <template>
   <Basic :items="items">
     <div class="body">
-      <div class="title">
-        <h1>留言详情</h1>
-        <div class="buttons">
-          <a
-            v-b-modal.reply
-            id="reply-button"
-            class="btn"
-            @click="reply_id=message.comment_id">
-            <simple-line-icons
-              icon="pencil"
-              color="white"
-              class="icon"
-              size="small"/>
-            回复
-          </a>
-          <InputModal
-            id="reply"
-            title="回复留言"
-            placeholder="请输入你要回复的内容"
-            @click="reply_message"/>
-          <a
-            v-b-modal.delete
-            id="delete-button"
-            class="btn">
-            <simple-line-icons
-              icon="trash"
-              color="white"
-              class="icon"
-              size="small"/>
-            删除</a>
-          <ConfirmModal
-            id="delete"
-            title="确认删除"
-            text="您确定要删除此条留言吗？"
-            @click="delete_message"/>
+      <div class="head-container">
+        <div class="head-title">
+          <h1>留言详情</h1>
+          <div class="buttons">
+            <a
+              v-b-modal.reply
+              id="reply-button"
+              class="btn"
+              @click="reply_id=message.comment_id">
+              <simple-line-icons
+                icon="pencil"
+                color="white"
+                class="icon"
+                size="small"/>
+              回复
+            </a>
+            <a
+              v-b-modal.delete
+              id="delete-button"
+              class="btn">
+              <simple-line-icons
+                icon="trash"
+                color="white"
+                class="icon"
+                size="small"/>
+              删除</a>
+          </div>
         </div>
       </div>
+      <InputModal
+        id="reply"
+        title="回复留言"
+        placeholder="请输入你要回复的内容"
+        @click="reply_message"/>
+      <ConfirmModal
+        id="delete"
+        title="确认删除"
+        text="您确定要删除此条留言吗？"
+        @click="delete_message"/>
       <Alert
         :count_down="wrong_count_down"
         :instruction="wrong"
@@ -242,25 +244,13 @@ export default {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
-.title {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 15px 0 15px;
-  margin: 25px 0;
-  color: #204269;
-}
-
 h1 {
+  color: #204269;
   text-align: left;
 }
 
 .buttons {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  text-align: right;
+  display: inline-block;
 }
 
 .btn {
@@ -286,5 +276,19 @@ h1 {
 #delete-button:hover,
 #delete-button:active {
   background-color: #ba2d28;
+}
+
+.head-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin: 25px 0;
+}
+
+.head-container {
+  padding: 0 15px;
+  margin-bottom: 15px;
+  text-align: left;
 }
 </style>

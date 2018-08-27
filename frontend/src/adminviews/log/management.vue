@@ -246,7 +246,7 @@ h4 {
 }
 
 .table-div {
-  padding-left: 20px;
+  padding-left: 15px;
 }
 
 table {
