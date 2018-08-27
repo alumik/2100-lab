@@ -84,10 +84,6 @@ export default {
       pageOptions: [5, 10, 15]
     }
   },
-  // watch: {
-  //   currentPage (n, o) {
-  //   }
-  // },
   async mounted () {
     let that = this
     let res = await axios.get(
