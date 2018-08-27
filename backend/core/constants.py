@@ -20,14 +20,15 @@ ERROR = {
     'admin_already_registered': 'Admin is already registered.',
     'message_send_failed': 'Message send failed.',
     'course_already_purchased': 'This course has already been purchased.',
-    'comment_not_allowed': 'Commenting is not allowed.'
+    'comment_not_allowed': 'Commenting is not allowed.',
+    'cannot_reply_a_reply': 'Cannot add replies to a reply.'
 }
 
 ADMIN_GROUPS_NAME = {
     'super_admin': '超级管理员权限',
-    'comment_admin': '评论管理权限',
+    'comment_admin': '留言管理权限',
     'course_admin': '课程管理权限',
-    'customer_admin': '客户管理权限',
+    'customer_admin': '用户管理权限',
     'log_admin': '日志管理权限',
     'order_admin': '订单管理权限'
 }

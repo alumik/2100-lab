@@ -144,6 +144,7 @@ const i18n = new VueI18n({
 
 Vue.component('simple-line-icons', SimpleLineIcons)
 router.beforeEach(async (to, from, next) => {
+  document.title = to.meta.title
   let response = await axios.post(
     'http://localhost:8000/api/v1/core/auth/is-authenticated/',
     {

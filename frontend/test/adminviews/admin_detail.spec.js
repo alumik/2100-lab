@@ -29,7 +29,7 @@ describe('管理员详情模块单元测验', () => {
 
   it('转换信息测试1_1', () => {
     let s = wrapper.vm.transfer_permission('comment_admin')
-    expect(s).toEqual('用户评论管理权限')
+    expect(s).toEqual('留言管理权限')
   })
 
   it('转换信息测试1_2', () => {
@@ -39,12 +39,12 @@ describe('管理员详情模块单元测验', () => {
 
   it('转换信息测试1_3', () => {
     let s = wrapper.vm.transfer_permission('customer_admin')
-    expect(s).toEqual('客户管理权限')
+    expect(s).toEqual('用户管理权限')
   })
 
   it('转换信息测试1_4', () => {
     let s = wrapper.vm.transfer_permission('log_admin')
-    expect(s).toEqual('日志权限')
+    expect(s).toEqual('日志管理权限')
   })
 
   it('转换信息测试1_5', () => {

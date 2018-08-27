@@ -343,8 +343,12 @@ def change_admin_groups(request):
         old_admin_groups_cn.append(ADMIN_GROUPS_NAME[str(admin_group)])
     for admin_group in new_admin_groups:
         new_admin_groups_cn.append((ADMIN_GROUPS_NAME[str(admin_group)]))
-    old_data = ', '.join(old_admin_groups_cn)
-    new_data = ', '.join(new_admin_groups_cn)
+    old_data = '，'.join(old_admin_groups_cn)
+    new_data = '，'.join(new_admin_groups_cn)
+    if old_data == '':
+        old_data = '无权限'
+    if new_data == '':
+        new_data = '无权限'
 
     admin.groups.clear()
     for admin_group in new_admin_groups:

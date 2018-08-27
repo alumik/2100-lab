@@ -202,7 +202,7 @@ export default {
           } else {
             this.admin.admin_groups =
               this.admin.admin_groups +
-              ',' +
+              '，' +
               this.transfer_permission(permission)
           }
         }
@@ -211,13 +211,13 @@ export default {
     transfer_permission (permission) {
       switch (permission) {
         case 'comment_admin':
-          return '用户评论管理权限'
+          return '留言管理权限'
         case 'course_admin':
           return '课程管理权限'
         case 'customer_admin':
-          return '客户管理权限'
+          return '用户管理权限'
         case 'log_admin':
-          return '日志权限'
+          return '日志管理权限'
         case 'order_admin':
           return '订单管理权限'
         case 'super_admin':
