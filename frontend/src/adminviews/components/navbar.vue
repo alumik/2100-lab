@@ -69,7 +69,7 @@ export default {
 <style scoped>
 .logo {
   height: 50px;
-  margin-left: 30px;
+  margin-left: 28px;
   vertical-align: middle;
   cursor: pointer;
 }
@@ -100,8 +100,12 @@ export default {
   outline: none;
 }
 
+.navbar-brand {
+  padding: 0;
+}
+
 .logout {
-  margin-right: 27px;
+  margin-right: 28px;
   color: rgba(0, 0, 0, 0.5);
 }
 
