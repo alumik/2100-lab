@@ -1,4 +1,4 @@
-export default function resizeImage (url, width, height, callback) {
+export default function resize_image (url, width, height, callback) {
   var sourceImage = new Image()
 
   sourceImage.onload = function (evt) {

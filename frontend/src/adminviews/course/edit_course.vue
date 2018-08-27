@@ -23,28 +23,6 @@
           type="text">
       </div>
       <div class="form-group form-inline">
-        <label
-          class="form-check-label my-label"
-          for="course_content">课程素材</label>
-        <UploadSourceForEdit
-          id="course_content"
-          :origin_image_list="course.origin_image_file_list"
-          :origin_audio_list="course.origin_audio_file_list"
-          @uploadResource="receive_uploaded_resource"/>
-        <PreSortPicture
-          :is_uploaded="is_uploaded"
-          :choose_image_data_list_origin="image_file_list"
-          @update_is_uploaded="is_uploaded=false"
-          @reset_is_uploaded="is_uploaded=true"
-          @uploadSortedPic="receive_sorted_pictures"/>
-        <SyncPicture
-          :audio_file_list="audio_file_list"
-          :image_data_list="image_file_list"
-          :is_audio_changed="is_audio_changed"
-          @sync_picture_audio="receive_sync_data"
-        />
-      </div>
-      <div class="form-group form-inline">
         <div>
           <label
             class="form-check-label my-label"
@@ -139,6 +117,28 @@
           </div>
         </div>
       </div>
+      <div class="form-group form-inline">
+        <label
+          class="form-check-label my-label"
+          for="course_content">课程素材</label>
+        <UploadSourceForEdit
+          id="course_content"
+          :origin_image_list="course.origin_image_file_list"
+          :origin_audio_list="course.origin_audio_file_list"
+          @uploadResource="receive_uploaded_resource"/>
+        <PreSortPicture
+          :is_uploaded="is_uploaded"
+          :choose_image_data_list_origin="image_file_list"
+          @update_is_uploaded="is_uploaded=false"
+          @reset_is_uploaded="is_uploaded=true"
+          @uploadSortedPic="receive_sorted_pictures"/>
+        <SyncPicture
+          :audio_file_list="audio_file_list"
+          :image_data_list="image_file_list"
+          :is_audio_changed="is_audio_changed"
+          @sync_picture_audio="receive_sync_data"
+        />
+      </div>
       <div class="form-group">
         <label
           id="intro-label"
@@ -166,34 +166,41 @@ import SyncPicture from './synchronization'
 import qs from 'qs'
 export default {
   name: 'EditCourse',
-  components: {SyncPicture, PreSortPicture, UploadSourceForEdit, Basic},
+  components: { SyncPicture, PreSortPicture, UploadSourceForEdit, Basic },
   data: function () {
     return {
-      items: [{
-        text: '主页',
-        href: '/admin/main'
-      }, {
-        text: '课程管理',
-        href: '/admin/course'
-      }, {
-        text: this.$route.query.course_id.toString(),
-        href: '/admin/course/detail?course_id=' + this.$route.query.course_id.toString()
-      }, {
-        text: '修改课程',
-        active: true
-      }],
+      items: [
+        {
+          text: '主页',
+          href: '/admin/main'
+        },
+        {
+          text: '课程管理',
+          href: '/admin/course'
+        },
+        {
+          text: this.$route.query.course_id.toString(),
+          href:
+            '/admin/course/detail?course_id=' +
+            this.$route.query.course_id.toString()
+        },
+        {
+          text: '修改课程',
+          active: true
+        }
+      ],
       course_id: 0,
       course: {
-        'title': '',
-        'codename': '',
-        'expire_duration_day': '',
-        'expire_duration_hour': '',
-        'price': '',
-        'reward_percent': '',
-        'description': '',
-        'can_comment': '',
-        'origin_audio_file_list': [],
-        'origin_image_file_list': []
+        title: '',
+        codename: '',
+        expire_duration_day: '',
+        expire_duration_hour: '',
+        price: '',
+        reward_percent: '',
+        description: '',
+        can_comment: '',
+        origin_audio_file_list: [],
+        origin_image_file_list: []
       },
       audio_file_list: [],
       image_file_list: [],
@@ -204,17 +211,18 @@ export default {
   },
   created () {
     this.course_id = this.$route.query.course_id
-    axios.get('http://localhost:8000/api/v1/courses/backstage/course-management/get-course-assets/',
-      {
-        params: {
-          'course_id': this.course_id
+    axios
+      .get(
+        'http://localhost:8000/api/v1/courses/backstage/course-management/get-course-assets/',
+        {
+          params: {
+            course_id: this.course_id
+          }
         }
-      }
-    ).then(
-      response => {
+      )
+      .then(response => {
         this.initial_data(response.data)
-      }
-    )
+      })
   },
   methods: {
     initial_data (data) {
@@ -228,7 +236,9 @@ export default {
       let duration = data.expire_duration
       this.course.expire_duration_day = Math.floor(duration / (3600 * 24))
       let day = this.course.expire_duration_day
-      this.course.expire_duration_hour = Math.floor((duration - day * 24 * 3600) / 3600)
+      this.course.expire_duration_hour = Math.floor(
+        (duration - day * 24 * 3600) / 3600
+      )
       this.course.origin_audio_file_list[0] = data.audio
       this.course.origin_image_file_list = data.images
       if (this.course.can_comment === true) {
@@ -240,41 +250,54 @@ export default {
         for (let i = 0; i < this.course.origin_image_file_list.length; i++) {
           let addPath = this.$store.state.address
           let originPath = this.course.origin_image_file_list[i].image_path
-          this.course.origin_image_file_list[i].image_path = addPath + originPath
+          this.course.origin_image_file_list[i].image_path =
+            addPath + originPath
           this.image_file_list.push({
-            'origin_index': this.course.origin_image_file_list[i].image_id,
-            'image': this.course.origin_image_file_list[i].image_path,
-            'index': i + 1,
-            'time': ''
+            origin_index: this.course.origin_image_file_list[i].image_id,
+            image: this.course.origin_image_file_list[i].image_path,
+            index: i + 1,
+            time: ''
           })
         }
       }
       if (this.course.origin_audio_file_list.length > 0) {
-        this.course.origin_audio_file_list[0] = this.$store.state.address + this.course.origin_audio_file_list[0]
+        this.course.origin_audio_file_list[0] =
+          this.$store.state.address + this.course.origin_audio_file_list[0]
         this.audio_file_list.push(this.course.origin_audio_file_list[0])
       }
     },
     update_can_comment: function (data) {
       this.course.can_comment = data
     },
-    receive_uploaded_resource: function (uploadPicResourse, audioFileList, originDeleteImageIndex) {
+    receive_uploaded_resource: function (
+      upload_pic_resourse,
+      audio_file_list,
+      origin_delete_image_index
+    ) {
       this.is_uploaded = true
       this.image_file_list.length = 0
-      if (audioFileList && audioFileList.length === 1 && audioFileList[0]) {
+      if (
+        audio_file_list &&
+        audio_file_list.length === 1 &&
+        audio_file_list[0]
+      ) {
         this.is_audio_changed = true
-        this.audio_file_list = audioFileList
-        this.course.origin_audio_file_list[0] = audioFileList[0].name
+        this.audio_file_list = audio_file_list
+        this.course.origin_audio_file_list[0] = audio_file_list[0].name
       }
-      for (let i = 1; i <= uploadPicResourse.length; i++) {
-        this.image_file_list.push(uploadPicResourse[i - 1])
+      for (let i = 1; i <= upload_pic_resourse.length; i++) {
+        this.image_file_list.push(upload_pic_resourse[i - 1])
       }
-      for (let i = 0; i < originDeleteImageIndex.length; i++) {
-        this.delete_origin_image_index_list.push(originDeleteImageIndex[i])
+      for (let i = 0; i < origin_delete_image_index.length; i++) {
+        this.delete_origin_image_index_list.push(origin_delete_image_index[i])
       }
       let nowLength = this.image_file_list.length
-      for (let i = 1; i <= originDeleteImageIndex.length; i++) {
+      for (let i = 1; i <= origin_delete_image_index.length; i++) {
         for (let ii = 0; ii < this.course.origin_image_file_list.length; ii++) {
-          if (this.course.origin_image_file_list[ii].image_id === originDeleteImageIndex[i - 1]) {
+          if (
+            this.course.origin_image_file_list[ii].image_id ===
+            origin_delete_image_index[i - 1]
+          ) {
             this.course.origin_image_file_list.splice(ii, 1)
             break
           }
@@ -282,150 +305,161 @@ export default {
       }
       for (let i = 1; i <= this.course.origin_image_file_list.length; i++) {
         this.image_file_list.push({
-          'origin_index': this.course.origin_image_file_list[i - 1].image_id,
-          'image': this.course.origin_image_file_list[i - 1].image_path,
-          'index': i + nowLength,
-          'time': ''
+          origin_index: this.course.origin_image_file_list[i - 1].image_id,
+          image: this.course.origin_image_file_list[i - 1].image_path,
+          index: i + nowLength,
+          time: ''
         })
       }
     },
-    receive_sorted_pictures: function (sortImageDataList) {
+    receive_sorted_pictures: function (sort_image_datalist) {
       this.image_file_list.length = 0
-      for (let i = 0; i < sortImageDataList.length; i++) {
-        this.image_file_list.push(sortImageDataList[i])
+      for (let i = 0; i < sort_image_datalist.length; i++) {
+        this.image_file_list.push(sort_image_datalist[i])
       }
     },
-    receive_sync_data: function (imageDataList) {
+    receive_sync_data: function (image_datalist) {
+      this.image_file_list = image_datalist
     },
     upload_all_data: function () {
-      let formdata = new FormData()
-      formdata.append('course_id', this.course_id)
-      formdata.append('title', this.course.title)
-      formdata.append('codename', this.course.codename)
-      formdata.append('days', this.course.expire_duration_day)
-      formdata.append('hours', this.course.expire_duration_hour)
-      formdata.append('price', this.course.price)
-      formdata.append('can_comment', this.course.can_comment)
-      formdata.append('reward_percent', this.course.reward_percent * 0.01)
-      formdata.append('description', this.course.description)
+      let form_data = this.initial_form_data()
+      axios
+        .post(
+          'http://localhost:8000/api/v1/courses/backstage/course-management/edit-course/',
+          form_data
+        )
+        .then(response => {
+          console.log(response.data.message)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      axios
+        .post(
+          'http://localhost:8000/api/v1/courses/backstage/course-management/delete-course-images/',
+          qs.stringify(
+            {
+              delete_list: this.delete_origin_image_index_list
+            },
+            { arrayFormat: 'repeat' }
+          )
+        )
+        .then(response => {
+          console.log(response.data.message)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    initial_form_data: function () {
+      let form_data = new FormData()
+      form_data.append('course_id', this.course_id)
+      form_data.append('title', this.course.title)
+      form_data.append('codename', this.course.codename)
+      form_data.append('days', this.course.expire_duration_day)
+      form_data.append('hours', this.course.expire_duration_hour)
+      form_data.append('price', this.course.price)
+      form_data.append('can_comment', this.course.can_comment)
+      form_data.append('reward_percent', this.course.reward_percent * 0.01)
+      form_data.append('description', this.course.description)
       if (this.is_audio_changed === true) {
-        formdata.append('audio', this.audio_file_list[0])
+        form_data.append('audio', this.audio_file_list[0])
       }
       for (let i = 0; i < this.image_file_list.length; i++) {
         let obj = this.image_file_list[i]
         if (obj.image.slice(0, 4) === 'http' && obj.time !== '') {
-          formdata.append('image_ids', obj.origin_index)
-          formdata.append('load_times_ids', obj.time)
+          form_data.append('image_ids', obj.origin_index)
+          form_data.append('load_times_ids', obj.time)
         } else if (obj.image.slice(0, 4) === 'data' && obj.time !== '') {
-          formdata.append('image_files', obj.file)
-          formdata.append('load_times_files', obj.time)
+          form_data.append('image_files', obj.file)
+          form_data.append('load_times_files', obj.time)
         }
       }
-      axios.post('http://localhost:8000/api/v1/courses/backstage/course-management/edit-course/', formdata).then(
-        response => {
-          console.log(response.data.message)
-        }
-      ).catch(
-        error => {
-          console.log(error)
-        }
-      )
-      axios.post('http://localhost:8000/api/v1/courses/backstage/course-management/delete-course-images/',
-        qs.stringify({
-          'delete_list': this.delete_origin_image_index_list
-        }, {arrayFormat: 'repeat'})).then(
-        response => {
-          console.log(response.data.message)
-        }
-      ).catch(
-        error => {
-          console.log(error)
-        }
-      )
+      return form_data
     }
   }
 }
 </script>
 
 <style scoped>
-  .my-content {
-    margin: 40px;
-    text-align: left;
-  }
+.my-content {
+  margin: 40px;
+  text-align: left;
+}
 
-  .my-label {
-    display: inline-block;
-    width: 150px;
-    text-align: left;
-  }
+.my-label {
+  display: inline-block;
+  width: 150px;
+  text-align: left;
+}
 
-  .flare_time {
-    display: flex;
-  }
+.flare_time {
+  display: flex;
+}
 
-  #flare_time_day {
-    width: 80px;
-    min-width: 80px;
-    max-width: 80px;
-  }
+#flare_time_day {
+  width: 80px;
+  min-width: 80px;
+  max-width: 80px;
+}
 
-  #flare_time_hour {
-    width: 70px;
-    min-width: 70px;
-    max-width: 70px;
-  }
+#flare_time_hour {
+  width: 70px;
+  min-width: 70px;
+  max-width: 70px;
+}
 
-  .input {
-    width: 260px;
-    min-width: 260px;
-    max-width: 260px;
-  }
+.input {
+  width: 260px;
+  min-width: 260px;
+  max-width: 260px;
+}
 
-  #can_review {
-    display: flex;
-  }
+#can_review {
+  display: flex;
+}
 
-  #input-group-flare {
-    display: flex;
-  }
+#input-group-flare {
+  display: flex;
+}
 
-  .my-btn,
-  #intro {
-    max-width: 405px;
-  }
+.my-btn,
+#intro {
+  max-width: 405px;
+}
 
-  #No {
-    margin-left: 100px;
-  }
+#No {
+  margin-left: 100px;
+}
 
-  #intro-label {
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
+#intro-label {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
 
-  #percent {
-    width: 210px;
-    min-width: 210px;
-    max-width: 210px;
-  }
+#percent {
+  width: 210px;
+  min-width: 210px;
+  max-width: 210px;
+}
 
-  #price {
-    width: 210px;
-    min-width: 210px;
-    max-width: 210px;
-  }
+#price {
+  width: 210px;
+  min-width: 210px;
+  max-width: 210px;
+}
 
-  .btn {
-    color: white;
-    background-color: #8d4e91;
-    border-color: #8d6592;
-    border-radius: 10px;
-    outline: none;
-    box-shadow: #8d6592 inset;
-  }
+.btn {
+  color: white;
+  background-color: #8d4e91;
+  border-color: #8d6592;
+  border-radius: 10px;
+  outline: none;
+  box-shadow: #8d6592 inset;
+}
 
-  .btn:hover,
-  .btn:active {
-    background-color: #5e0057;
-  }
+.btn:hover,
+.btn:active {
+  background-color: #5e0057;
+}
 </style>

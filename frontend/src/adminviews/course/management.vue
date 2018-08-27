@@ -145,14 +145,20 @@
           <b-row class="define-btn">
             <b-col cols="8"/>
             <b-col cols="2">
-              <b-button
-                class="btn-primary"
-                @click="upload_data">上传</b-button>
+              <a
+                id="upload-btn"
+                class="btn"
+                @click="upload_data">
+                上传
+              </a>
             </b-col>
             <b-col cols="2">
-              <b-button
-                class="btn-primary"
-                @click="hide_modal">取消</b-button>
+              <a
+                id="cancel-btn"
+                class="btn"
+                @click="hide_modal">
+                取消
+              </a>
             </b-col>
           </b-row>
         </div>
@@ -240,7 +246,7 @@ import axios from 'axios'
 import qs from 'qs'
 import Basic from '../basic/basic'
 import Pagination from '../../components/pagination'
-import resizeImage from './resize'
+import resize_image from './resize'
 export default {
   name: 'CourseManagement',
   components: { Pagination, Basic },
@@ -376,8 +382,8 @@ export default {
         return page
       }
     },
-    change_page: function (currentpage) {
-      this.page = currentpage
+    change_page: function (current_page) {
+      this.page = current_page
       this.change()
     },
     handle_file_change () {
@@ -404,7 +410,7 @@ export default {
         let file = files[i]
         let reader = new FileReader()
         reader.onload = function (e) {
-          resizeImage(e.target.result, 150, 150, function (result) {
+          resize_image(e.target.result, 150, 150, function (result) {
             _this.image_data_list.push(result)
             _this.file_name_list.push(file)
           })
@@ -525,11 +531,15 @@ h6 {
   margin-top: 3px;
 }
 
+#upload-btn,
+#cancel-btn,
 #head-change-btn {
   color: white;
   background-color: #337ab7;
 }
 
+#upload-btn:hover,
+#cancel-btn:hover,
 #head-change-btn:hover {
   background-color: #286090;
 }

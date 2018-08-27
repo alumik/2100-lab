@@ -215,15 +215,15 @@ export default {
       }
       this.image_file_list = uploadPicResourse
     },
-    receive_sorted_pictures (sortedPic) {
+    receive_sorted_pictures (sorted_pic) {
       this.image_file_list.length = 0
-      for (let i = 1; i <= sortedPic.length; i++) {
-        this.image_file_list.push(sortedPic[i - 1])
+      for (let i = 1; i <= sorted_pic.length; i++) {
+        this.image_file_list.push(sorted_pic[i - 1])
         this.image_file_list[i - 1].index = i
       }
     },
-    receive_sync_data (imageDataList) {
-      this.image_file_list = imageDataList
+    receive_sync_data (image_data_list) {
+      this.image_file_list = image_data_list
     },
     upload_all_data () {
       let formdata = new FormData()

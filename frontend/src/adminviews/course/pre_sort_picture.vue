@@ -2,7 +2,7 @@
   <div>
     <b-btn
       class="head-btn"
-      @click="showModal">
+      @click="show_modal">
       图片预排序
     </b-btn>
     <b-modal
@@ -21,7 +21,7 @@
         fluid
         class="bg-danger row pre-scrollable choose-list">
         <b-row
-          v-for="img in sortImageDataList"
+          v-for="img in sort_image_data_list"
           :key="img.index"
           class="choose-row">
           <b-col>
@@ -59,11 +59,11 @@
           <b-col cols="8"/>
           <b-col cols="2">
             <b-button
-              @click="sendModal">上传</b-button>
+              @click="send_modal">上传</b-button>
           </b-col>
           <b-col cols="2">
             <b-button
-              @click="hideModal">取消</b-button>
+              @click="hide_modal">取消</b-button>
           </b-col>
         </b-row>
       </div>
@@ -86,20 +86,20 @@ export default {
   },
   data: function () {
     return {
-      sortImageDataList: [],
+      sort_image_data_list: [],
       choose_image_data_list: [],
       now_index: 0,
       is_returned: true
     }
   },
   methods: {
-    showModal () {
+    show_modal () {
       if (this.is_returned === true || this.is_uploaded === true) {
         this.$emit('update_is_uploaded', this.is_uploaded)
         this.is_returned = false
         this.now_index = 0
         this.choose_image_data_list = []
-        this.sortImageDataList = []
+        this.sort_image_data_list = []
         this.choose_image_data_list.length = 0
         for (let i = 0; i < this.choose_image_data_list_origin.length; i++) {
           this.choose_image_data_list.push(
@@ -117,31 +117,31 @@ export default {
       this.choose_image_data_list.splice(img.index - 1, 1)
       img.index = this.now_index + 1
       this.now_index += 1
-      this.sortImageDataList.push(img)
+      this.sort_image_data_list.push(img)
     },
     dropback (img) {
       this.now_index -= 1
-      for (let i = img.index; i < this.sortImageDataList.length; i++) {
-        this.sortImageDataList[i].index -= 1
+      for (let i = img.index; i < this.sort_image_data_list.length; i++) {
+        this.sort_image_data_list[i].index -= 1
       }
-      this.sortImageDataList.splice(img.index - 1, 1)
+      this.sort_image_data_list.splice(img.index - 1, 1)
       img.index = this.choose_image_data_list.length + 1
       this.choose_image_data_list.push(img)
     },
-    sendModal () {
+    send_modal () {
       if (
-        this.sortImageDataList.length ===
+        this.sort_image_data_list.length ===
         this.choose_image_data_list_origin.length
       ) {
         this.now_index = 0
-        this.$emit('uploadSortedPic', this.sortImageDataList.slice())
+        this.$emit('uploadSortedPic', this.sort_image_data_list.slice())
         this.choose_image_data_list.length = 0
-        this.sortImageDataList.length = 0
+        this.sort_image_data_list.length = 0
         this.$refs.edit_picture.hide()
         this.is_returned = true
       }
     },
-    hideModal () {
+    hide_modal () {
       this.$emit('reset_is_uploaded', this.is_uploaded)
       for (let i = 1; i <= this.choose_image_data_list_origin.length; i++) {
         this.choose_image_data_list_origin[i - 1].index = i

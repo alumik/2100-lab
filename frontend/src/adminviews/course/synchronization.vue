@@ -105,7 +105,7 @@ import Basic from '../basic/basic'
 import PreSortPicture from './pre_sort_picture'
 export default {
   name: 'SyncPicture',
-  components: {PreSortPicture, Basic},
+  components: { PreSortPicture, Basic },
   props: {
     image_data_list: {
       default: () => {},
@@ -129,11 +129,13 @@ export default {
     }
   },
   watch: {
-    now_number (newValue, oldValue) {
-      this.attr[newValue] = 'primary'
-      this.attr[oldValue] = ''
+    now_number (new_value, old_value) {
+      this.attr[new_value] = 'primary'
+      this.attr[old_value] = ''
       let temp = []
-      for (let at of this.attr) { temp.push(at) }
+      for (let at of this.attr) {
+        temp.push(at)
+      }
       this.attr = temp
     }
   },
@@ -157,7 +159,11 @@ export default {
       }
     },
     show_modal () {
-      for (;this.now_number <= this.image_data_list.length; this.now_number++) {
+      for (
+        ;
+        this.now_number <= this.image_data_list.length;
+        this.now_number++
+      ) {
         if (this.image_data_list[this.now_number - 1].time === '') {
           break
         }
@@ -191,49 +197,49 @@ export default {
 </script>
 
 <style scoped>
-  .my-row {
-    margin-top: 40px;
-    margin-bottom: 40px;
-  }
+.my-row {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
 
-  .audio-player {
-    width: 100%;
-  }
+.audio-player {
+  width: 100%;
+}
 
-  .choose-list {
-    width: 100%;
-    min-height: 400px;
-    max-height: 400px;
-    margin-top: 50px;
-  }
+.choose-list {
+  width: 100%;
+  min-height: 400px;
+  max-height: 400px;
+  margin-top: 50px;
+}
 
-  .card-picture {
-    width: 90%;
-    min-width: 200px;
-    height: 300px;
-    min-height: 300px;
-    overflow: hidden;
-  }
+.card-picture {
+  width: 90%;
+  min-width: 200px;
+  height: 300px;
+  min-height: 300px;
+  overflow: hidden;
+}
 
-  .card-pic {
-    width: 100%;
-    min-width: 250px;
-    height: 100px;
-    max-height: 100px;
-  }
+.card-pic {
+  width: 100%;
+  min-width: 250px;
+  height: 100px;
+  max-height: 100px;
+}
 
-  .choose-row {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    min-width: 1000px;
-    max-width: 1000px;
-    height: 100px;
-    max-height: 100px;
-    margin-bottom: 50px;
-  }
+.choose-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  min-width: 1000px;
+  max-width: 1000px;
+  height: 100px;
+  max-height: 100px;
+  margin-bottom: 50px;
+}
 
-  .table-data {
-    overflow: paged-y;
-  }
+.table-data {
+  overflow: paged-y;
+}
 </style>
