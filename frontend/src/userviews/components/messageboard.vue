@@ -135,6 +135,28 @@
         @dismissed="add_message_test=false">
         {{ add_message_error_msg }}
       </b-alert>
+      <!--<div style="text-align: center; border-left: 1px solid #ccc; border-right: 1px solid #ccc;">-->
+      <!--<simple-line-icons-->
+      <!--icon="bubble"-->
+      <!--color="#999"-->
+      <!--size="small"/>-->
+      <!--</div>-->
+      <div style="margin-top: 2rem;">
+        <textarea
+          id="input-message"
+          v-model="new_msg"
+          class="textarea-style"
+          placeholder="请输入留言"
+          @keyup.enter="add_comment"/>
+        <br>
+        <div
+          id="commit-button"
+          class="commit-button-style">
+          <b-button
+            @click="add_comment">评论</b-button>
+          <hr>
+        </div>
+      </div>
       <div class="form-style">
         <div
           v-for="index in message_list.length"
@@ -235,21 +257,6 @@
         </div>
       </div>
       <div>
-        <textarea
-          id="input-message"
-          v-model="new_msg"
-          class="textarea-style"
-          placeholder="请输入评论"
-          @keyup.enter="add_comment"/>
-        <br>
-        <div
-          id="commit-button"
-          class="commit-button-style">
-          <b-button
-            @click="add_comment">评论</b-button>
-        </div>
-      </div>
-      <div>
         <Pagination
           id="pagination"
           :rows="rows"
@@ -293,7 +300,7 @@ export default {
       add_message_error_msg: '',
       delete_message_test: false,
       delete_message_error_msg: '',
-      page_limit: 1,
+      page_limit: 5,
       page: 1,
       rows: 0,
       modal_page_limit: 2,
@@ -345,17 +352,18 @@ export default {
           }
         )
         .then(function (response) {
+          console.log(response.data)
           that.rows = response.data.count
           that.message_list = response.data.content
           that.can_comment = true
         })
         .catch(function (error) {
+          console.log(error.response)
           if (error.response.data.message === 'Object not found.') {
             that.getallmessage_test = true
             that.getallmessage_error_msg = that.$t('error.object_not_found')
-          } else if (error.response.data.message === 'Access denied.') {
-            that.getallmessage_test = true
-            that.getallmessage_error_msg = that.$t('error.access_denied')
+          } else if (error.response.data.message === 'Commenting is not allowed.') {
+            that.can_comment = false
           }
         })
     },
@@ -612,6 +620,7 @@ export default {
           })
         )
         .then(function (response) {
+          console.log(response)
           if (response.data.message === 'Success.') {
             that.getallmessage()
           }
@@ -623,9 +632,7 @@ export default {
           } else if (error.response.data.message === 'Access denied.') {
             that.add_message_test = true
             that.add_message_error_msg = that.$t('error.access_denied')
-          } else if (
-            error.response.data.message === 'Commenting is not allowed.'
-          ) {
+          } else if (error.response.data.message === 'Commenting is not allowed.') {
             that.add_message_test = true
             that.add_message_error_msg = that.$t(
               'prompt.user_comment_not_allowed'
