@@ -8,8 +8,19 @@ from core.constants import INFO
 
 
 def is_authenticated(request):
-    """判断用户是否已登录"""
-    return JsonResponse({'is_authenticated': request.user.is_authenticated})
+    """判断用户是否已登录
+
+    如果已登录返回ID、登录状态和是否为管理员
+    """
+
+    user = request.user
+    return JsonResponse(
+        {
+            'user_id': user.id,
+            'is_authenticated': user.is_authenticated,
+            'is_staff': user.is_staff
+        }
+    )
 
 
 @login_required
