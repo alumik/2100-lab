@@ -32,8 +32,8 @@
 #sidebar .sidebar-header {
   padding: 20px 0 20px 45px;
   font-size: 1.25rem;
-  background: white;
   text-align: left;
+  background: white;
 }
 
 #sidebar ul.components {
