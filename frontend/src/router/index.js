@@ -40,6 +40,9 @@ export default new Router({
     {
       path: '/',
       name: 'Homepage',
+      meta: {
+        requireAuth: false
+      },
       component: Homepage
     },
     {
@@ -68,6 +71,9 @@ export default new Router({
     {
       path: '/admin',
       name: 'AdminLogin',
+      meta: {
+        requireAuth: false
+      },
       component: () => import('@/adminviews/login')
     },
     {

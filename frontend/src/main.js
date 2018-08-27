@@ -27,16 +27,18 @@ axios.defaults.withCredentials = true
 const store = new Vuex.Store({
   state: {
     status: false,
+    admin_id: '',
     user: {
       user_id: '',
       username: '',
       phone_number: '',
       avatar: 'default/customers/avatars/2100_lab.jpg',
-      reward_coin: '',
+      reward_coin: '0.00',
       is_vip: '',
       is_banned: '',
       date_joined: '',
-      updated_at: ''
+      updated_at: '',
+      groups: []
     },
     address: 'http://localhost:8000/media/',
     menu: 0,
@@ -48,6 +50,43 @@ const store = new Vuex.Store({
       '#204269',
       '#204269',
       '#204269'
+    ],
+    lists: [
+      {
+        id: 1,
+        isActive: false,
+        path: '/admin/course'
+      },
+      {
+        id: 2,
+        isActive: false,
+        path: '/admin/message'
+      },
+      {
+        id: 3,
+        isActive: false,
+        path: '/admin/user'
+      },
+      {
+        id: 4,
+        isActive: false,
+        path: '/admin/order'
+      },
+      {
+        id: 5,
+        isActive: false,
+        path: '/admin/log'
+      },
+      {
+        id: 6,
+        isActive: false,
+        path: '/admin/data/total'
+      },
+      {
+        id: 7,
+        isActive: false,
+        path: '/admin/adminmanagement'
+      }
     ]
   },
   mutations: {
@@ -67,7 +106,6 @@ const store = new Vuex.Store({
     },
     money (state, money) {
       state.money = money
-      sessionStorage.setItem('money', money)
     },
     date_joined (state, time) {
       state.user.date_joined = time
@@ -89,6 +127,9 @@ const store = new Vuex.Store({
       }
       state.colors[id] = '#5b9bd1'
       sessionStorage.setItem('colors', id)
+    },
+    groups (state, groups) {
+      state.groups = groups
     }
   }
 })
@@ -102,7 +143,32 @@ const i18n = new VueI18n({
 })
 
 Vue.component('simple-line-icons', SimpleLineIcons)
-
+router.beforeEach(async (to, from, next) => {
+  let response = await axios.post(
+    'http://localhost:8000/api/v1/core/auth/is-authenticated/',
+    {
+      withCredentials: true
+    }
+  )
+  if (!response.data.is_authenticated && to.meta.requireAuth !== false) {
+    next('/')
+  } else if (response.data.is_authenticated && response.data.is_staff) {
+    for (let list of store.state.lists) {
+      if (to.path.toString().includes(list.path)) {
+        sessionStorage.setItem('menu', list.id)
+      }
+    }
+    next()
+  } else if (
+    response.data.is_authenticated &&
+    !response.data.is_staff &&
+    to.path.includes('admin/')
+  ) {
+    next('/')
+  } else {
+    next()
+  }
+})
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

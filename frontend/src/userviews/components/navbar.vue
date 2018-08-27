@@ -49,7 +49,8 @@ import axios from 'axios'
 export default {
   name: 'UserNavbar',
   data () {
-    return {}
+    return {
+    }
   },
   computed: {
     avatar () {

@@ -15,24 +15,17 @@
           class="navbar-toggler-icon"/>
       </button>
       <b-navbar-brand
-        class="logo">
+        class="logo"
+        @click="home">
         <img
           id="logoimg"
           src="../../assets/2100logo.png">
       </b-navbar-brand>
-      <b-navbar-toggle target="nav_collapse"/>
-      <b-collapse
-        id="nav_collapse"
-        is-nav>
-        <b-navbar-nav class="ml-auto">
-          <b-nav-item>{{ $store.state.status ? $store.state.user.username : '' }}
-          </b-nav-item>
-          <b-nav-item
-            @click="log">
-            {{ $store.state.status ? '注销' : '登录' }}
-          </b-nav-item>
-        </b-navbar-nav>
-      </b-collapse>
+      <div
+        class="logout"
+        @click="log">
+        {{ $store.state.status ? '注销' : '登录' }}
+      </div>
     </div>
   </b-navbar>
 </template>
@@ -47,6 +40,9 @@ export default {
     }
   },
   methods: {
+    home () {
+      this.$router.push({ path: '/' })
+    },
     log () {
       if (this.$store.state.status) {
         axios
@@ -75,6 +71,7 @@ export default {
   height: 50px;
   margin-left: 30px;
   vertical-align: middle;
+  cursor: pointer;
 }
 
 .logo img {
@@ -101,5 +98,14 @@ export default {
   margin: 0 15px;
   border: none;
   outline: none;
+}
+
+.logout {
+  margin-right: 27px;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.logout:hover {
+  color: #5b9bd1;
 }
 </style>
