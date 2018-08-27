@@ -18,28 +18,26 @@
     </b-container>
     <div
       id="course-list"
-      class="bv-example-row course-list-style">
+      class="course-list-style">
       <b-container class="bv-example-row">
-        <b-row>
+        <b-form-row>
           <b-col
             v-for="course in courselist"
             :key="course.course_id"
-            class="col-style">
+            class="col-style col-card-style">
             <b-card
-              id="course-card"
               :img-src="example_src"
-              :title="course.title"
-              img-alt="Image"
-              img-top
-              tag="article"
-              class="mb-2 width-style"
-              @click="open_detail_page(course.course_id)">
-              <p class="card-text">
-                {{ course.description?course.description.substring(0,20):'' }}
+              img-alt="Img"
+              img-top>
+              <p style="height: 2.5rem;">
+                {{ course.title }}
+              </p>
+              <p class="card-text card-text-height">
+                {{ course.description.substring(0,30) }}
               </p>
             </b-card>
           </b-col>
-        </b-row>
+        </b-form-row>
       </b-container>
     </div>
   </body>
@@ -64,7 +62,7 @@ export default {
   },
   data () {
     return {
-      example_src: 'https://picsum.photos/400/300/?image=32'
+      example_src: 'https://picsum.photos/400/300/?image=790'
     }
   },
   methods: {
@@ -95,14 +93,24 @@ export default {
     color: #999;
   }
 
-  .width-style {
-    min-width: 10rem;
-    max-width: 20rem;
+  .col-card-style {
+    width: 16rem;
+    min-width: 16rem;
+    max-width: 16rem;
+    height: 22.5rem;
+    min-height: 22.5rem;
+    max-height: 22.5rem;
   }
 
   .col-style {
     flex: 1 0 20%;
-    margin-bottom: 20px;
+    padding: 0;
+    margin: 0.7rem;
+    text-align: center;
+  }
+
+  .card-text-height {
+    height: 5rem;
   }
 
   #course-list {
@@ -113,6 +121,6 @@ export default {
   }
 
   .course-list-style {
-    margin: 30px 0;
+    margin: 0;
   }
 </style>
