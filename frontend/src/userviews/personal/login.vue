@@ -123,11 +123,11 @@ export default {
       }
     }
   },
-  created () {
+  mounted () {
     if (this.$route.params.source === 'coursedetail') {
       this.course_id = this.$route.params.course_id
     } else if (this.$store.state.status) {
-      this.$router.push({path: '/'})
+      this.$router.push({ path: '/' })
     }
   },
   methods: {
@@ -166,8 +166,6 @@ export default {
     },
     handleOk (evt) {
       this.$store.commit('status')
-      this.$store.commit('username', this.user_data)
-      this.$store.commit('phone', this.phone)
       if (this.course_id !== -1) {
         this.$router.push({
           path: '/coursedetail',
@@ -202,7 +200,6 @@ export default {
                 this.content = res.data.content
               })
             this.modalShow = !this.modalShow
-            this.user_data = response.data
           } else {
             this.$store.commit('status')
             this.$store.commit('username', response.data.username)
@@ -229,6 +226,22 @@ export default {
           }
         })
     }
+  },
+  async beforeRouteEnter (to, from, next) {
+    let response = await axios.post(
+      'http://localhost:8000/api/v1/core/auth/is-authenticated/',
+      {
+        withCredentials: true
+      }
+    )
+    let status = response.data.is_authenticated
+    next(vm => {
+      if (status) {
+        next('/')
+      } else {
+        next()
+      }
+    })
   }
 }
 </script>

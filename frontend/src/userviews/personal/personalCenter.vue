@@ -136,13 +136,13 @@ export default {
       ],
       nameState: true,
       avatar: '',
-      file: null,
-      value: this.$store.state.username,
+      file: '',
+      value: this.$store.state.user.username,
       disabled: true,
       status: '修改',
-      phone: this.$store.state.phone,
-      money: this.$store.state.money,
-      time: this.$store.state.time,
+      phone: this.$store.state.user.phone_number,
+      money: this.$store.state.user.reward_coin,
+      time: this.$store.state.user.date_joined,
       del_disabled: false,
       input_phone: ''
     }
@@ -159,14 +159,17 @@ export default {
         'http://localhost:8000/api/v1/customers/forestage/personal-center/get-customer-detail/'
       )
       .then(res => {
-        this.avatar = this.$store.state.address + res.data.avatar
-        this.$store.commit('money', (this.money = res.data.reward_coin))
-        this.$store.commit('avatar', res.data.avatar)
-        this.time = res.data.date_joined
+        this.$store.commit('status')
+        this.$store.commit('user', res.data)
+        this.avatar = this.$store.state.address + this.$store.state.user.avatar
+        this.value = this.$store.state.user.username
+        this.phone = this.$store.state.user.phone_number
+        this.money = this.$store.state.user.reward_coin
+        this.time = this.$store.state.user.date_joined
           .toString()
           .substring(0, 19)
           .replace('T', ' ')
-        this.$store.commit('time', this.time)
+        this.$store.commit('date_joined', this.time)
       })
       .catch(error => {
         alert(error.message)
@@ -187,7 +190,6 @@ export default {
           data
         )
         .then(res => {
-          that.$store.state.avatar = res.data.new_avatar
           this.$store.commit('avatar', res.data.new_avatar)
           that.avatar = this.$store.state.address + res.data.new_avatar
           alert('头像上传成功')
@@ -208,7 +210,6 @@ export default {
           .then(res => {
             this.status = '修改'
             this.disabled = !this.disabled
-            // console.log(res.data.new_username)
             this.$store.commit('username', this.value)
           })
           .catch(() => {
@@ -218,7 +219,7 @@ export default {
     },
     Delete () {
       let that = this
-      if (that.$store.state.phone === that.input_phone) {
+      if (that.$store.state.user.phone_number === that.input_phone) {
         axios
           .post(
             'http://localhost:8000/api/v1/customers/forestage/personal-center/delete-customer/'
@@ -285,7 +286,7 @@ img {
   height: 50px;
   padding: 0;
   margin: 0;
-  -ms-filter: "alpha(opacity=0)";
+  -ms-filter: 'alpha(opacity=0)';
   opacity: 0;
 }
 
@@ -307,7 +308,7 @@ img {
   width: auto;
 }
 
-[placeholder="请输入自己的手机号"] {
+[placeholder='请输入自己的手机号'] {
   margin-bottom: 15px;
 }
 </style>

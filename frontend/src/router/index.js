@@ -45,6 +45,9 @@ export default new Router({
     {
       path: '/login',
       name: 'Login',
+      meta: {
+        requireAuth: false
+      },
       component: () => import('@/userviews/personal/login')
     },
     {

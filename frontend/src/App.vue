@@ -8,18 +8,25 @@
 import axios from 'axios'
 export default {
   name: 'App',
-  destroyed () {
-    if (this.$store.state.status) {
-      axios
-        .post('http://localhost:8000/api/v1/core/auth/logout/', {
-          withCredentials: true
-        })
-        .then(res => {
-          this.$store.commit('status', false)
-        })
-        .catch(error => {
-          alert(error)
-        })
+  async created () {
+    this.$store.commit('colors', sessionStorage.getItem('colors'))
+    this.$store.commit('menu', sessionStorage.getItem('menu'))
+    let response = await axios.post(
+      'http://localhost:8000/api/v1/core/auth/is-authenticated/',
+      {
+        withCredentials: true
+      }
+    )
+    if (response.data.is_authenticated) {
+      try {
+        let res = await axios.get(
+          'http://localhost:8000/api/v1/customers/forestage/personal-center/get-customer-detail/'
+        )
+        this.$store.commit('status')
+        this.$store.commit('user', res.data)
+      } catch (error) {
+        alert(error.message)
+      }
     }
   }
 }
