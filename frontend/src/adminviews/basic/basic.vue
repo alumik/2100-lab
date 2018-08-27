@@ -120,6 +120,7 @@ export default {
   z-index: 2;
   width: 100%;
   margin: 0;
+  user-select: none;
   border-left: 3px solid #5c9acf;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
 }
