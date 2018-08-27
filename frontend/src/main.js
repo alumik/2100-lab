@@ -27,16 +27,18 @@ axios.defaults.withCredentials = true
 const store = new Vuex.Store({
   state: {
     status: false,
+    admin_id: '',
     user: {
       user_id: '',
       username: '',
       phone_number: '',
       avatar: 'default/customers/avatars/2100_lab.jpg',
-      reward_coin: '',
+      reward_coin: '0.00',
       is_vip: '',
       is_banned: '',
       date_joined: '',
-      updated_at: ''
+      updated_at: '',
+      groups: []
     },
     address: 'http://localhost:8000/media/',
     menu: 0,
@@ -67,7 +69,6 @@ const store = new Vuex.Store({
     },
     money (state, money) {
       state.money = money
-      sessionStorage.setItem('money', money)
     },
     date_joined (state, time) {
       state.user.date_joined = time
@@ -89,6 +90,9 @@ const store = new Vuex.Store({
       }
       state.colors[id] = '#5b9bd1'
       sessionStorage.setItem('colors', id)
+    },
+    groups (state, groups) {
+      state.groups = groups
     }
   }
 })
@@ -110,6 +114,10 @@ router.beforeEach(async (to, from, next) => {
     }
   )
   if (!response.data.is_authenticated && to.meta.requireAuth !== false) {
+    next('/')
+  // } else if (to.path.toString().includes('admin/')){
+  //     next('/admin/main')
+  } else if (response.data.is_authenticated && !response.data.staff && to.path.includes('admin/')) {
     next('/')
   } else {
     next()

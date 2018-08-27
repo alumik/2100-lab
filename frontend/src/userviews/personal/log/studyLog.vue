@@ -79,11 +79,15 @@ export default {
       items: [],
       count: 0,
       currentPage: 1,
-      perPage: 10,
+      perPage: 1,
       page_nums: 1,
       pageOptions: [5, 10, 15]
     }
   },
+  // watch: {
+  //   currentPage (n, o) {
+  //   }
+  // },
   async mounted () {
     let that = this
     let res = await axios.get(

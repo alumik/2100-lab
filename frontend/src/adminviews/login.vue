@@ -145,9 +145,10 @@ export default {
         withCredentials: true
       }
     )
-    let status = response.data.is_authenticated
-    if (status) {
+    if (response.data.is_authenticated && response.data.is_staff) {
       next('/admin/main')
+    } else if (response.data.is_authenticated && !response.data.is_staff) {
+      next('/')
     } else {
       next()
     }
