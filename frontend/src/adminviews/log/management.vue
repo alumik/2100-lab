@@ -110,13 +110,16 @@ export default {
   components: { Alert, Basic },
   data () {
     return {
-      items: [{
-        text: '主页',
-        href: '/admin/main'
-      }, {
-        text: '日志查询',
-        active: true
-      }],
+      items: [
+        {
+          text: '主页',
+          href: '/admin/main'
+        },
+        {
+          text: '日志查询',
+          active: true
+        }
+      ],
       begin_date: new Date(new Date().getTime() - 24 * 60 * 60 * 1000),
       end_date: new Date(),
       options: {
@@ -125,7 +128,7 @@ export default {
       admin_id: '',
       select1: [],
       options1: [
-        { text: '增加管理员&#12288', value: 1 },
+        { text: '增加管理员', value: 1 },
         { text: '修改管理员权限', value: 2 },
         { text: '修改管理员名称', value: 3 },
         { text: '修改管理员密码', value: 4 }
@@ -133,23 +136,23 @@ export default {
       select2: [],
       options2: [
         { text: '删除管理员', value: 5 },
-        { text: '订单退款&#12288', value: 6 },
-        { text: '删除用户&#12288', value: 7 },
-        { text: '禁言用户&#12288', value: 8 }
+        { text: '订单退款', value: 6 },
+        { text: '删除用户', value: 7 },
+        { text: '禁言用户', value: 8 }
       ],
       select3: [],
       options3: [
         { text: '解除禁言', value: 9 },
-        { text: '认证用户&#12288', value: 10 },
-        { text: '取消认证&#12288', value: 11 },
-        { text: '删除留言&#12288', value: 12 }
+        { text: '认证用户', value: 10 },
+        { text: '取消认证', value: 11 },
+        { text: '删除留言', value: 12 }
       ],
       select4: [],
       options4: [
-        { text: '回复留言&#12288', value: 13 },
-        { text: '增加课程&#12288', value: 14 },
-        { text: '修改课程&#12288', value: 15 },
-        { text: '删除课程&#12288', value: 16 }
+        { text: '回复留言', value: 13 },
+        { text: '增加课程', value: 14 },
+        { text: '修改课程', value: 15 },
+        { text: '删除课程', value: 16 }
       ],
       page_jump: false,
       wrong: '',
@@ -159,15 +162,19 @@ export default {
   },
   computed: {
     indeterminate: function () {
-      if (this.select1.length === 4 &&
+      if (
+        this.select1.length === 4 &&
         this.select2.length === 4 &&
         this.select3.length === 4 &&
-        this.select4.length === 4) {
+        this.select4.length === 4
+      ) {
         return false
-      } else if (this.select1.length === 0 &&
+      } else if (
+        this.select1.length === 0 &&
         this.select2.length === 0 &&
         this.select3.length === 0 &&
-        this.select4.length === 0) {
+        this.select4.length === 0
+      ) {
         return false
       } else {
         return true
@@ -183,12 +190,20 @@ export default {
         this.wrong_count_down = this.dismiss_second
       } else {
         this.page_jump = true
-        this.$router.push({ name: 'LogDetail',
+        this.$router.push({
+          name: 'LogDetail',
           query: {
             admin_username: this.admin_id,
             begin_date: begin_date,
             end_date: end_date,
-            select: this.select1 + ',' + this.select2 + ',' + this.select3 + ',' + this.select4
+            select:
+              this.select1 +
+              ',' +
+              this.select2 +
+              ',' +
+              this.select3 +
+              ',' +
+              this.select4
           }
         })
       }
@@ -213,80 +228,82 @@ export default {
 </script>
 
 <style scoped>
-  .body {
-    height: 100%;
-    overflow-x: scroll;
-  }
+.body {
+  padding: 20px;
+  margin: 70px 20px 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
 
-  h1,
-  h4 {
-    padding-left: 20px;
-    margin-top: 25px;
-    margin-bottom: 25px;
-    text-align: left;
-  }
+h1,
+h4 {
+  padding-left: 15px;
+  margin: 25px 0;
+  color: #204269;
+  text-align: left;
+}
 
-  .table-div {
-    padding-left: 20px;
-  }
+.table-div {
+  padding-left: 20px;
+}
 
-  table {
-    width: 400px;
-    text-align: center;
-  }
+table {
+  width: 400px;
+  text-align: center;
+}
 
-  input {
-    width: 178px;
-  }
+input {
+  width: 178px;
+}
 
-  .col-md-6 {
-    align-items: center;
-  }
+.col-md-6 {
+  align-items: center;
+}
 
-  tr {
-    align-items: center;
-  }
+tr {
+  align-items: center;
+}
 
-  tr td {
-    width: 180px;
-  }
+tr td {
+  width: 180px;
+}
 
-  .checkbox-div {
-    padding-left: 20px;
-    text-align: left;
-  }
+.checkbox-div {
+  padding-left: 20px;
+  text-align: left;
+}
 
-  .outer {
-    font-size: 1.2em;
-    font-weight: normal;
-  }
+.outer {
+  font-size: 1.2em;
+  font-weight: normal;
+}
 
-  .checkbox {
-    display: flex;
-  }
+.checkbox {
+  display: flex;
+}
 
-  .inner {
-    padding-left: 30px;
-  }
+.inner {
+  padding-left: 30px;
+}
 
-  .button-group {
-    display: flex;
-    justify-content: flex-start;
-    padding-top: 10px;
-    padding-left: 20px;
-  }
+.button-group {
+  display: flex;
+  justify-content: flex-start;
+  padding-top: 10px;
+  padding-left: 20px;
+}
 
-  .btn {
-    color: white;
-    background-color: #8d4e91;
-    border-color: #8d6592;
-    border-radius: 10px;
-    outline: none;
-    box-shadow: #8d6592 inset;
-  }
+.btn {
+  margin-right: 2px;
+  margin-left: 2px;
+  color: #5b9bd1;
+  background-color: rgba(91, 155, 209, 0.2);
+  border: 1px solid #d3d9df;
+}
 
-  .btn:hover,
-  .btn:active {
-    background-color: #5e0057;
-  }
+.btn:hover,
+.btn:active {
+  background-color: rgba(66, 112, 151, 0.2);
+}
 </style>

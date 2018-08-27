@@ -1,9 +1,8 @@
 <template>
-  <Basic
-    :items="items"
-    class="my-basic">
-    <div>
+  <Basic class="my-basic">
+    <div class="body">
       <h1>日志列表</h1>
+      <h6>第 {{ page }}/{{ num_pages }} 页，共 {{ rows }} 条数据</h6>
       <Alert
         :count_down="wrong_count_down"
         :instruction="wrong"
@@ -51,21 +50,21 @@ export default {
   components: { Alert, Pagination, Basic },
   data () {
     return {
-      items: [{
-        text: '主页',
-        href: '/admin/main'
-      }, {
-        text: '日志查询',
-        href: '/admin/log'
-      }, {
-        text: '日志列表',
-        active: true
-      }],
-      titles: [
-        { label: '时间' },
-        { label: '管理员名称' },
-        { label: '内容' }
+      items: [
+        {
+          text: '主页',
+          href: '/admin/main'
+        },
+        {
+          text: '日志查询',
+          href: '/admin/log'
+        },
+        {
+          text: '日志列表',
+          active: true
+        }
       ],
+      titles: [{ label: '时间' }, { label: '管理员名称' }, { label: '内容' }],
       logs: [],
       rows: 20,
       page: 1,
@@ -73,7 +72,8 @@ export default {
       dismiss_second: 5,
       wrong_count_down: 0,
       wrong: '',
-      select: []
+      select: [],
+      num_pages: 0
     }
   },
   created () {
@@ -84,21 +84,31 @@ export default {
       }
     }
     const that = this
-    axios.get('http://localhost:8000/api/v1/admin/backstage/log-management/get-admin-log/',
-      { params: {
-        page_limit: that.per_page,
-        page: that.page,
-        admin_username: that.$route.query.admin_username,
-        start_timestamp: that.$route.query.begin_date,
-        end_timestamp: that.$route.query.end_date,
-        filters: that.select
-      },
-      paramsSerializer: function (params) {
-        return qs.stringify(params, {arrayFormat: 'repeat'})
-      }})
+    axios
+      .get(
+        'http://localhost:8000/api/v1/admin/backstage/log-management/get-admin-log/',
+        {
+          params: {
+            page_limit: that.per_page,
+            page: that.page,
+            admin_username: that.$route.query.admin_username,
+            start_timestamp: that.$route.query.begin_date,
+            end_timestamp: that.$route.query.end_date,
+            filters: that.select
+          },
+          paramsSerializer: function (params) {
+            return qs.stringify(params, { arrayFormat: 'repeat' })
+          }
+        }
+      )
       .then(function (response) {
         that.logs = response.data.content
         that.rows = response.data.count
+        if (response.data.num_pages === 0) {
+          that.num_pages = 1
+        } else {
+          that.num_pages = response.data.num_pages
+        }
       })
       .catch(function (error) {
         that.wrong = '查询日志失败！' + error
@@ -109,21 +119,31 @@ export default {
     change_page: function (page) {
       this.page = page
       const that = this
-      axios.get('http://localhost:8000/api/v1/admin/backstage/log-management/get-admin-log/',
-        { params: {
-          page_limit: that.per_page,
-          page: that.page,
-          admin_username: that.$route.query.admin_username,
-          start_timestamp: that.$route.query.begin_date,
-          end_timestamp: that.$route.query.end_date,
-          filters: that.select
-        },
-        paramsSerializer: function (params) {
-          return qs.stringify(params, {arrayFormat: 'repeat'})
-        }})
+      axios
+        .get(
+          'http://localhost:8000/api/v1/admin/backstage/log-management/get-admin-log/',
+          {
+            params: {
+              page_limit: that.per_page,
+              page: that.page,
+              admin_username: that.$route.query.admin_username,
+              start_timestamp: that.$route.query.begin_date,
+              end_timestamp: that.$route.query.end_date,
+              filters: that.select
+            },
+            paramsSerializer: function (params) {
+              return qs.stringify(params, { arrayFormat: 'repeat' })
+            }
+          }
+        )
         .then(function (response) {
           that.logs = response.data.content
           that.rows = response.data.count
+          if (response.data.num_pages === 0) {
+            that.num_pages = 1
+          } else {
+            that.num_pages = response.data.num_pages
+          }
         })
         .catch(function (error) {
           that.wrong = '查询日志失败！' + error
@@ -147,43 +167,57 @@ export default {
 </script>
 
 <style scoped>
-  h1 {
-    padding-left: 15px;
-    margin-top: 25px;
-    margin-bottom: 25px;
-    text-align: left;
-  }
+.body {
+  padding: 20px;
+  margin: 70px 20px 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
 
-  .table-div {
-    padding-right: 15px;
-    padding-left: 15px;
-    overflow-x: scroll;
-  }
+h1,
+h6 {
+  padding-left: 15px;
+  margin: 25px 0;
+  color: #204269;
+  text-align: left;
+}
 
-  table {
-    font-size: 1.2em;
-    border: 1px solid #d3d9df;
-  }
+h6 {
+  margin-bottom: 15px;
+  font-weight: bold;
+}
 
-  td {
-    vertical-align: middle;
-  }
+.table-div {
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow-x: scroll;
+}
 
-  thead tr {
-    font-weight: bold;
-    color: white;
-    background-color: #6c757d;
-  }
+table {
+  margin-bottom: 20px;
+  border-top: 1px solid #d3d9df;
+}
 
-  .sm-td {
-    width: 200px;
-  }
+td {
+  font-size: 1rem;
+  vertical-align: middle;
+}
 
-  .md-td {
-    width: 250px;
-  }
+thead tr {
+  font-weight: bold;
+  color: #999;
+}
 
-  .lg-td {
-    width: 400px;
-  }
+.sm-td {
+  width: 200px;
+}
+
+.md-td {
+  width: 250px;
+}
+
+.lg-td {
+  width: 400px;
+}
 </style>
