@@ -92,6 +92,7 @@ export default {
 
 .navbar {
   padding: 10px 5px;
+  user-select: none;
   background-color: #fff !important;
   border-bottom: 1px solid rgba(153, 153, 153, 0.42);
 }
