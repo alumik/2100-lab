@@ -255,7 +255,7 @@ export default {
 .body {
   padding: 20px;
   margin: 70px 20px 20px;
-  overflow-x: scroll;
+  overflow-x: auto;
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
