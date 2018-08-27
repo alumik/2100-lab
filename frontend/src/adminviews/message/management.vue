@@ -372,10 +372,8 @@ h6 {
 }
 
 .buttons {
-  display: flex;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 30px;
+  padding: 10px;
+  white-space: nowrap;
 }
 
 .table-div {

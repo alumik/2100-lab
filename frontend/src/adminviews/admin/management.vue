@@ -1,9 +1,11 @@
 <template>
   <Basic :items="items">
     <div class="my-content">
-      <h1>管理员列表</h1>
-      <div class="my-head-btn">
-        <h6>第 {{ page }}/{{ num_pages }} 页，共 {{ rows }} 条数据</h6>
+      <div class="headdiv">
+        <div class="headline">
+          <h1>管理员列表</h1>
+          <h6>第 {{ page }}/{{ num_pages }} 页，共 {{ rows }} 条数据</h6>
+        </div>
         <a
           id="head-btn"
           class="btn"
@@ -216,20 +218,11 @@ export default {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
-.my-head-btn {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  margin: 25px 0;
-  color: #23527c;
-}
-
 #head-btn {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  margin: 0;
+  position: absolute;
+  right: 15px;
+  bottom: 0;
+  display: inline-block;
   color: white;
   text-align: right;
   background-color: #4db14d;
@@ -266,7 +259,7 @@ export default {
 }
 
 .table-div {
-  padding-left: 15px;
+  padding: 0 15px;
   overflow-x: scroll;
 }
 
@@ -285,14 +278,13 @@ h1 {
 }
 
 h6 {
-  margin-bottom: 15px;
+  margin-bottom: 0;
   font-weight: bold;
   color: #23527c;
 }
 
 h1,
 h6 {
-  padding-left: 15px;
   color: #204269;
 }
 
@@ -303,5 +295,16 @@ th {
 thead tr {
   font-weight: bold;
   color: #999;
+}
+
+.headline {
+  display: inline-block;
+}
+
+.headdiv {
+  position: relative;
+  padding: 0 15px;
+  margin-bottom: 15px;
+  text-align: left;
 }
 </style>

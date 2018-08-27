@@ -276,7 +276,6 @@ export default {
 
 h1 {
   padding-left: 15px;
-  margin: 25px 0;
   color: #204269;
   text-align: left;
 }
@@ -286,6 +285,7 @@ h1 {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  margin: 25px 0;
 }
 
 .head-td {
@@ -304,7 +304,6 @@ h1 {
 .button-group {
   display: inline-block;
   float: right;
-  margin-bottom: 5px;
 }
 
 #distribution-btn {
