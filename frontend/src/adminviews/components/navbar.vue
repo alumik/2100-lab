@@ -25,7 +25,7 @@
         id="nav_collapse"
         is-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-item>{{ $store.state.status ? $store.state.username : '' }}
+          <b-nav-item>{{ $store.state.status ? $store.state.user.username : '' }}
           </b-nav-item>
           <b-nav-item
             @click="log">

@@ -2,7 +2,7 @@
     DEMO STYLE
 */
 
-@import "fontFamily.css";
+@import 'fontFamily.css';
 
 /* ---------------------------------------------------
     SIDEBAR STYLE
@@ -30,12 +30,14 @@
 #sidebar .sidebar-header {
   padding: 20px;
   font-size: 1.25rem;
+  cursor: pointer;
   background: #f3f5ee;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1) inset;
 }
 
 #sidebar ul.components {
   padding: 0;
+  cursor: pointer;
 }
 
 a:hover,
@@ -58,7 +60,7 @@ a:focus {
 }
 
 #sidebar ul li.active > a,
-a[aria-expanded="true"] {
+a[aria-expanded='true'] {
   color: #8d4e91;
   background: #fff;
 }

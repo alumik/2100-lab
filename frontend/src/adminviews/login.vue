@@ -72,12 +72,12 @@ export default {
   },
   created () {
     if (this.$store.state.status) {
-      this.$router.push({ path: '/admin/main' })
+      // this.$router.push({ path: '/admin/main' })
     }
   },
   mounted () {
     if (this.$store.state.status) {
-      this.$router.push({ path: '/admin/main' })
+      // this.$router.push({ path: '/admin/main' })
     }
   },
   methods: {
@@ -136,6 +136,20 @@ export default {
       } else {
         this.$router.push({ path: '/admin' })
       }
+    }
+  },
+  async beforeRouteEnter (to, from, next) {
+    let response = await axios.post(
+      'http://localhost:8000/api/v1/core/auth/is-authenticated/',
+      {
+        withCredentials: true
+      }
+    )
+    let status = response.data.is_authenticated
+    if (status) {
+      next('/admin/main')
+    } else {
+      next()
     }
   }
 }

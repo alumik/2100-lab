@@ -9,6 +9,8 @@ import axios from 'axios'
 export default {
   name: 'App',
   async created () {
+    this.$store.commit('colors', sessionStorage.getItem('colors'))
+    this.$store.commit('menu', sessionStorage.getItem('menu'))
     let response = await axios.post(
       'http://localhost:8000/api/v1/core/auth/is-authenticated/',
       {

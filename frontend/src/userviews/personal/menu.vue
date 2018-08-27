@@ -4,7 +4,7 @@
     :class="{hide: hidden, 'sidebar': true}">
     <div
       class="sidebar-header"
-      @click="jump(0)">个人中心</div>
+      @click="jump(2)">个人中心</div>
     <ul class="components">
       <li
         v-for="item in list"
@@ -33,9 +33,11 @@ export default {
   methods: {
     jump: function (id) {
       if (id === 1) {
-        this.$router.push({path: '/personal/orderlog'})
+        this.$router.push({ path: '/personal/orderlog' })
+      } else if (id === 0) {
+        this.$router.push({ path: '/personal/studylog' })
       } else {
-        this.$router.push({path: '/personal/studylog'})
+        this.$router.push({ path: '/personal' })
       }
     }
   }
