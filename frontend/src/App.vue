@@ -34,15 +34,16 @@ export default {
             }
           )
           this.$store.commit('groups', res.data.admin_groups)
-          // console.log(this.$store.state.user)
           // for (let permission of res.data.admin_groups) {
           // }
+          this.$store.commit('colors', sessionStorage.getItem('colors'))
           this.$store.commit('menu', sessionStorage.getItem('menu'))
         } else {
           let res = await axios.get(
             'http://localhost:8000/api/v1/customers/forestage/personal-center/get-customer-detail/'
           )
           this.$store.commit('user', res.data)
+          this.$store.commit('colors', sessionStorage.getItem('colors'))
           this.$store.commit('menu', sessionStorage.getItem('menu'))
         }
       } catch (error) {

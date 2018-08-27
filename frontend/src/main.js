@@ -157,6 +157,7 @@ router.beforeEach(async (to, from, next) => {
     for (let list of store.state.lists) {
       if (to.path.toString().includes(list.path)) {
         sessionStorage.setItem('menu', list.id)
+        sessionStorage.setItem('colors', parseInt(list.id) - 1)
       }
     }
     next()
