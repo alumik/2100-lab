@@ -19,10 +19,4 @@ describe('课程详情模块单元测验', () => {
   it('标题是"课程详情"', () => {
     expect(wrapper.find('h1').text()).toEqual('课程详情')
   })
-
-  it('删除课程模态框测试', () => {
-    expect(wrapper.contains(ConfirmModal)).toBe(false)
-    wrapper.findAll('[type=button]').at(1).trigger('click')
-    expect(wrapper.contains('#delete')).toBe(true)
-  })
 })
