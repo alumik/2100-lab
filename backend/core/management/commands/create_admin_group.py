@@ -1,7 +1,7 @@
 """创建权限组并分配对应权限"""
 
-from django.core.management.base import BaseCommand
 from django.contrib.auth.models import Group, Permission
+from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
@@ -16,9 +16,15 @@ class Command(BaseCommand):
         order_admin = Group.objects.create(name='order_admin')
         log_admin = Group.objects.create(name='log_admin')
 
-        course_admin.permissions.add(*list(Permission.objects.filter(codename__contains='course')))
-        course_admin.permissions.add(*list(Permission.objects.filter(codename__contains='hero')))
-        course_admin.permissions.add(*list(Permission.objects.filter(codename__contains='image')))
+        course_admin.permissions.add(
+            *list(Permission.objects.filter(codename__contains='course'))
+        )
+        course_admin.permissions.add(
+            *list(Permission.objects.filter(codename__contains='hero'))
+        )
+        course_admin.permissions.add(
+            *list(Permission.objects.filter(codename__contains='image'))
+        )
 
         comment_admin.permissions.add(
             *list(Permission.objects.filter(codename__contains='comment'))
@@ -31,9 +37,13 @@ class Command(BaseCommand):
             *list(Permission.objects.filter(codename__contains='learninglog'))
         )
 
-        order_admin.permissions.add(*list(Permission.objects.filter(codename__contains='orderlog')))
+        order_admin.permissions.add(
+            *list(Permission.objects.filter(codename__contains='orderlog'))
+        )
 
-        log_admin.permissions.add(*list(Permission.objects.filter(codename__contains='adminlog')))
+        log_admin.permissions.add(
+            *list(Permission.objects.filter(codename__contains='adminlog'))
+        )
 
         course_admin.save()
         comment_admin.save()

@@ -54,11 +54,17 @@ ACTION_TYPE = {
 
 ADMIN_LOG_TEMPLATE = {
     '1': Template('新增了ID为 ${object_id} ，电话号码为 ${new_data} 的管理员'),
-    '2': Template('将ID为 ${object_id} 的管理员的权限由 ${old_data} 改为 ${new_data}'),
-    '3': Template('将ID为 ${object_id} 的管理员的用户名由 ${old_data} 改为 ${new_data}'),
+    '2': Template(
+        '将ID为 ${object_id} 的管理员的权限由 ${old_data} 改为 ${new_data}'
+    ),
+    '3': Template(
+        '将ID为 ${object_id} 的管理员的用户名由 ${old_data} 改为 ${new_data}'
+    ),
     '4': Template('修改了ID为 ${object_id} 的管理员的密码'),
     '5': Template('删除了ID为 ${object_id} 的管理员'),
-    '6': Template('为用户ID为 ${new_data} ，订单ID为 ${object_id} 的订单办理了退款'),
+    '6': Template(
+        '为用户ID为 ${new_data} ，订单ID为 ${object_id} 的订单办理了退款'
+    ),
     '7': Template('删除了ID为 ${object_id} 的用户'),
     '8': Template('禁言了ID为 ${object_id} 的用户'),
     '9': Template('解除了ID为 ${object_id} 的用户的禁言'),
