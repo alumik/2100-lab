@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 
 import { shallowMount } from '@vue/test-utils'
-import ConfirmModal from '@/adminviews/components/InputModal.vue'
 import BackendCourseDetail from '@/adminviews/course/detail.vue'
 
 const $route = {
