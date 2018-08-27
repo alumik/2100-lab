@@ -29,18 +29,18 @@
             for="course_content">课程素材</label>
           <UploadSource
             id="course_content"
-            @uploadResource="receive_uploaded_resource"/>
+            @upload_resource="receive_uploaded_resource"/>
           <PreSortPicture
             :choose_image_data_list_origin="image_file_list.slice()"
             :is_uploaded="is_uploaded"
             @update_is_uploaded="is_uploaded=false"
             @reset_is_uploaded="is_uploaded=true"
-            @uploadSortedPic="receive_sorted_pictures"
+            @upload_sorted_pic="receive_sorted_pictures"
           />
           <SyncPicture
             :audio_file_list="audio_file_list"
             :image_data_list="image_file_list"
-            :is_audio_changed="true"
+            :is_audio_changed="is_audio_changed"
             @sync_picture_audio="receive_sync_data"
           />
         </div>
@@ -198,9 +198,10 @@ export default {
       days: '',
       hours: '',
       prices: '',
-      can_comment: '',
+      can_comment: '1',
       reward_percent: '',
       description: '',
+      is_audio_changed: false,
       is_uploaded: true
     }
   },
@@ -208,22 +209,23 @@ export default {
     update_can_comment: function (data) {
       this.can_comment = data
     },
-    receive_uploaded_resource: function (uploadPicResourse, audioFileList) {
+    receive_uploaded_resource: function (upload_pic_resourse, audio_file_list) {
       this.is_uploaded = true
-      if (audioFileList.length === 1) {
-        this.audio_file_list[0] = audioFileList[0]
+      if (audio_file_list.length === 1) {
+        this.audio_file_list[0] = audio_file_list[0]
+        this.is_audio_changed = true
       }
-      this.image_file_list = uploadPicResourse
+      this.image_file_list = upload_pic_resourse
     },
-    receive_sorted_pictures (sortedPic) {
+    receive_sorted_pictures (sorted_pic) {
       this.image_file_list.length = 0
-      for (let i = 1; i <= sortedPic.length; i++) {
-        this.image_file_list.push(sortedPic[i - 1])
+      for (let i = 1; i <= sorted_pic.length; i++) {
+        this.image_file_list.push(sorted_pic[i - 1])
         this.image_file_list[i - 1].index = i
       }
     },
-    receive_sync_data (imageDataList) {
-      this.image_file_list = imageDataList
+    receive_sync_data (image_data_list) {
+      this.image_file_list = image_data_list
     },
     upload_all_data () {
       let formdata = new FormData()

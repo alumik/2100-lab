@@ -1,6 +1,6 @@
 <template>
   <div class="button-group">
-    <b-button @click="showModal">
+    <b-button @click="show_modal">
       管理资料
     </b-button>
     <b-modal
@@ -13,115 +13,130 @@
         class="w-100">
         <h3 class="float-left">上传课程资料</h3>
       </div>
-      <b-container class="my-container">
-        <b-row
-          id="audio-row">
-          <b-col cols="2"><h5>音频资料</h5></b-col>
-          <b-col cols="8"><input
-            v-model="audio_name"
-            type="text"
-            class="text-left audio-input"
-          ></b-col>
-          <b-col
-            cols="2">
-            <b-button @click="openAudioEntrance">打开</b-button>
-          </b-col>
-          <input
-            id="upload-file"
-            ref="input_audio"
-            type="file"
-            accept="audio/mp3"
-            multiple="multiple"
-            @change="handleAudioFileChange">
-        </b-row>
-        <b-row
-          align-v="center">
-          <b-col><h5 class="text-left">图片资料</h5></b-col>
-        </b-row>
-        <b-row class="my-row">
-          <div
-            v-if="has_origin_images"
-            class="img-origin-preview-list">
+      <div class="my-body">
+        <b-container class="my-container">
+          <b-row
+            id="audio-row">
+            <b-col cols="2"><h5>音频资料</h5></b-col>
+            <b-col cols="8"><input
+              v-model="audio_name"
+              type="text"
+              class="text-left audio-input form-control"
+            ></b-col>
+            <b-col
+              cols="2">
+              <a
+                id="open-upload-btn"
+                class="btn"
+                @click="open_audio_entrance">
+                上传
+              </a>
+            </b-col>
+            <input
+              id="upload-file"
+              ref="input_audio"
+              type="file"
+              accept="audio/mp3"
+              multiple="multiple"
+              @change="handle_audio_file_change">
+          </b-row>
+          <b-row
+            align-v="center">
+            <b-col><h5 class="text-left">图片资料</h5></b-col>
+          </b-row>
+          <b-row class="my-row">
             <div
-              v-for="image in origin_image_copy_list"
-              :key="image.image_id"
-              class="img-uploader-preview">
-              <div class="preview-img">
-                <b-img
-                  :src="image.image_path"
-                  thumbnail
-                  fluid
-                  alt="Thumbnail"/>
-              </div>
-              <img
-                src="../../assets/close.png"
-                class="img-uploader-delete-btn"
-                @click="deleteOriginImg(image.image_id)">
-            </div>
-          </div>
-          <div
-            ref="uploader"
-            class="img-uploader"
-            @drop="handlePicDrop">
-            <p
-              v-if="!hasImages"
-              class="img-uploader-placeholder">{{ placeholder }}</p>
-            <div
-              v-if="hasImages"
-              class="img-uploader-preview-list">
+              v-if="has_origin_images"
+              class="img-origin-preview-list">
               <div
-                v-for="(data,index) in imageDataList"
-                :key="index"
+                v-for="image in origin_image_copy_list"
+                :key="image.image_id"
                 class="img-uploader-preview">
-
                 <div class="preview-img">
                   <b-img
-                    :src="data"
+                    :src="image.image_path"
                     thumbnail
                     fluid
                     alt="Thumbnail"/>
                 </div>
-                <div
-                  v-if="hasImages"
-                  class="img-uploader-mask">
-                  <p
-                    class="img-uploader-file-name"
-                    @click="openPicInput()">
-                    {{ placeholder }}</p>
-                </div>
                 <img
                   src="../../assets/close.png"
                   class="img-uploader-delete-btn"
-                  @click="deleteImg(index)">
+                  @click="delete_origin_img(image.image_id)">
               </div>
             </div>
-            <label
-              v-if="!hasImages"
-              for="inputID"
-              class="img-uploader-label"/>
-            <input
-              id="inputID"
-              ref="input"
-              class="input-image col-lg-12"
-              type="file"
-              accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
-              multiple="multiple"
-              @change="handlePicFileChange">
-          </div>
-        </b-row>
-      </b-container>
+            <div
+              ref="uploader"
+              class="img-uploader"
+              @drop="handle_pic_drop">
+              <p
+                v-if="!has_images"
+                class="img-uploader-placeholder">{{ placeholder }}</p>
+              <div
+                v-if="has_images"
+                class="img-uploader-preview-list">
+                <div
+                  v-for="(data,index) in image_data_list"
+                  :key="index"
+                  class="img-uploader-preview">
+
+                  <div class="preview-img">
+                    <b-img
+                      :src="data"
+                      thumbnail
+                      fluid
+                      alt="Thumbnail"/>
+                  </div>
+                  <div
+                    v-if="has_images"
+                    class="img-uploader-mask">
+                    <p
+                      class="img-uploader-file-name"
+                      @click="open_pic_input">
+                      {{ placeholder }}</p>
+                  </div>
+                  <img
+                    src="../../assets/close.png"
+                    class="img-uploader-delete-btn"
+                    @click="delete_img(index)">
+                </div>
+              </div>
+              <label
+                v-if="!has_images"
+                for="inputID"
+                class="img-uploader-label"/>
+              <input
+                id="inputID"
+                ref="input"
+                class="input-image col-lg-12"
+                type="file"
+                accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
+                multiple="multiple"
+                @change="handle_picture_file_change">
+            </div>
+          </b-row>
+        </b-container>
+      </div>
       <div
         slot="modal-footer"
         class="w-100">
         <b-row class="define-btn">
           <b-col cols="8"/>
           <b-col cols="2">
-            <b-button
-              @click="uploadResource">上传</b-button>
+            <a
+              id="upload-btn"
+              class="btn"
+              @click="upload_resource">
+              上传
+            </a>
           </b-col>
           <b-col cols="2">
-            <b-button
-              @click="hideModal">取消</b-button>
+            <a
+              id="cancel-btn"
+              class="btn"
+              @click="hide_modal">
+              取消
+            </a>
           </b-col>
         </b-row>
       </div>
@@ -130,7 +145,7 @@
 </template>
 
 <script>
-import resizeImage from './resize'
+import resize_image from './resize'
 export default {
   name: 'UploadSourceForEdit',
   props: {
@@ -149,63 +164,64 @@ export default {
   },
   data () {
     return {
-      audioFileList: [],
+      audio_file_list: [],
       audio_name: '',
       placeholder: '请选择上传文件',
-      imageDataList: [],
-      imageFileList: [],
+      image_data_list: [],
+      image_file_list: [],
       origin_image_copy_list: [],
       origin_delete_image_index: []
     }
   },
   computed: {
-    hasImages () {
-      return this.imageDataList.length > 0
+    has_images () {
+      return this.image_data_list.length > 0
     },
     has_origin_images () {
       return this.origin_image_copy_list.length > 0
     }
   },
   methods: {
-    handleAudioFileChange () {
+    handle_audio_file_change () {
       let input = this.$refs.input_audio
       let files = input.files
       if (files && files.length === 1) {
-        this.audioFileList.length = 0
-        this.audioFileList.push(files[0])
+        this.audio_file_list.length = 0
+        this.audio_file_list.push(files[0])
         this.audio_name = files[0].name
       }
     },
-    handlePicFileChange () {
+    handle_picture_file_change () {
       let input = this.$refs.input
       let files = input.files
       let _this = this
-      if (!files || !window.FileReader) return
-
+      if (!files || !window.FileReader) {
+        return
+      }
       for (let i = 0; i < files.length; i++) {
         let file = files[i]
         let reader = new FileReader()
         reader.onload = function (e) {
-          resizeImage(e.target.result, 150, 150, function (result) {
-            _this.imageDataList.push(result)
-            _this.imageFileList.push(file)
+          resize_image(e.target.result, 150, 150, function (result) {
+            _this.image_data_list.push(result)
+            _this.image_file_list.push(file)
           })
         }
         reader.readAsDataURL(file)
       }
     },
-    handlePicDrop (e) {
+    handle_pic_drop (e) {
       let files = e.dataTransfer.files
       this.preview(files)
     },
-    openPicInput () {
+    open_pic_input () {
       this.$refs.input.click()
     },
-    deleteImg (index) {
-      this.imageDataList.splice(index, 1)
-      this.imageFileList.splice(index, 1)
+    delete_img (index) {
+      this.image_data_list.splice(index, 1)
+      this.image_file_list.splice(index, 1)
     },
-    deleteOriginImg (index) {
+    delete_origin_img (index) {
       let i = 0
       for (i = 0; i < this.origin_image_copy_list.length; i++) {
         if (this.origin_image_copy_list[i].image_id === index) {
@@ -215,7 +231,7 @@ export default {
       this.origin_image_copy_list.splice(i, 1)
       this.origin_delete_image_index.push(index)
     },
-    showModal () {
+    show_modal () {
       this.origin_image_copy_list.length = 0
       if (this.origin_audio_list.length === 1) {
         this.audio_name = this.origin_audio_list[0]
@@ -227,25 +243,30 @@ export default {
       }
       this.$refs.upload_source.show()
     },
-    hideModal () {
+    hide_modal () {
       this.origin_delete_image_index.length = 0
       this.$refs.upload_source.hide()
     },
-    openAudioEntrance () {
+    open_audio_entrance () {
       this.$refs.input_audio.click()
     },
-    uploadResource () {
+    upload_resource () {
       let uploadPicResourse = []
-      for (let i = 1; i <= this.imageDataList.length; i++) {
+      for (let i = 1; i <= this.image_data_list.length; i++) {
         uploadPicResourse.push({
-          'file': this.imageFileList[i - 1],
-          'image': this.imageDataList[i - 1],
-          'index': i,
-          'time': ''
+          file: this.image_file_list[i - 1],
+          image: this.image_data_list[i - 1],
+          index: i,
+          time: ''
         })
       }
       this.$refs.upload_source.hide()
-      this.$emit('uploadResource', uploadPicResourse, this.audioFileList, this.origin_delete_image_index)
+      this.$emit(
+        'upload_resource',
+        uploadPicResourse,
+        this.audio_file_list,
+        this.origin_delete_image_index
+      )
     }
   }
 }
@@ -273,6 +294,24 @@ export default {
   width: 100%;
   padding: 0;
   margin: 0;
+}
+
+.my-body {
+  margin-right: 16px;
+  margin-left: 16px;
+}
+
+#upload-btn,
+#cancel-btn,
+#open-upload-btn {
+  color: white;
+  background-color: #337ab7;
+}
+
+#upload-btn:hover,
+#cancel-btn:hover,
+#open-upload-btn:hover {
+  background-color: #286090;
 }
 
 #upload-file {
