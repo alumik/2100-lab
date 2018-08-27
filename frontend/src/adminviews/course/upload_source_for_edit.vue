@@ -174,7 +174,6 @@ export default {
         this.audioFileList.length = 0
         this.audioFileList.push(files[0])
         this.audio_name = files[0].name
-        console.log('update')
       }
     },
     handlePicFileChange () {
@@ -207,7 +206,6 @@ export default {
       this.imageFileList.splice(index, 1)
     },
     deleteOriginImg (index) {
-      console.log(index)
       let i = 0
       for (i = 0; i < this.origin_image_copy_list.length; i++) {
         if (this.origin_image_copy_list[i].image_id === index) {
@@ -216,8 +214,6 @@ export default {
       }
       this.origin_image_copy_list.splice(i, 1)
       this.origin_delete_image_index.push(index)
-      console.log(this.origin_image_copy_list)
-      console.log(this.origin_delete_image_index)
     },
     showModal () {
       this.origin_image_copy_list.length = 0
@@ -229,8 +225,6 @@ export default {
           this.origin_image_copy_list.push(this.origin_image_list[i])
         }
       }
-      console.log(this.audio_name)
-      console.log(this.origin_audio_list)
       this.$refs.upload_source.show()
     },
     hideModal () {
