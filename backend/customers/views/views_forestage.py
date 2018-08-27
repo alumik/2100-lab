@@ -1,18 +1,22 @@
 """用户模块前台函数"""
 
-import re
 import random
+import re
 import time
 
 from django.conf import settings
 from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+
+# Comment out the following line to prevent sms being sent by CI server.
 # from qcloudsms_py.httpclient import HTTPError
 
-from core.utils import get_page
 from core.constants import ERROR, INFO
+from core.utils import get_page
 from customers.models import LearningLog, OrderLog
+
+# Comment out the following line to prevent sms being sent by CI server.
 # from customers.utils import tencent_cloud_message
 
 
@@ -27,10 +31,14 @@ def get_verification_code(request):
     if match:
         verification_code = str(random.randint(0, 999999)).zfill(6)
 
+        # Comment out the following lines to prevent sms being sent by CI server.
         # try:
         #     tencent_cloud_message(phone_number, verification_code)
         # except (HTTPError, Exception):
-        #     return JsonResponse({'message': ERROR['message_send_failed']}, status=500)
+        #     return JsonResponse(
+        #         {'message': ERROR['message_send_failed']},
+        #         status=500
+        #     )
 
         request.session['prev_phone_number'] = phone_number
         request.session['verification_code'] = verification_code
@@ -66,10 +74,16 @@ def authenticate_customer(request):
     verification_code = request.POST.get('verification_code')
 
     if phone_number != request.session['prev_phone_number']:
-        return JsonResponse({'message': ERROR['different_phone_number']}, status=400)
+        return JsonResponse(
+            {'message': ERROR['different_phone_number']},
+            status=400
+        )
 
     if verification_code != request.session['verification_code']:
-        return JsonResponse({'message': ERROR['invalid_verification_code']}, status=400)
+        return JsonResponse(
+            {'message': ERROR['invalid_verification_code']},
+            status=400
+        )
 
     try:
         user = get_user_model().objects.get(phone_number=phone_number)
@@ -104,10 +118,16 @@ def change_username(request):
     username = request.POST.get('username')
     try:
         get_user_model().objects.get(username=username)
-        return JsonResponse({'message': ERROR['username_already_taken']}, status=400)
+        return JsonResponse(
+            {'message': ERROR['username_already_taken']},
+            status=400
+        )
     except get_user_model().DoesNotExist:
         if re.match(r'^.*_deleted_.*$', username):
-            return JsonResponse({'message': ERROR['invalid_username']}, status=400)
+            return JsonResponse(
+                {'message': ERROR['invalid_username']},
+                status=400
+            )
         user.username = username
         user.save()
         return JsonResponse({'new_username': username})
@@ -148,7 +168,9 @@ def get_reward_coin(request):
 def get_learning_logs(request):
     """获取用户学习记录列表"""
 
-    learning_logs = LearningLog.objects.filter(customer=request.user).order_by('-latest_learn')
+    learning_logs = LearningLog.objects.filter(
+        customer=request.user
+    ).order_by('-latest_learn')
     return get_page(request, learning_logs)
 
 
@@ -156,7 +178,9 @@ def get_learning_logs(request):
 def get_order_logs(request):
     """获取用户订单记录列表"""
 
-    order_logs = OrderLog.objects.filter(customer=request.user).order_by('-created_at')
+    order_logs = OrderLog.objects.filter(
+        customer=request.user
+    ).order_by('-created_at')
     return get_page(request, order_logs)
 
 

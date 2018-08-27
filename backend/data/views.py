@@ -1,8 +1,8 @@
 """数据分析模块操作"""
 
 from datetime import datetime
-import pytz
 import time
+import pytz
 
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
