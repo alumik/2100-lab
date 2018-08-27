@@ -14,17 +14,21 @@
         <h3 class="float-left">上传课程资料</h3>
       </div>
       <b-container class="my-container">
-        <b-row
-          id="audio-row">
+        <b-row>
           <b-col cols="2"><h5>音频资料</h5></b-col>
           <b-col cols="8"><input
             v-model="audio_name"
             type="text"
-            class="text-left audio-input"
+            class="text-left form-control audio-input"
           ></b-col>
           <b-col
             cols="2">
-            <b-button @click="open_audio_entrance">打开</b-button>
+            <a
+              id="open-upload-btn"
+              class="btn"
+              @click="open_audio_entrance">
+              上传
+            </a>
           </b-col>
           <input
             id="upload-file"
@@ -53,7 +57,6 @@
                 v-for="(data,index) in image_data_list"
                 :key="index"
                 class="img-uploader-preview">
-
                 <div class="preview-img">
                   <b-img
                     :src="data"
@@ -96,12 +99,20 @@
         <b-row class="define-btn">
           <b-col cols="8"/>
           <b-col cols="2">
-            <b-button
-              @click="upload_resource">上传</b-button>
+            <a
+              id="upload-btn"
+              class="btn"
+              @click="upload_resource">
+              上传
+            </a>
           </b-col>
           <b-col cols="2">
-            <b-button
-              @click="hide_modal">取消</b-button>
+            <a
+              id="cancel-btn"
+              class="btn"
+              @click="hide_modal">
+              取消
+            </a>
           </b-col>
         </b-row>
       </div>
@@ -148,8 +159,9 @@ export default {
       let input = this.$refs.input
       let files = input.files
       let _this = this
-      if (!files || !window.FileReader) return
-
+      if (!files || !window.FileReader) {
+        return
+      }
       for (let i = 0; i < files.length; i++) {
         let file = files[i]
         let reader = new FileReader()
@@ -192,6 +204,7 @@ export default {
           time: ''
         })
       }
+      console.log(this.audio_file_list)
       this.$refs.upload_source.hide()
       this.$emit(
         'upload_resource',
@@ -211,8 +224,32 @@ export default {
   max-width: 8rem;
 }
 
+h5 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#open-upload-btn {
+  margin-top: 20px;
+  margin-left: 10px;
+}
+
+#upload-btn,
+#cancel-btn,
+#open-upload-btn {
+  color: white;
+  background-color: #337ab7;
+}
+
+#upload-btn:hover,
+#cancel-btn:hover,
+#open-upload-btn:hover {
+  background-color: #286090;
+}
+
 .audio-input {
   width: 100%;
+  margin-top: 20px;
 }
 
 .define-btn {
@@ -223,7 +260,8 @@ export default {
 
 .my-container {
   width: 100%;
-  padding: 0;
+  padding-right: 15px;
+  padding-left: 15px;
   margin: 0;
 }
 

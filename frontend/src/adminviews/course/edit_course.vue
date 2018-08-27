@@ -125,13 +125,13 @@
           id="course_content"
           :origin_image_list="course.origin_image_file_list"
           :origin_audio_list="course.origin_audio_file_list"
-          @uploadResource="receive_uploaded_resource"/>
+          @upload_resource="receive_uploaded_resource"/>
         <PreSortPicture
           :is_uploaded="is_uploaded"
           :choose_image_data_list_origin="image_file_list"
           @update_is_uploaded="is_uploaded=false"
           @reset_is_uploaded="is_uploaded=true"
-          @uploadSortedPic="receive_sorted_pictures"/>
+          @upload_sorted_pic="receive_sorted_pictures"/>
         <SyncPicture
           :audio_file_list="audio_file_list"
           :image_data_list="image_file_list"
@@ -198,7 +198,7 @@ export default {
         price: '',
         reward_percent: '',
         description: '',
-        can_comment: '',
+        can_comment: '1',
         origin_audio_file_list: [],
         origin_image_file_list: []
       },
@@ -276,11 +276,7 @@ export default {
     ) {
       this.is_uploaded = true
       this.image_file_list.length = 0
-      if (
-        audio_file_list &&
-        audio_file_list.length === 1 &&
-        audio_file_list[0]
-      ) {
+      if (audio_file_list && audio_file_list.length === 1 && audio_file_list[0]) {
         this.is_audio_changed = true
         this.audio_file_list = audio_file_list
         this.course.origin_audio_file_list[0] = audio_file_list[0].name

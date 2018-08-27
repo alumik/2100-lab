@@ -17,53 +17,69 @@
         class="w-100">
         <h3 class="float-left">图片预排序</h3>
       </div>
-      <b-container
-        fluid
-        class="bg-danger row pre-scrollable choose-list">
-        <b-row
-          v-for="img in sort_image_data_list"
-          :key="img.index"
-          class="choose-row">
-          <b-col>
-            <b-img
-              :src="img.image"
-              fluid
-              alt="test-image"
-              class="img-thumbnail"
-              @click="dropback(img)"/>
-          </b-col>
+      <div class="my-body">
+        <b-row>
+          <b-col cols="3"><h5>已排序图片</h5></b-col>
         </b-row>
-      </b-container>
-      <b-container
-        fluid
-        class="bg-primary row pre-scrollable choose-list">
-        <b-row
-          v-for="img in choose_image_data_list"
-          :key="img.data"
-          class="choose-row"
-        >
-          <b-col>
-            <b-img
-              :src="img.image"
-              fluid
-              alt="test-image"
-              class="img-thumbnail"
-              @click="dropout(img)"/>
-          </b-col>
+        <b-container
+          fluid
+          class="row choose-list">
+          <b-row
+            v-for="img in sort_image_data_list"
+            :key="img.index"
+            class="choose-row">
+            <b-col>
+              <b-img
+                :src="img.image"
+                fluid
+                alt="test-image"
+                class="img-thumbnail"
+                @click="dropback(img)"/>
+            </b-col>
+          </b-row>
+        </b-container>
+        <b-row>
+          <b-col cols="3"><h5>未排序图片</h5></b-col>
         </b-row>
-      </b-container>
+        <b-container
+          fluid
+          class="row choose-list">
+          <b-row
+            v-for="img in choose_image_data_list"
+            :key="img.data"
+            class="choose-row"
+          >
+            <b-col>
+              <b-img
+                :src="img.image"
+                fluid
+                alt="test-image"
+                class="img-thumbnail"
+                @click="dropout(img)"/>
+            </b-col>
+          </b-row>
+        </b-container>
+      </div>
       <div
         slot="modal-footer"
         class="w-100">
         <b-row class="define-btn">
           <b-col cols="8"/>
           <b-col cols="2">
-            <b-button
-              @click="send_modal">上传</b-button>
+            <a
+              id="upload-btn"
+              class="btn"
+              @click="send_modal">
+              上传
+            </a>
           </b-col>
           <b-col cols="2">
-            <b-button
-              @click="hide_modal">取消</b-button>
+            <a
+              id="cancel-btn"
+              class="btn"
+              @click="hide_modal">
+              取消
+            </a>
           </b-col>
         </b-row>
       </div>
@@ -134,7 +150,7 @@ export default {
         this.choose_image_data_list_origin.length
       ) {
         this.now_index = 0
-        this.$emit('uploadSortedPic', this.sort_image_data_list.slice())
+        this.$emit('upload_sorted_pic', this.sort_image_data_list.slice())
         this.choose_image_data_list.length = 0
         this.sort_image_data_list.length = 0
         this.$refs.edit_picture.hide()
@@ -158,13 +174,20 @@ export default {
   float: right;
 }
 
+.my-body {
+  margin-right: 16px;
+  margin-left: 16px;
+}
+
 .choose-list {
-  display: flex;
-  flex-direction: row;
+  display: -webkit-box;
   min-height: 200px;
   max-height: 200px;
   padding: 0;
   margin: 0;
+  overflow: hidden;
+  overflow-x: auto;
+  background-color: lightgray;
 }
 
 .choose-row {
@@ -173,5 +196,21 @@ export default {
   height: 200px;
   max-height: 200px;
   padding: 5px;
+}
+
+#upload-btn,
+#cancel-btn {
+  color: white;
+  background-color: #337ab7;
+}
+
+#upload-btn:hover,
+#cancel-btn:hover {
+  background-color: #286090;
+}
+
+h5 {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 </style>

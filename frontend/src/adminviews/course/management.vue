@@ -515,6 +515,11 @@ h6 {
   border: 1px solid #d3d9df;
 }
 
+.buttons {
+  padding: 10px;
+  white-space: nowrap;
+}
+
 #head-add-btn {
   color: white;
   text-align: right;
