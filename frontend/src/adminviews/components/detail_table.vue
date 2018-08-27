@@ -45,6 +45,7 @@ export default {
   }
 
   td {
+    word-break: break-all;
     vertical-align: middle;
   }
 

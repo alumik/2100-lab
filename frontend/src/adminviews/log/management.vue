@@ -297,13 +297,14 @@ tr td {
 .btn {
   margin-right: 2px;
   margin-left: 2px;
-  color: #5b9bd1;
-  background-color: rgba(91, 155, 209, 0.2);
+  color: white;
+  background-color: #337ab7;
   border: 1px solid #d3d9df;
+  outline: none;
 }
 
 .btn:hover,
 .btn:active {
-  background-color: rgba(66, 112, 151, 0.2);
+  background-color: #286090;
 }
 </style>
