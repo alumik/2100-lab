@@ -1,10 +1,11 @@
 """课程模块模型"""
+
 # pylint: disable=E1101
 
 import datetime
 
-from django.db import models
 from django.conf import settings
+from django.db import models
 
 from core.models import SoftDeletionModel
 
@@ -22,8 +23,15 @@ class Course(SoftDeletionModel):
     )
     codename = models.CharField(max_length=50, unique=True)
     price = models.DecimalField(decimal_places=2, max_digits=12, default=0)
-    reward_percent = models.DecimalField(decimal_places=2, max_digits=12, default=0)
-    thumbnail = models.ImageField(upload_to='uploads/courses/thumbnails/', blank=True)
+    reward_percent = models.DecimalField(
+        decimal_places=2,
+        max_digits=12,
+        default=0
+    )
+    thumbnail = models.ImageField(
+        upload_to='uploads/courses/thumbnails/',
+        blank=True
+    )
     audio = models.FileField(upload_to='uploads/courses/audios/', blank=True)
     expire_duration = models.DurationField(default=datetime.timedelta())
     can_comment = models.BooleanField(default=True)
@@ -69,7 +77,10 @@ class Course(SoftDeletionModel):
 class CourseUpVotes(models.Model):
     """课程点赞记录模型"""
 
-    customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    customer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -94,7 +105,10 @@ class Image(models.Model):
 class Comment(SoftDeletionModel):
     """评论和回复模型"""
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     content = models.TextField()
     up_votes = models.ManyToManyField(
@@ -138,7 +152,9 @@ class Comment(SoftDeletionModel):
             'reply_count': Comment.objects.filter(parent=self).count(),
             'replies': []
         }
-        replies = Comment.objects.filter(parent=self).order_by('-created_at')[:3]
+        replies = Comment.objects.filter(
+            parent=self
+        ).order_by('-created_at')[:3]
         for reply in replies:
             json_data['replies'].append(reply.as_reply_dict(customer))
         return json_data

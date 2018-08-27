@@ -6,10 +6,10 @@ import datetime
 from django.contrib.auth.decorators import permission_required
 from django.http import JsonResponse
 
-from core.utils import get_backstage_page
-from core.constants import ERROR, INFO, ACTION_TYPE
-from courses.models import Course, Comment, Image, Hero
 from admins.models import AdminLog
+from core.constants import ERROR, INFO, ACTION_TYPE
+from core.utils import get_backstage_page
+from courses.models import Course, Comment, Image, Hero
 
 
 @permission_required('courses.view_course')
@@ -296,11 +296,17 @@ def add_comment(request):
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
     if reply_to.parent is not None:
-        return JsonResponse({'message': ERROR['cannot_reply_a_reply']}, status=400)
+        return JsonResponse(
+            {'message': ERROR['cannot_reply_a_reply']},
+            status=400
+        )
 
     course = reply_to.course
     if not course.can_comment:
-        return JsonResponse({'message': ERROR['comment_not_allowed']}, status=403)
+        return JsonResponse(
+            {'message': ERROR['comment_not_allowed']},
+            status=403
+        )
 
     reply = Comment.objects.create(
         user=request.user,
