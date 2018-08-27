@@ -1,23 +1,21 @@
 <template>
   <body>
-    <div class="navbar-style">
-      <UserNavbar/>
-      <b-alert
-        :show="created_test"
-        variant="danger"
-        dismissible
-        @dismissed="created_test = false">
-        {{ created_error_msg }}
-      </b-alert>
-      <b-alert
-        :show="carousel_test"
-        variant="danger"
-        dismissible
-        fade
-        @dismissed="carousel_test=false">
-        {{ carousel_error_msg }}
-      </b-alert>
-    </div>
+    <UserNavbar/>
+    <b-alert
+      :show="created_test"
+      variant="danger"
+      dismissible
+      @dismissed="created_test = false">
+      {{ created_error_msg }}
+    </b-alert>
+    <b-alert
+      :show="carousel_test"
+      variant="danger"
+      dismissible
+      fade
+      @dismissed="carousel_test=false">
+      {{ carousel_error_msg }}
+    </b-alert>
     <div class="homepage-container">
       <div class="carousel-container">
         <b-carousel
@@ -26,40 +24,42 @@
           controls
           indicators
           img-responsive
-          background="#ababab"
         >
           <b-carousel-slide
             class="height-change"
             caption="First slide"
             name="carousel-pic-1"
             text="Nulla vitae elit libero, a pharetra augue mollis interdum."
-            img-src="https://picsum.photos/1024/300/?image=30"/>
+            img-src="https://picsum.photos/1024/300/?image=60"/>
           <b-carousel-slide
             class="height-change"
             caption="First slide"
             name="carousel-pic-2"
             text="Nulla vitae elit libero, a pharetra augue mollis interdum."
-            img-src="https://picsum.photos/1024/300/?image=31"/>
+            img-src="https://picsum.photos/1024/300/?image=70"/>
           <b-carousel-slide
             class="height-change"
             caption="First slide"
             name="carousel-pic-3"
             text="Nulla vitae elit libero, a pharetra augue mollis interdum."
-            img-src="https://picsum.photos/1024/300/?image=32"/>
+            img-src="https://picsum.photos/1024/300/?image=80"/>
           <b-carousel-slide
             class="height-change"
             caption="First slide"
             name="carousel-pic-4"
             text="Nulla vitae elit libero, a pharetra augue mollis interdum."
-            img-src="https://picsum.photos/1024/300/?image=33"/>
+            img-src="https://picsum.photos/1024/300/?image=90"/>
         </b-carousel>
       </div>
       <div class="recommend-list">
         <RecommendList
           :courselist="freecourselist"
-          course_type="free"/>
+          course_type="free"
+          class="list-style"/>
+        <hr>
         <RecommendList
           :courselist="paidcourselist"
+          class="paid-recommend"
           course_type="paid"/>
       </div>
     </div>
@@ -121,16 +121,18 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+.list-style {
+  margin: 3rem 0;
+}
+
+.paid-recommend {
+  margin-top: 3.5rem;
+}
+
 .homepage-container {
   margin-right: 0;
   margin-left: 0;
   border-width: 0.2rem;
-}
-
-.navbar-style {
-  position: fixed;
-  z-index: 999;
-  width: 100%;
 }
 
 .recommend-list {
