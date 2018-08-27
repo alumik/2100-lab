@@ -106,14 +106,14 @@
             </tr>
           </tbody>
         </table>
-        <b-pagination
-          :total-rows="rows"
-          :per-page="per_page"
-          v-model="page"
-          align="center"
-          size="md"
-          @input="change_page"/>
       </div>
+      <b-pagination
+        :total-rows="rows"
+        :per-page="per_page"
+        v-model="page"
+        align="center"
+        size="md"
+        @input="change_page"/>
     </div>
   </Basic>
 </template>
@@ -156,7 +156,7 @@ export default {
       state: '',
       page_jump: false,
       page: 1,
-      per_page: 20,
+      per_page: 15,
       dismiss_second: 5,
       wrong_count_down: 0,
       wrong: '',
@@ -282,8 +282,8 @@ h6 {
 }
 
 .table-div {
-  padding-right: 15px;
-  padding-left: 15px;
+  padding: 0 15px;
+  margin-bottom: 25px;
   overflow-x: auto;
 }
 

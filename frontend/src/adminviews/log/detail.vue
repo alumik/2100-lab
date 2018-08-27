@@ -1,8 +1,12 @@
 <template>
   <Basic :items="items">
     <div class="body">
-      <h1>日志列表</h1>
-      <h6>第 {{ page }}/{{ num_pages }} 页，共 {{ rows }} 条数据</h6>
+      <div class="head-container">
+        <div class="head-title">
+          <h1>日志列表</h1>
+        </div>
+        <h6>第 {{ page }}/{{ num_pages }} 页，共 {{ rows }} 条数据</h6>
+      </div>
       <Alert
         :count_down="wrong_count_down"
         :instruction="wrong"
@@ -68,7 +72,7 @@ export default {
       logs: [],
       rows: 20,
       page: 1,
-      per_page: 10,
+      per_page: 15,
       dismiss_second: 5,
       wrong_count_down: 0,
       wrong: '',
@@ -177,20 +181,17 @@ export default {
 
 h1,
 h6 {
-  padding-left: 15px;
-  margin: 25px 0;
   color: #204269;
   text-align: left;
 }
 
 h6 {
-  margin-bottom: 15px;
   font-weight: bold;
 }
 
 .table-div {
-  padding-right: 15px;
-  padding-left: 15px;
+  padding: 0 15px;
+  margin-bottom: 25px;
   overflow-x: auto;
 }
 
@@ -219,5 +220,16 @@ thead tr {
 
 .lg-td {
   width: 400px;
+}
+
+.head-title {
+  display: flex;
+  margin: 25px 0;
+}
+
+.head-container {
+  padding: 0 15px;
+  margin-bottom: 15px;
+  text-align: left;
 }
 </style>

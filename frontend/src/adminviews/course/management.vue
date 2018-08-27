@@ -252,7 +252,7 @@ export default {
       title: '',
       rows: 0,
       error_message: '',
-      per_limit: 5,
+      per_limit: 15,
       page: 1,
       num_pages: 0,
       placeholder: '点击上传图片',
@@ -506,6 +506,7 @@ h6 {
 
 .table-div {
   padding: 0 15px;
+  margin-bottom: 25px;
   overflow-x: auto;
 }
 
