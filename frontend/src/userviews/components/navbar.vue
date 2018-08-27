@@ -50,7 +50,6 @@ export default {
   name: 'UserNavbar',
   data () {
     return {
-    //   avatar: this.$store.state.address + this.$store.state.user.avatar
     }
   },
   computed: {
