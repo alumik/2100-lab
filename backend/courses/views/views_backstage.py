@@ -32,6 +32,7 @@ def get_course_list(request):
 @permission_required('courses.view_course')
 def get_course_detail(request):
     """获取课程详情"""
+
     course_id = request.GET.get('course_id')
 
     try:
@@ -44,6 +45,7 @@ def get_course_detail(request):
             'course_id': course.id,
             'codename': course.codename,
             'title': course.title,
+            'thumbnail': str(course.thumbnail),
             'up_votes': course.up_votes.count(),
             'expire_duration': course.expire_duration,
             'price': course.price,
@@ -93,6 +95,7 @@ def add_course(request):
     images = request.FILES.getlist('images', [])
     audio = request.FILES.get('audio')
     load_times = request.POST.getlist('load_times', [])
+    thumbnail = request.FILES.get('thumbnail')
 
     course = Course.objects.create(
         title=title,
@@ -103,6 +106,7 @@ def add_course(request):
         reward_percent=Decimal(reward_percent),
         description=description,
         audio=audio,
+        thumbnail=thumbnail
     )
 
     for image in images:
@@ -165,6 +169,9 @@ def edit_course(request):
     audio = request.FILES.get('audio')
     if audio is not None:
         course.audio = audio
+    thumbnail = request.FILES.get('thumbnail')
+    if thumbnail is not None:
+        course.thumbnail = thumbnail
     course.save()
     image_files = request.FILES.getlist('image_files', [])
     image_ids = request.POST.getlist('image_ids', [])
