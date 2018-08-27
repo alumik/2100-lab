@@ -1,10 +1,16 @@
 <template>
   <div>
-    <b-btn
-      class="head-btn"
+    <a
+      id="pre-sort-btn"
+      class="btn"
       @click="show_modal">
+      <simple-line-icons
+        id="change-icon"
+        icon="picture"
+        color="white"
+        class="icon"/>
       图片预排序
-    </b-btn>
+    </a>
     <b-modal
       ref="edit_picture"
       size="lg"
@@ -169,11 +175,6 @@ export default {
 </script>
 
 <style scoped>
-.head-btn {
-  display: inline-block;
-  float: right;
-}
-
 .my-body {
   margin-right: 16px;
   margin-left: 16px;
@@ -212,5 +213,16 @@ export default {
 h5 {
   margin-top: 20px;
   margin-bottom: 20px;
+}
+
+#pre-sort-btn {
+  margin-right: 5px;
+  margin-left: 5px;
+  color: white;
+  background-color: #337ab7;
+}
+
+#pre-sort-btn:hover {
+  background-color: #286090;
 }
 </style>
