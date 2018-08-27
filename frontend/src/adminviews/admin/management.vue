@@ -232,12 +232,12 @@ export default {
   margin: 0;
   color: white;
   text-align: right;
-  background-color: #449c44;
+  background-color: #4db14d;
 }
 
 #head-btn:hover,
 #head-btn:active {
-  background-color: #4db14d;
+  background-color: #449c44;
 }
 
 #add-icon {

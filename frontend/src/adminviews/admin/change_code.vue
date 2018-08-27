@@ -166,12 +166,12 @@ label {
   margin-left: 15px;
   color: white;
   text-align: right;
-  background-color: #449c44;
+  background-color: #4db14d;
   border: 1px solid #d3d9df;
 }
 
 .btn:hover,
 .btn:active {
-  background-color: #4db14d;
+  background-color: #449c44;
 }
 </style>

@@ -310,31 +310,31 @@ h1 {
 #distribution-btn {
   margin-left: 15px;
   color: white;
-  background-color: royalblue;
+  background-color: #337ab7;
 }
 
 #distribution-btn:hover {
-  background-color: #00f;
+  background-color: #286090;
 }
 
 #change-password-btn {
   margin-left: 15px;
   color: white;
-  background-color: royalblue;
+  background-color: #337ab7;
 }
 
 #change-password-btn:hover {
-  background-color: #00f;
+  background-color: #286090;
 }
 
 #change-username-btn {
   margin-left: 15px;
   color: white;
-  background-color: royalblue;
+  background-color: #337ab7;
 }
 
 #change-username-btn:hover {
-  background-color: #00f;
+  background-color: #286090;
 }
 
 #delete-user-btn {
@@ -351,12 +351,12 @@ h1 {
 .btn {
   color: white;
   text-align: right;
-  background-color: #449c44;
+  background-color: #4db14d;
   border: 1px solid #d3d9df;
 }
 
 .btn:hover,
 .btn:active {
-  background-color: #4db14d;
+  background-color: #449c44;
 }
 </style>

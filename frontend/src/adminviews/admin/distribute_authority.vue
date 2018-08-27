@@ -245,12 +245,12 @@ h1 {
   margin-left: 3px;
   color: white;
   text-align: right;
-  background-color: #0c0;
+  background-color: #4db14d;
   border: 1px solid #d3d9df;
 }
 
 .btn:hover,
 .btn:active {
-  background-color: #090;
+  background-color: #449c44;
 }
 </style>
