@@ -102,7 +102,19 @@ const i18n = new VueI18n({
 })
 
 Vue.component('simple-line-icons', SimpleLineIcons)
-
+router.beforeEach(async (to, from, next) => {
+  let response = await axios.post(
+    'http://localhost:8000/api/v1/core/auth/is-authenticated/',
+    {
+      withCredentials: true
+    }
+  )
+  if (!response.data.is_authenticated && to.meta.requireAuth !== false) {
+    next('/')
+  } else {
+    next()
+  }
+})
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
