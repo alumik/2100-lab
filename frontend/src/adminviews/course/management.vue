@@ -40,97 +40,104 @@
           <h3 class="float-left">更换首页图片</h3>
         </div>
         <b-container>
-          <b-row
-            align-v="center">
+          <b-row>
             <b-col>
               <h5 class="text-left">
-                图片资料
+                已有封面轮播图片列表
               </h5>
             </b-col>
           </b-row>
           <b-row class="my-row">
-            <div class="my-row">
-              <div
-                v-for="image in origin_image_list"
-                :key="image.hero_id"
-                class="img-uploader-preview">
-                <div class="preview-img">
-                  <b-img
-                    :src="image.image"
-                    thumbnail
-                    fluid
-                    alt="Thumbnail"/>
-                </div>
-                <img
-                  src="../../assets/logo.png"
-                  class="img-uploader-delete-btn"
-                  @click="delete_origin_img(image.hero_id)">
+            <div
+              v-for="image in origin_image_list"
+              :key="image.hero_id"
+              class="img-uploader-preview">
+              <div class="preview-img">
+                <b-img
+                  :src="image.image"
+                  thumbnail
+                  fluid
+                  alt="Thumbnail"/>
               </div>
-              <div
-                ref="uploader"
-                class="img-uploader"
-                @drop="handle_drop">
-                <p
-                  v-if="!has_images"
-                  class="img-uploader-placeholder">{{ placeholder }}</p>
-                <div
-                  v-if="has_images"
-                  class="img-uploader-preview-list">
-                  <div
-                    v-for="(data,index) in image_data_list"
-                    :key="index"
-                    class="img-uploader-preview">
-
-                    <div class="preview-img">
-                      <b-img
-                        :src="data"
-                        thumbnail
-                        fluid
-                        alt="Thumbnail"/>
-                    </div>
-                    <div
-                      v-if="has_images"
-                      class="img-uploader-mask">
-                      <p
-                        class="img-uploader-file-name"
-                        @click="open_input()">
-                        {{ placeholder }}</p>
-                    </div>
-                    <img
-                      src="../../assets/logo.png"
-                      class="img-uploader-delete-btn"
-                      @click="delete_img(index)">
-                  </div>
-                </div>
-                <label
-                  v-if="!has_images"
-                  for="inputID"
-                  class="img-uploader-label"/>
-                <input
-                  id="inputID"
-                  ref="input"
-                  class="input-image col-lg-12"
-                  type="file"
-                  accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
-                  multiple="multiple"
-                  @change="handle_file_change">
-              </div>
+              <img
+                src="../../assets/close.png"
+                class="img-uploader-delete-btn"
+                @click="delete_origin_img(image.hero_id)">
             </div>
+          </b-row>
+          <b-row>
+            <b-col>
+              <h5 class="text-left">
+                封面轮播图片上传区域
+              </h5>
+            </b-col>
+          </b-row>
+          <b-row class="content-row">
+            <b-col
+              ref="uploader"
+              class="img-uploader"
+              @drop="handle_drop">
+              <p
+                v-if="!has_images"
+                class="img-uploader-placeholder">{{ placeholder }}</p>
+              <div
+                v-if="has_images"
+                class="img-uploader-preview-list">
+                <div
+                  v-for="(data,index) in image_data_list"
+                  :key="index"
+                  class="img-uploader-preview">
+                  <div class="preview-img">
+                    <b-img
+                      :src="data"
+                      thumbnail
+                      fluid
+                      alt="Thumbnail"/>
+                  </div>
+                  <div
+                    v-if="has_images"
+                    class="img-uploader-mask">
+                    <p
+                      class="img-uploader-file-name"
+                      @click="open_input()">
+                      {{ placeholder }}</p>
+                  </div>
+                  <img
+                    src="../../assets/close.png"
+                    class="img-uploader-delete-btn"
+                    @click="delete_img(index)">
+                </div>
+              </div>
+              <label
+                v-if="!has_images"
+                for="inputID"
+                class="img-uploader-label"/>
+              <input
+                id="inputID"
+                ref="input"
+                class="input-image col-lg-12"
+                type="file"
+                accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
+                multiple="multiple"
+                @change="handle_file_change">
+            </b-col>
           </b-row>
           <b-row align-v="start">
             <b-col>
               <h5 class="text-left">
-                输入文字
+                文字输入区域 输入文字与图片为一一对应顺序，以换行为分隔符
               </h5>
             </b-col>
           </b-row>
-          <div>
-            <textarea
-              id="intro"
-              v-model="input_content"
-              class="form-control col-lg-12"
-              rows="6s"/>
-          </div>
+          <b-row class="content-row">
+            <b-col class="my-col">
+              <textarea
+                id="intro"
+                v-model="input_content"
+                class="form-control col-lg-12"
+                rows="6s"/>
+            </b-col>
+          </b-row>
         </b-container>
         <div
           slot="modal-footer"
@@ -139,10 +146,12 @@
             <b-col cols="8"/>
             <b-col cols="2">
               <b-button
+                class="btn-primary"
                 @click="upload_data">上传</b-button>
             </b-col>
             <b-col cols="2">
               <b-button
+                class="btn-primary"
                 @click="hide_modal">取消</b-button>
             </b-col>
           </b-row>
@@ -405,14 +414,14 @@ export default {
     },
     upload_data () {
       let updateText = this.input_content.split('\n')
-      let formdata = new FormData()
+      let form_data = new FormData()
       for (let i = 0; i < this.file_name_list.length; i++) {
-        formdata.append('heroes', this.file_name_list[i])
-        formdata.append('captions', updateText[i])
+        form_data.append('heroes', this.file_name_list[i])
+        form_data.append('captions', updateText[i])
       }
       axios.post(
         'http://localhost:8000/api/v1/courses/backstage/course-management/add-hero/',
-        formdata
+        form_data
       )
       axios.post(
         'http://localhost:8000/api/v1/courses/backstage/course-management/delete-hero/',
@@ -423,6 +432,11 @@ export default {
           { arrayFormat: 'repeat' }
         )
       )
+      this.image_data_list = []
+      this.file_name_list = []
+      this.delete_origin_list = []
+      this.input_content = ''
+      this.$refs.upload_picture.hide()
     },
     delete_origin_img (index) {
       this.delete_origin_list.push(index)
@@ -457,6 +471,28 @@ export default {
 h1,
 h6 {
   color: #204269;
+}
+
+.my-row {
+  display: flex;
+  flex-wrap: nowrap;
+  min-height: 100px;
+  overflow: hidden;
+  overflow-x: auto;
+}
+
+.my-col {
+  padding: 0;
+}
+
+#intro {
+  width: 96%;
+  margin-left: 15px;
+}
+
+h5 {
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
 h1 {
@@ -549,6 +585,8 @@ table {
   min-width: 260px;
   max-width: 800px;
   height: calc(150px + 25px * 2);
+  margin-right: 15px;
+  margin-left: 15px;
   background: #ebebeb;
   border-radius: 5px;
 }

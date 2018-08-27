@@ -51,7 +51,7 @@
                 alt="Thumbnail"/>
             </div>
             <img
-              src="../../assets/logo.png"
+              src="../../assets/close.png"
               class="img-uploader-delete-btn"
               @click="deleteOriginImg(image.hero_id)">
           </div>
@@ -86,7 +86,7 @@
                     {{ placeholder }}</p>
                 </div>
                 <img
-                  src="../../assets/logo.png"
+                  src="../../assets/close.png"
                   class="img-uploader-delete-btn"
                   @click="deleteImg(index)">
               </div>
