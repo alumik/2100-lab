@@ -17,24 +17,12 @@ describe('课程详情模块单元测验', () => {
   })
 
   it('标题是"课程详情"', () => {
-    expect(wrapper.find('h2').text()).toEqual('课程详情')
+    expect(wrapper.find('h1').text()).toEqual('课程详情')
   })
 
   it('删除课程模态框测试', () => {
     expect(wrapper.contains(ConfirmModal)).toBe(false)
     wrapper.findAll('[type=button]').at(1).trigger('click')
     expect(wrapper.contains('#delete')).toBe(true)
-  })
-
-  const wrappers = shallowMount(BackendCourseDetail, {
-    mocks: {
-      $route
-    }
-  })
-
-  it('修改课程跳转测试', () => {
-    expect(wrappers.vm.test_router).toEqual(-1)
-    wrappers.findAll('[type=button]').at(0).trigger('click')
-    expect(wrappers.vm.test_router).toEqual(1)
   })
 })
