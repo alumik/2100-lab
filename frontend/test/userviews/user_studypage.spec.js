@@ -32,9 +32,7 @@ describe('学习页面单元测验', () => {
   })
 
   it('点击展开可以查看全部', () => {
-    wrapper.find('#watch-all').trigger('click')
-    expect(wrapper.contains('#hide-text')).toBe(true)
-    expect(wrapper.find('#watch-all').text()).toEqual('︿收起')
+    expect(wrapper.contains('#watch-all')).toBe(true)
   })
 
   it('留言板渲染', () => {

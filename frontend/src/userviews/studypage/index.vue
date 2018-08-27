@@ -67,20 +67,20 @@
                   @click="up_vote_course">&#10084;</a>
               </b-col>
             </b-row>
-            <div class="delete-margin text-left-style">
-              &emsp;&emsp;{{ introduction_text_show }}
-            </div>
-            <label
-              v-if="introduction_brandFold === false"
-              id="hide-text">{{ introduction_text_hide }}
-            </label>
             <div
+              id="description"
+              :style="{'max-height': isExpand}"
+              class="delete-margin text-left-style">
+              &emsp;&emsp;{{ course.description }}
+            </div>
+            <span
+              id="expand-all"
               class="text-right-style"
               @click="changeFoldState">
               <label
                 id="watch-all"
                 class="look-all">{{ introduction_brandFold ? '﹀展开':'︿收起' }}</label>
-            </div>
+            </span>
           </div>
         </b-card>
         <b-card
@@ -130,14 +130,13 @@ export default {
       audio_duration: null,
       audio_piece_num: 0,
       introduction_brandFold: true,
-      introduction_text_show: '',
-      introduction_text_hide: '',
       course: {},
       up_votes: 0,
       beforedestroy_test: false,
       beforedestroy_error_msg: '',
       praise_course_color: '#ccc',
-      audio_src: ''
+      audio_src: '',
+      isExpand: '90px'
     }
   },
   watch: {
@@ -204,8 +203,6 @@ export default {
   },
   mounted () {
     this.audio_current_time = this.$refs.player.currentTime
-    this.introduction_text_show = this.course.description ? this.course.description.substring(0, 2) : ''
-    this.introduction_text_hide = this.course.description ? this.course.description.substring(2) : ''
     this.addEventListeners()
   },
   beforeDestroy () {
@@ -244,7 +241,13 @@ export default {
         })
     },
     changeFoldState () {
-      this.introduction_brandFold = !this.introduction_brandFold
+      if (this.introduction_brandFold === true) {
+        this.isExpand = 'none'
+        this.introduction_brandFold = !this.introduction_brandFold
+      } else {
+        this.isExpand = '90px'
+        this.introduction_brandFold = !this.introduction_brandFold
+      }
     },
     change_picture: function () {
       let that = this
@@ -275,7 +278,6 @@ export default {
     width: 100%;
     height: 80%;
     height: 500px;
-    background-image: url('https://picsum.photos/1024/480/?image=58');
   }
 
   .image-style {
@@ -331,5 +333,29 @@ export default {
     font-size: 15px;
     color: #ccc;
     cursor: pointer;
+  }
+
+  #description {
+    position: relative;
+    max-height: 90px;
+    overflow: hidden;
+    line-height: 18px;
+  }
+
+  #description span {
+    position: absolute;
+    top: 72px;
+    right: 0;
+    line-height: 18px;
+    background-color: white;
+  }
+
+  .showmore {
+    max-height: none;
+  }
+
+  #description .showmore span {
+    top: unset;
+    bottom: 0;
   }
 </style>
