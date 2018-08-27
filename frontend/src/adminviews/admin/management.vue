@@ -267,7 +267,7 @@ export default {
 
 .table-div {
   padding: 0 15px;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 table {
