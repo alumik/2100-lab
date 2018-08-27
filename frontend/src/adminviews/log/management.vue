@@ -4,6 +4,12 @@
     class="my-basic">
     <div class="body">
       <h1>日志查询</h1>
+      <Alert
+        :count_down="wrong_count_down"
+        :instruction="wrong"
+        variant="danger"
+        @decrease="wrong_count_down-1"
+        @zero="wrong_count_down=0"/>
       <div class="table-div">
         <table class="table">
           <thead>
@@ -47,7 +53,7 @@
             :indeterminate="indeterminate"
             aria-describedby="options1"
             aria-controls="options1"
-            @change="toggleAll">
+            @change="toggle_all">
             全选
           </b-form-checkbox>
         </b-form-group>
@@ -98,10 +104,10 @@
 
 <script>
 import Basic from '../basic/basic'
-
+import Alert from '../../components/alert'
 export default {
   name: 'LogManagement',
-  components: { Basic },
+  components: { Alert, Basic },
   data () {
     return {
       items: [{
@@ -111,7 +117,7 @@ export default {
         text: '日志查询',
         active: true
       }],
-      begin_date: new Date(),
+      begin_date: new Date(new Date().getTime() - 24 * 60 * 60 * 1000),
       end_date: new Date(),
       options: {
         format: 'YYYY/MM/DD'
@@ -145,7 +151,10 @@ export default {
         { text: '修改课程&#12288', value: 15 },
         { text: '删除课程&#12288', value: 16 }
       ],
-      page_jump: false
+      page_jump: false,
+      wrong: '',
+      wrong_count_down: 0,
+      dismiss_second: 5
     }
   },
   computed: {
@@ -167,17 +176,24 @@ export default {
   },
   methods: {
     to_detail: function () {
-      this.page_jump = true
-      this.$router.push({ name: 'LogDetail',
-        query: {
-          admin_username: this.admin_id,
-          begin_date: Date.parse(this.begin_date) / 1000,
-          end_date: Date.parse(this.end_date) / 1000,
-          select: this.select1 + ',' + this.select2 + ',' + this.select3 + ',' + this.select4
-        }
-      })
+      let begin_date = Date.parse(this.begin_date) / 1000
+      let end_date = Date.parse(this.end_date) / 1000
+      if (begin_date > end_date) {
+        this.wrong = '您输入的查询日期有误！'
+        this.wrong_count_down = this.dismiss_second
+      } else {
+        this.page_jump = true
+        this.$router.push({ name: 'LogDetail',
+          query: {
+            admin_username: this.admin_id,
+            begin_date: begin_date,
+            end_date: end_date,
+            select: this.select1 + ',' + this.select2 + ',' + this.select3 + ',' + this.select4
+          }
+        })
+      }
     },
-    toggleAll (checked) {
+    toggle_all (checked) {
       if (checked) {
         for (let i = 0; i < 4; i++) {
           this.select1.push(this.options1[i].value)
