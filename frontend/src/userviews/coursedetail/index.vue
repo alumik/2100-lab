@@ -18,13 +18,6 @@
       @dismissed="add_praise_test = false">
       {{ add_praise_error_msg }}
     </b-alert>
-    <div
-      id="page-title"
-      class="content-style">
-      <h5>
-        {{ course.title }}
-      </h5>
-    </div>
     <div id="modals">
       <div>
         <b-modal
@@ -161,102 +154,83 @@
       <div
         id="introduction"
         class="introduction-style">
-        <div class="reminder-style">
-          <div
-            v-if="!course.can_access"
-            class="row row-style">
-            <h6 v-if="!isNaN(get_now_price())">现价 ￥{{ get_now_price() }}  </h6>
-            <h6
-              v-if="!isNaN($store.state.money) && $store.state.money != 0.00">&emsp;&emsp;￥
-              <label
-                v-if="!isNaN(course.price)"
-                class="origin-value">{{ course.price }}</label>
-            </h6>
-          </div>
-          <div
-            class="row time-style">
-            <h6 v-if="course.expire_duration !==0 && !isNaN(course.expire_duration)">
-              课程时效 {{ change_duration_to_timestamp(course.expire_duration) }}
-            </h6>
-          </div>
-          <div
-            class="row time-style">
-            <h6 v-if="course.expire_time !== null">
-              距离失效还有 {{ left_time }}</h6>
-          </div>
+        <div
+          id="page-title"
+          class="content-style">
+          <h4>
+            {{ course.title }}
+          </h4>
         </div>
-        <b-row class="button-row">
-          <b-col
-            id="study-or-pay"
-            cols="4">
-            <div v-show="course.can_access">
-              <b-button
-                id="study-button"
-                size="sm"
-                variant="primary"
-                class="my-btn"
-                @click="start_study">
-                开始学习
-              </b-button>
-            </div>
-            <div v-show="!course.can_access">
-              <b-button
-                id="pay-button"
-                size="sm"
-                variant="primary"
-                class="my-btn"
-                @click="handle_pay_operate">
-                立即购买
-              </b-button>
-            </div>
-          </b-col >
-          <b-col cols="4">
+        <div
+          v-if="!course.can_access">
+          <h6 v-if="!isNaN(get_now_price())">现价 ￥{{ get_now_price() }}  </h6>
+          <h6
+            v-if="!isNaN($store.state.money) && $store.state.money != 0.00">&emsp;&emsp;￥
+            <label
+              v-if="!isNaN(course.price)"
+              class="origin-value">{{ course.price }}</label>
+          </h6>
+        </div>
+        <div>
+          <h6 v-if="course.expire_duration !==0 && !isNaN(course.expire_duration)">
+            课程时效 {{ change_duration_to_timestamp(course.expire_duration) }}
+          </h6>
+        </div>
+        <div>
+          <h6 v-if="course.expire_time !== null">
+            距离失效还有 {{ left_time }}</h6>
+        </div>
+        <div class="button-row">
+          <div v-show="course.can_access">
             <b-button
-              v-b-modal.share-popup
-              id="share-button"
+              id="study-button"
               size="sm"
               variant="primary"
-              class="my-btn share-margin"
-            >
-              分享
-            </b-button>
-            <b-badge
-              :title="share_instruction"
-              pill
-              variant="primary"
-              class="reminder"
-              data-container="body"
-              data-toggle="popover"
-              data-content="share_introduction"
-              data-placement="top"
-            >
-              <label>!</label>
-            </b-badge>
-          </b-col>
-          <b-col cols="4">
-            <b-button
-              id="praise-button"
-              :style="{background: praise_color, border: praise_border_color}"
-              size="sm"
               class="my-btn"
-              @click="add_praise">
-              {{ course.up_votes }} 赞
+              @click="start_study">
+              开始学习
             </b-button>
-          </b-col>
-          <b-col>
-            <div
-              style="height: 100px;"
-              class="social-share"
-              data-wechat-qrcode-title="请打开微信扫一扫"/>
-          </b-col>
-        </b-row>
+          </div>
+          <div v-show="!course.can_access">
+            <b-button
+              id="pay-button"
+              size="sm"
+              variant="primary"
+              class="my-btn"
+              @click="handle_pay_operate">
+              立即购买
+            </b-button>
+          </div>
+          <b-button
+            v-b-modal.share-popup
+            id="share-button"
+            :title="share_instruction"
+            size="sm"
+            variant="primary"
+            class="my-btn share-margin"
+          >
+            分享
+          </b-button>
+          <b-button
+            id="praise-button"
+            :style="{background: praise_color, border: praise_border_color}"
+            size="sm"
+            class="my-btn"
+            @click="add_praise">
+            {{ course.up_votes }} 赞
+          </b-button>
+          <div
+            style="height: 100px;"
+            class="social-share"
+            data-wechat-qrcode-title="请打开微信扫一扫"/>
+        </div>
       </div>
-      <div
-        id="course-introduction"
-        class="profile-style">
-        <h5>课程简介</h5>
-        <p>&emsp; &emsp;{{ course.description }}</p>
-      </div>
+    </div>
+    <div
+      id="course-introduction"
+      class="container">
+      <h5>课程简介</h5>
+      <p>{{ course.description }}</p>
     </div>
   </Basic>
 </template>
@@ -528,10 +502,10 @@ export default {
       }
     },
     get_now_price: function () {
-      if (this.$store.state.money > this.course.price) {
+      if (this.$store.state.user.reward_coin > this.course.price) {
         return 0
       } else {
-        return this.course.price - this.$store.state.money
+        return this.course.price - this.$store.state.user.reward_coin
       }
     }
   }
