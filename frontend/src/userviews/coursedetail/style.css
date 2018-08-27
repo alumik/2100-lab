@@ -1,21 +1,41 @@
-.profile-style {
-  height: 300px;
-  margin: 50px 10px;
+#profile {
+  display: flex;
+  justify-content: center;
+  padding: 50px 50px 0 50px;
+  margin: 50px;
+}
+
+#course-image {
+  width: 500px;
+  height: 400px;
+  margin-right: 150px;
+  overflow: hidden;
+}
+
+h4,
+h5,
+p {
   text-align: left;
-  opacity: 0.9;
+}
+
+#introduction {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+#page-title {
+  margin-bottom: 50px;
+}
+
+.button-row {
+  display: flex;
+  margin-top: 80px;
 }
 
 #course-introduction .profile-style {
   height: 250px;
-}
-
-.content-style {
-  margin: 40px 60px;
-  text-align: center;
-}
-
-.share-margin {
-  margin-right: 5px;
 }
 
 .modal-style {
@@ -23,42 +43,9 @@
 }
 
 .my-btn {
+  height: 35px;
+  margin-right: 20px;
   font-size: 16px;
-}
-
-.course-img-style {
-  width: 45%;
-  height: 100%;
-  margin-right: 10px;
-}
-
-.button-row {
-  height: 50%;
-  vertical-align: bottom;
-}
-
-.introduction-style {
-  display: flex;
-  flex-direction: column;
-  width: 50%;
-  height: 100%;
-  margin-left: 20px;
-  vertical-align: bottom;
-}
-
-.origin-value {
-  text-decoration: line-through;
-}
-
-.reminder {
-  width: 15px;
-  height: 15px;
-  margin-top: 5px;
-  font-size: 10px;
-}
-
-.reminder-style {
-  height: 50%;
 }
 
 .qrcode-margin-style {
@@ -91,4 +78,3 @@
   resize: none;
   outline: none;
 }
-
