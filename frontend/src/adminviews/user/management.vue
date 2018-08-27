@@ -1,8 +1,12 @@
 <template>
   <Basic :items="items">
     <div class="body">
-      <h1>用户列表</h1>
-      <h6>第 {{ page }}/{{ num_pages }} 页，共 {{ rows }} 条数据</h6>
+      <div class="head-container">
+        <div class="head-title">
+          <h1>用户列表</h1>
+        </div>
+        <h6>第 {{ page }}/{{ num_pages }} 页，共 {{ rows }} 条数据</h6>
+      </div>
       <Alert
         :count_down="wrong_count_down"
         :instruction="wrong"
@@ -269,17 +273,11 @@ export default {
 
 h1,
 h6 {
-  padding-left: 15px;
   color: #23527c;
   text-align: left;
 }
 
-h1 {
-  margin: 25px 0;
-}
-
 h6 {
-  margin-bottom: 15px;
   font-weight: bold;
 }
 
@@ -341,5 +339,16 @@ thead tr {
 
 .md-td {
   width: 180px;
+}
+
+.head-title {
+  display: flex;
+  margin: 25px 0;
+}
+
+.head-container {
+  padding: 0 15px;
+  margin-bottom: 15px;
+  text-align: left;
 }
 </style>

@@ -1,34 +1,35 @@
 <template>
   <Basic :items="items">
     <div class="my-content">
-      <h1>课程列表</h1>
-      {{ error_message }}
-      <div class="my-head-btn">
-        <h6>第 {{ page }}/{{ num_pages }} 页，共 {{ rows }} 条数据</h6>
-        <div class="my-btn-group">
-          <a
-            id="head-add-btn"
-            class="btn"
-            @click="jump(0)">
-            <simple-line-icons
-              id="add-icon"
-              icon="user-follow"
-              color="white"
-              class="icon"/>
-            新增课程
-          </a>
-          <a
-            id="head-change-btn"
-            class="btn"
-            @click="jump(-1)">
-            <simple-line-icons
-              id="change-icon"
-              icon="tag"
-              color="white"
-              class="icon"/>
-            更换首页图片
-          </a>
+      <div class="head-container">
+        <div class="head-title">
+          <h1>课程列表</h1>
+          <div class="my-btn-group">
+            <a
+              id="head-add-btn"
+              class="btn"
+              @click="jump(0)">
+              <simple-line-icons
+                id="add-icon"
+                icon="user-follow"
+                color="white"
+                class="icon"/>
+              新增课程
+            </a>
+            <a
+              id="head-change-btn"
+              class="btn"
+              @click="jump(-1)">
+              <simple-line-icons
+                id="change-icon"
+                icon="picture"
+                color="white"
+                class="icon"/>
+              更换首页图片
+            </a>
+          </div>
         </div>
+        <h6>第 {{ page }}/{{ num_pages }} 页，共 {{ rows }} 条数据</h6>
       </div>
       <b-modal
         ref="upload_picture"
@@ -449,47 +450,30 @@ export default {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
-.my-head-btn {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  margin: 25px 0;
-  color: #23527c;
-}
-
 .my-btn-group {
-  display: inline-flex;
-}
-
-h1 {
-  margin: 25px 0;
-  text-align: left;
-}
-
-h6 {
-  margin-bottom: 15px;
-  font-weight: bold;
-  color: #23527c;
+  display: inline-block;
 }
 
 h1,
 h6 {
-  padding-left: 15px;
   color: #204269;
 }
 
+h1 {
+  text-align: left;
+}
+
+h6 {
+  margin-bottom: 0;
+  font-weight: bold;
+}
+
 .btn {
-  margin-right: 2px;
-  margin-left: 2px;
+  margin-left: 3px;
   border: 1px solid #d3d9df;
 }
 
 #head-add-btn {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  margin: 0;
   color: white;
   text-align: right;
   background-color: #4db14d;
@@ -506,7 +490,6 @@ h6 {
 }
 
 #head-change-btn {
-  margin-left: 15px;
   color: white;
   background-color: #337ab7;
 }
@@ -522,7 +505,7 @@ h6 {
 }
 
 .table-div {
-  padding-left: 15px;
+  padding: 0 15px;
   overflow-x: auto;
 }
 
@@ -661,5 +644,19 @@ table {
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: pointer;
+}
+
+.head-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin: 25px 0;
+}
+
+.head-container {
+  padding: 0 15px;
+  margin-bottom: 15px;
+  text-align: left;
 }
 </style>
