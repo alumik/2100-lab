@@ -2,7 +2,7 @@
   <Basic :items="items">
     <div>
       <div class="my-content">
-        <h2>新增课程</h2>
+        <h1>新增课程</h1>
         <div class="form-group form-inline">
           <label
             class="form-check-label my-label"
@@ -22,27 +22,6 @@
             v-model="codename"
             class="input form-control col-lg-3"
             type="text">
-        </div>
-        <div class="form-group form-inline">
-          <label
-            class="form-check-label my-label"
-            for="course_content">课程素材</label>
-          <UploadSource
-            id="course_content"
-            @upload_resource="receive_uploaded_resource"/>
-          <PreSortPicture
-            :choose_image_data_list_origin="image_file_list.slice()"
-            :is_uploaded="is_uploaded"
-            @update_is_uploaded="is_uploaded=false"
-            @reset_is_uploaded="is_uploaded=true"
-            @upload_sorted_pic="receive_sorted_pictures"
-          />
-          <SyncPicture
-            :audio_file_list="audio_file_list"
-            :image_data_list="image_file_list"
-            :is_audio_changed="is_audio_changed"
-            @sync_picture_audio="receive_sync_data"
-          />
         </div>
         <div class="form-group form-inline">
           <div>
@@ -103,33 +82,7 @@
             </div>
           </div>
         </div>
-        <div class="form-group form-inline">
-          <label
-            class="form-check-label my-label"
-            for="can_review">
-            可评论
-          </label>
-          <div id="can_review">
-            <label for="Yes">
-              <input
-                id="Yes"
-                type="radio"
-                checked
-                name="optn"
-                @click="update_can_comment(1)"
-              >是
-            </label>
-            <label for="No">
-              <input
-                id="No"
-                type="radio"
-                name="optn"
-                @click="update_can_comment(0)"
-              >否
-            </label>
-          </div>
-        </div>
-        <div class="form-inline">
+        <div class="form-inline form-group">
           <label
             class="form-check-label my-label"
             for="percent">分销金比例</label>
@@ -147,6 +100,42 @@
             </div>
           </div>
         </div>
+        <div class="form-group form-inline">
+          <label class="form-check-label my-label">
+            可评论
+          </label>
+          <div class="can-comment">
+            <b-form-group>
+              <b-form-radio-group
+                v-model="can_comment"
+                :options="comment_options"
+                name="radioInline"/>
+            </b-form-group>
+          </div>
+        </div>
+        <div class="form-group form-inline">
+          <label
+            class="form-check-label my-label"
+            for="course_content">课程素材</label>
+          <div class="my-sync-btn">
+            <UploadSource
+              id="course_content"
+              @upload_resource="receive_uploaded_resource"/>
+            <PreSortPicture
+              :choose_image_data_list_origin="image_file_list.slice()"
+              :is_uploaded="is_uploaded"
+              @update_is_uploaded="is_uploaded=false"
+              @reset_is_uploaded="is_uploaded=true"
+              @upload_sorted_pic="receive_sorted_pictures"
+            />
+            <SyncPicture
+              :audio_file_list="audio_file_list"
+              :image_data_list="image_file_list"
+              :is_audio_changed="is_audio_changed"
+              @sync_picture_audio="receive_sync_data"
+            />
+          </div>
+        </div>
         <div class="form-group">
           <label
             id="intro-label"
@@ -158,9 +147,12 @@
             class="form-control col-lg-2"
             rows="6s"/>
         </div>
-        <button
-          class="btn my-btn"
-          @click="upload_all_data">保存</button>
+        <a
+          id="save-btn"
+          class="btn"
+          @click="upload_all_data">
+          保存
+        </a>
       </div>
     </div>
   </Basic>
@@ -199,6 +191,10 @@ export default {
       hours: '',
       prices: '',
       can_comment: '1',
+      comment_options: [
+        { text: '是', value: '1' },
+        { text: '否', value: '0' }
+      ],
       reward_percent: '',
       description: '',
       is_audio_changed: false,
@@ -206,9 +202,6 @@ export default {
     }
   },
   methods: {
-    update_can_comment: function (data) {
-      this.can_comment = data
-    },
     receive_uploaded_resource: function (upload_pic_resourse, audio_file_list) {
       this.is_uploaded = true
       if (audio_file_list.length === 1) {
@@ -260,18 +253,39 @@ export default {
 
 <style scoped>
 .my-content {
-  margin: 40px;
+  padding: 20px;
+  margin: 70px 20px 20px;
+  text-align: left;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  margin: 25px 15px;
+  color: #204269;
   text-align: left;
 }
 
 .my-label {
   display: inline-block;
   width: 150px;
+  margin-left: 25px;
   text-align: left;
+}
+
+.form-group {
+  margin-top: 40px;
+  margin-bottom: 20px;
 }
 
 .flare_time {
   display: flex;
+}
+
+label {
+  font-size: 14px;
+  font-weight: bold;
 }
 
 #flare_time_day {
@@ -282,8 +296,8 @@ export default {
 
 #flare_time_hour {
   width: 70px;
-  min-width: 70px;
-  max-width: 70px;
+  min-width: 80px;
+  max-width: 80px;
 }
 
 .input {
@@ -292,21 +306,17 @@ export default {
   max-width: 260px;
 }
 
-#can_review {
-  display: flex;
+.can-comment {
+  margin-top: -20px;
 }
 
 #input-group-flare {
   display: flex;
 }
 
-.my-btn,
 #intro {
-  max-width: 405px;
-}
-
-#No {
-  margin-left: 100px;
+  max-width: 550px;
+  margin-left: 25px;
 }
 
 #intro-label {
@@ -315,28 +325,33 @@ export default {
 }
 
 #percent {
-  width: 210px;
-  min-width: 210px;
-  max-width: 210px;
+  width: 217px;
+  min-width: 217px;
+  max-width: 217px;
 }
 
 #price {
-  width: 210px;
-  min-width: 210px;
-  max-width: 210px;
+  width: 217px;
+  min-width: 217px;
+  max-width: 217px;
 }
 
-.btn {
+#save-btn {
+  margin-left: 25px;
   color: white;
-  background-color: #8d4e91;
-  border-color: #8d6592;
-  border-radius: 10px;
-  outline: none;
-  box-shadow: #8d6592 inset;
+  text-align: right;
+  background-color: #4db14d;
+  border: 1px solid #d3d9df;
 }
 
-.btn:hover,
-.btn:active {
-  background-color: #5e0057;
+#save-btn:hover,
+#save-btn:active {
+  background-color: #449c44;
+}
+
+.my-sync-btn {
+  display: flex;
+  margin-right: -5px;
+  margin-left: -5px;
 }
 </style>

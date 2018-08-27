@@ -1,8 +1,16 @@
 <template>
   <div>
-    <b-button @click="show_modal">
+    <a
+      id="sync-btn"
+      class="btn"
+      @click="show_modal">
+      <simple-line-icons
+        id="change-icon"
+        icon="picture"
+        color="white"
+        class="icon"/>
       音图片同步
-    </b-button>
+    </a>
     <b-modal
       ref="sync_picture"
       size="lg"
@@ -293,5 +301,16 @@ export default {
 #delete-button:hover,
 #delete-button:active {
   background-color: #ba2d28;
+}
+
+#sync-btn {
+  margin-right: 5px;
+  margin-left: 5px;
+  color: white;
+  background-color: #337ab7;
+}
+
+#sync-btn:hover {
+  background-color: #286090;
 }
 </style>
