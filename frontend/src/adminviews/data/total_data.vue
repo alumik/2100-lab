@@ -100,16 +100,19 @@ import axios from 'axios'
 import Alert from '../../components/alert'
 export default {
   name: 'TotalData',
-  components: {Alert, Basic, BreadCrumb, Menu, AdminNavbar},
+  components: { Alert, Basic, BreadCrumb, Menu, AdminNavbar },
   data () {
     return {
-      items: [{
-        text: '主页',
-        href: '/admin/main'
-      }, {
-        text: '数据分析',
-        active: true
-      }],
+      items: [
+        {
+          text: '主页',
+          href: '/admin/main'
+        },
+        {
+          text: '数据分析',
+          active: true
+        }
+      ],
       buttons: [
         { id: 0, state: true, text: '今天' },
         { id: 1, state: false, text: '近一周' },
@@ -132,14 +135,14 @@ export default {
       },
       praise_top_setting: {
         labelMap: {
-          'title': '课程名',
-          'up_votes': '点赞数'
+          title: '课程名',
+          up_votes: '点赞数'
         }
       },
       study_top_setting: {
         labelMap: {
-          'title': '课程名',
-          'learners': '学习人数'
+          title: '课程名',
+          learners: '学习人数'
         }
       },
       dismiss_second: 5,
@@ -165,8 +168,11 @@ export default {
     } else if (i === 3) {
       days = 182
     }
-    axios.get('http://localhost:8000/api/v1/data/data-management/get-overall-data/',
-      {params: {days: days}})
+    axios
+      .get(
+        'http://localhost:8000/api/v1/data/data-management/get-overall-data/',
+        { params: { days: days } }
+      )
       .then(function (response) {
         that.increased_users = response.data.customers_count
         that.sale = response.data.income
@@ -208,8 +214,11 @@ export default {
     search: function () {
       const that = this
       let days = this.get_days()
-      axios.get('http://localhost:8000/api/v1/data/data-management/get-overall-data/',
-        {params: {days: days}})
+      axios
+        .get(
+          'http://localhost:8000/api/v1/data/data-management/get-overall-data/',
+          { params: { days: days } }
+        )
         .then(function (response) {
           if (response.data.message === 'Access denied.') {
             that.wrong = '您没有权限获取数据！'
@@ -243,88 +252,88 @@ export default {
 </script>
 
 <style scoped>
-  .body {
-    padding: 20px;
-    margin: 70px 20px 20px;
-    overflow-x: scroll;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-  }
+.body {
+  padding: 20px;
+  margin: 70px 20px 20px;
+  overflow-x: scroll;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
 
-  h1 {
-    padding-left: 15px;
-    margin: 25px 0;
-    color: #204269;
-    text-align: left;
-  }
+h1 {
+  padding-left: 15px;
+  margin: 25px 0;
+  color: #204269;
+  text-align: left;
+}
 
-  .tab-content {
-    padding: 20px;
-    text-align: left;
-  }
+.tab-content {
+  padding: 20px;
+  text-align: left;
+}
 
-  .statistics {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
+.statistics {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
 
-  .statistics > div {
-    display: flex;
-    justify-content: space-between;
-    width: 300px;
-    height: 100px;
-    padding: 20px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    border: 1px solid #ced4da;
-  }
+.statistics > div {
+  display: flex;
+  justify-content: space-between;
+  width: 300px;
+  height: 100px;
+  padding: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #ced4da;
+}
 
-  .charts {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    margin-top: 100px;
-  }
+.charts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-top: 100px;
+}
 
-  .charts > div {
-    flex-basis: 50%;
-    justify-content: space-around;
-    text-align: center;
-  }
+.charts > div {
+  flex-basis: 50%;
+  justify-content: space-around;
+  text-align: center;
+}
 
-  h5 {
-    font-weight: bold;
-    text-align: center;
-  }
+h5 {
+  font-weight: bold;
+  text-align: center;
+}
 
-  p {
-    text-align: center;
-  }
+p {
+  text-align: center;
+}
 
-  .image {
-    width: 50px;
-    height: 50px;
-  }
+.image {
+  width: 50px;
+  height: 50px;
+}
 
-  .data {
-    margin-right: 20px;
-    margin-left: 20px;
-    border: 1px solid #f3f5ee;
-  }
+.data {
+  margin-right: 20px;
+  margin-left: 20px;
+  border: 1px solid #f3f5ee;
+}
 
-  .col-md-2 > div {
-    width: 150px;
-    height: 31px;
-    text-align: center;
-    vertical-align: middle;
-  }
+.col-md-2 > div {
+  width: 150px;
+  height: 31px;
+  text-align: center;
+  vertical-align: middle;
+}
 
-  .tab-content > div {
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
+.tab-content > div {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
 </style>

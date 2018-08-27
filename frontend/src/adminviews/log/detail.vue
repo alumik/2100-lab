@@ -1,5 +1,5 @@
 <template>
-  <Basic class="my-basic">
+  <Basic :items="items">
     <div class="body">
       <h1>日志列表</h1>
       <h6>第 {{ page }}/{{ num_pages }} 页，共 {{ rows }} 条数据</h6>
