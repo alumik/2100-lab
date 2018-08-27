@@ -1,143 +1,154 @@
 <template>
   <Basic :items="items">
     <div class="my-content">
-      <h2>课程列表</h2>
+      <h1>课程列表</h1>
       {{ error_message }}
-      <div>
-        <div class="head-btn">
-          <button
-            type="button"
-            class="row btn btn-sm my-in-btn"
-            @click="jump(0)"
-          >新增课程</button>
+      <div class="my-head-btn">
+        <h6>第 {{ page }}/{{ num_pages }} 页，共 {{ rows }} 条数据</h6>
+        <div class="my-btn-group">
+          <a
+            id="head-add-btn"
+            class="btn"
+            @click="jump(0)">
+            <simple-line-icons
+              id="add-icon"
+              icon="user-follow"
+              color="white"
+              class="icon"/>
+            新增课程
+          </a>
+          <a
+            id="head-change-btn"
+            class="btn"
+            @click="jump(-1)">
+            <simple-line-icons
+              id="change-icon"
+              icon="tag"
+              color="white"
+              class="icon"/>
+            更换首页图片
+          </a>
         </div>
-        <div class="head-btn">
-          <button
-            type="button"
-            class="row btn btn-sm my-in-btn"
-            @click="jump(-1)"
-          >更换首页图片</button>
-          <b-modal
-            ref="upload_picture"
-            size="lg"
-            centered
-            no-close-on-esc>
-            <div slot="modal-header">
-              <h3 class="float-left">更换首页图片</h3>
-            </div>
-            <b-container>
-              <b-row
-                align-v="center">
-                <b-col>
-                  <h5 class="text-left">
-                    图片资料
-                  </h5>
-                </b-col>
-              </b-row>
-              <b-row class="my-row">
-                <div class="my-row">
+      </div>
+      <b-modal
+        ref="upload_picture"
+        size="lg"
+        centered
+        no-close-on-esc>
+        <div slot="modal-header">
+          <h3 class="float-left">更换首页图片</h3>
+        </div>
+        <b-container>
+          <b-row
+            align-v="center">
+            <b-col>
+              <h5 class="text-left">
+                图片资料
+              </h5>
+            </b-col>
+          </b-row>
+          <b-row class="my-row">
+            <div class="my-row">
+              <div
+                v-for="image in origin_image_list"
+                :key="image.hero_id"
+                class="img-uploader-preview">
+                <div class="preview-img">
+                  <b-img
+                    :src="image.image"
+                    thumbnail
+                    fluid
+                    alt="Thumbnail"/>
+                </div>
+                <img
+                  src="../../assets/logo.png"
+                  class="img-uploader-delete-btn"
+                  @click="delete_origin_img(image.hero_id)">
+              </div>
+              <div
+                ref="uploader"
+                class="img-uploader"
+                @drop="handle_drop">
+                <p
+                  v-if="!has_images"
+                  class="img-uploader-placeholder">{{ placeholder }}</p>
+                <div
+                  v-if="has_images"
+                  class="img-uploader-preview-list">
                   <div
-                    v-for="image in originImageList"
-                    :key="image.hero_id"
+                    v-for="(data,index) in image_data_list"
+                    :key="index"
                     class="img-uploader-preview">
+
                     <div class="preview-img">
                       <b-img
-                        :src="image.image"
+                        :src="data"
                         thumbnail
                         fluid
                         alt="Thumbnail"/>
                     </div>
+                    <div
+                      v-if="has_images"
+                      class="img-uploader-mask">
+                      <p
+                        class="img-uploader-file-name"
+                        @click="open_input()">
+                        {{ placeholder }}</p>
+                    </div>
                     <img
                       src="../../assets/logo.png"
                       class="img-uploader-delete-btn"
-                      @click="deleteOriginImg(image.hero_id)">
-                  </div>
-                  <div
-                    ref="uploader"
-                    class="img-uploader"
-                    @drop="handleDrop">
-                    <p
-                      v-if="!hasImages"
-                      class="img-uploader-placeholder">{{ placeholder }}</p>
-                    <div
-                      v-if="hasImages"
-                      class="img-uploader-preview-list">
-                      <div
-                        v-for="(data,index) in imageDataList"
-                        :key="index"
-                        class="img-uploader-preview">
-
-                        <div class="preview-img">
-                          <b-img
-                            :src="data"
-                            thumbnail
-                            fluid
-                            alt="Thumbnail"/>
-                        </div>
-                        <div
-                          v-if="hasImages"
-                          class="img-uploader-mask">
-                          <p
-                            class="img-uploader-file-name"
-                            @click="openInput()">
-                            {{ placeholder }}</p>
-                        </div>
-                        <img
-                          src="../../assets/logo.png"
-                          class="img-uploader-delete-btn"
-                          @click="deleteImg(index)">
-                      </div>
-                    </div>
-                    <label
-                      v-if="!hasImages"
-                      for="inputID"
-                      class="img-uploader-label"/>
-                    <input
-                      id="inputID"
-                      ref="input"
-                      class="input-image col-lg-12"
-                      type="file"
-                      accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
-                      multiple="multiple"
-                      @change="handleFileChange">
+                      @click="delete_img(index)">
                   </div>
                 </div>
-              </b-row>
-              <b-row align-v="start">
-                <b-col>
-                  <h5 class="text-left">
-                    输入文字
-                  </h5>
-                </b-col>
-              </b-row>
-              <div>
-                <textarea
-                  id="intro"
-                  v-model="input_content"
-                  class="form-control col-lg-12"
-                  rows="6s"/>
+                <label
+                  v-if="!has_images"
+                  for="inputID"
+                  class="img-uploader-label"/>
+                <input
+                  id="inputID"
+                  ref="input"
+                  class="input-image col-lg-12"
+                  type="file"
+                  accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
+                  multiple="multiple"
+                  @change="handle_file_change">
               </div>
-            </b-container>
-            <div
-              slot="modal-footer"
-              class="w-100">
-              <b-row class="define-btn">
-                <b-col cols="8"/>
-                <b-col cols="2">
-                  <b-button
-                    @click="uploadData">上传</b-button>
-                </b-col>
-                <b-col cols="2">
-                  <b-button
-                    @click="hideModal">取消</b-button>
-                </b-col>
-              </b-row>
             </div>
-          </b-modal>
+          </b-row>
+          <b-row align-v="start">
+            <b-col>
+              <h5 class="text-left">
+                输入文字
+              </h5>
+            </b-col>
+          </b-row>
+          <div>
+            <textarea
+              id="intro"
+              v-model="input_content"
+              class="form-control col-lg-12"
+              rows="6s"/>
+          </div>
+        </b-container>
+        <div
+          slot="modal-footer"
+          class="w-100">
+          <b-row class="define-btn">
+            <b-col cols="8"/>
+            <b-col cols="2">
+              <b-button
+                @click="upload_data">上传</b-button>
+            </b-col>
+            <b-col cols="2">
+              <b-button
+                @click="hide_modal">取消</b-button>
+            </b-col>
+          </b-row>
         </div>
-      </div>
-      <div class="my-table">
-        <table class="table table-striped table-hover">
+      </b-modal>
+      <div class="table-div">
+        <table class="table table-striped">
           <thead>
             <tr>
               <th scope="col">课程代码</th>
@@ -149,21 +160,21 @@
           <tbody>
             <tr>
               <td>
-                <div class="input-group my-short-input">
+                <div class="input-group">
                   <input
                     v-model="codename"
                     type="text"
-                    class="form-control col-5"
+                    class="form-control my-in-input"
                     placeholder=""
                     @keyup.enter="change">
                 </div>
               </td>
               <td>
-                <div class="input-group my-long-input">
+                <div class="input-group">
                   <input
                     v-model="title"
                     type="text"
-                    class="form-control col-6"
+                    class="form-control my-in-input"
                     placeholder=""
                     @keyup.enter="change">
                 </div>
@@ -178,20 +189,30 @@
               <td>{{ course.codename }}</td>
               <td>{{ course.title }}</td>
               <td>{{ course.updated_at }}</td>
-              <div class="my-in-for-btn">
-                <button
-                  id="content"
-                  type="button"
-                  class="in-btn row btn-sm"
-                  @click="jump(course.course_id + 1)"
-                >详情</button>
-                <button
-                  id="edit"
-                  type="button"
-                  class="in-btn row btn-sm"
-                  @click="jump(course.course_id * (-1) - 2)"
-                >修改</button>
-              </div>
+              <td class="buttons">
+                <a
+                  id="detail-button"
+                  class="btn"
+                  @click="jump(course.course_id + 1)">
+                  <simple-line-icons
+                    icon="pencil"
+                    color="green"
+                    class="icon"
+                    size="small"/>
+                  详情
+                </a>
+                <a
+                  id="change-button"
+                  class="btn"
+                  @click="jump(course.course_id * (-1) - 2)">
+                  <simple-line-icons
+                    icon="trash"
+                    color="#e60000"
+                    class="icon"
+                    size="small"/>
+                  修改
+                </a>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -199,7 +220,7 @@
       <Pagination
         :rows="rows"
         :perpage="per_limit"
-        @change="changePage"/>
+        @change="change_page"/>
     </div>
   </Basic>
 </template>
@@ -212,147 +233,158 @@ import Pagination from '../../components/pagination'
 import resizeImage from './resize'
 export default {
   name: 'CourseManagement',
-  components: {Pagination, Basic},
+  components: { Pagination, Basic },
   data: function () {
     return {
-      items: [{
-        text: '主页',
-        href: '/admin/main'
-      }, {
-        text: '课程管理',
-        active: true
-      }],
+      items: [
+        {
+          text: '主页',
+          href: '/admin/main'
+        },
+        {
+          text: '课程管理',
+          active: true
+        }
+      ],
       courses: [],
       codename: '',
       title: '',
       rows: 0,
       error_message: '',
-      per_limit: 8,
+      per_limit: 5,
       page: 1,
-
+      num_pages: 0,
       placeholder: '点击上传图片',
-      originImageList: [],
-      imageDataList: [],
-      fileNameList: [],
-      deleteOriginList: [],
+      origin_image_list: [],
+      image_data_list: [],
+      file_name_list: [],
+      delete_origin_list: [],
       input_content: ''
     }
   },
   computed: {
-    hasImages () {
-      return this.imageDataList.length > 0
-    },
-    sizeFormatted () {
-      let result = 0
-      if (this.maxSize < 1024) {
-        result = this.maxSize + 'K'
-      } else {
-        result =
-          (this.maxSize / 1024).toFixed(this.maxSize % 1024 > 0 ? 2 : 0) + 'M'
-      }
-      return result
+    has_images () {
+      return this.image_data_list.length > 0
     }
   },
   created: function () {
-    axios.get('http://localhost:8000/api/v1/courses/backstage/course-management/get-course-list', {
-      params: {
-        codename: '',
-        title: '',
-        page_limit: this.per_limit,
-        page: 1
-      }
-    }).then(
-      response => {
+    axios
+      .get(
+        'http://localhost:8000/api/v1/courses/backstage/course-management/get-course-list',
+        {
+          params: {
+            codename: '',
+            title: '',
+            page_limit: this.per_limit,
+            page: 1
+          }
+        }
+      )
+      .then(response => {
+        this.num_pages = this.update_num_pages(response.data.num_pages)
         this.rows = response.data.count
         let _course = []
         for (let data of response.data.content) {
-          _course.push({'course_id': data['course_id'],
-            'codename': data['codename'],
-            'title': data['title'],
-            'updated_at': data['updated_at'].substring(0, 10)})
+          _course.push({
+            course_id: data['course_id'],
+            codename: data['codename'],
+            title: data['title'],
+            updated_at: data['updated_at'].substring(0, 10)
+          })
         }
         this.courses = _course
-      }).catch(
-      error => {
+      })
+      .catch(error => {
         this.error_message = '读取数据出错' + error.response.data.message
-      }
-    )
+      })
   },
   methods: {
     jump: function (id) {
       if (id === 0) {
-        this.$router.push({name: 'AddCourse'})
+        this.$router.push({ name: 'AddCourse' })
       } else if (id === -1) {
-        axios.get('http://localhost:8000/api/v1/courses/forestage/main/get-heroes/').then(
-          response => {
-            this.originImageList = response.data.content
-            for (let i = 0; i < this.originImageList.length; i++) {
-              this.originImageList[i].image = this.$store.state.address.concat(this.originImageList[i].image)
+        axios
+          .get(
+            'http://localhost:8000/api/v1/courses/forestage/main/get-heroes/'
+          )
+          .then(response => {
+            this.origin_image_list = response.data.content
+            for (let i = 0; i < this.origin_image_list.length; i++) {
+              this.origin_image_list[i].image = this.$store.state.address.concat(
+                this.origin_image_list[i].image
+              )
             }
-          }
-        )
+          })
         this.$refs.upload_picture.show()
       } else if (id > 0) {
-        this.$router.push({name: 'BackendCourseDetail', query: {course_id: id - 1}})
+        this.$router.push({
+          name: 'BackendCourseDetail',
+          query: { course_id: id - 1 }
+        })
       } else if (id < 0) {
-        this.$router.push({name: 'EditCourse', query: {course_id: (-(id + 2)).toString()}})
+        this.$router.push({
+          name: 'EditCourse',
+          query: { course_id: (-(id + 2)).toString() }
+        })
       }
     },
     change: function () {
-      axios.get('http://localhost:8000/api/v1/courses/backstage/course-management/get-course-list', {
-        params: {
-          codename: this.codename,
-          title: this.title,
-          page_limit: this.per_limit,
-          page: this.page
-        }
-      }).then(
-        response => {
+      axios
+        .get(
+          'http://localhost:8000/api/v1/courses/backstage/course-management/get-course-list',
+          {
+            params: {
+              codename: this.codename,
+              title: this.title,
+              page_limit: this.per_limit,
+              page: this.page
+            }
+          }
+        )
+        .then(response => {
+          this.num_pages = this.update_num_pages(response.data.num_pages)
           this.rows = response.data.count
           let _course = []
           for (let data of response.data.content) {
             _course.push({
-              'course_id': data['course_id'],
-              'codename': data['codename'],
-              'title': data['title'],
-              'updated_at': data['updated_at'].substring(0, 10)
+              course_id: data['course_id'],
+              codename: data['codename'],
+              title: data['title'],
+              updated_at: data['updated_at'].substring(0, 10)
             })
           }
           this.courses = _course
-        }).catch(
-        error => {
+        })
+        .catch(error => {
           this.error_message = '读取数据出错' + error
-        }
-      )
+        })
     },
-    changePage: function (currentpage) {
+    update_num_pages: function (page) {
+      if (page === 0) {
+        return 1
+      } else {
+        return page
+      }
+    },
+    change_page: function (currentpage) {
       this.page = currentpage
       this.change()
     },
-    preventDefaultEvent (eventName) {
-      document.addEventListener(
-        eventName,
-        function (e) {
-          e.preventDefault()
-        },
-        false
-      )
-    },
-    handleFileChange () {
+    handle_file_change () {
       let input = this.$refs.input
       let files = input.files
       this.preview(files)
     },
-    handleDrop (e) {
+    handle_drop (e) {
       let files = e.dataTransfer.files
       this.preview(files)
     },
-    openInput () {
+    open_input () {
       this.$refs.input.click()
     },
-    deleteImg (index) {
-      this.imageDataList.splice(index, 1)
-      this.fileNameList.splice(index, 1)
+    delete_img (index) {
+      this.image_data_list.splice(index, 1)
+      this.file_name_list.splice(index, 1)
     },
     preview (files) {
       let _this = this
@@ -363,37 +395,45 @@ export default {
         let reader = new FileReader()
         reader.onload = function (e) {
           resizeImage(e.target.result, 150, 150, function (result) {
-            _this.imageDataList.push(result)
-            _this.fileNameList.push(file)
+            _this.image_data_list.push(result)
+            _this.file_name_list.push(file)
           })
         }
         reader.readAsDataURL(file)
       }
     },
-    uploadData () {
+    upload_data () {
       let updateText = this.input_content.split('\n')
       let formdata = new FormData()
-      for (let i = 0; i < this.fileNameList.length; i++) {
-        formdata.append('heroes', this.fileNameList[i])
+      for (let i = 0; i < this.file_name_list.length; i++) {
+        formdata.append('heroes', this.file_name_list[i])
         formdata.append('captions', updateText[i])
       }
-      axios.post('http://localhost:8000/api/v1/courses/backstage/course-management/add-hero/', formdata)
-      axios.post('http://localhost:8000/api/v1/courses/backstage/course-management/delete-hero/',
-        qs.stringify({
-          delete_list: this.deleteOriginList
-        }, {arrayFormat: 'repeat'}))
+      axios.post(
+        'http://localhost:8000/api/v1/courses/backstage/course-management/add-hero/',
+        formdata
+      )
+      axios.post(
+        'http://localhost:8000/api/v1/courses/backstage/course-management/delete-hero/',
+        qs.stringify(
+          {
+            delete_list: this.delete_origin_list
+          },
+          { arrayFormat: 'repeat' }
+        )
+      )
     },
-    deleteOriginImg (index) {
-      this.deleteOriginList.push(index)
+    delete_origin_img (index) {
+      this.delete_origin_list.push(index)
       let i = -1
-      for (i = 0; i < this.originImageList.length; i++) {
-        if (this.originImageList[i].hero_id === index) {
+      for (i = 0; i < this.origin_image_list.length; i++) {
+        if (this.origin_image_list[i].hero_id === index) {
           break
         }
       }
-      this.originImageList.splice(i, 1)
+      this.origin_image_list.splice(i, 1)
     },
-    hideModal () {
+    hide_modal () {
       this.$refs.upload_picture.hide()
     }
   }
@@ -401,193 +441,203 @@ export default {
 </script>
 
 <style scoped>
-  .my-content {
-    margin: 40px;
-    text-align: left;
-  }
+.my-content {
+  padding: 20px;
+  margin: 70px 20px 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
 
-  .head-btn {
-    display: inline-block;
-    float: right;
-    margin-bottom: 20px;
-  }
+.my-head-btn {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin: 25px 0;
+  color: #23527c;
+}
 
-  .my-in-btn {
-    margin-right: auto;
-    margin-left: 50px;
-  }
+.my-btn-group {
+  display: inline-flex;
+}
 
-  .my-table {
-    text-align: center;
-  }
+h1 {
+  margin: 25px 0;
+  text-align: left;
+}
 
-  .my-td {
-    width: 250px;
-  }
+h6 {
+  margin-bottom: 15px;
+  font-weight: bold;
+  color: #23527c;
+}
 
-  .my-row {
-    width: 100%;
-    padding: 0;
-    margin: 0;
-  }
+h1,
+h6 {
+  padding-left: 15px;
+  color: #204269;
+}
 
-  .my-in-for-btn {
-    display: flex;
-  }
+#head-add-btn {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  margin: 0;
+  color: white;
+  text-align: right;
+  background-color: #4db14d;
+}
 
-  #content {
-    margin-top: 10px;
-  }
+#head-add-btn:hover,
+#head-add-btn:active {
+  background-color: #449c44;
+}
 
-  #edit {
-    margin-top: 10px;
-  }
+#add-icon,
+#change-icon {
+  margin-top: 3px;
+}
 
-  .my-long-input {
-    margin-left: 25%;
-  }
+#head-change-btn {
+  margin-left: 15px;
+  color: white;
+  background-color: #337ab7;
+}
 
-  .my-short-input {
-    margin-left: 28%;
-  }
+#head-change-btn:hover {
+  background-color: #286090;
+}
 
-  .in-btn {
-    margin-right: auto;
-    margin-left: auto;
-  }
+.my-in-input {
+  width: 50px;
+  margin-right: 10%;
+  margin-left: 10%;
+}
 
-  thead tr {
-    font-weight: bold;
-    color: white;
-    background-color: #6c757d;
-  }
+.table-div {
+  padding-left: 15px;
+  overflow-x: scroll;
+}
 
-  .table {
-    border: 1px solid #d3d9df;
-  }
+thead tr {
+  font-weight: bold;
+  color: #999;
+}
 
-  .btn,
-  .in-btn {
-    color: white;
-    background-color: #8d4e91;
-    border-color: #8d6592;
-    border-radius: 10px;
-    outline: none;
-    box-shadow: #8d6592 inset;
-  }
+td {
+  vertical-align: middle;
+}
 
-  .btn:hover,
-  .in-btn:hover,
-  .btn:active,
-  .in-btn:active {
-    background-color: #5e0057;
-  }
+table {
+  border-top: 1px solid #d3d9df;
+}
 
-  .input-image {
-    display: none;
-  }
+.input-image {
+  display: none;
+}
 
-  .img-uploader {
-    position: relative;
-    width: auto;
-    min-width: 260px;
-    max-width: 800px;
-    height: calc(150px + 25px * 2);
-    background: #ebebeb;
-    border-radius: 5px;
-  }
+.img-uploader {
+  position: relative;
+  width: auto;
+  min-width: 260px;
+  max-width: 800px;
+  height: calc(150px + 25px * 2);
+  background: #ebebeb;
+  border-radius: 5px;
+}
 
-  .img-uploader-placeholder {
-    position: absolute;
-    top: 50%;
-    width: 100%;
-    margin: 0;
-    font-size: 15px;
-    color: #aaa;
-    text-align: center;
-    transform: translate(0%, -50%);
-  }
+.img-uploader-placeholder {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  margin: 0;
+  font-size: 15px;
+  color: #aaa;
+  text-align: center;
+  transform: translate(0%, -50%);
+}
 
-  .img-uploader-preview-list {
-    width: 100%;
-    height: calc(150px + 18px * 2);
-    overflow: hidden;
-    overflow-x: auto;
-    text-align: center;
-    white-space: nowrap;
-    -webkit-backface-visibility: hidden;
-    -webkit-overflow-scrolling: touch;
-  }
+.img-uploader-preview-list {
+  width: 100%;
+  height: calc(150px + 18px * 2);
+  overflow: hidden;
+  overflow-x: auto;
+  text-align: center;
+  white-space: nowrap;
+  -webkit-backface-visibility: hidden;
+  -webkit-overflow-scrolling: touch;
+}
 
-  .img-uploader-preview {
-    z-index: 2;
-    display: inline-block;
-    min-height: 150px;
-    margin: 10px;
-    background: #333;
-    border-radius: 10px;
-    transition: 0.3s cubic-bezier(0.3, 0, 0.2, 1);
-  }
+.img-uploader-preview {
+  z-index: 2;
+  display: inline-block;
+  min-height: 150px;
+  margin: 10px;
+  background: #333;
+  border-radius: 10px;
+  transition: 0.3s cubic-bezier(0.3, 0, 0.2, 1);
+}
 
-  .img-uploader-mask {
-    position: absolute;
-    bottom: 0;
-    display: none;
-    width: 150px;
-    text-align: center;
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: 1px;
-  }
+.img-uploader-mask {
+  position: absolute;
+  bottom: 0;
+  display: none;
+  width: 150px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 1px;
+}
 
-  .img-uploader-preview:hover {
-    transform: scale(1.02);
-  }
+.img-uploader-preview:hover {
+  transform: scale(1.02);
+}
 
-  .img-uploader-preview:hover .img-uploader-mask {
-    display: block;
-  }
+.img-uploader-preview:hover .img-uploader-mask {
+  display: block;
+}
 
-  .img-uploader-delete-btn {
-    position: absolute;
-    top: 0;
-    right: 0;
-    display: none;
-    width: 25px;
-    height: 25px;
-    margin: 5px;
-  }
+.img-uploader-delete-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: none;
+  width: 25px;
+  height: 25px;
+  margin: 5px;
+}
 
-  .img-uploader-preview:hover .img-uploader-delete-btn {
-    display: block;
-  }
+.img-uploader-preview:hover .img-uploader-delete-btn {
+  display: block;
+}
 
-  .img-uploader-preview .preview-img {
-    width: 150px;
-    height: 150px;
-    overflow: hidden;
-  }
+.img-uploader-preview .preview-img {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+}
 
-  .img-uploader-label {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    margin-bottom: 0;
-    cursor: pointer;
-  }
+.img-uploader-label {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  margin-bottom: 0;
+  cursor: pointer;
+}
 
-  .img-uploader-file-name {
-    display: inline-block;
-    max-width: 90%;
-    padding-top: 10px;
-    margin: 0;
-    overflow: hidden;
-    font-size: 5px;
-    color: white;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    cursor: pointer;
-  }
+.img-uploader-file-name {
+  display: inline-block;
+  max-width: 90%;
+  padding-top: 10px;
+  margin: 0;
+  overflow: hidden;
+  font-size: 5px;
+  color: white;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
 </style>
