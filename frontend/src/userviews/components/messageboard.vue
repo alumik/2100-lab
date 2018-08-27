@@ -42,7 +42,7 @@
               </b-col>
               <b-col cols="6">
                 <label class="time-style">&emsp;
-                  {{ replies[i-1].created_at }}评论
+                  {{ replies[i-1].created_at }}回复
                 </label>
               </b-col>
               <b-col
@@ -85,7 +85,7 @@
         </div>
       </b-modal>
     </div>
-    <div v-if="!can_comment">该课程以禁止评论！</div>
+    <div v-if="!can_comment">该课程已禁止评论！</div>
     <div v-if="can_comment">
       <b-alert
         :show="created_test"
@@ -239,7 +239,7 @@
           id="input-message"
           v-model="new_msg"
           class="textarea-style"
-          placeholder="请输入留言"
+          placeholder="请输入评论"
           @keyup.enter="add_comment"/>
         <br>
         <div
