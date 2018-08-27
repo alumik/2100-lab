@@ -51,5 +51,5 @@ urlpatterns = [
         'log-management/get-admin-log/',
         views_backstage.get_admin_log,
         name='get-admin-log'
-    ),
+    )
 ]

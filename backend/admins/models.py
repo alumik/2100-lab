@@ -1,4 +1,5 @@
 """管理员模块模型"""
+
 # pylint: disable=E1101
 
 from django.conf import settings
@@ -10,7 +11,10 @@ from core.constants import ADMIN_LOG_TEMPLATE
 class AdminLog(models.Model):
     """管理员后台记录模型"""
 
-    admin_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    admin_user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
     action_type = models.SmallIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     old_data = models.TextField(blank=True)
