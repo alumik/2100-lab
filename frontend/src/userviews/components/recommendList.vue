@@ -1,43 +1,50 @@
 <template>
   <body>
-    <hr>
-    <b-container class="text-color">
-      <b-row>
-        <b-col
-          cols="8"
-          class="text-align-left">
-          <label id="list-title">{{ course_type === 'free' ? '免费课程':'付费课程' }}</label>
-        </b-col>
-        <b-col
-          class="text-align-right">
-          <label
-            id="watch-more"
-            @click="watch_more">更多</label>
-        </b-col>
-      </b-row>
-    </b-container>
+    <b-row style="text-align: center; margin-bottom: 20px;">
+      <b-col
+        style="font-size: 2rem; border-left: 3px solid #ccc; width: 20px; margin-left: 30px; font-weight: bold;"
+        cols="8"
+        class="text-align-left">
+        <label id="list-title">{{ course_type === 'free' ? '免费':'付费' }}</label>
+      </b-col>
+      <b-col
+        class="watch-more" style="border: 1px solid #f00;">
+        <label
+          id="watch-more"
+          @click="watch_more">更多</label>
+      </b-col>
+    </b-row>
     <div
       id="course-list"
       class="course-list-style">
-      <b-container class="bv-example-row">
-        <b-form-row>
+      <b-container
+        fluid
+        class="bv-example-row">
+        <b-row>
           <b-col
             v-for="course in courselist"
             :key="course.course_id"
-            class="col-style col-card-style">
-            <b-card
-              :img-src="example_src"
-              img-alt="Img"
-              img-top>
-              <p style="height: 2.5rem;">
-                {{ course.title }}
-              </p>
-              <p class="card-text card-text-height">
-                {{ course.description.substring(0,30) }}
-              </p>
-            </b-card>
+            sm="6"
+            md="4"
+            lg="3"
+            class="col-style"
+            style="border-radius: 15px;"
+            @click="open_detail_page(course.course_id)">
+            <div style="border-radius: 25px;">
+              <img
+                :src="example_src"
+                style="width: 100%; height: 100%; border-radius: 15px 15px 0 0;">
+              <div style="padding: 15px;">
+                <h5 class="card-title">
+                  {{ course.title }}
+                </h5>
+                <p class="card-text card-text-height">
+                  &emsp;&emsp;{{ course.description }}
+                </p>
+              </div>
+            </div>
           </b-col>
-        </b-form-row>
+        </b-row>
       </b-container>
     </div>
   </body>
@@ -62,7 +69,7 @@ export default {
   },
   data () {
     return {
-      example_src: 'https://picsum.photos/400/300/?image=790'
+      example_src: 'https://picsum.photos/400/300/?image=79'
     }
   },
   methods: {
@@ -81,36 +88,43 @@ export default {
 </script>
 
 <style>
-  .text-align-right {
-    text-align: right;
+  .watch-more {
+    padding-top: 2rem;
+    padding-left: 18rem;
+    font-weight: bold;
   }
 
   .text-align-left {
     text-align: left;
   }
 
-  .text-color {
-    color: #999;
-  }
-
-  .col-card-style {
-    width: 16rem;
-    min-width: 16rem;
-    max-width: 16rem;
-    height: 22.5rem;
-    min-height: 22.5rem;
-    max-height: 22.5rem;
-  }
-
   .col-style {
     flex: 1 0 20%;
+    min-width: 15rem;
+    min-height: 18rem;
     padding: 0;
-    margin: 0.7rem;
+    margin: 1rem;
     text-align: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  .col-style:hover {
+    -ms-transform: translate(0, -5px); /* IE 9 */
+    -webkit-transform: translate(0, -5px); /* Safari and Chrome */
+    transform: translate(0, -5px);
   }
 
   .card-text-height {
-    height: 5rem;
+    max-height: 5.5rem;
+    overflow: hidden;
+    font-size: 15px;
+  }
+
+  .card-title {
+    height: 1.5rem;
+    overflow: hidden;
+    font-weight: bold;
   }
 
   #course-list {

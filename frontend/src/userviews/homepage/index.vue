@@ -135,7 +135,7 @@ export default {
 
 .recommend-list {
   width: 100%;
-  padding: 1rem;
+  padding: 3rem;
   margin: 0;
 }
 </style>
