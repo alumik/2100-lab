@@ -41,11 +41,6 @@
               id="save-btn"
               class="btn"
               @click="submit_message">
-              <simple-line-icons
-                id="add-icon"
-                icon="user-follow"
-                color="white"
-                class="icon"/>
               保存
             </a>
           </b-form-group>
@@ -130,6 +125,10 @@ export default {
       )
       .then(response => {
         for (let permission of response.data.admin_groups) {
+          if (permission === 'super_admin') {
+            this.toggle_all(true)
+            break
+          }
           this.selected.push(this.transfer_permission(permission))
         }
       })
@@ -187,16 +186,24 @@ export default {
           )
         )
         .then(response => {
+          this.wrong_count_down = 0
+          this.success_count_down = 0
           this.error_message = response.data.message
-          this.$router.push({
-            name: 'AdminDetail',
-            query: { admin_id: this.admin_id }
-          })
+          this.success_count_down = 3
+          setTimeout(this.router_push, 3000)
         })
         .catch(error => {
+          this.wrong_count_down = 0
+          this.success_count_down = 0
           this.error_message = error.response.message
           this.wrong_count_down = 5
         })
+    },
+    router_push () {
+      this.$router.push({
+        name: 'AdminDetail',
+        query: { admin_id: this.$route.query.admin_id }
+      })
     }
   }
 }
@@ -238,12 +245,12 @@ h1 {
   margin-left: 3px;
   color: white;
   text-align: right;
-  background-color: #0c0;
+  background-color: #4db14d;
   border: 1px solid #d3d9df;
 }
 
 .btn:hover,
 .btn:active {
-  background-color: #090;
+  background-color: #449c44;
 }
 </style>

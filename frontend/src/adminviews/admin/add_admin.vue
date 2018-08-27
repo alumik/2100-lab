@@ -49,11 +49,6 @@
           id="save-btn"
           class="btn"
           @click="check_format">
-          <simple-line-icons
-            id="add-icon"
-            icon="pin"
-            color="white"
-            class="icon"/>
           保存
         </a>
       </div>
@@ -122,7 +117,6 @@ export default {
       }
     },
     send_message: function () {
-      let _this = this
       axios
         .post(
           'http://localhost:8000/api/v1/admin/backstage/admin-management/add-admin/',
@@ -132,21 +126,23 @@ export default {
           })
         )
         .then(response => {
-          let that = this
+          let _this = this
+          this.wrong_count_down = 0
+          this.success_count_down = 0
           if (response.data.new_admin_id) {
             _this.error_message = '添加成功'
-            _this.admin.phone_number = ''
-            _this.admin.password = ''
-            _this.admin.password_again = ''
-            this.success_count_down = 5
+            this.success_count_down = 3
             setTimeout(function () {
-              that.$router.push({ name: 'AdminManagement' })
-            }, 5000)
+              _this.$router.push({ name: 'AdminManagement' })
+            }, 3000)
           }
         })
         .catch(error => {
-          _this.error_message = error.response.message
-          this.wrong_count_down = 5
+          let _this = this
+          _this.wrong_count_down = 0
+          _this.success_count_down = 0
+          _this.error_message = error.response.data.message
+          _this.wrong_count_down = 5
         })
     }
   }
@@ -185,12 +181,12 @@ h1 {
   margin-left: 15px;
   color: white;
   text-align: right;
-  background-color: #449c44;
+  background-color: #4db14d;
   border: 1px solid #d3d9df;
 }
 
 .btn:hover,
 .btn:active {
-  background-color: #4db14d;
+  background-color: #449c44;
 }
 </style>

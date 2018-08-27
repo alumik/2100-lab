@@ -34,6 +34,7 @@
             :choose_image_data_list_origin="image_file_list.slice()"
             :is_uploaded="is_uploaded"
             @update_is_uploaded="is_uploaded=false"
+            @reset_is_uploaded="is_uploaded=true"
             @uploadSortedPic="receive_sorted_pictures"
           />
           <SyncPicture
@@ -113,6 +114,7 @@
               <input
                 id="Yes"
                 type="radio"
+                checked
                 name="optn"
                 @click="update_can_comment(1)"
               >是

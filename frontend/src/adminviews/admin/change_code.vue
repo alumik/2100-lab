@@ -39,11 +39,6 @@
           id="save-btn"
           class="btn"
           @click="submit_message">
-          <simple-line-icons
-            id="add-icon"
-            icon="pin"
-            color="white"
-            class="icon"/>
           保存
         </a>
       </div>
@@ -109,17 +104,26 @@ export default {
             })
           )
           .then(response => {
+            this.wrong_count_down = 0
+            this.success_count_down = 0
             this.error_message = response.data.message
-            this.$router.push({
-              name: 'AdminDetail',
-              query: { admin_id: this.admin_id }
-            })
+            this.error_message = '修改密码成功'
+            this.success_count_down = 3
+            setTimeout(this.router_push, 3000)
           })
           .catch(error => {
+            this.wrong_count_down = 0
+            this.success_count_down = 0
             this.error_message = error.response.message
             this.wrong_count_down = 5
           })
       }
+    },
+    router_push () {
+      this.$router.push({
+        name: 'AdminDetail',
+        query: { admin_id: this.$route.query.admin_id }
+      })
     }
   }
 }
@@ -162,12 +166,12 @@ label {
   margin-left: 15px;
   color: white;
   text-align: right;
-  background-color: #449c44;
+  background-color: #4db14d;
   border: 1px solid #d3d9df;
 }
 
 .btn:hover,
 .btn:active {
-  background-color: #4db14d;
+  background-color: #449c44;
 }
 </style>

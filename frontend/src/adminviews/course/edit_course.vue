@@ -35,6 +35,7 @@
           :is_uploaded="is_uploaded"
           :choose_image_data_list_origin="image_file_list"
           @update_is_uploaded="is_uploaded=false"
+          @reset_is_uploaded="is_uploaded=true"
           @uploadSortedPic="receive_sorted_pictures"/>
         <SyncPicture
           :audio_file_list="audio_file_list"

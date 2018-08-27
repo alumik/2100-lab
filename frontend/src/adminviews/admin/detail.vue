@@ -186,10 +186,14 @@ export default {
             this.admin.admin_groups = '超级管理员权限'
             break
           } else {
-            this.admin.admin_groups =
-              this.admin.admin_groups +
-              ' ' +
-              this.transfer_permission(permission)
+            if (this.admin.admin_groups === '') {
+              this.admin.admin_groups = this.transfer_permission(permission)
+            } else {
+              this.admin.admin_groups =
+                this.admin.admin_groups +
+                ',' +
+                this.transfer_permission(permission)
+            }
           }
         }
       })
@@ -300,37 +304,42 @@ h1 {
 .button-group {
   display: inline-block;
   float: right;
+  margin-bottom: 5px;
 }
 
 #distribution-btn {
+  margin-left: 15px;
   color: white;
-  background-color: #06f;
+  background-color: #337ab7;
 }
 
 #distribution-btn:hover {
-  background-color: #00f;
+  background-color: #286090;
 }
 
 #change-password-btn {
+  margin-left: 15px;
   color: white;
-  background-color: #06f;
+  background-color: #337ab7;
 }
 
 #change-password-btn:hover {
-  background-color: #00f;
+  background-color: #286090;
 }
 
 #change-username-btn {
+  margin-left: 15px;
   color: white;
-  background-color: #06f;
+  background-color: #337ab7;
 }
 
 #change-username-btn:hover {
-  background-color: #00f;
+  background-color: #286090;
 }
 
 #delete-user-btn {
   margin-right: 15px;
+  margin-left: 15px;
   color: white;
   background-color: #dd514c;
 }
@@ -342,12 +351,12 @@ h1 {
 .btn {
   color: white;
   text-align: right;
-  background-color: #449c44;
+  background-color: #4db14d;
   border: 1px solid #d3d9df;
 }
 
 .btn:hover,
 .btn:active {
-  background-color: #4db14d;
+  background-color: #449c44;
 }
 </style>
