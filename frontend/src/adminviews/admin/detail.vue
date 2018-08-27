@@ -310,7 +310,6 @@ h1 {
 }
 
 #distribution-btn {
-  margin-left: 15px;
   color: white;
   background-color: #337ab7;
 }
@@ -320,7 +319,6 @@ h1 {
 }
 
 #change-password-btn {
-  margin-left: 15px;
   color: white;
   background-color: #337ab7;
 }
@@ -330,7 +328,6 @@ h1 {
 }
 
 #change-username-btn {
-  margin-left: 15px;
   color: white;
   background-color: #337ab7;
 }
@@ -340,8 +337,6 @@ h1 {
 }
 
 #delete-user-btn {
-  margin-right: 15px;
-  margin-left: 15px;
   color: white;
   background-color: #dd514c;
 }
@@ -351,6 +346,7 @@ h1 {
 }
 
 .btn {
+  margin-left: 3px;
   color: white;
   text-align: right;
   background-color: #4db14d;

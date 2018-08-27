@@ -1,22 +1,22 @@
 <template>
   <Basic :items="items">
     <div class="my-content">
-      <div class="headdiv">
-        <div class="headline">
+      <div class="head-container">
+        <div class="head-title">
           <h1>管理员列表</h1>
-          <h6>第 {{ page }}/{{ num_pages }} 页，共 {{ rows }} 条数据</h6>
+          <a
+            id="head-btn"
+            class="btn"
+            @click="jump(-1)">
+            <simple-line-icons
+              id="add-icon"
+              icon="user-follow"
+              color="white"
+              class="icon"/>
+            新增管理员
+          </a>
         </div>
-        <a
-          id="head-btn"
-          class="btn"
-          @click="jump(-1)">
-          <simple-line-icons
-            id="add-icon"
-            icon="user-follow"
-            color="white"
-            class="icon"/>
-          新增管理员
-        </a>
+        <h6>第 {{ page }}/{{ num_pages }} 页，共 {{ rows }} 条数据</h6>
       </div>
       <div class="table-div">
         <table class="table table-striped">
@@ -226,9 +226,6 @@ export default {
 }
 
 #head-btn {
-  position: absolute;
-  right: 15px;
-  bottom: 0;
   display: inline-block;
   color: white;
   text-align: right;
@@ -279,20 +276,18 @@ td {
   vertical-align: middle;
 }
 
+h1,
+h6 {
+  color: #204269;
+}
+
 h1 {
-  margin: 25px 0;
   text-align: left;
 }
 
 h6 {
   margin-bottom: 0;
   font-weight: bold;
-  color: #23527c;
-}
-
-h1,
-h6 {
-  color: #204269;
 }
 
 th {
@@ -304,12 +299,14 @@ thead tr {
   color: #999;
 }
 
-.headline {
-  display: inline-block;
+.head-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 25px 0;
 }
 
-.headdiv {
-  position: relative;
+.head-container {
   padding: 0 15px;
   margin-bottom: 15px;
   text-align: left;

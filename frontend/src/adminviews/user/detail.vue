@@ -28,11 +28,6 @@
               size="small"/>
             认证用户
           </a>
-          <ConfirmModal
-            id="authenticate"
-            title="确认认证"
-            text="您确定要认证此用户吗？"
-            @click="authenticate_user"/>
           <a
             v-if="is_banned"
             id="banned-button"
@@ -57,11 +52,6 @@
               size="small"/>
             禁言用户
           </a>
-          <ConfirmModal
-            id="ban"
-            title="确认禁言"
-            text="您确定要禁言此用户吗？"
-            @click="ban_user"/>
           <a
             v-if="is_deleted"
             id="deleted-button"
@@ -85,13 +75,23 @@
               size="small"/>
             删除用户
           </a>
-          <ConfirmModal
-            id="delete"
-            title="确认删除"
-            text="您确定要删除此用户吗？"
-            @click="delete_user"/>
         </div>
       </div>
+      <ConfirmModal
+        id="authenticate"
+        title="确认认证"
+        text="您确定要认证此用户吗？"
+        @click="authenticate_user"/>
+      <ConfirmModal
+        id="delete"
+        title="确认删除"
+        text="您确定要删除此用户吗？"
+        @click="delete_user"/>
+      <ConfirmModal
+        id="ban"
+        title="确认禁言"
+        text="您确定要禁言此用户吗？"
+        @click="ban_user"/>
       <Alert
         :count_down="wrong_count_down"
         :instruction="wrong"
@@ -112,7 +112,7 @@
             <tr class="row mx-0">
               <td class="col-3">头像</td>
               <td class="col-9">
-                <img src="http://localhost:8000/media/default/customers/avatars/2100_lab.jpg">
+                <img :src="avatar">
               </td>
             </tr>
             <tr
@@ -266,7 +266,8 @@ export default {
       success: '',
       is_banned: false,
       is_vip: false,
-      is_deleted: false
+      is_deleted: false,
+      avatar: ''
     }
   },
   created () {
@@ -291,6 +292,7 @@ export default {
           that.is_deleted = response.data.customer_info.is_deleted
           that.orders = response.data.recent_orders
           that.course_logs = response.data.recent_learning_logs
+          that.avatar = that.$store.state.address + response.data.customer_info.avatar
         }
       })
       .catch(function (error) {
@@ -437,7 +439,7 @@ export default {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  padding: 0 15px 0 15px;
+  padding: 0 15px;
   margin: 25px 0;
 }
 
@@ -448,21 +450,18 @@ h2 {
 }
 
 .buttons {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  text-align: right;
+  display: inline-block;
 }
 
 .btn {
+  display: inline-block;
   margin-left: 3px;
   color: white;
   border: 1px solid #d3d9df;
 }
 
 .table-div {
-  padding-right: 15px;
-  padding-left: 15px;
+  padding: 0 15px;
   overflow-x: auto;
 }
 
