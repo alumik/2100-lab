@@ -50,6 +50,43 @@ const store = new Vuex.Store({
       '#204269',
       '#204269',
       '#204269'
+    ],
+    lists: [
+      {
+        id: 1,
+        isActive: false,
+        path: '/admin/course'
+      },
+      {
+        id: 2,
+        isActive: false,
+        path: '/admin/message'
+      },
+      {
+        id: 3,
+        isActive: false,
+        path: '/admin/user'
+      },
+      {
+        id: 4,
+        isActive: false,
+        path: '/admin/order'
+      },
+      {
+        id: 5,
+        isActive: false,
+        path: '/admin/log'
+      },
+      {
+        id: 6,
+        isActive: false,
+        path: '/admin/data/total'
+      },
+      {
+        id: 7,
+        isActive: false,
+        path: '/admin/adminmanagement'
+      }
     ]
   },
   mutations: {
@@ -115,9 +152,18 @@ router.beforeEach(async (to, from, next) => {
   )
   if (!response.data.is_authenticated && to.meta.requireAuth !== false) {
     next('/')
-  // } else if (to.path.toString().includes('admin/')){
-  //     next('/admin/main')
-  } else if (response.data.is_authenticated && !response.data.staff && to.path.includes('admin/')) {
+  } else if (response.data.is_authenticated && response.data.is_staff) {
+    for (let list of store.state.lists) {
+      if (to.path.toString().includes(list.path)) {
+        sessionStorage.setItem('menu', list.id)
+      }
+    }
+    next()
+  } else if (
+    response.data.is_authenticated &&
+    !response.data.is_staff &&
+    to.path.includes('admin/')
+  ) {
     next('/')
   } else {
     next()
