@@ -244,7 +244,19 @@ export default {
 
 <style scoped>
   .body {
+    padding: 20px;
+    margin: 70px 20px 20px;
     overflow-x: scroll;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  h1 {
+    padding-left: 15px;
+    margin: 25px 0;
+    color: #204269;
+    text-align: left;
   }
 
   .tab-content {
@@ -302,13 +314,6 @@ export default {
     margin-right: 20px;
     margin-left: 20px;
     border: 1px solid #f3f5ee;
-  }
-
-  h1 {
-    padding-left: 15px;
-    margin-top: 25px;
-    margin-bottom: 25px;
-    text-align: left;
   }
 
   .col-md-2 > div {

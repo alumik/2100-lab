@@ -131,7 +131,7 @@ export default {
       }],
       colors1: ['#ff5722'],
       colors2: ['#448aff'],
-      begin_date: new Date(),
+      begin_date: new Date(new Date().getTime() - 24 * 60 * 60 * 1000),
       end_date: new Date(),
       options: {
         format: 'YYYY/MM/DD',
@@ -279,7 +279,12 @@ export default {
 
 <style scoped>
   .body {
+    padding: 20px;
+    margin: 70px 20px 20px;
     overflow-x: scroll;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
   }
 
   .tab-content {
