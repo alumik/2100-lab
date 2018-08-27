@@ -69,10 +69,6 @@ describe('课程详情页单元测试', () => {
     expect(wrapper.findAll('.my-btn').length).toEqual(4)
   })
 
-  it('测试提示数量', () => {
-    expect(wrapper.findAll('.reminder').length).toEqual(1)
-  })
-
   it('测试课程简介渲染', () => {
     expect(wrapper.contains('.profile-style')).toBe(true)
   })
