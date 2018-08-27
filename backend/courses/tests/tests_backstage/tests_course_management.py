@@ -188,6 +188,7 @@ class CourseDetailTests(TestCase):
                 'expire_duration': 'P0DT00H00M00S',
                 'price': '0.00',
                 'reward_percent': '0.00',
+                'thumbnail': '',
                 'created_at': response_json_data['created_at'],
                 'updated_at': response_json_data['updated_at'],
                 'description': 'd1'
