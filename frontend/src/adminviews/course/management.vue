@@ -195,8 +195,8 @@
                   class="btn"
                   @click="jump(course.course_id + 1)">
                   <simple-line-icons
-                    icon="pencil"
-                    color="green"
+                    icon="bubble"
+                    color="#5b9bd1"
                     class="icon"
                     size="small"/>
                   详情
@@ -206,8 +206,8 @@
                   class="btn"
                   @click="jump(course.course_id * (-1) - 2)">
                   <simple-line-icons
-                    icon="trash"
-                    color="#e60000"
+                    icon="pencil"
+                    color="green"
                     class="icon"
                     size="small"/>
                   修改
@@ -479,6 +479,12 @@ h6 {
   color: #204269;
 }
 
+.btn {
+  margin-right: 2px;
+  margin-left: 2px;
+  border: 1px solid #d3d9df;
+}
+
 #head-add-btn {
   display: flex;
   flex-wrap: wrap;
@@ -518,6 +524,22 @@ h6 {
 .table-div {
   padding-left: 15px;
   overflow-x: scroll;
+}
+
+#detail-button {
+  color: #5b9bd1;
+}
+
+#detail-button:hover {
+  background-color: rgba(91, 155, 209, 0.2);
+}
+
+#change-button {
+  color: green;
+}
+
+#change-button:hover {
+  background-color: rgba(0, 128, 0, 0.2);
 }
 
 thead tr {
