@@ -1,8 +1,16 @@
 <template>
   <div class="button-group">
-    <b-button @click="show_modal">
+    <a
+      id="manage-btn"
+      class="btn"
+      @click="show_modal">
+      <simple-line-icons
+        id="change-icon"
+        icon="picture"
+        color="white"
+        class="icon"/>
       管理资料
-    </b-button>
+    </a>
     <b-modal
       ref="upload_source"
       size="lg"
@@ -439,5 +447,16 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: pointer;
+}
+
+#manage-btn {
+  margin-right: 5px;
+  margin-left: 5px;
+  color: white;
+  background-color: #337ab7;
+}
+
+#manage-btn:hover {
+  background-color: #286090;
 }
 </style>

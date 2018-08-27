@@ -1,158 +1,156 @@
 <template>
   <Basic :items="items">
-    <div class="my-content">
-      <h2>修改课程</h2>
-      <div class="form-group form-inline">
-        <label
-          class="form-check-label my-label"
-          for="coursename">课程名</label>
-        <input
-          id="coursename"
-          v-model="course.title"
-          class="input form-control col-lg-3"
-          type="text">
-      </div>
-      <div class="form-group form-inline">
-        <label
-          class="form-check-label my-label"
-          for="courseID">课程代码</label>
-        <input
-          id="courseID"
-          v-model="course.codename"
-          class="input form-control col-lg-3"
-          type="text">
-      </div>
-      <div class="form-group form-inline">
-        <div>
+    <div>
+      <div class="my-content">
+        <h1>修改课程</h1>
+        <div class="form-group form-inline">
           <label
             class="form-check-label my-label"
-            for="flare_time">阅后即焚时间</label>
+            for="coursename">课程名</label>
+          <input
+            id="coursename"
+            v-model="course.title"
+            class="input form-control col-lg-3"
+            type="text">
         </div>
-        <div
-          id="flare_time"
-          class="flare_time">
+        <div class="form-group form-inline">
+          <label
+            class="form-check-label my-label"
+            for="courseID">课程代码</label>
+          <input
+            id="courseID"
+            v-model="course.codename"
+            class="input form-control col-lg-3"
+            type="text">
+        </div>
+        <div class="form-group form-inline">
           <div>
-            <div
-              class="input-group">
-              <input
-                id="flare_time_day"
-                v-model="course.expire_duration_day"
-                class="input form-control col-lg-1"
-                type="text">
-              <div class="input-group-prepend">
-                <span class="input-group-text">天</span>
+            <label
+              class="form-check-label my-label"
+              for="flare_time">阅后即焚时间</label>
+          </div>
+          <div
+            id="flare_time"
+            class="flare_time">
+            <div>
+              <div
+                class="input-group">
+                <input
+                  id="flare_time_day"
+                  v-model="course.expire_duration_day"
+                  class="input form-control col-lg-1"
+                  type="text">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">天</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div
+                id="input-group-flare"
+                class="input-group">
+                <input
+                  id="flare_time_hour"
+                  v-model="course.expire_duration_hour"
+                  class="input form-control col-lg-1"
+                  type="text">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">小时</span>
+                </div>
               </div>
             </div>
           </div>
+        </div>
+        <div class="form-group form-inline">
+          <label
+            class="form-check-label my-label"
+            for="price">金额</label>
           <div>
-            <div
-              id="input-group-flare"
-              class="input-group">
+            <div class="input-group">
               <input
-                id="flare_time_hour"
-                v-model="course.expire_duration_hour"
+                id="price"
+                v-model="course.price"
                 class="input form-control col-lg-1"
                 type="text">
               <div class="input-group-prepend">
-                <span class="input-group-text">小时</span>
+                <span class="input-group-text">元</span>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="form-group form-inline">
-        <label
-          class="form-check-label my-label"
-          for="price">金额</label>
-        <div>
-          <div class="input-group">
-            <input
-              id="price"
-              v-model="course.price"
-              class="input form-control col-lg-1"
-              type="text">
-            <div class="input-group-prepend">
-              <span class="input-group-text">元</span>
+        <div class="form-inline form-group">
+          <label
+            class="form-check-label my-label"
+            for="percent">分销金比例</label>
+          <div>
+            <div class="input-group">
+              <input
+                id="percent"
+                v-model="course.reward_percent"
+                class="input form-control col-lg-3"
+                type="text">
+              <div class="input-group-prepend">
+                <span
+                  class="input-group-text">%</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="form-group form-inline">
-        <label
-          class="form-check-label my-label"
-          for="can_review">可评论</label>
-        <div
-          id="can_review">
-          <label for="Yes"><input
-            id="Yes"
-            ref="Yes"
-            type="radio"
-            name="optn"
-            @click="update_can_comment(1)"
-          >是</label>
-          <label for="No"><input
-            id="No"
-            ref="No"
-            type="radio"
-            name="optn"
-            @click="update_can_comment(0)"
-          >否</label>
-        </div>
-      </div>
-      <div class="form-inline">
-        <label
-          class="form-check-label my-label"
-          for="percent">分销金比例</label>
-        <div>
-          <div class="input-group">
-            <input
-              id="percent"
-              v-model="course.reward_percent"
-              class="input form-control col-lg-3"
-              type="text">
-            <div class="input-group-prepend">
-              <span
-                class="input-group-text">%</span>
-            </div>
+        <div class="form-group form-inline">
+          <label class="form-check-label my-label">
+            可评论
+          </label>
+          <div class="can-comment">
+            <b-form-group>
+              <b-form-radio-group
+                v-model="course.can_comment"
+                :options="comment_options"
+                name="radioInline"/>
+            </b-form-group>
           </div>
         </div>
+        <div class="form-group form-inline">
+          <label
+            class="form-check-label my-label"
+            for="course_content">课程素材</label>
+          <div class="my-sync-btn">
+            <UploadSourceForEdit
+              id="course_content"
+              :origin_image_list="course.origin_image_file_list"
+              :origin_audio_list="course.origin_audio_file_list"
+              @upload_resource="receive_uploaded_resource"/>
+            <PreSortPicture
+              :is_uploaded="is_uploaded"
+              :choose_image_data_list_origin="image_file_list"
+              @update_is_uploaded="is_uploaded=false"
+              @reset_is_uploaded="is_uploaded=true"
+              @upload_sorted_pic="receive_sorted_pictures"/>
+            <SyncPicture
+              :audio_file_list="audio_file_list"
+              :image_data_list="image_file_list"
+              :is_audio_changed="is_audio_changed"
+              @sync_picture_audio="receive_sync_data"
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <label
+            id="intro-label"
+            class="form-check-label my-label"
+            for="intro">简介</label>
+          <textarea
+            id="intro"
+            v-model="course.description"
+            class="form-control col-lg-2"
+            rows="6s">&nbsp;</textarea>
+        </div>
+        <a
+          id="save-btn"
+          class="btn"
+          @click="upload_all_data">
+          保存
+        </a>
       </div>
-      <div class="form-group form-inline">
-        <label
-          class="form-check-label my-label"
-          for="course_content">课程素材</label>
-        <UploadSourceForEdit
-          id="course_content"
-          :origin_image_list="course.origin_image_file_list"
-          :origin_audio_list="course.origin_audio_file_list"
-          @upload_resource="receive_uploaded_resource"/>
-        <PreSortPicture
-          :is_uploaded="is_uploaded"
-          :choose_image_data_list_origin="image_file_list"
-          @update_is_uploaded="is_uploaded=false"
-          @reset_is_uploaded="is_uploaded=true"
-          @upload_sorted_pic="receive_sorted_pictures"/>
-        <SyncPicture
-          :audio_file_list="audio_file_list"
-          :image_data_list="image_file_list"
-          :is_audio_changed="is_audio_changed"
-          @sync_picture_audio="receive_sync_data"
-        />
-      </div>
-      <div class="form-group">
-        <label
-          id="intro-label"
-          class="form-check-label my-label"
-          for="intro">简介</label>
-        <textarea
-          id="intro"
-          v-model="course.description"
-          class="form-control col-lg-2"
-          rows="6s">&nbsp;</textarea>
-      </div>
-      <button
-        class="btn my-btn"
-        @click="upload_all_data">保存</button>
     </div>
   </Basic>
 </template>
@@ -198,10 +196,14 @@ export default {
         price: '',
         reward_percent: '',
         description: '',
-        can_comment: '1',
+        can_comment: '',
         origin_audio_file_list: [],
         origin_image_file_list: []
       },
+      comment_options: [
+        { text: '是', value: '1' },
+        { text: '否', value: '0' }
+      ],
       audio_file_list: [],
       image_file_list: [],
       delete_origin_image_index_list: [],
@@ -232,7 +234,11 @@ export default {
       this.course.price = data.price
       this.course.reward_percent = data.reward_percent * 100
       this.course.description = data.description
-      this.course.can_comment = data.can_comment
+      if (data.can_comment === true) {
+        this.course.can_comment = 1
+      } else {
+        this.course.can_comment = 0
+      }
       let duration = data.expire_duration
       this.course.expire_duration_day = Math.floor(duration / (3600 * 24))
       let day = this.course.expire_duration_day
@@ -241,11 +247,6 @@ export default {
       )
       this.course.origin_audio_file_list[0] = data.audio
       this.course.origin_image_file_list = data.images
-      if (this.course.can_comment === true) {
-        this.$refs.Yes.checked = true
-      } else if (this.course.can_comment === false) {
-        this.$refs.No.checked = true
-      }
       if (this.course.origin_image_file_list.length > 0) {
         for (let i = 0; i < this.course.origin_image_file_list.length; i++) {
           let addPath = this.$store.state.address
@@ -265,9 +266,6 @@ export default {
           this.$store.state.address + this.course.origin_audio_file_list[0]
         this.audio_file_list.push(this.course.origin_audio_file_list[0])
       }
-    },
-    update_can_comment: function (data) {
-      this.course.can_comment = data
     },
     receive_uploaded_resource: function (
       upload_pic_resourse,
@@ -341,7 +339,7 @@ export default {
           )
         )
         .then(response => {
-          console.log(response.data.message)
+          console.log(response.data)
         })
         .catch(error => {
           console.log(error)
@@ -379,18 +377,39 @@ export default {
 
 <style scoped>
 .my-content {
-  margin: 40px;
+  padding: 20px;
+  margin: 70px 20px 20px;
+  text-align: left;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  margin: 25px 15px;
+  color: #204269;
   text-align: left;
 }
 
 .my-label {
   display: inline-block;
   width: 150px;
+  margin-left: 25px;
   text-align: left;
+}
+
+.form-group {
+  margin-top: 40px;
+  margin-bottom: 20px;
 }
 
 .flare_time {
   display: flex;
+}
+
+label {
+  font-size: 14px;
+  font-weight: bold;
 }
 
 #flare_time_day {
@@ -401,8 +420,8 @@ export default {
 
 #flare_time_hour {
   width: 70px;
-  min-width: 70px;
-  max-width: 70px;
+  min-width: 80px;
+  max-width: 80px;
 }
 
 .input {
@@ -411,21 +430,17 @@ export default {
   max-width: 260px;
 }
 
-#can_review {
-  display: flex;
+.can-comment {
+  margin-top: -20px;
 }
 
 #input-group-flare {
   display: flex;
 }
 
-.my-btn,
 #intro {
-  max-width: 405px;
-}
-
-#No {
-  margin-left: 100px;
+  max-width: 550px;
+  margin-left: 25px;
 }
 
 #intro-label {
@@ -434,28 +449,33 @@ export default {
 }
 
 #percent {
-  width: 210px;
-  min-width: 210px;
-  max-width: 210px;
+  width: 217px;
+  min-width: 217px;
+  max-width: 217px;
 }
 
 #price {
-  width: 210px;
-  min-width: 210px;
-  max-width: 210px;
+  width: 217px;
+  min-width: 217px;
+  max-width: 217px;
 }
 
-.btn {
+#save-btn {
+  margin-left: 25px;
   color: white;
-  background-color: #8d4e91;
-  border-color: #8d6592;
-  border-radius: 10px;
-  outline: none;
-  box-shadow: #8d6592 inset;
+  text-align: right;
+  background-color: #4db14d;
+  border: 1px solid #d3d9df;
 }
 
-.btn:hover,
-.btn:active {
-  background-color: #5e0057;
+#save-btn:hover,
+#save-btn:active {
+  background-color: #449c44;
+}
+
+.my-sync-btn {
+  display: flex;
+  margin-right: -5px;
+  margin-left: -5px;
 }
 </style>
