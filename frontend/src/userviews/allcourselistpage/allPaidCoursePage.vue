@@ -1,19 +1,21 @@
 <template>
   <Basic>
-    <b-alert
-      :show="created_test"
-      variant="danger"
-      dismissible
-      fade
-      @dismissed="created_test=false">
-      {{ created_error_msg }}
-    </b-alert>
-    <AllCourseList
-      id="all-paid"
-      :page_title="page_title"
-      :course_list="course_list"
-      :rows="rows"
-      @change_page="change_page"/>
+    <div class="body">
+      <b-alert
+        :show="created_test"
+        variant="danger"
+        dismissible
+        fade
+        @dismissed="created_test=false">
+        {{ created_error_msg }}
+      </b-alert>
+      <AllCourseList
+        id="all-paid"
+        :page_title="page_title"
+        :course_list="course_list"
+        :rows="rows"
+        @change_page="change_page"/>
+    </div>
   </Basic>
 </template>
 
