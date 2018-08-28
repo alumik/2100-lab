@@ -23,11 +23,30 @@ describe('日志详情页面单元测试', () => {
     }
   })
 
-  it('日志详情组件存在', () => {
+  it('测试日志详情组件是否存在', () => {
     expect(wrapper.exists()).toBe(true)
   })
 
-  it('包含Basic组件', () => {
+  it('测试是否包含Basic组件', () => {
     expect(wrapper.contains(Basic)).toBe(true)
+  })
+
+  it('测试是否包含标题', () => {
+    expect(wrapper.contains('.head-title')).toBe(true)
+  })
+
+  it('测试change_page函数', () => {
+    expect(wrapper.vm.page).toBe(1)
+    wrapper.vm.change_page(2)
+    expect(wrapper.vm.page).toBe(2)
+  })
+
+  it('测试compute_date函数', () => {
+    expect(wrapper.vm.compute_date('2018-08-27T17:57:31.385Z')).toEqual('8/28/2018, 1:57:31 AM')
+  })
+
+  it('测试compute_admin_name函数', () => {
+    expect(wrapper.vm.compute_admin_name('1_deleted_2')).toEqual('1（已删除）')
+    expect(wrapper.vm.compute_admin_name('1523')).toEqual('1523')
   })
 })
