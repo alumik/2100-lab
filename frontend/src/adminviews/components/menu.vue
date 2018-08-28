@@ -100,43 +100,26 @@ export default {
     }
   },
   computed: {
-    // permit: function (i) {
-    //   return this.$store.state.user.groups.includes(i)
-    // }
   },
   async created () {
     this.$store.commit('menu', sessionStorage.getItem('menu'))
     this.$store.commit('colors', sessionStorage.getItem('colors'))
-    let response = await axios.post(
-      'http://localhost:8000/api/v1/core/auth/is-authenticated/',
-      {
-        withCredentials: true
-      }
-    )
-    if (response.data.is_authenticated) {
-      this.$store.commit('status')
-      try {
-        if (response.data.is_staff) {
-          let res = await axios.get(
-            'http://localhost:8000/api/v1/admin/backstage/admin-management/get-admin-detail/',
-            {
-              params: {
-                admin_id: response.data.user_id
-              }
-            }
-          )
-          this.$store.commit('groups', res.data.admin_groups)
+    try {
+      let response = await axios.post(
+        'http://localhost:8000/api/v1/core/auth/is-authenticated/',
+        {
+          withCredentials: true
         }
-      } catch (error) {
-        alert(error.message)
+      )
+      if (response.data.is_authenticated && response.data.is_staff) {
+        this.$store.commit('status')
+        this.$store.commit('groups', response.data.admin_groups)
       }
+    } catch (error) {
+      alert(error.message)
     }
   },
   methods: {
-    permit: function (i) {
-      console.log(this.$store.state.user)
-      return this.$store.state.groups.includes(i)
-    },
     jump: function (id) {
       this.$emit('jump', id)
       this.$store.commit('colors', id - 1)

@@ -1,10 +1,11 @@
 """核心功能后台操作"""
 
 from django.contrib import auth
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
-from core.constants import INFO
+from core.constants import ERROR, INFO
 
 
 def is_authenticated(request):
@@ -14,11 +15,23 @@ def is_authenticated(request):
     """
 
     user = request.user
+    admin_groups = []
+    if user.is_staff:
+        try:
+            admin = get_user_model().objects.get(id=user.id, is_staff=True)
+        except get_user_model().DoesNotExist:
+            return JsonResponse({'message': ERROR['object_not_found']}, status=404)
+        for group in admin.groups.all():
+            admin_groups.append(group.name)
+        if admin.is_superuser:
+            admin_groups.append('super_admin')
+
     return JsonResponse(
         {
             'user_id': user.id,
             'is_authenticated': user.is_authenticated,
-            'is_staff': user.is_staff
+            'is_staff': user.is_staff,
+            'admin_groups': admin_groups
         }
     )
 

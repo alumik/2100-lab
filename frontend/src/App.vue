@@ -25,15 +25,7 @@ export default {
             'http://localhost:8000/api/v1/customers/forestage/personal-center/get-customer-detail/'
           )
           this.$store.commit('user', res.data)
-          res = await axios.get(
-            'http://localhost:8000/api/v1/admin/backstage/admin-management/get-admin-detail/',
-            {
-              params: {
-                admin_id: response.data.user_id
-              }
-            }
-          )
-          this.$store.commit('groups', res.data.admin_groups)
+          this.$store.commit('groups', response.data.admin_groups)
           this.$store.commit('colors', sessionStorage.getItem('colors'))
           this.$store.commit('menu', sessionStorage.getItem('menu'))
         } else {

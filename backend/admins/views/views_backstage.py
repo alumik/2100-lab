@@ -180,8 +180,8 @@ def get_admin_list(request):
 def get_admin_detail(request):
     """获取管理员详情"""
 
-    # if not request.user.is_superuser:
-    #     return JsonResponse({'message': ERROR['access_denied']}, status=403)
+    if not request.user.is_superuser:
+        return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
     admin_id = request.GET.get('admin_id')
 
