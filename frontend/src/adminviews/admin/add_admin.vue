@@ -138,9 +138,25 @@ export default {
           let _this = this
           _this.wrong_count_down = 0
           _this.success_count_down = 0
-          _this.error_message = error.response.data.message
+          _this.error_message = this.init_error_message(error.response.data.message)
           _this.wrong_count_down = 5
         })
+    },
+    init_error_message (message) {
+      switch (message) {
+        case 'Access denied.':
+          return '用户无权限，拒绝访问'
+        case 'Object not found.':
+          return '查询的对象不存在'
+        case 'Not a valid phone number.':
+          return '无效的手机号'
+        case 'Invalid password.':
+          return '无效的密码'
+        case 'Admin is already registered.':
+          return '该用户已被注册'
+        default:
+          return '数据库查询出错'
+      }
     }
   }
 }

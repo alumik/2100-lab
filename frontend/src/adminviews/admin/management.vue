@@ -4,6 +4,18 @@
       <div class="head-container">
         <div class="head-title">
           <h1>管理员列表</h1>
+          <Alert
+            :count_down="wrong_count_down"
+            :instruction="error_message"
+            variant="danger"
+            @decrease="wrong_count_down-1"
+            @zero="wrong_count_down=0"/>
+          <Alert
+            :count_down="success_count_down"
+            :instruction="error_message"
+            variant="success"
+            @decrease="success_count_down-1"
+            @zero="success_count_down=0"/>
           <a
             id="head-btn"
             class="btn"
@@ -76,18 +88,6 @@
         :rows="rows"
         :perpage="per_limit"
         @change="change_page"/>
-      <Alert
-        :count_down="wrong_count_down"
-        :instruction="error_message"
-        variant="danger"
-        @decrease="wrong_count_down-1"
-        @zero="wrong_count_down=0"/>
-      <Alert
-        :count_down="success_count_down"
-        :instruction="error_message"
-        variant="success"
-        @decrease="success_count_down-1"
-        @zero="success_count_down=0"/>
     </div>
   </Basic>
 </template>
@@ -140,6 +140,8 @@ export default {
         }
       )
       .then(response => {
+        this.wrong_count_down = 0
+        this.success_count_down = 0
         this.rows = response.data.count
         this.num_pages = this.update_num_pages(response.data.num_pages)
         let _admins = []
@@ -153,7 +155,9 @@ export default {
         this.admins = _admins
       })
       .catch(error => {
-        this.error_message = '读取数据出错' + error
+        this.wrong_count_down = 0
+        this.success_count_down = 0
+        this.error_message = this.init_error_message(error.response.data.message)
         this.wrong_count_down = 5
       })
   },
@@ -197,9 +201,19 @@ export default {
           this.admins = _admins
         })
         .catch(error => {
-          this.error_message = '读取数据出错' + error.response.data.message
+          this.error_message = this.init_error_message(error.response.data.message)
           this.wrong_count_down = 5
         })
+    },
+    init_error_message (message) {
+      switch (message) {
+        case 'Access denied.':
+          return '用户无权限，拒绝访问'
+        case 'Object not found.':
+          return '查询的对象不存在'
+        default:
+          return '数据库查询出错'
+      }
     },
     change_page: function (currentpage) {
       this.page = currentpage

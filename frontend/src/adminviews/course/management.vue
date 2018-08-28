@@ -4,6 +4,18 @@
       <div class="head-container">
         <div class="head-title">
           <h1>课程列表</h1>
+          <Alert
+            :count_down="wrong_count_down"
+            :instruction="error_message"
+            variant="danger"
+            @decrease="wrong_count_down-1"
+            @zero="wrong_count_down=0"/>
+          <Alert
+            :count_down="success_count_down"
+            :instruction="error_message"
+            variant="success"
+            @decrease="success_count_down-1"
+            @zero="success_count_down=0"/>
           <div class="my-btn-group">
             <a
               id="head-add-btn"
@@ -247,9 +259,10 @@ import qs from 'qs'
 import Basic from '../basic/basic'
 import Pagination from '../../components/pagination'
 import resize_image from './resize'
+import Alert from '../../components/alert'
 export default {
   name: 'CourseManagement',
-  components: { Pagination, Basic },
+  components: { Alert, Pagination, Basic },
   data: function () {
     return {
       items: [
@@ -267,6 +280,8 @@ export default {
       title: '',
       rows: 0,
       error_message: '',
+      wrong_count_down: 0,
+      success_count_down: 0,
       per_limit: 15,
       page: 1,
       num_pages: 0,
@@ -311,7 +326,10 @@ export default {
         this.courses = _course
       })
       .catch(error => {
-        this.error_message = '读取数据出错' + error.response.data.message
+        this.wrong_count_down = 0
+        this.success_count_down = 0
+        this.error_message = this.init_error_message(error.response.data.message)
+        this.wrong_count_down = 5
       })
   },
   methods: {
@@ -330,6 +348,12 @@ export default {
                 this.origin_image_list[i].image
               )
             }
+          })
+          .catch(error => {
+            this.wrong_count_down = 0
+            this.success_count_down = 0
+            this.error_message = this.init_error_message(error.response.data.message)
+            this.wrong_count_down = 5
           })
         this.$refs.upload_picture.show()
       } else if (id > 0) {
@@ -372,7 +396,10 @@ export default {
           this.courses = _course
         })
         .catch(error => {
-          this.error_message = '读取数据出错' + error
+          this.wrong_count_down = 0
+          this.success_count_down = 0
+          this.error_message = this.init_error_message(error.response.data.message)
+          this.wrong_count_down = 5
         })
     },
     update_num_pages: function (page) {
@@ -456,6 +483,16 @@ export default {
     },
     hide_modal () {
       this.$refs.upload_picture.hide()
+    },
+    init_error_message (message) {
+      switch (message) {
+        case 'Access denied.':
+          return '用户无权限，拒绝访问'
+        case 'Object not found.':
+          return '查询的对象不存在'
+        default:
+          return '数据库查询出错'
+      }
     }
   }
 }

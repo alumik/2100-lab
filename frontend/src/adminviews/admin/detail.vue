@@ -4,6 +4,18 @@
       <div class="head-container">
         <div class="head-title">
           <h1>管理员详情</h1>
+          <Alert
+            :count_down="wrong_count_down"
+            :instruction="error_message"
+            variant="danger"
+            @decrease="wrong_count_down-1"
+            @zero="wrong_count_down=0"/>
+          <Alert
+            :count_down="success_count_down"
+            :instruction="error_message"
+            variant="success"
+            @decrease="success_count_down-1"
+            @zero="success_count_down=0"/>
           <div class="button-group">
             <a
               id="distribution-btn"
@@ -107,18 +119,6 @@
         </table>
       </div>
     </div>
-    <Alert
-      :count_down="wrong_count_down"
-      :instruction="error_message"
-      variant="danger"
-      @decrease="wrong_count_down-1"
-      @zero="wrong_count_down=0"/>
-    <Alert
-      :count_down="success_count_down"
-      :instruction="error_message"
-      variant="success"
-      @decrease="success_count_down-1"
-      @zero="success_count_down=0"/>
   </Basic>
 </template>
 
@@ -177,11 +177,23 @@ export default {
         this.initial_data(response)
       })
       .catch(error => {
-        this.error_message = '读取数据出错' + error.response.data.message
+        this.wrong_count_down = 0
+        this.success_count_down = 0
+        this.error_message = this.init_error_message(error.response.data.message)
         this.wrong_count_down = 5
       })
   },
   methods: {
+    init_error_message (message) {
+      switch (message) {
+        case 'Access denied.':
+          return '用户无权限，拒绝访问'
+        case 'Object not found.':
+          return '查询的对象不存在'
+        default:
+          return '数据库查询出错'
+      }
+    },
     initial_data (response) {
       this.admin.admin_id = response.data.admin_id
       this.admin.username = response.data.username
@@ -258,10 +270,15 @@ export default {
           })
         )
         .then(response => {
+          this.wrong_count_down = 0
+          this.success_count_down = 0
+          this.error_message = '删除成功！'
           this.$router.push({ name: 'AdminManagement' })
         })
         .catch(error => {
-          this.error_message = error.response.message
+          this.wrong_count_down = 0
+          this.success_count_down = 0
+          this.error_message = this.init_error_message(error.response.data.message)
           this.wrong_count_down = 5
         })
     }

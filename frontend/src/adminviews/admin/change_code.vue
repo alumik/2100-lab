@@ -114,7 +114,7 @@ export default {
           .catch(error => {
             this.wrong_count_down = 0
             this.success_count_down = 0
-            this.error_message = error.response.message
+            this.init_error_message(error.response.data.message)
             this.wrong_count_down = 5
           })
       }
@@ -124,6 +124,16 @@ export default {
         name: 'AdminDetail',
         query: { admin_id: this.$route.query.admin_id }
       })
+    },
+    init_error_message (message) {
+      switch (message) {
+        case 'Access denied.':
+          return '用户无权限，拒绝访问'
+        case 'Object not found.':
+          return '查询的对象不存在'
+        default:
+          return '数据库查询出错'
+      }
     }
   }
 }

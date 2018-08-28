@@ -45,7 +45,6 @@ def get_course_detail(request):
             'course_id': course.id,
             'codename': course.codename,
             'title': course.title,
-            'thumbnail': str(course.thumbnail),
             'up_votes': course.up_votes.count(),
             'expire_duration': course.expire_duration,
             'price': course.price,
@@ -221,6 +220,7 @@ def get_course_assets(request):
         'reward_percent': course.reward_percent,
         'description': course.description,
         'audio': str(course.audio),
+        'thumbnail': str(course.thumbnail),
         'images': []
     }
     for image in images:

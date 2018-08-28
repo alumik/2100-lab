@@ -92,7 +92,9 @@ export default {
         this.old_name = response.data.username
       })
       .catch(error => {
-        this.error_message = '读取数据出错' + error.response.data.message
+        this.wrong_count_down = 0
+        this.success_count_down = 0
+        this.error_message = this.init_error_message(error.response.data.message)
         this.wrong_count_down = 5
       })
   },
@@ -123,7 +125,7 @@ export default {
           .catch(error => {
             this.wrong_count_down = 0
             this.success_count_down = 0
-            this.error_message = error.response.message
+            this.error_message = this.init_error_message(error.response.data.message)
             this.wrong_count_down = 5
           })
       }
@@ -133,6 +135,20 @@ export default {
         name: 'AdminDetail',
         query: { admin_id: this.$route.query.admin_id }
       })
+    },
+    init_error_message (message) {
+      switch (message) {
+        case 'Access denied.':
+          return '用户无权限，拒绝访问'
+        case 'Object not found.':
+          return '查询的对象不存在'
+        case 'This username is already taken.':
+          return '该用户名已存在'
+        case 'Invalid username.':
+          return '无效的用户名'
+        default:
+          return '数据库查询出错'
+      }
     }
   }
 }
