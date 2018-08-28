@@ -192,7 +192,6 @@ class CourseDetailTests(TestCase):
                 'created_at': response_json_data['created_at'],
                 'updated_at': response_json_data['updated_at'],
                 'description': 'd1',
-                'thumbnail': ''
             }
         )
 
