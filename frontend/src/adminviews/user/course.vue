@@ -94,7 +94,7 @@ export default {
     const that = this
     axios
       .get(
-        'http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-learning-log-list/',
+        'http://localhost/api/v1/customers/backstage/customer-management/get-customer-learning-log-list/',
         {
           params: {
             customer_id: that.$route.query.user_id,
@@ -128,7 +128,7 @@ export default {
       const that = this
       axios
         .get(
-          'http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-learning-log-list/',
+          'http://localhost/api/v1/customers/backstage/customer-management/get-customer-learning-log-list/',
           {
             params: {
               customer_id: that.$route.query.user_id,

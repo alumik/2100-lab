@@ -90,7 +90,7 @@ export default {
     const that = this
     axios
       .get(
-        'http://localhost:8000/api/v1/admin/backstage/log-management/get-admin-log/',
+        'http://localhost/api/v1/admin/backstage/log-management/get-admin-log/',
         {
           params: {
             page_limit: that.per_page,
@@ -125,7 +125,7 @@ export default {
       const that = this
       axios
         .get(
-          'http://localhost:8000/api/v1/admin/backstage/log-management/get-admin-log/',
+          'http://localhost/api/v1/admin/backstage/log-management/get-admin-log/',
           {
             params: {
               page_limit: that.per_page,

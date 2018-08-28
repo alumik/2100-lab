@@ -164,7 +164,7 @@ export default {
     const that = this
     axios
       .get(
-        'http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-list/',
+        'http://localhost/api/v1/customers/backstage/customer-management/get-customer-list/',
         {
           params: {
             page_limit: that.per_page,
@@ -237,7 +237,7 @@ export default {
       let state = this.get_state_data()
       axios
         .get(
-          'http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-list/',
+          'http://localhost/api/v1/customers/backstage/customer-management/get-customer-list/',
           {
             params: {
               customer_id: that.user_id,

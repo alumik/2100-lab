@@ -258,7 +258,7 @@ export default {
       } else {
         axios
           .get(
-            'http://localhost:8000/api/v1/data/data-management/get-data-by-time/',
+            'http://localhost/api/v1/data/data-management/get-data-by-time/',
             {
               params: {
                 start_timestamp: data[0],

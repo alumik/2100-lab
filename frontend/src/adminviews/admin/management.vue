@@ -129,7 +129,7 @@ export default {
   created: function () {
     axios
       .get(
-        'http://localhost:8000/api/v1/admin/backstage/admin-management/get-admin-list/',
+        'http://localhost/api/v1/admin/backstage/admin-management/get-admin-list/',
         {
           params: {
             username: '',
@@ -177,7 +177,7 @@ export default {
     change: function () {
       axios
         .get(
-          'http://localhost:8000/api/v1/admin/backstage/admin-management/get-admin-list/',
+          'http://localhost/api/v1/admin/backstage/admin-management/get-admin-list/',
           {
             params: {
               username: this.username,

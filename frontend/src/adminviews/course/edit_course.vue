@@ -235,7 +235,7 @@ export default {
     this.course_id = this.$route.query.course_id
     axios
       .get(
-        'http://localhost:8000/api/v1/courses/backstage/course-management/get-course-assets/',
+        'http://localhost/api/v1/courses/backstage/course-management/get-course-assets/',
         {
           params: {
             course_id: this.course_id
@@ -348,7 +348,7 @@ export default {
       let form_data = this.initial_form_data()
       axios
         .post(
-          'http://localhost:8000/api/v1/courses/backstage/course-management/edit-course/',
+          'http://localhost/api/v1/courses/backstage/course-management/edit-course/',
           form_data
         )
         .then(response => {
@@ -368,7 +368,7 @@ export default {
         })
       axios
         .post(
-          'http://localhost:8000/api/v1/courses/backstage/course-management/delete-course-images/',
+          'http://localhost/api/v1/courses/backstage/course-management/delete-course-images/',
           qs.stringify(
             {
               delete_list: this.delete_origin_image_index_list

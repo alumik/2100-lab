@@ -156,7 +156,7 @@ export default {
   mounted () {
     axios
       .get(
-        'http://localhost:8000/api/v1/customers/forestage/personal-center/get-customer-detail/'
+        'http://localhost/api/v1/customers/forestage/personal-center/get-customer-detail/'
       )
       .then(res => {
         this.$store.commit('status')
@@ -186,7 +186,7 @@ export default {
       data.set('new_avatar', event.target.files[0])
       axios
         .post(
-          'http://localhost:8000/api/v1/customers/forestage/personal-center/change-avatar/',
+          'http://localhost/api/v1/customers/forestage/personal-center/change-avatar/',
           data
         )
         .then(res => {
@@ -203,7 +203,7 @@ export default {
       } else {
         axios
           .post(
-            'http://localhost:8000/api/v1/customers/forestage/personal-center/change-username/',
+            'http://localhost/api/v1/customers/forestage/personal-center/change-username/',
             qs.stringify({ username: this.value }),
             { withCredentials: true }
           )
@@ -222,7 +222,7 @@ export default {
       if (that.$store.state.user.phone_number === that.input_phone) {
         axios
           .post(
-            'http://localhost:8000/api/v1/customers/forestage/personal-center/delete-customer/'
+            'http://localhost/api/v1/customers/forestage/personal-center/delete-customer/'
           )
           .then(res => {
             if (res.data.message === 'Object deleted.') {

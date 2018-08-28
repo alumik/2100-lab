@@ -106,7 +106,7 @@ export default {
     this.$store.commit('colors', sessionStorage.getItem('colors'))
     try {
       let response = await axios.post(
-        'http://localhost:8000/api/v1/core/auth/is-authenticated/',
+        'http://localhost/api/v1/core/auth/is-authenticated/',
         {
           withCredentials: true
         }

@@ -22,7 +22,7 @@
 //     phone: '',
 //     money: '',
 //     time: '',
-//     address: 'http://localhost:8000/media/'
+//     address: 'http://localhost/media/'
 //   }
 // })
 //

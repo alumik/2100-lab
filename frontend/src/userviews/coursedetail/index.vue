@@ -318,7 +318,7 @@ export default {
     }
     axios
       .get(
-        'http://localhost:8000/api/v1/courses/forestage/course/get-course-detail/',
+        'http://localhost/api/v1/courses/forestage/course/get-course-detail/',
         {
           params: {
             course_id: that.query_course_id,
@@ -409,7 +409,7 @@ export default {
       } else {
         axios
           .get(
-            'http://localhost:8000/api/v1/courses/forestage/course/up-vote-course/' +
+            'http://localhost/api/v1/courses/forestage/course/up-vote-course/' +
               '?course_id=' +
               that.query_course_id
           )
@@ -458,7 +458,7 @@ export default {
         this.$root.$emit('bv::hide::modal', 'pay-popup')
         axios
           .post(
-            'http://localhost:8000/api/v1/courses/forestage/course/buy-course/',
+            'http://localhost/api/v1/courses/forestage/course/buy-course/',
             qs.stringify({
               course_id: that.query_course_id,
               payment_method: that.pay_method

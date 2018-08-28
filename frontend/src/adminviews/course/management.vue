@@ -301,7 +301,7 @@ export default {
   created: function () {
     axios
       .get(
-        'http://localhost:8000/api/v1/courses/backstage/course-management/get-course-list',
+        'http://localhost/api/v1/courses/backstage/course-management/get-course-list',
         {
           params: {
             codename: '',
@@ -339,7 +339,7 @@ export default {
       } else if (id === -1) {
         axios
           .get(
-            'http://localhost:8000/api/v1/courses/forestage/main/get-heroes/'
+            'http://localhost/api/v1/courses/forestage/main/get-heroes/'
           )
           .then(response => {
             this.origin_image_list = response.data.content
@@ -371,7 +371,7 @@ export default {
     change: function () {
       axios
         .get(
-          'http://localhost:8000/api/v1/courses/backstage/course-management/get-course-list',
+          'http://localhost/api/v1/courses/backstage/course-management/get-course-list',
           {
             params: {
               codename: this.codename,
@@ -453,11 +453,11 @@ export default {
         form_data.append('captions', updateText[i])
       }
       axios.post(
-        'http://localhost:8000/api/v1/courses/backstage/course-management/add-hero/',
+        'http://localhost/api/v1/courses/backstage/course-management/add-hero/',
         form_data
       )
       axios.post(
-        'http://localhost:8000/api/v1/courses/backstage/course-management/delete-hero/',
+        'http://localhost/api/v1/courses/backstage/course-management/delete-hero/',
         qs.stringify(
           {
             delete_list: this.delete_origin_list

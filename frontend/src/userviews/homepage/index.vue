@@ -95,7 +95,7 @@ export default {
     let that = this
     axios
       .get(
-        'http://localhost:8000/api/v1/courses/forestage/course/get-recent-courses'
+        'http://localhost/api/v1/courses/forestage/course/get-recent-courses'
       )
       .then(function (response) {
         that.freecourselist = response.data.free_courses
@@ -106,7 +106,7 @@ export default {
         that.created_error_msg = error
       })
     axios
-      .get('http://localhost:8000/api/v1/courses/forestage/main/get-heroes/')
+      .get('http://localhost/api/v1/courses/forestage/main/get-heroes/')
       .then(function (response) {
         that.carousellist = response.content
         that.carouselnum = response.count

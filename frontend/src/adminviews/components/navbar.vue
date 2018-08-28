@@ -46,7 +46,7 @@ export default {
     log () {
       if (this.$store.state.status) {
         axios
-          .post('http://localhost:8000/api/v1/core/auth/logout/', {
+          .post('http://localhost/api/v1/core/auth/logout/', {
             withCredentials: true
           })
           .then(res => {

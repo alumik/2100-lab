@@ -203,7 +203,7 @@ export default {
     const that = this
     axios
       .get(
-        'http://localhost:8000/api/v1/courses/backstage/comment-management/get-comment-list/',
+        'http://localhost/api/v1/courses/backstage/comment-management/get-comment-list/',
         {
           params: {
             page_limit: that.per_page,
@@ -267,7 +267,7 @@ export default {
       }
       axios
         .get(
-          'http://localhost:8000/api/v1/courses/backstage/comment-management/get-comment-list/',
+          'http://localhost/api/v1/courses/backstage/comment-management/get-comment-list/',
           {
             params: {
               username: that.user,
@@ -301,7 +301,7 @@ export default {
       const that = this
       axios
         .post(
-          'http://localhost:8000/api/v1/courses/backstage/comment-management/delete-comment/',
+          'http://localhost/api/v1/courses/backstage/comment-management/delete-comment/',
           qs.stringify({
             comment_id: that.delete_id
           })
@@ -325,7 +325,7 @@ export default {
       const that = this
       axios
         .post(
-          'http://localhost:8000/api/v1/courses/backstage/comment-management/add-comment/',
+          'http://localhost/api/v1/courses/backstage/comment-management/add-comment/',
           qs.stringify({
             reply_to_id: that.reply_id,
             comment_content: val

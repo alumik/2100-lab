@@ -256,7 +256,7 @@ export default {
       formdata.append('thumbnail', this.thumb_file[0])
       axios
         .post(
-          'http://localhost:8000/api/v1/courses/backstage/course-management/add-course/',
+          'http://localhost/api/v1/courses/backstage/course-management/add-course/',
           formdata
         )
         .then(response => {
