@@ -185,6 +185,7 @@ export default {
       ],
       audio_file_list: [],
       image_file_list: [],
+      thumb_file: [],
       title: '',
       codename: '',
       days: '',
@@ -202,13 +203,15 @@ export default {
     }
   },
   methods: {
-    receive_uploaded_resource: function (upload_pic_resourse, audio_file_list) {
+    receive_uploaded_resource: function (upload_pic_resourse, audio_file_list, thumb_file) {
       this.is_uploaded = true
       if (audio_file_list.length === 1) {
         this.audio_file_list[0] = audio_file_list[0]
         this.is_audio_changed = true
       }
       this.image_file_list = upload_pic_resourse
+      this.thumb_file[0] = thumb_file
+      console.log(this.thumb_file)
     },
     receive_sorted_pictures (sorted_pic) {
       this.image_file_list.length = 0
@@ -235,6 +238,7 @@ export default {
       formdata.append('can_comment', this.can_comment)
       formdata.append('reward_percent', this.reward_percent * 0.01)
       formdata.append('description', this.description)
+      formdata.append('thumbnail', this.thumb_file[0])
       axios
         .post(
           'http://localhost:8000/api/v1/courses/backstage/course-management/add-course/',

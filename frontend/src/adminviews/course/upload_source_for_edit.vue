@@ -24,6 +24,51 @@
       <div class="my-body">
         <b-container class="my-container">
           <b-row
+            align-v="center">
+            <b-col><h5 class="text-left">封面缩略图</h5></b-col>
+          </b-row>
+          <b-row class="my-row">
+            <div
+              ref="uploader"
+              class="img-uploader">
+              <p
+                v-if="!has_thumbs"
+                class="img-uploader-placeholder">{{ placeholder }}</p>
+              <div
+                v-if="has_thumbs"
+                class="img-uploader-preview-list">
+                <div class="img-uploader-preview">
+                  <div class="preview-img">
+                    <b-img
+                      :src="thumb_data"
+                      thumbnail
+                      fluid
+                      alt="Thumbnail"/>
+                  </div>
+                  <div
+                    v-if="has_thumbs"
+                    class="img-uploader-mask">
+                    <p
+                      class="img-uploader-file-name"
+                      @click="open_thumb_input()">
+                      {{ placeholder }}</p>
+                  </div>
+                </div>
+              </div>
+              <label
+                v-if="!has_thumbs"
+                for="inputTh"
+                class="img-uploader-label"/>
+              <input
+                id="inputTh"
+                ref="input_th"
+                class="input-image col-lg-12"
+                type="file"
+                accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
+                @change="handle_thumb_file_change">
+            </div>
+          </b-row>
+          <b-row
             id="audio-row">
             <b-col cols="2"><h5>音频资料</h5></b-col>
             <b-col cols="8"><input
@@ -37,7 +82,7 @@
                 id="open-upload-btn"
                 class="btn"
                 @click="open_audio_entrance">
-                上传
+                打开
               </a>
             </b-col>
             <input
@@ -168,10 +213,17 @@ export default {
     origin_audio_list: {
       type: Array,
       default: () => {}
+    },
+    origin_thumb_list: {
+      type: Array,
+      default: () => {}
     }
   },
   data () {
     return {
+      is_thumb_change: false,
+      thumb_data: '',
+      thumb_file: '',
       audio_file_list: [],
       audio_name: '',
       placeholder: '请选择上传文件',
@@ -187,9 +239,32 @@ export default {
     },
     has_origin_images () {
       return this.origin_image_copy_list.length > 0
+    },
+    has_thumbs () {
+      return this.origin_thumb_list.length !== 0 || this.thumb_data !== ''
     }
   },
   methods: {
+    handle_thumb_file_change () {
+      let input = this.$refs.input_th
+      let files = input.files
+      let _this = this
+      if (!files || !window.FileReader) {
+        return
+      }
+      for (let i = 0; i < files.length; i++) {
+        let file = files[i]
+        let reader = new FileReader()
+        reader.onload = function (e) {
+          resize_image(e.target.result, 150, 150, function (result) {
+            _this.thumb_data = result
+            _this.thumb_file = file
+            _this.is_thumb_change = true
+          })
+        }
+        reader.readAsDataURL(file)
+      }
+    },
     handle_audio_file_change () {
       let input = this.$refs.input_audio
       let files = input.files
@@ -225,6 +300,9 @@ export default {
     open_pic_input () {
       this.$refs.input.click()
     },
+    open_thumb_input () {
+      this.$refs.input_th.click()
+    },
     delete_img (index) {
       this.image_data_list.splice(index, 1)
       this.image_file_list.splice(index, 1)
@@ -240,6 +318,7 @@ export default {
       this.origin_delete_image_index.push(index)
     },
     show_modal () {
+      this.thumb_data = this.origin_thumb_list[0]
       this.origin_image_copy_list.length = 0
       if (this.origin_audio_list.length === 1) {
         this.audio_name = this.origin_audio_list[0]
@@ -259,21 +338,28 @@ export default {
       this.$refs.input_audio.click()
     },
     upload_resource () {
-      let uploadPicResourse = []
+      let upload_pic_resource = []
       for (let i = 1; i <= this.image_data_list.length; i++) {
-        uploadPicResourse.push({
+        upload_pic_resource.push({
           file: this.image_file_list[i - 1],
           image: this.image_data_list[i - 1],
           index: i,
           time: ''
         })
       }
+      let upload_thumb_resource = []
+      upload_thumb_resource[0] = {
+        'file': this.thumb_file,
+        'data': this.thumb_data
+      }
       this.$refs.upload_source.hide()
       this.$emit(
         'upload_resource',
-        uploadPicResourse,
+        upload_pic_resource,
         this.audio_file_list,
-        this.origin_delete_image_index
+        this.origin_delete_image_index,
+        upload_thumb_resource,
+        this.is_thumb_change
       )
     }
   }
@@ -281,6 +367,11 @@ export default {
 </script>
 
 <style scoped>
+h5 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
 .button-group {
   display: flex;
   flex-direction: row;
@@ -290,6 +381,7 @@ export default {
 
 .audio-input {
   width: 100%;
+  margin-top: 20px;
 }
 
 .define-btn {
@@ -307,6 +399,11 @@ export default {
 .my-body {
   margin-right: 16px;
   margin-left: 16px;
+}
+
+#open-upload-btn {
+  margin-top: 20px;
+  margin-left: 10px;
 }
 
 #upload-btn,

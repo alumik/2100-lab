@@ -118,6 +118,7 @@
               id="course_content"
               :origin_image_list="course.origin_image_file_list"
               :origin_audio_list="course.origin_audio_file_list"
+              :origin_thumb_list="course.origin_thumb_file_list"
               @upload_resource="receive_uploaded_resource"/>
             <PreSortPicture
               :is_uploaded="is_uploaded"
@@ -198,17 +199,20 @@ export default {
         description: '',
         can_comment: '',
         origin_audio_file_list: [],
-        origin_image_file_list: []
+        origin_image_file_list: [],
+        origin_thumb_file_list: []
       },
       comment_options: [
         { text: '是', value: '1' },
         { text: '否', value: '0' }
       ],
+      thumb_file: '',
       audio_file_list: [],
       image_file_list: [],
       delete_origin_image_index_list: [],
       is_uploaded: true,
-      is_audio_changed: false
+      is_audio_changed: false,
+      is_thumb_change: false
     }
   },
   created () {
@@ -247,6 +251,7 @@ export default {
       )
       this.course.origin_audio_file_list[0] = data.audio
       this.course.origin_image_file_list = data.images
+      this.course.origin_thumb_file_list[0] = this.$store.state.address + data.thumbnail
       if (this.course.origin_image_file_list.length > 0) {
         for (let i = 0; i < this.course.origin_image_file_list.length; i++) {
           let addPath = this.$store.state.address
@@ -267,12 +272,14 @@ export default {
         this.audio_file_list.push(this.course.origin_audio_file_list[0])
       }
     },
-    receive_uploaded_resource: function (
-      upload_pic_resourse,
-      audio_file_list,
-      origin_delete_image_index
-    ) {
+    receive_uploaded_resource: function (upload_pic_resourse, audio_file_list, origin_delete_image_index,
+      upload_thumb_resource, is_thumb_change) {
       this.is_uploaded = true
+      if (is_thumb_change === true) {
+        this.is_thumb_change = true
+        this.thumb_file = upload_thumb_resource[0]['file']
+        this.course.origin_thumb_file_list[0] = upload_thumb_resource[0]['data']
+      }
       this.image_file_list.length = 0
       if (audio_file_list && audio_file_list.length === 1 && audio_file_list[0]) {
         this.is_audio_changed = true
@@ -358,6 +365,9 @@ export default {
       form_data.append('description', this.course.description)
       if (this.is_audio_changed === true) {
         form_data.append('audio', this.audio_file_list[0])
+      }
+      if (this.is_thumb_change === true) {
+        form_data.append('thumbnail', this.thumb_file)
       }
       for (let i = 0; i < this.image_file_list.length; i++) {
         let obj = this.image_file_list[i]
