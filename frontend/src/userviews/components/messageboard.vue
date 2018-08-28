@@ -143,7 +143,7 @@
         {{ add_message_error_msg }}
       </b-alert>
       <div
-        class="piece-of-message" >
+        class="comment-style" >
         <div class="user-avatar">
           <img
             :src="$store.state.address + this.$store.state.user.avatar"
@@ -176,7 +176,7 @@
         </div>
         <div class="message-list-area">
           <div style="display: flex; flex-direction: row; justify-content: space-between;">
-            <div>{{ message_list[index-1].username }}</div>
+            <div style="font-size: 15px; color: #333; font-weight: bold;">{{ message_list[index-1].username }}</div>
             <div
               v-if="message_list[index-1].username === $store.state.user.username"
               id="delete-button"
@@ -209,52 +209,60 @@
               @click="want_reply(message_list[index-1].comment_id)">
               回复
             </div>
-            <!--<div-->
-            <!--id="watch-more"-->
-            <!--@click="watch_all_replies(message_list[index-1].comment_id)">-->
-            <!--更多回复-->
-            <!--</div>-->
+          </div>
+          <div
+            v-for="i in message_list[index-1].replies.length"
+            :key="i"
+            style="padding: 1rem 0 0 3rem;">
+            <div>
+              <div>
+                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                  <div style="display: flex; flex-direction: row;">
+                    <div style="color: #999; font-size: 14px; font-weight: bold;">{{ message_list[index-1].replies[i-1].username }}</div>
+                    <div>&emsp;{{ message_list[index-1].replies[i-1].content }}</div>
+                  </div>
+                  <div
+                    v-if="message_list[index-1].replies[i-1].username === $store.state.user.username"
+                    class="delete-comment"
+                    @click="delete_comment(message_list[index-1].replies[i-1].comment_id)">
+                    <label>删除</label>
+                  </div>
+                </div>
+                <div style="display: flex; flex-direction: row;">
+                  <label class="time-style">
+                    {{ (message_list[index-1].replies[i-1].created_at).substring(0,10) }}
+                    &nbsp;{{ (message_list[index-1].replies[i-1].created_at).substring(11,19) }}
+                  </label>
+                  <div>
+                    &emsp;{{ message_list[index-1].replies[i-1].up_votes }}
+                    <b-img
+                      :src="message_list[index-1].replies[i-1].up_voted === true ? up_icon_after : up_icon_before"
+                      class="vote-style "
+                      @click="up_vote_child_reply(index-1, i-1, message_list[index-1].replies[i-1].comment_id)"/>
+                    &emsp; &emsp;{{ message_list[index-1].replies[i-1].down_votes }}
+                    <b-img
+                      :src="message_list[index-1].replies[i-1].down_voted === true ? down_icon_after : down_icon_before"
+                      class="vote-style "
+                      @click="down_vote_child_reply(index-1, i-1, message_list[index-1].replies[i-1].comment_id)"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            v-if="message_list [index-1].reply_count !== 0"
+            style="display: flex; flex-direction: row; padding-left: 3rem; font-size: 14px;">
+            <div style="margin-right: 1rem;">
+              共{{ message_list [index-1].reply_count }}条回复
+            </div>
+            <div
+              id="watch-more"
+              style="color: #009966; cursor: pointer;"
+              @click="watch_all_replies(message_list[index-1].comment_id)">
+              点击查看
+            </div>
           </div>
         </div>
-        <!--<b-row>-->
-        <!--<b-col>-->
-        <!--<div-->
-        <!--v-for="i in message_list[index-1].replies.length"-->
-        <!--:key="i">-->
-        <!--<div>-->
-        <!--<b-row>-->
-        <!--<b-col class="text-align-left">-->
-        <!--{{ message_list[index-1].replies[i-1].username }}-->
-        <!--<label class="time-style">&emsp;-->
-        <!--{{ message_list[index-1].replies[i-1].created_at }}-->
-        <!--回复{{ message_list[index-1].username }}</label>-->
-        <!--</b-col>-->
-        <!--<b-col-->
-        <!--v-if="message_list[index-1].replies[i-1].username === $store.state.user.username"-->
-        <!--class="delete-comment"-->
-        <!--@click="delete_comment(message_list[index-1].replies[i-1].comment_id)">-->
-        <!--<label>×</label>-->
-        <!--</b-col>-->
-        <!--</b-row>-->
-        <!--<p class="message-content">{{ message_list[index-1].replies[i-1].content }}</p>-->
-        <!--</div>-->
-        <!--<b-row class="text-align-right">-->
-        <!--<b-col>-->
-        <!--{{ message_list[index-1].replies[i-1].up_votes }}-->
-        <!--<b-img-->
-        <!--:src="message_list[index-1].replies[i-1].up_voted === true ? up_icon_after : up_icon_before"-->
-        <!--class="vote-style "-->
-        <!--@click="up_vote_child_reply(index-1, i-1, message_list[index-1].replies[i-1].comment_id)"/>-->
-        <!--&emsp; &emsp;{{ message_list[index-1].replies[i-1].down_votes }}-->
-        <!--<b-img-->
-        <!--:src="message_list[index-1].replies[i-1].down_voted === true ? down_icon_after : down_icon_before"-->
-        <!--class="vote-style "-->
-        <!--@click="down_vote_child_reply(index-1, i-1, message_list[index-1].replies[i-1].comment_id)"/>-->
-        <!--</b-col>-->
-        <!--</b-row>-->
-        <!--</div>-->
-        <!--</b-col>-->
-        <!--</b-row>-->
       </div>
       <div>
         <Pagination
@@ -352,13 +360,11 @@ export default {
           }
         )
         .then(function (response) {
-          console.log(response.data)
           that.rows = response.data.count
           that.message_list = response.data.content
           that.can_comment = true
         })
         .catch(function (error) {
-          console.log(error.response)
           if (error.response.data.message === 'Object not found.') {
             that.getallmessage_test = true
             that.getallmessage_error_msg = that.$t('error.object_not_found')
@@ -549,6 +555,7 @@ export default {
             }
           })
         .then(function (response) {
+          console.log(response.data.content)
           that.replies = response.data.content
           that.modal_rows = response.data.count
         })
@@ -620,7 +627,6 @@ export default {
           })
         )
         .then(function (response) {
-          console.log(response)
           if (response.data.message === 'Success.') {
             that.getallmessage()
           }
@@ -692,6 +698,7 @@ export default {
 
 <style scoped>
 .time-style {
+  font-size: 14px;
   color: #adb5bd;
 }
 
@@ -723,7 +730,7 @@ export default {
   justify-content: space-between;
   width: 90%;
   height: 100%;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #eee;
 }
 
 .message-list-area {
@@ -733,14 +740,22 @@ export default {
   width: 90%;
   height: 100%;
   text-align: left;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #eee;
+}
+
+.comment-style {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  height: 6rem;
+  margin: 1rem 0.5rem 1rem 0;
 }
 
 .piece-of-message {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  height: 6rem;
+  height: auto;
   margin: 1rem 0.5rem 1rem 0;
 }
 
