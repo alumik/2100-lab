@@ -203,8 +203,7 @@ class CommentListTests(TestCase):
                 'deleted_at': response_json_data['deleted_at'],
                 'up_votes': comment.up_votes.count(),
                 'down_votes': comment.down_votes.count(),
-                'content': comment.content,
-                'thumbnail': ''
+                'content': comment.content
             }
         )
 
