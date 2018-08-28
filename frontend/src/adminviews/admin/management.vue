@@ -4,6 +4,18 @@
       <div class="head-container">
         <div class="head-title">
           <h1>管理员列表</h1>
+          <Alert
+            :count_down="wrong_count_down"
+            :instruction="error_message"
+            variant="danger"
+            @decrease="wrong_count_down-1"
+            @zero="wrong_count_down=0"/>
+          <Alert
+            :count_down="success_count_down"
+            :instruction="error_message"
+            variant="success"
+            @decrease="success_count_down-1"
+            @zero="success_count_down=0"/>
           <a
             id="head-btn"
             class="btn"
@@ -76,18 +88,6 @@
         :rows="rows"
         :perpage="per_limit"
         @change="change_page"/>
-      <Alert
-        :count_down="wrong_count_down"
-        :instruction="error_message"
-        variant="danger"
-        @decrease="wrong_count_down-1"
-        @zero="wrong_count_down=0"/>
-      <Alert
-        :count_down="success_count_down"
-        :instruction="error_message"
-        variant="success"
-        @decrease="success_count_down-1"
-        @zero="success_count_down=0"/>
     </div>
   </Basic>
 </template>

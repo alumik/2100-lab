@@ -188,16 +188,24 @@ export default {
         .then(response => {
           this.wrong_count_down = 0
           this.success_count_down = 0
-          this.error_message = response.data.message
+          this.error_message = '分配权限成功'
           this.success_count_down = 3
           setTimeout(this.router_push, 3000)
         })
         .catch(error => {
           this.wrong_count_down = 0
           this.success_count_down = 0
-          this.error_message = error.response.message
+          this.error_message = this.init_error_message(error.response.message)
           this.wrong_count_down = 5
         })
+    },
+    init_error_message (message) {
+      switch (message) {
+        case 'Access denied.':
+          return '用户无权限，拒绝访问'
+        case 'Object not found.':
+          return '查询的对象不存在'
+      }
     },
     router_push () {
       this.$router.push({
