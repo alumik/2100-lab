@@ -68,12 +68,12 @@
                   @click="changeFoldState">
                   <simple-line-icons
                     v-if="introduction_brandFold === true"
-                    icon="arrow-down-circle"
+                    icon="arrow-down"
                     size="small"
                     color="#009966"/>
                   <simple-line-icons
                     v-else
-                    icon="arrow-up-circle"
+                    icon="arrow-up"
                     size="small"
                     color="#FF6600"/>课程简介
                 </div>
@@ -282,6 +282,7 @@ export default {
   }
 
   .study-background {
+    min-height: calc(100vh - 170px);
     padding: 0 5rem;
     background-color: #f7f7f7;
   }

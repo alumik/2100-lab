@@ -63,6 +63,11 @@
           course_type="paid"/>
       </div>
     </div>
+    <div class="footer">
+      <p class="text-center">
+        --- 2100实验室 ---
+      </p>
+    </div>
   </body>
 </template>
 
