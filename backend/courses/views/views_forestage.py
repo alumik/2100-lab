@@ -74,7 +74,7 @@ def get_course_detail(request):
         'up_voted': request.user in course.up_votes.all(),
         'expire_duration': course.expire_duration.total_seconds(),
         'expire_time': None,
-        'can_access': utils.can_access(course, request.user)
+        'can_access': False
     }
     if request.user.is_authenticated:
         try:
@@ -87,6 +87,7 @@ def get_course_detail(request):
                 course_detail['expire_time'] = expire_time
         except LearningLog.DoesNotExist:
             pass
+        course_detail['can_access'] = utils.can_access(course, request.user)
     return JsonResponse(course_detail)
 
 

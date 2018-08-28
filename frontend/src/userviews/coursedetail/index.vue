@@ -163,8 +163,8 @@
         </div>
         <div class="price-time">
           <div
-            v-if="!course.can_access && course.price !== 0">
-            <h6 v-if="!isNaN(get_now_price())">
+            v-if="!course.can_access">
+            <h6 v-if="!course.can_access && course.price !== 0">
               <simple-line-icons
                 icon="basket-loaded"
                 color="#ffd706"
@@ -189,77 +189,57 @@
           <div>
             <h6 v-if="course.expire_time !== null && course.expire_duration !==0">
               距离失效还有 {{ left_time }}</h6>
-            <div class="button-row">
-              <div v-show="course.can_access || (!course.can_access && $store.state.status === false && course.price===0)">
-                <b-button
-                  id="study-button"
-                  size="sm"
-                  variant="primary"
-                  class="my-btn"
-                  @click="start_study">
-                  开始学习
-                </b-button>
-              </div>
-              <div v-show="!course.can_access && course.price !== 0">
-                <b-button
-                  id="pay-button"
-                  size="sm"
-                  variant="primary"
-                  class="my-btn"
-                  @click="handle_pay_operate">
-                  立即购买
-                </b-button>
-              </div>
-            </div>
-            <div class="button-row">
-              <b-button
-                v-show="course.can_access"
-                id="study-button"
-                size="sm"
-                variant="primary"
-                class="my-btn"
-                @click="start_study">
-                开始学习
-              </b-button>
-              <b-button
-                v-show="!course.can_access"
-                id="pay-button"
-                size="sm"
-                variant="primary"
-                class="my-btn"
-                @click="handle_pay_operate">
-                立即购买
-              </b-button>
-              <b-button
-                v-b-modal.share-popup
-                id="share-button"
-                :title="share_instruction"
-                size="sm"
-                variant="primary"
-                class="my-btn share-margin"
-              >
-                分享
-              </b-button>
-              <b-button
-                id="praise-button"
-                :style="{background: praise_color, border: praise_border_color}"
-                size="sm"
-                class="my-btn"
-                @click="add_praise">
-                {{ course.up_votes }} 赞
-              </b-button>
-            </div>
           </div>
         </div>
-        <div class="detail">
-          <div
-            id="detail-introduction"
-            class="container">
-            <h5>课程简介</h5>
-            <p>{{ course.description }}</p>
-          </div>
+        <div class="button-row">
+          <b-button
+            v-show="course.can_access || (!course.can_access && $store.state.status === false && course.price===0)"
+            id="study-button"
+            size="sm"
+            variant="primary"
+            class="my-btn"
+            @click="start_study">
+            开始学习
+          </b-button>
+          <b-button
+            v-show="!course.can_access && course.price !== 0"
+            id="pay-button"
+            size="sm"
+            variant="primary"
+            class="my-btn"
+            @click="handle_pay_operate">
+            立即购买
+          </b-button>
+          <b-button
+            v-b-modal.share-popup
+            id="share-button"
+            :title="share_instruction"
+            size="sm"
+            variant="primary"
+            class="my-btn share-margin"
+          >
+            分享
+          </b-button>
+          <b-button
+            id="praise-button"
+            :style="{background: praise_color, border: praise_border_color}"
+            size="sm"
+            class="my-btn"
+            @click="add_praise">
+            {{ course.up_votes }} 赞
+          </b-button>
         </div>
-  </div></div></Basic>
+      </div>
+    </div>
+    <div class="detail">
+      <div
+        id="detail-introduction"
+        class="container">
+        <h5>课程简介</h5>
+        <p>{{ course.description }}</p>
+      </div>
+    </div>
+  </Basic>
 </template>
 
 <script>
@@ -285,10 +265,10 @@ export default {
       course_img_src_example: 'https://picsum.photos/1024/480/?image=54',
       pay_qrcode_url: 'http://www.jisuanke.com',
       share_instruction:
-        '        小可爱，你可以通过分享该二维码和' +
-        '小朋友一起学习有趣的实验哦~ 分享付费课程给好朋友，如果' +
-        '他/她购买该课程，你将会获得奖励金哦~奖励金可以用来购买' +
-        '其他有趣的实验课程呢，所以赶紧拿起你的手机进行分享吧(*^▽^*)',
+          '        小可爱，你可以通过分享该二维码和' +
+          '小朋友一起学习有趣的实验哦~ 分享付费课程给好朋友，如果' +
+          '他/她购买该课程，你将会获得奖励金哦~奖励金可以用来购买' +
+          '其他有趣的实验课程呢，所以赶紧拿起你的手机进行分享吧(*^▽^*)',
       course: {},
       created_test: false,
       created_error_msg: '',
@@ -319,12 +299,13 @@ export default {
         return '该课程将永久开放'
       }
     },
+
     share_reminder: function () {
       let that = this
       return (
         '分享该课程的二维码，如果小伙伴点击你分享的链接购买课程,\n你就将获得' +
-        that.course.price * that.course.reward_percent +
-        '奖励金哦！'
+          that.course.price * that.course.reward_percent +
+          '奖励金哦！'
       )
     }
   },
@@ -349,7 +330,6 @@ export default {
         that.course = response.data
         that.course.price = parseFloat(response.data.price)
         that.course.reward_percent = parseFloat(response.data.reward_percent)
-        console.log(that.course.expire_duration)
         if (that.course.up_voted === true) {
           that.praise_color = 'green'
           that.praise_border_color = 'green'
@@ -367,12 +347,12 @@ export default {
       })
     that.user_status = that.$store.state.status
     that.share_qrcode_url =
-      shareQrcodeHost +
-      '?course_id=' +
-      that.query_course_id +
-      '&' +
-      'referer_id=' +
-      that.$store.state.user.customer_id
+        shareQrcodeHost +
+        '?course_id=' +
+        that.query_course_id +
+        '&' +
+        'referer_id=' +
+        that.$store.state.user.customer_id
   },
   mounted () {
     mygenerator = setInterval(this.generate_left_time, 1000)
@@ -391,10 +371,10 @@ export default {
         (substract - days * (3600 * 24) - hours * 3600) / 60
       )
       let seconds =
-        substract - days * (3600 * 24) - hours * 3600 - minutes * 60
+          substract - days * (3600 * 24) - hours * 3600 - minutes * 60
       if (days >= 0 && hours >= 0 && minutes >= 0 && seconds >= 0) {
         this.left_time =
-          days + '天' + hours + '小时' + minutes + '分钟' + seconds + '秒'
+            days + '天' + hours + '小时' + minutes + '分钟' + seconds + '秒'
       } else {
         this.left_time = '0天0小时0分钟0秒'
       }
@@ -495,7 +475,7 @@ export default {
               that.finishPay_error_msg = that.$t('error.object_not_found')
             } else if (
               error.response.data.message ===
-              'This course has already been purchased.'
+                'This course has already been purchased.'
             ) {
               that.finishPay_test = true
               that.finishPay_error_msg = that.$t(
