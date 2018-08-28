@@ -265,7 +265,7 @@ export default {
 
 .avatar_related {
   justify-content: space-between;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
 }
 
 img {
@@ -291,7 +291,7 @@ img {
 }
 
 .uneditable {
-  text-align: right;
+  text-align: left;
 }
 
 .input-group-text {

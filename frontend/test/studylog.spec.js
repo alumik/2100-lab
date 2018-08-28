@@ -6,9 +6,6 @@ import StudyLog from '@/userviews/personal/log/studyLog.vue'
 describe('个人学习记录页面单元测试', () => {
   const wrapper = shallowMount(StudyLog)
   it('包含顶部导航栏', () => {
-    // wrapper.vm.mounted()
-  })
-  it('包含顶部导航栏', () => {
     expect(wrapper.contains('#nav')).toBe(true)
   })
   it('点击导航栏上的toggler后侧边栏收缩', () => {

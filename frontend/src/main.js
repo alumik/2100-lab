@@ -197,7 +197,7 @@ router.beforeEach(async (to, from, next) => {
     !response.data.is_staff &&
     to.path.includes('admin/')
   ) {
-    next('/')
+    next('/404')
   } else {
     next()
   }
