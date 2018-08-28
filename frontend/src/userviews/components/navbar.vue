@@ -155,7 +155,7 @@ export default {
 
 .navbar-dark .navbar-nav .nav-link:hover,
 .navbar-dark .navbar-nav .nav-link:focus {
-  color: #f00;
+  color: lightgray;
 }
 
 .navbar {
@@ -166,7 +166,7 @@ export default {
 }
 
 .navbar-toggler {
-  background-color: #f00;
+  background-color: lightgray;
 }
 
 #userimg:hover {
