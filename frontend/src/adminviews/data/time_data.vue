@@ -191,12 +191,15 @@ export default {
     get_start_end_time: function () {
       let start = Date.parse(this.begin_date) / 1000
       let end = Date.parse(this.end_date) / 1000
+      console.log(this.begin_date)
+      console.log(this.end_date)
       if (start >= end) {
         return -1
       } else {
         let temp = []
         temp[0] = start
         temp[1] = end
+        console.log(temp)
         return temp
       }
     },
