@@ -3,6 +3,18 @@
     <div>
       <div class="my-content">
         <h1>新增课程</h1>
+        <Alert
+          :count_down="wrong_count_down"
+          :instruction="error_message"
+          variant="danger"
+          @decrease="wrong_count_down-1"
+          @zero="wrong_count_down=0"/>
+        <Alert
+          :count_down="success_count_down"
+          :instruction="error_message"
+          variant="success"
+          @decrease="success_count_down-1"
+          @zero="success_count_down=0"/>
         <div class="form-group form-inline">
           <label
             class="form-check-label my-label"
@@ -164,9 +176,10 @@ import UploadSource from './upload_source'
 import PreSortPicture from './pre_sort_picture'
 import SyncPicture from './synchronization'
 import axios from 'axios'
+import Alert from '../../components/alert'
 export default {
   name: 'AddCourse',
-  components: { SyncPicture, PreSortPicture, UploadSource, Basic },
+  components: { Alert, SyncPicture, PreSortPicture, UploadSource, Basic },
   data: function () {
     return {
       items: [
@@ -183,6 +196,9 @@ export default {
           active: true
         }
       ],
+      error_message: '',
+      wrong_count_down: 0,
+      success_count_down: 0,
       audio_file_list: [],
       image_file_list: [],
       thumb_file: [],
@@ -211,7 +227,6 @@ export default {
       }
       this.image_file_list = upload_pic_resourse
       this.thumb_file[0] = thumb_file
-      console.log(this.thumb_file)
     },
     receive_sorted_pictures (sorted_pic) {
       this.image_file_list.length = 0
@@ -245,11 +260,30 @@ export default {
           formdata
         )
         .then(response => {
-          console.log(response.data.message)
+          this.wrong_count_down = 0
+          this.success_count_down = 0
+          this.error_message = '增加课程成功'
+          this.success_count_down = 3
+          setTimeout(this.$router.push({
+            name: 'CourseManagement'
+          }), 3000)
         })
         .catch(error => {
-          console.log(error)
+          this.wrong_count_down = 0
+          this.success_count_down = 0
+          this.error_message = this.init_error_message(error.response.data.message)
+          this.wrong_count_down = 5
         })
+    },
+    init_error_message (message) {
+      switch (message) {
+        case 'Access denied.':
+          return '用户无权限，拒绝访问'
+        case 'Object not found.':
+          return '查询的对象不存在'
+        default:
+          return '数据库查询出错'
+      }
     }
   }
 }

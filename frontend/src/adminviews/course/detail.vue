@@ -4,6 +4,18 @@
     <div class="my-content">
       <div class="title">
         <h1>课程详情</h1>
+        <Alert
+          :count_down="wrong_count_down"
+          :instruction="error_message"
+          variant="danger"
+          @decrease="wrong_count_down-1"
+          @zero="wrong_count_down=0"/>
+        <Alert
+          :count_down="success_count_down"
+          :instruction="error_message"
+          variant="success"
+          @decrease="success_count_down-1"
+          @zero="success_count_down=0"/>
         <div>
           <div class="head-btn">
             <a
@@ -113,13 +125,14 @@
 </template>
 
 <script>
+import Alert from '../../components/alert'
 import Basic from '../basic/basic'
 import ConfirmModal from '../components/ConfirmModal'
 import axios from 'axios'
 import qs from 'qs'
 export default {
   name: 'BackendCourseDetail',
-  components: { ConfirmModal, Basic },
+  components: { Alert, ConfirmModal, Basic },
   data: function () {
     return {
       items: [
@@ -138,6 +151,8 @@ export default {
       ],
       test_router: -1,
       error_message: '',
+      wrong_count_down: 0,
+      success_count_down: 0,
       course: {
         codename: '',
         name: '',
@@ -180,7 +195,10 @@ export default {
         this.course.description = response.data.description
       })
       .catch(error => {
-        this.error_message = '读取数据出错' + error.response.data.message
+        this.wrong_count_down = 0
+        this.success_count_down = 0
+        this.error_message = this.init_error_message(error.response.data.message)
+        this.wrong_count_down = 5
       })
   },
   methods: {
@@ -191,6 +209,16 @@ export default {
         query: { course_id: this.$route.query.course_id }
       })
     },
+    init_error_message (message) {
+      switch (message) {
+        case 'Access denied.':
+          return '用户无权限，拒绝访问'
+        case 'Object not found.':
+          return '查询的对象不存在'
+        default:
+          return '数据库查询出错'
+      }
+    },
     delete_message: function () {
       axios
         .post(
@@ -200,10 +228,17 @@ export default {
           })
         )
         .then(response => {
-          this.$router.push({ name: 'CourseManagement' })
+          this.wrong_count_down = 0
+          this.success_count_down = 0
+          this.error_message = '删除课程成功'
+          this.success_count_down = 3
+          setTimeout(this.$router.push({ name: 'CourseManagement' }), 3000)
         })
         .catch(error => {
-          this.error_message = error.response.message
+          this.wrong_count_down = 0
+          this.success_count_down = 0
+          this.error_message = this.init_error_message(error.response.data.message)
+          this.wrong_count_down = 5
         })
     }
   }

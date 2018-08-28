@@ -3,6 +3,18 @@
     <div>
       <div class="my-content">
         <h1>修改课程</h1>
+        <Alert
+          :count_down="wrong_count_down"
+          :instruction="error_message"
+          variant="danger"
+          @decrease="wrong_count_down-1"
+          @zero="wrong_count_down=0"/>
+        <Alert
+          :count_down="success_count_down"
+          :instruction="error_message"
+          variant="success"
+          @decrease="success_count_down-1"
+          @zero="success_count_down=0"/>
         <div class="form-group form-inline">
           <label
             class="form-check-label my-label"
@@ -143,7 +155,7 @@
             id="intro"
             v-model="course.description"
             class="form-control col-lg-2"
-            rows="6s">&nbsp;</textarea>
+            rows="6s"/>
         </div>
         <a
           id="save-btn"
@@ -163,9 +175,10 @@ import UploadSourceForEdit from './upload_source_for_edit'
 import PreSortPicture from './pre_sort_picture'
 import SyncPicture from './synchronization'
 import qs from 'qs'
+import Alert from '../../components/alert'
 export default {
   name: 'EditCourse',
-  components: { SyncPicture, PreSortPicture, UploadSourceForEdit, Basic },
+  components: { Alert, SyncPicture, PreSortPicture, UploadSourceForEdit, Basic },
   data: function () {
     return {
       items: [
@@ -210,6 +223,9 @@ export default {
       audio_file_list: [],
       image_file_list: [],
       delete_origin_image_index_list: [],
+      error_message: '',
+      wrong_count_down: 0,
+      success_count_down: 0,
       is_uploaded: true,
       is_audio_changed: false,
       is_thumb_change: false
@@ -228,6 +244,12 @@ export default {
       )
       .then(response => {
         this.initial_data(response.data)
+      })
+      .catch(error => {
+        this.wrong_count_down = 0
+        this.success_count_down = 0
+        this.error_message = this.init_error_message(error.response.data.message)
+        this.wrong_count_down = 5
       })
   },
   methods: {
@@ -330,10 +352,19 @@ export default {
           form_data
         )
         .then(response => {
-          console.log(response.data.message)
+          this.wrong_count_down = 0
+          this.success_count_down = 0
+          this.error_message = '修改课程成功'
+          this.success_count_down = 3
+          setTimeout(this.$router.push({
+            name: 'CourseManagement'
+          }), 3000)
         })
         .catch(error => {
-          console.log(error)
+          this.wrong_count_down = 0
+          this.success_count_down = 0
+          this.error_message = this.init_error_message(error.response.data.message)
+          this.wrong_count_down = 5
         })
       axios
         .post(
@@ -345,11 +376,11 @@ export default {
             { arrayFormat: 'repeat' }
           )
         )
-        .then(response => {
-          console.log(response.data)
-        })
         .catch(error => {
-          console.log(error)
+          this.wrong_count_down = 0
+          this.success_count_down = 0
+          this.error_message = this.init_error_message(error.response.data.message)
+          this.wrong_count_down = 5
         })
     },
     initial_form_data: function () {
@@ -380,6 +411,16 @@ export default {
         }
       }
       return form_data
+    },
+    init_error_message (message) {
+      switch (message) {
+        case 'Access denied.':
+          return '用户无权限，拒绝访问'
+        case 'Object not found.':
+          return '查询的对象不存在'
+        default:
+          return '数据库查询出错'
+      }
     }
   }
 }
