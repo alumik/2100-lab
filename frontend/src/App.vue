@@ -9,8 +9,8 @@ import axios from 'axios'
 export default {
   name: 'App',
   async mounted () {
-    this.$store.commit('colors', sessionStorage.getItem('colors'))
     this.$store.commit('menu', sessionStorage.getItem('menu'))
+    this.$store.commit('colors', sessionStorage.getItem('colors'))
     let response = await axios.post(
       'http://localhost:8000/api/v1/core/auth/is-authenticated/',
       {
@@ -34,8 +34,6 @@ export default {
             }
           )
           this.$store.commit('groups', res.data.admin_groups)
-          // for (let permission of res.data.admin_groups) {
-          // }
           this.$store.commit('colors', sessionStorage.getItem('colors'))
           this.$store.commit('menu', sessionStorage.getItem('menu'))
         } else {

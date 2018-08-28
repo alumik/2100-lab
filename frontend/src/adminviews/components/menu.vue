@@ -11,9 +11,11 @@
     <ul class="components">
       <li
         v-for="i in lists.length"
+        v-show="$store.state.groups.includes(i)"
         :key="i"
         :class="{ active: $store.state.menu.toString() === i.toString() }">
-        <a @click="jump(i)">
+        <a
+          @click="jump(i)">
           <simple-line-icons
             :icon="icons[i-1]"
             :color="colors[i-1]"
@@ -27,6 +29,7 @@
 
 <script>
 import './style/style.css'
+import axios from 'axios'
 export default {
   name: 'Menu',
   props: {
@@ -96,7 +99,44 @@ export default {
       colors: this.$store.state.colors
     }
   },
+  computed: {
+    // permit: function (i) {
+    //   return this.$store.state.user.groups.includes(i)
+    // }
+  },
+  async created () {
+    this.$store.commit('menu', sessionStorage.getItem('menu'))
+    this.$store.commit('colors', sessionStorage.getItem('colors'))
+    let response = await axios.post(
+      'http://localhost:8000/api/v1/core/auth/is-authenticated/',
+      {
+        withCredentials: true
+      }
+    )
+    if (response.data.is_authenticated) {
+      this.$store.commit('status')
+      try {
+        if (response.data.is_staff) {
+          let res = await axios.get(
+            'http://localhost:8000/api/v1/admin/backstage/admin-management/get-admin-detail/',
+            {
+              params: {
+                admin_id: response.data.user_id
+              }
+            }
+          )
+          this.$store.commit('groups', res.data.admin_groups)
+        }
+      } catch (error) {
+        alert(error.message)
+      }
+    }
+  },
   methods: {
+    permit: function (i) {
+      console.log(this.$store.state.user)
+      return this.$store.state.groups.includes(i)
+    },
     jump: function (id) {
       this.$emit('jump', id)
       this.$store.commit('colors', id - 1)

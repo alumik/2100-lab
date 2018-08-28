@@ -40,6 +40,7 @@ const store = new Vuex.Store({
       updated_at: '',
       groups: []
     },
+    groups: [],
     address: 'http://localhost:8000/media/',
     menu: 0,
     colors: [
@@ -87,6 +88,13 @@ const store = new Vuex.Store({
         isActive: false,
         path: '/admin/adminmanagement'
       }
+    ],
+    permissions: [
+      'course_admin',
+      'comment_admin',
+      'customer_admin',
+      'order_admin',
+      'log_admin'
     ]
   },
   mutations: {
@@ -129,7 +137,18 @@ const store = new Vuex.Store({
       sessionStorage.setItem('colors', id)
     },
     groups (state, groups) {
-      state.groups = groups
+      if (groups.includes('super_admin')) {
+        state.groups.push(1, 2, 3, 4, 5, 6, 7)
+      } else {
+        state.groups = []
+        let i = 1
+        for (let group of state.permissions) {
+          if (groups.includes(group)) {
+            state.groups.push(i)
+          }
+          i++
+        }
+      }
     }
   }
 })
