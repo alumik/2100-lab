@@ -164,7 +164,7 @@
         <div class="price-time">
           <div
             v-if="!course.can_access">
-            <h6 v-if="!isNaN(get_now_price())">
+            <h6 v-if="!course.can_access && course.price !== 0">
               <simple-line-icons
                 icon="basket-loaded"
                 color="#ffd706"
@@ -187,13 +187,13 @@
             </h6>
           </div>
           <div>
-            <h6 v-if="course.expire_time !== null">
+            <h6 v-if="course.expire_time !== null && course.expire_duration !==0">
               距离失效还有 {{ left_time }}</h6>
           </div>
         </div>
         <div class="button-row">
           <b-button
-            v-show="course.can_access"
+            v-show="course.can_access || (!course.can_access && $store.state.status === false && course.price===0)"
             id="study-button"
             size="sm"
             variant="primary"
@@ -202,7 +202,7 @@
             开始学习
           </b-button>
           <b-button
-            v-show="!course.can_access"
+            v-show="!course.can_access && course.price !== 0"
             id="pay-button"
             size="sm"
             variant="primary"
@@ -265,10 +265,10 @@ export default {
       course_img_src_example: 'https://picsum.photos/1024/480/?image=54',
       pay_qrcode_url: 'http://www.jisuanke.com',
       share_instruction:
-        '        小可爱，你可以通过分享该二维码和' +
-        '小朋友一起学习有趣的实验哦~ 分享付费课程给好朋友，如果' +
-        '他/她购买该课程，你将会获得奖励金哦~奖励金可以用来购买' +
-        '其他有趣的实验课程呢，所以赶紧拿起你的手机进行分享吧(*^▽^*)',
+          '        小可爱，你可以通过分享该二维码和' +
+          '小朋友一起学习有趣的实验哦~ 分享付费课程给好朋友，如果' +
+          '他/她购买该课程，你将会获得奖励金哦~奖励金可以用来购买' +
+          '其他有趣的实验课程呢，所以赶紧拿起你的手机进行分享吧(*^▽^*)',
       course: {},
       created_test: false,
       created_error_msg: '',
@@ -289,18 +289,23 @@ export default {
   computed: {
     time_reminder: function () {
       let that = this
-      return (
-        '  该课程将于初次点开' +
-        that.change_duration_to_timestamp(that.course.expire_duration) +
-        '后不可再观看'
-      )
+      if (that.course.expire_duration !== 0) {
+        return (
+          '  该课程将于初次点开' +
+          that.change_duration_to_timestamp(that.course.expire_duration) +
+          '后不可再观看'
+        )
+      } else {
+        return '该课程将永久开放'
+      }
     },
+
     share_reminder: function () {
       let that = this
       return (
         '分享该课程的二维码，如果小伙伴点击你分享的链接购买课程,\n你就将获得' +
-        that.course.price * that.course.reward_percent +
-        '奖励金哦！'
+          that.course.price * that.course.reward_percent +
+          '奖励金哦！'
       )
     }
   },
@@ -342,12 +347,12 @@ export default {
       })
     that.user_status = that.$store.state.status
     that.share_qrcode_url =
-      shareQrcodeHost +
-      '?course_id=' +
-      that.query_course_id +
-      '&' +
-      'referer_id=' +
-      that.$store.state.user.customer_id
+        shareQrcodeHost +
+        '?course_id=' +
+        that.query_course_id +
+        '&' +
+        'referer_id=' +
+        that.$store.state.user.customer_id
   },
   mounted () {
     mygenerator = setInterval(this.generate_left_time, 1000)
@@ -366,19 +371,26 @@ export default {
         (substract - days * (3600 * 24) - hours * 3600) / 60
       )
       let seconds =
-        substract - days * (3600 * 24) - hours * 3600 - minutes * 60
+          substract - days * (3600 * 24) - hours * 3600 - minutes * 60
       if (days >= 0 && hours >= 0 && minutes >= 0 && seconds >= 0) {
         this.left_time =
-          days + '天' + hours + '小时' + minutes + '分钟' + seconds + '秒'
+            days + '天' + hours + '小时' + minutes + '分钟' + seconds + '秒'
       } else {
         this.left_time = '0天0小时0分钟0秒'
       }
     },
     change_duration_to_timestamp (duration) {
-      const hours = Math.floor(duration / 3600)
-      const minutes = Math.floor((duration - hours * 3600) / 60)
-      const seconds = duration - hours * 3600 - minutes * 60
-      return hours + '小时' + minutes + '分钟' + seconds + '秒'
+      const days = Math.floor(duration / (3600 * 24))
+      const hours = Math.floor((duration - days * (3600 * 24)) / 3600)
+      if (days > 0 && hours > 0) {
+        return days + '天' + hours + '小时'
+      } else if (days > 0 && hours === 0) {
+        return days + '天'
+      } else if (days === 0 && hours > 0) {
+        return hours + '小时'
+      } else if (days === 0 && hours === 0) {
+        return ''
+      }
     },
     pay_method_chose (payMethod) {
       if (payMethod === 1) {
@@ -463,7 +475,7 @@ export default {
               that.finishPay_error_msg = that.$t('error.object_not_found')
             } else if (
               error.response.data.message ===
-              'This course has already been purchased.'
+                'This course has already been purchased.'
             ) {
               that.finishPay_test = true
               that.finishPay_error_msg = that.$t(
@@ -493,7 +505,7 @@ export default {
       }
     },
     start_study: function () {
-      if (this.course.expire_time !== null) {
+      if (this.course.expire_time !== null && this.course.expire_duration !== 0) {
         let due = new Date(this.course.expire_time)
         let now = new Date()
         let substract = Math.floor((due - now) / 1000)
