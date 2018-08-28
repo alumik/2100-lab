@@ -5,11 +5,11 @@ import time
 import pytz
 
 from django.contrib.auth.decorators import login_required
-from django.utils import timezone
 from django.http import JsonResponse
+from django.utils import timezone
 
-from data import utils
 from core.constants import ERROR
+from data import utils
 
 
 @login_required

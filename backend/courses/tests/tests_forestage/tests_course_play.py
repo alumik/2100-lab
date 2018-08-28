@@ -5,8 +5,8 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from customers.models import OrderLog
 from courses.models import Course, Image, Comment
+from customers.models import OrderLog
 
 
 class CoursePlayTests(TestCase):

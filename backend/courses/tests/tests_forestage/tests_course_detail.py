@@ -6,8 +6,8 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from customers.models import LearningLog, OrderLog
 from courses.models import Course
+from customers.models import LearningLog, OrderLog
 
 
 class CourseDetailTests(TestCase):
@@ -225,7 +225,10 @@ class BuyCourseTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(int(user_1.reward_coin), 0)
         self.assertEqual(int(user_0.reward_coin), 25)
-        self.assertEqual(int(OrderLog.objects.get(customer__phone_number='00000000001').cash_spent), 20)
+        self.assertEqual(
+            int(OrderLog.objects.get(customer__phone_number='00000000001').cash_spent),
+            20
+        )
 
         response = self.client.post(
             reverse('api:courses:forestage:buy-course'),
@@ -257,5 +260,8 @@ class BuyCourseTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(int(user_2.reward_coin), 20)
         self.assertEqual(int(user_0.reward_coin), 50)
-        self.assertEqual(int(OrderLog.objects.get(customer__phone_number='00000000002').cash_spent), 0)
+        self.assertEqual(
+            int(OrderLog.objects.get(customer__phone_number='00000000002').cash_spent),
+            0
+        )
         self.client.logout()

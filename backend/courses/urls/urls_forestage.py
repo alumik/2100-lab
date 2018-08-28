@@ -76,5 +76,5 @@ urlpatterns = [
         'play/save-learning-log/',
         views_forestage.save_learning_log,
         name='save-learning-log'
-    ),
+    )
 ]

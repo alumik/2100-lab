@@ -2,16 +2,16 @@
 
 import time
 
-from django.contrib.auth.decorators import permission_required
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import permission_required
 from django.http import JsonResponse
 from django.utils import timezone
 
-from core.utils import get_backstage_page, get_brief_page
+from admins.models import AdminLog
 from core.constants import ERROR, INFO, ACTION_TYPE
+from core.utils import get_backstage_page, get_brief_page
 from customers.models import OrderLog, LearningLog
 from customers.utils import get_customer_page
-from admins.models import AdminLog
 
 
 @permission_required('customers.view_orderlog')
@@ -163,7 +163,9 @@ def get_customer_detail(request):
         'recent_learning_logs': []
     }
 
-    recent_orders = OrderLog.objects.filter(customer=customer).order_by('-created_at')[:5]
+    recent_orders = OrderLog.objects.filter(
+        customer=customer
+    ).order_by('-created_at')[:5]
     recent_learning_logs = LearningLog.objects.filter(
         customer=customer
     ).order_by('-latest_learn')[:5]
@@ -207,7 +209,9 @@ def get_customer_learning_log_list(request):
     except OrderLog.DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
-    learning_logs = LearningLog.objects.filter(customer=customer).order_by('-latest_learn')
+    learning_logs = LearningLog.objects.filter(
+        customer=customer
+    ).order_by('-latest_learn')
     return get_brief_page(request, learning_logs)
 
 

@@ -1,6 +1,6 @@
 import json
-import uuid
 import re
+import uuid
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
@@ -15,7 +15,11 @@ class CustomerListTests(TestCase):
     def setUp(self):
         get_user_model().objects.create_user(phone_number='00000000001')
         get_user_model().objects.create_user(phone_number='00000000002', is_vip=True)
-        get_user_model().objects.create_user(phone_number='00000000003', is_vip=True, is_banned=True)
+        get_user_model().objects.create_user(
+            phone_number='00000000003',
+            is_vip=True,
+            is_banned=True
+        )
         get_user_model().objects.create_user(phone_number='00000000004', is_banned=True)
         admin = get_user_model().objects.create_user(
             phone_number='11122223333',
@@ -89,7 +93,11 @@ class CustomerListTests(TestCase):
 
 class CustomerDetailTests(TestCase):
     def setUp(self):
-        customer = get_user_model().objects.create_user(phone_number='00000000001', is_vip=True, is_banned=True)
+        customer = get_user_model().objects.create_user(
+            phone_number='00000000001',
+            is_vip=True,
+            is_banned=True
+        )
         admin = get_user_model().objects.create_user(
             phone_number='11122223333',
             password='123456',
@@ -159,7 +167,11 @@ class CustomerDetailTests(TestCase):
 
 class CustomerOperationTests(TestCase):
     def setUp(self):
-        get_user_model().objects.create_user(phone_number='00000000001', is_vip=True, is_banned=False)
+        get_user_model().objects.create_user(
+            phone_number='00000000001',
+            is_vip=True,
+            is_banned=False
+        )
         admin = get_user_model().objects.create_user(
             phone_number='11122223333',
             password='123456',

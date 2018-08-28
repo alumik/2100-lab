@@ -56,5 +56,5 @@ urlpatterns = [
         'customer-management/delete-customer/',
         views_backstage.delete_customer,
         name='delete-customer'
-    ),
+    )
 ]

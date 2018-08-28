@@ -2,7 +2,7 @@
 
 from django.urls import path
 
-from . import views
+from data import views
 
 app_name = 'data'
 
@@ -16,5 +16,5 @@ urlpatterns = [
         'data-management/get-data-by-time/',
         views.get_data_by_time,
         name='get-data-by-time'
-    ),
+    )
 ]

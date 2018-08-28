@@ -1,4 +1,5 @@
 """用户模块模型"""
+
 # pylint: disable=E1101
 
 from django.conf import settings
@@ -10,7 +11,10 @@ from courses.models import Course
 class LearningLog(models.Model):
     """学习记录模型"""
 
-    customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    customer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     progress = models.IntegerField(default=0)
     latest_learn = models.DateTimeField(auto_now_add=True)
@@ -46,10 +50,17 @@ class OrderLog(models.Model):
     """订单记录模型"""
 
     order_no = models.CharField(max_length=50, unique=True)
-    customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    customer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     cash_spent = models.DecimalField(decimal_places=2, max_digits=12, default=0)
-    reward_spent = models.DecimalField(decimal_places=2, max_digits=12, default=0)
+    reward_spent = models.DecimalField(
+        decimal_places=2,
+        max_digits=12,
+        default=0
+    )
     payment_method = models.SmallIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     refunded_at = models.DateTimeField(blank=True, null=True)

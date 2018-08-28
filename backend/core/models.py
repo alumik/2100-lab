@@ -1,4 +1,5 @@
 """核心功能模型"""
+
 # pylint: disable=E1101
 
 from django.contrib.auth.models import AbstractUser, BaseUserManager
@@ -12,7 +13,9 @@ class SoftDeletionQuerySet(models.query.QuerySet):
     def delete(self):
         """软删除对象"""
 
-        return super(SoftDeletionQuerySet, self).update(deleted_at=timezone.now())
+        return super(SoftDeletionQuerySet, self).update(
+            deleted_at=timezone.now()
+        )
 
     def hard_delete(self):
         """硬删除对象"""
@@ -77,7 +80,11 @@ class UserManager(BaseUserManager):
 
         if not phone_number:
             raise ValueError('The given phone number must be set')
-        user = self.model(username=str(phone_number), phone_number=phone_number, **extra_fields)
+        user = self.model(
+            username=str(phone_number),
+            phone_number=phone_number,
+            **extra_fields
+        )
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -116,7 +123,11 @@ class CustomUser(SoftDeletionModel, AbstractUser):
         upload_to='uploads/customers/avatars/',
         default='default/customers/avatars/2100_lab.jpg'
     )
-    reward_coin = models.DecimalField(decimal_places=2, max_digits=12, default=0)
+    reward_coin = models.DecimalField(
+        decimal_places=2,
+        max_digits=12,
+        default=0
+    )
     is_vip = models.BooleanField(default=False)
     is_banned = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True)

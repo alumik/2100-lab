@@ -1,15 +1,19 @@
 import json
 
-from django.test import TestCase
-from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
+from django.test import TestCase
+from django.urls import reverse
 
 
 class AdminListTests(TestCase):
     def setUp(self):
         get_user_model().objects.create_user(phone_number='13300000000')
-        get_user_model().objects.create_user(phone_number='14400000000', password='123456', is_staff=True)
+        get_user_model().objects.create_user(
+            phone_number='14400000000',
+            password='123456',
+            is_staff=True
+        )
         get_user_model().objects.create_user(
             phone_number='15500000000',
             password='123456',
@@ -128,7 +132,10 @@ class AdminOperationsTests(TestCase):
             }
         )
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(json.loads(response.content)['message'], 'This username is already taken.')
+        self.assertEqual(
+            json.loads(response.content)['message'],
+            'This username is already taken.'
+        )
 
     def test_change_admin_username_invalid(self):
         self.client.login(phone_number='15500000000', password='123456')
@@ -265,18 +272,22 @@ class AdminGroupsTests(TestCase):
         order_admin = Group.objects.create(name='order_admin')
         log_admin = Group.objects.create(name='log_admin')
 
-        course_admin.permissions.add(*list(Permission.objects.filter(codename__contains='course')))
-        course_admin.permissions.add(*list(Permission.objects.filter(codename__contains='hero')))
-        course_admin.permissions.add(*list(Permission.objects.filter(codename__contains='image')))
-
-        comment_admin.permissions.add(*list(Permission.objects.filter(codename__contains='comment')))
-
-        customer_admin.permissions.add(*list(Permission.objects.filter(codename__contains='customuser')))
-        customer_admin.permissions.add(*list(Permission.objects.filter(codename__contains='learninglog')))
-
-        order_admin.permissions.add(*list(Permission.objects.filter(codename__contains='orderlog')))
-
-        log_admin.permissions.add(*list(Permission.objects.filter(codename__contains='adminlog')))
+        course_admin.permissions.add(
+            *list(Permission.objects.filter(codename__contains='course')))
+        course_admin.permissions.add(
+            *list(Permission.objects.filter(codename__contains='hero')))
+        course_admin.permissions.add(
+            *list(Permission.objects.filter(codename__contains='image')))
+        comment_admin.permissions.add(
+            *list(Permission.objects.filter(codename__contains='comment')))
+        customer_admin.permissions.add(
+            *list(Permission.objects.filter(codename__contains='customuser')))
+        customer_admin.permissions.add(
+            *list(Permission.objects.filter(codename__contains='learninglog')))
+        order_admin.permissions.add(
+            *list(Permission.objects.filter(codename__contains='orderlog')))
+        log_admin.permissions.add(
+            *list(Permission.objects.filter(codename__contains='adminlog')))
 
         course_admin.save()
         comment_admin.save()

@@ -2,15 +2,15 @@
 
 import uuid
 
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
-from core.utils import get_page
 from core.constants import ERROR, INFO
-from customers.models import LearningLog, OrderLog
-from courses.models import Hero, Course, Image, Comment, CourseUpVotes
+from core.utils import get_page
 from courses import utils
+from courses.models import Hero, Course, Image, Comment, CourseUpVotes
+from customers.models import LearningLog, OrderLog
 
 
 def get_heroes(request):
@@ -46,7 +46,9 @@ def get_recent_courses(request):
 def get_course_list(request):
     """获取课程列表"""
 
-    courses = utils.get_courses(request.GET.get('course_type')).order_by('-updated_at')
+    courses = utils.get_courses(
+        request.GET.get('course_type')
+    ).order_by('-updated_at')
     return get_page(request, courses)
 
 
@@ -76,7 +78,10 @@ def get_course_detail(request):
     }
     if request.user.is_authenticated:
         try:
-            learning_log = LearningLog.objects.get(course=course, customer=request.user)
+            learning_log = LearningLog.objects.get(
+                course=course,
+                customer=request.user
+            )
             expire_time = learning_log.expire_time
             if expire_time is not None:
                 course_detail['expire_time'] = expire_time
@@ -128,7 +133,10 @@ def buy_course(request):
 
     try:
         OrderLog.objects.get(customer=customer, course=course, refunded_at=None)
-        return JsonResponse({'message': ERROR['course_already_purchased']}, status=400)
+        return JsonResponse(
+            {'message': ERROR['course_already_purchased']},
+            status=400
+        )
     except OrderLog.DoesNotExist:
         pass
 
@@ -214,7 +222,10 @@ def save_learning_log(request):
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
     try:
-        learning_log = LearningLog.objects.get(course=course, customer=request.user)
+        learning_log = LearningLog.objects.get(
+            course=course,
+            customer=request.user
+        )
     except LearningLog.DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
@@ -237,7 +248,10 @@ def get_course_comments(request):
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
     if not course.can_comment:
-        return JsonResponse({'message': ERROR['comment_not_allowed']}, status=403)
+        return JsonResponse(
+            {'message': ERROR['comment_not_allowed']},
+            status=403
+        )
 
     comments = Comment.objects.filter(
         course=course,
@@ -336,7 +350,10 @@ def add_comment(request):
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
     if (not course.can_comment) or user.is_banned:
-        return JsonResponse({'message': ERROR['comment_not_allowed']}, status=403)
+        return JsonResponse(
+            {'message': ERROR['comment_not_allowed']},
+            status=403
+        )
 
     comment = Comment.objects.create(
         user=user,
@@ -375,7 +392,10 @@ def get_replies(request):
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
     if not comment.course.can_comment:
-        return JsonResponse({'message': ERROR['comment_not_allowed']}, status=403)
+        return JsonResponse(
+            {'message': ERROR['comment_not_allowed']},
+            status=403
+        )
 
     replies = Comment.objects.filter(parent=comment).order_by('-created_at')
     return utils.get_reply_page(request, replies)

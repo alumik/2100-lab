@@ -61,5 +61,5 @@ urlpatterns = [
         'auth/authenticate-customer/',
         views_forestage.authenticate_customer,
         name='authenticate-customer'
-    ),
+    )
 ]

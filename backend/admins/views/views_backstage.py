@@ -1,19 +1,19 @@
 """管理员模块后台操作"""
 
 from datetime import datetime
-import re
 import time
+import re
 import pytz
 
-from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import Group
+from django.http import JsonResponse
 
+from admins.models import AdminLog
+from admins.utils import get_admin_page
 from core.constants import ERROR, INFO, ACTION_TYPE, ADMIN_GROUPS_NAME
 from core.utils import get_page
-from admins.utils import get_admin_page
-from admins.models import AdminLog
 
 
 def authenticate_admin(request):
@@ -75,7 +75,10 @@ def authenticate_admin(request):
     """
 
     if request.user.is_authenticated:
-        return JsonResponse({'message': ERROR['user_is_already_authenticated']}, status=400)
+        return JsonResponse(
+            {'message': ERROR['user_is_already_authenticated']},
+            status=400
+        )
 
     phone_number = request.POST.get('phone_number')
     password = request.POST.get('password')
@@ -83,7 +86,10 @@ def authenticate_admin(request):
     admin = authenticate(request, phone_number=phone_number, password=password)
 
     if not admin:
-        return JsonResponse({'message': ERROR['invalid_phone_number_or_password']}, status=400)
+        return JsonResponse(
+            {'message': ERROR['invalid_phone_number_or_password']},
+            status=400
+        )
 
     if not admin.is_staff:
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
@@ -218,11 +224,17 @@ def change_admin_username(request):
 
     try:
         get_user_model().objects.get(username=new_username)
-        return JsonResponse({'message': ERROR['username_already_taken']}, status=400)
+        return JsonResponse(
+            {'message': ERROR['username_already_taken']},
+            status=400
+        )
 
     except get_user_model().DoesNotExist:
         if re.match(r'^.*_deleted_.*$', new_username):
-            return JsonResponse({'message': ERROR['invalid_username']}, status=400)
+            return JsonResponse(
+                {'message': ERROR['invalid_username']},
+                status=400
+            )
         admin.username = new_username
         admin.save()
         AdminLog.objects.create(
@@ -298,14 +310,20 @@ def add_admin(request):
     password = request.POST.get('password')
 
     if not re.search(r'^1\d{10}$', phone_number):
-        return JsonResponse({'message': ERROR['invalid_phone_number']}, status=400)
+        return JsonResponse(
+            {'message': ERROR['invalid_phone_number']},
+            status=400
+        )
 
     if password == '':
         return JsonResponse({'message': ERROR['invalid_password']}, status=400)
 
     try:
         get_user_model().objects.get(phone_number=phone_number)
-        return JsonResponse({'message': ERROR['admin_already_registered']}, status=400)
+        return JsonResponse(
+            {'message': ERROR['admin_already_registered']},
+            status=400
+        )
     except get_user_model().DoesNotExist:
         new_admin = get_user_model().objects.create_user(
             phone_number=phone_number,

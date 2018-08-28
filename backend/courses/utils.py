@@ -1,11 +1,11 @@
 """课程模块工具函数"""
 
-from django.utils import timezone
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import JsonResponse
+from django.utils import timezone
 
-from customers.models import LearningLog, OrderLog
 from courses.models import Course
+from customers.models import LearningLog, OrderLog
 
 
 def get_courses(course_type, limit=None):
@@ -85,7 +85,10 @@ def get_reply_page(request, items):
     except (PageNotAnInteger, EmptyPage):
         item_page = paginator.page(1)
     item_list = list(
-        map(lambda item: item.as_reply_dict(customer=request.user), list(item_page))
+        map(
+            lambda item: item.as_reply_dict(customer=request.user),
+            list(item_page)
+        )
     )
     return JsonResponse(
         {

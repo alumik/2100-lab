@@ -71,5 +71,5 @@ urlpatterns = [
         'comment-management/delete-comment/',
         views_backstage.delete_comment,
         name='delete-comment'
-    ),
+    )
 ]

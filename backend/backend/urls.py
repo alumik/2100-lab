@@ -27,7 +27,7 @@ from backend import settings
 urlpatterns = [
     path('django-admin/', admin.site.urls),
     path('api/v1/', include('api.urls', namespace='api')),
-    path('', TemplateView.as_view(template_name='index.html')),
+    path('', TemplateView.as_view(template_name='index.html'))
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
