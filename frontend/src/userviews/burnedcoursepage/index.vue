@@ -17,7 +17,7 @@
 import Basic from '../components/basic'
 import $ from 'jquery'
 
-$(document).ready(function (e) {
+$(document).ready(function (event) {
   if (window.history && window.history.pushState) {
     $(window).on('popstate', function () {
       window.history.pushState('forward', null, '/')

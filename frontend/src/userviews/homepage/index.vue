@@ -26,29 +26,37 @@
           img-responsive
         >
           <b-carousel-slide
+            :caption="carousellist[0] ? carousellist[0].caption : ''"
+            :img-src="carousellist[0] ? $store.state.address+
+            carousellist[0].image : ''"
+            img-width="1024"
+            img-height="250"
             class="height-change"
-            caption="First slide"
-            name="carousel-pic-1"
-            text="Nulla vitae elit libero, a pharetra augue mollis interdum."
-            img-src="https://picsum.photos/1024/300/?image=60"/>
+            name="carousel-pic-1"/>
           <b-carousel-slide
+            :caption="carousellist[1] ? carousellist[1].caption : ''"
+            :img-src="carousellist[1] ? $store.state.address+
+            carousellist[1].image : ''"
+            img-width="1024"
+            img-height="250"
             class="height-change"
-            caption="First slide"
-            name="carousel-pic-2"
-            text="Nulla vitae elit libero, a pharetra augue mollis interdum."
-            img-src="https://picsum.photos/1024/300/?image=70"/>
+            name="carousel-pic-2"/>
           <b-carousel-slide
+            :caption="carousellist[2] ? carousellist[2].caption : ''"
+            :img-src="carousellist[2] ? $store.state.address+
+            carousellist[2].image : ''"
+            img-width="1024"
+            img-height="250"
             class="height-change"
-            caption="First slide"
-            name="carousel-pic-3"
-            text="Nulla vitae elit libero, a pharetra augue mollis interdum."
-            img-src="https://picsum.photos/1024/300/?image=80"/>
+            name="carousel-pic-3"/>
           <b-carousel-slide
+            :caption="carousellist[3] ? carousellist[3].caption : ''"
+            :img-src="carousellist[3] ? $store.state.address+
+            carousellist[3].image : ''"
+            img-width="1024"
+            img-height="250"
             class="height-change"
-            caption="First slide"
-            name="carousel-pic-4"
-            text="Nulla vitae elit libero, a pharetra augue mollis interdum."
-            img-src="https://picsum.photos/1024/300/?image=90"/>
+            name="carousel-pic-4"/>
         </b-carousel>
       </div>
       <div class="recommend-list">
@@ -113,8 +121,8 @@ export default {
     axios
       .get('http://localhost/api/v1/courses/forestage/main/get-heroes/')
       .then(function (response) {
-        that.carousellist = response.content
-        that.carouselnum = response.count
+        that.carousellist = response.data.content
+        that.carouselnum = response.data.count
       })
       .catch(function (error) {
         that.carousel_test = true

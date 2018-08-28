@@ -1,7 +1,8 @@
 <template>
   <body>
     <div class="remind">
-      <label id="list-title">{{ course_type === 'free' ? '免费':'付费' }}</label>
+      <label id="list-title">{{ course_type === 'free' ? '免费':'付费' }}
+      </label>
       <div
         class="watch-more">
         <label
@@ -27,7 +28,7 @@
             @click="open_detail_page(course.course_id)">
             <div style="border-radius: 25px;">
               <img
-                :src="example_src"
+                :src="$store.state.address+course.thumbnail"
                 class="course-image">
               <div style="padding: 15px;">
                 <h5 class="card-title">
@@ -70,84 +71,84 @@ export default {
   methods: {
     watch_more: function () {
       if (this.course_type === 'free') {
-        this.$router.push({name: 'AllFreeCourse'})
+        this.$router.push({ name: 'AllFreeCourse' })
       } else {
-        this.$router.push({name: 'AllPaidCourse'})
+        this.$router.push({ name: 'AllPaidCourse' })
       }
     },
     open_detail_page: function (id) {
-      this.$router.push({name: 'CourseDetail', query: {course_id: id}})
+      this.$router.push({ name: 'CourseDetail', query: { course_id: id } })
     }
   }
 }
 </script>
 
 <style scoped>
-  .remind {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
+.remind {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
 
-  #list-title {
-    padding-left: 1rem;
-    margin-left: 1.2rem;
-    font-size: 2rem;
-    font-weight: bold;
-    border-left: 3px solid #ccc;
-  }
+#list-title {
+  padding-left: 1rem;
+  margin-left: 1.2rem;
+  font-size: 2rem;
+  font-weight: bold;
+  border-left: 3px solid #ccc;
+}
 
-  .course-image {
-    width: 100%;
-    height: 100%;
-    border-radius: 15px 15px 0 0;
-  }
+.course-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 15px 15px 0 0;
+}
 
-  #watch-more {
-    padding-top: 1rem;
-    padding-right: 2rem;
-    font-weight: bold;
-    cursor: pointer;
-  }
+#watch-more {
+  padding-top: 1rem;
+  padding-right: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-  .col-style {
-    flex: 1 0 20%;
-    min-width: 15rem;
-    min-height: 18rem;
-    padding: 0;
-    margin: 2rem 1.5rem;
-    text-align: center;
-    cursor: pointer;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  }
+.col-style {
+  flex: 1 0 20%;
+  min-width: 15rem;
+  min-height: 18rem;
+  padding: 0;
+  margin: 2rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
 
-  .col-style:hover {
-    -ms-transform: translate(0, -20px); /* IE 9 */
-    -webkit-transform: translate(0, -20px); /* Safari and Chrome */
-    transform: translate(0, -20px);
-  }
+.col-style:hover {
+  -ms-transform: translate(0, -20px); /* IE 9 */
+  -webkit-transform: translate(0, -20px); /* Safari and Chrome */
+  transform: translate(0, -20px);
+}
 
-  .card-text-height {
-    max-height: 5.5rem;
-    overflow: hidden;
-    font-size: 15px;
-  }
+.card-text-height {
+  max-height: 5.5rem;
+  overflow: hidden;
+  font-size: 15px;
+}
 
-  .card-title {
-    height: 1.5rem;
-    overflow: hidden;
-    font-weight: bold;
-  }
+.card-title {
+  height: 1.5rem;
+  overflow: hidden;
+  font-weight: bold;
+}
 
-  #course-list {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+#course-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 
-  .course-list-style {
-    margin: 0;
-  }
+.course-list-style {
+  margin: 0;
+}
 </style>

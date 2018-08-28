@@ -136,7 +136,8 @@ export default {
       that.code_disabled = true
       axios
         .post(
-          'http://localhost/api/v1/customers/forestage/auth/get-verification-code/',
+          'http://localhost/api/v1/customers/forestage/auth/' +
+          'get-verification-code/',
           qs.stringify({
             phone_number: this.phone
           }),
@@ -183,7 +184,8 @@ export default {
       let that = this
       axios
         .post(
-          'http://localhost/api/v1/customers/forestage/auth/authenticate-customer/',
+          'http://localhost/api/v1/customers/forestage/auth/' +
+          'authenticate-customer/',
           qs.stringify({
             phone_number: this.phone.toString(),
             verification_code: this.code.toString()
@@ -194,7 +196,8 @@ export default {
           if (that.new_customer) {
             axios
               .post(
-                'http://localhost/api/v1/customers/forestage/auth/get-eula/'
+                'http://localhost/api/v1/customers/forestage/auth/' +
+                'get-eula/'
               )
               .then(res => {
                 this.content = res.data.content

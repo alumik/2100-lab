@@ -56,23 +56,12 @@ export default {
       return this.$store.state.address + this.$store.state.user.avatar
     }
   },
-  created () {
-    // let that = this
-    // axios
-    //   .post('http://localhost/api/v1/core/auth/is-authenticated/')
-    //   .then(res => {
-    //     // console.log('登录状态：' + res.data.is_authenticated)
-    //     if (res.data.is_authenticated) {
-    //       that.$store.commit('status')
-    //       // console.log(that.$store.state)
-    //     }
-    //   })
-  },
   mounted () {
     if (this.$store.state.status) {
       axios
         .get(
-          'http://localhost/api/v1/customers/forestage/personal-center/get-customer-detail/'
+          'http://localhost/api/v1/customers/forestage/personal-center/' +
+          'get-customer-detail/'
         )
         .then(res => {
           this.$store.commit('avatar', res.data.avatar)

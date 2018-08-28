@@ -61,7 +61,8 @@
             <div class="introduction-style">
               <div
                 class="delete-margin text-left-style">
-                <div style="font-size: 1.7rem;">{{ course.title }}&emsp;</div>
+                <div style="font-size: 1.7rem;">{{ course.title }}&emsp;
+                </div>
                 <div
                   v-b-toggle.course-description
                   id="watch-all"
@@ -89,7 +90,8 @@
             <b-collapse
               id="course-description"
               class="mt-2">
-              <div class="text-align-left">&emsp;&emsp;{{ course.description }}</div>
+              <div class="text-align-left">&emsp;&emsp;
+                {{ course.description }}</div>
             </b-collapse>
           </div>
           <hr>
@@ -150,7 +152,8 @@ export default {
         for (var i = 1; i < this.audio_piece_num; i++) {
           var first = this.course.images[i - 1].load_time
           var second = this.course.images[i].load_time
-          if (this.audio_current_time >= first && this.audio_current_time < second) {
+          if (this.audio_current_time >= first && this.audio_current_time <
+            second) {
             this.now_picture_index = i - 1
             this.change_picture()
           }
@@ -161,7 +164,8 @@ export default {
   created: function () {
     let that = this
     that.query_course_id = parseInt(that.$route.query.course_id)
-    axios.get('http://localhost/api/v1/courses/forestage/play/get-course-assets?' +
+    axios.get('http://localhost/api/v1/courses/forestage/play/' +
+      'get-course-assets?' +
       'course_id=' + that.query_course_id)
       .then(function (response) {
         that.course = response.data
@@ -182,7 +186,8 @@ export default {
           that.assets_error_msg = that.$t('error.access_denied')
         }
       })
-    axios.get('http://localhost/api/v1/courses/forestage/course/get-course-detail?' +
+    axios.get('http://localhost/api/v1/courses/forestage/course/' +
+      'get-course-detail?' +
       'course_id=' + that.query_course_id)
       .then(function (response) {
         var data = response.data
@@ -205,7 +210,8 @@ export default {
   },
   beforeDestroy () {
     let that = this
-    axios.get('http://localhost/api/v1/courses/forestage/play/save-learning-log/', {params: {
+    axios.get('http://localhost/api/v1/courses/forestage/play/' +
+      'save-learning-log/', {params: {
       course_id: that.query_course_id,
       progress: that.audio_current_time
     }}).catch(function (error) {
@@ -214,14 +220,16 @@ export default {
         that.beforedestroy_error_msg = that.$t('error.object_not_found')
       } else if (error.response.data.message === 'Access denied.') {
         that.beforedestroy_message_test = true
-        that.beforedestroy_message_error_msg = that.$t('error.access_denied')
+        that.beforedestroy_message_error_msg =
+          that.$t('error.access_denied')
       }
     })
   },
   methods: {
     up_vote_course () {
       let that = this
-      axios.get('http://localhost/api/v1/courses/forestage/course/up-vote-course?' +
+      axios.get('http://localhost/api/v1/courses/forestage/course/' +
+        'up-vote-course?' +
       'course_id=' + that.query_course_id)
         .then(function (response) {
           if (response.data.up_voted === true) {
@@ -243,8 +251,9 @@ export default {
     },
     change_picture: function () {
       let that = this
-      that.now_picture = that.course.images[this.now_picture_index].image_path
-        ? that.course.images[that.now_picture_index].image_path : ''
+      that.now_picture =
+        that.course.images[this.now_picture_index].image_path
+          ? that.course.images[that.now_picture_index].image_path : ''
     },
     addEventListeners: function () {
       const self = this
@@ -263,100 +272,100 @@ export default {
 </script>
 
 <style>
-  .introduction-style {
-    display: flex;
-    flex-direction: row;
-    flex-grow: 2;
-    flex-shrink: 2;
-    align-items: center;
-    margin: 2rem 0;
-  }
+.introduction-style {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 2;
+  flex-shrink: 2;
+  align-items: center;
+  margin: 2rem 0;
+}
 
-  .audio-style {
-    height: 2.5rem;
-    vertical-align: center;
-  }
+.audio-style {
+  height: 2.5rem;
+  vertical-align: center;
+}
 
-  .text-align-left {
-    text-align: left;
-  }
+.text-align-left {
+  text-align: left;
+}
 
+.study-background {
+  min-height: calc(100vh - 170px);
+  padding: 0 5rem;
+  background-color: #f7f7f7;
+}
+
+.media-style {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  height: 50%;
+  padding: 1rem 0 0 0;
+}
+
+.image-style {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  text-align: center;
+}
+
+.course-image {
+  width: 100%;
+  height: 100%;
+}
+
+.sub-media {
+  width: 70%;
+  height: 90%;
+  text-align: center;
+}
+
+.delete-margin {
+  margin: 0;
+  cursor: pointer;
+}
+
+.text-left-style {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 1rem;
+  text-align: left;
+}
+
+.audio-player {
+  width: 100%;
+  height: 2rem;
+  color: #222;
+}
+
+.vote-style {
+  height: 25px;
+  text-align: right;
+}
+
+.heart-size {
+  font-size: 18px;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.container {
+  padding: 0 3rem;
+  background-color: #fff;
+}
+
+@media (max-width: 500px) {
   .study-background {
-    min-height: calc(100vh - 170px);
-    padding: 0 5rem;
-    background-color: #f7f7f7;
-  }
-
-  .media-style {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
-    height: 50%;
-    padding: 1rem 0 0 0;
-  }
-
-  .image-style {
-    width: 100%;
-    height: 100%;
     padding: 0;
-    text-align: center;
-  }
-
-  .course-image {
-    width: 100%;
-    height: 100%;
-  }
-
-  .sub-media {
-    width: 70%;
-    height: 90%;
-    text-align: center;
-  }
-
-  .delete-margin {
-    margin: 0;
-    cursor: pointer;
-  }
-
-  .text-left-style {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-right: 1rem;
-    text-align: left;
-  }
-
-  .audio-player {
-    width: 100%;
-    height: 2rem;
-    color: #222;
-  }
-
-  .vote-style {
-    height: 25px;
-    text-align: right;
-  }
-
-  .heart-size {
-    font-size: 18px;
-    color: #ccc;
-    cursor: pointer;
   }
 
   .container {
-    padding: 0 3rem;
+    padding: 0;
     background-color: #fff;
   }
-
-  @media (max-width: 500px) {
-    .study-background {
-      padding: 0;
-    }
-
-    .container {
-      padding: 0;
-      background-color: #fff;
-    }
-  }
+}
 </style>
