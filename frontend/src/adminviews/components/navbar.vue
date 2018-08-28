@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     home () {
-      this.$router.push({ path: '/' })
+      this.$router.push({ path: '/admin/main' })
     },
     log () {
       if (this.$store.state.status) {

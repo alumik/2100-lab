@@ -243,6 +243,10 @@ export default new Router({
       name: 'TimeData',
       component: () => import('@/adminviews/data/time_data'),
       meta: {title: '数据分析' + backstage_suffix}
+    },
+    {
+      path: '*',
+      redirect: '/404'
     }
   ]
 })

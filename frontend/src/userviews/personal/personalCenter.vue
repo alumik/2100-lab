@@ -291,7 +291,7 @@ img {
 }
 
 .uneditable {
-  text-align: right;
+  text-align: left;
 }
 
 .input-group-text {

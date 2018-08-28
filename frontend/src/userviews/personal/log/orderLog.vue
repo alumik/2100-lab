@@ -6,7 +6,8 @@
     <div id="main">
       <UserMenu
         :list="list"
-        :hidden="hidden"/>
+        :hidden="hidden"
+        class="menu"/>
       <div id="info">
         <BreadCrumb
           id="breadcrumb"
