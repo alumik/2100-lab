@@ -43,27 +43,36 @@ export default {
     }
   },
   created () {
-    this.getcourselist()
+    this.get_course_list()
   },
   methods: {
     change_page: function (page) {
       let that = this
       that.page = page
-      that.getcourselist()
+      that.get_course_list()
     },
-    getcourselist: function (page) {
+    get_course_list: function (page) {
       let that = this
-      axios.get('http://localhost/api/v1/courses/forestage/course/get-course-list/', { params: {
-        course_type: that.course_type,
-        page_limit: that.page_limit,
-        page: that.page
-      }}).then(function (response) {
-        that.course_list = response.data.content
-        that.rows = response.data.count
-      }).catch(function (error) {
-        that.created_test = true
-        that.created_error_msg = error.response.data.message
-      })
+      axios
+        .get(
+          'http://localhost/api/v1/courses/forestage/course' +
+          '/get-course-list/',
+          {
+            params: {
+              course_type: that.course_type,
+              page_limit: that.page_limit,
+              page: that.page
+            }
+          }
+        )
+        .then(function (response) {
+          that.course_list = response.data.content
+          that.rows = response.data.count
+        })
+        .catch(function (error) {
+          that.created_test = true
+          that.created_error_msg = error.response.data.message
+        })
     }
   }
 }

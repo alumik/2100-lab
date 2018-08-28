@@ -171,29 +171,36 @@
                 class="icon"
                 size="small"/> 现价 ￥{{ get_now_price() }}  </h6>
             <h6
-              v-if="!isNaN($store.state.user.reward_coin) && $store.state.user.reward_coin != 0.00">&emsp;&emsp;￥
+              v-if="!isNaN($store.state.user.reward_coin) &&
+              $store.state.user.reward_coin != 0.00">&emsp;&emsp;￥
               <label
                 v-if="!isNaN(course.price)"
                 class="origin-value">{{ course.price }}</label>
             </h6>
           </div>
           <div>
-            <h6 v-if="course.expire_duration !==0 && !isNaN(course.expire_duration)">
+            <h6
+              v-if="course.expire_duration !==0 &&
+              !isNaN(course.expire_duration)">
               <simple-line-icons
                 icon="clock"
                 color="#ffd706"
                 class="icon"
-                size="small"/> 课程时效 {{ change_duration_to_timestamp(course.expire_duration) }}
+                size="small"/> 课程时效
+              {{ change_duration_to_timestamp(course.expire_duration) }}
             </h6>
           </div>
           <div>
-            <h6 v-if="course.expire_time !== null && course.expire_duration !==0">
+            <h6
+              v-if="course.expire_time !== null &&
+              course.expire_duration !==0">
               距离失效还有 {{ left_time }}</h6>
           </div>
         </div>
         <div class="button-row">
           <b-button
-            v-show="course.can_access || (!course.can_access && $store.state.status === false && course.price===0)"
+            v-show="course.can_access || (!course.can_access
+            && $store.state.status === false && course.price===0)"
             id="study-button"
             size="sm"
             variant="primary"
@@ -222,7 +229,8 @@
           </b-button>
           <b-button
             id="praise-button"
-            :style="{background: praise_color, border: praise_border_color}"
+            :style="{background: praise_color,
+                     border: praise_border_color}"
             size="sm"
             class="my-btn"
             @click="add_praise">
@@ -265,10 +273,10 @@ export default {
       course_img_src_example: 'https://picsum.photos/1024/480/?image=54',
       pay_qrcode_url: 'http://www.jisuanke.com',
       share_instruction:
-          '        小可爱，你可以通过分享该二维码和' +
-          '小朋友一起学习有趣的实验哦~ 分享付费课程给好朋友，如果' +
-          '他/她购买该课程，你将会获得奖励金哦~奖励金可以用来购买' +
-          '其他有趣的实验课程呢，所以赶紧拿起你的手机进行分享吧(*^▽^*)',
+        '        小可爱，你可以通过分享该二维码和' +
+        '小朋友一起学习有趣的实验哦~ 分享付费课程给好朋友，如果' +
+        '他/她购买该课程，你将会获得奖励金哦~奖励金可以用来购买' +
+        '其他有趣的实验课程呢，所以赶紧拿起你的手机进行分享吧(*^▽^*)',
       course: {},
       created_test: false,
       created_error_msg: '',
@@ -303,9 +311,10 @@ export default {
     share_reminder: function () {
       let that = this
       return (
-        '分享该课程的二维码，如果小伙伴点击你分享的链接购买课程,\n你就将获得' +
-          that.course.price * that.course.reward_percent +
-          '奖励金哦！'
+        '分享该课程的二维码，如果小伙伴点击你分享的链接购买课程,' +
+        '\n你就将获得' +
+        that.course.price * that.course.reward_percent +
+        '奖励金哦！'
       )
     }
   },
@@ -314,11 +323,13 @@ export default {
     that.query_course_id = that.$route.query.course_id
     if (typeof that.$route.query.referer_id !== 'undefined') {
       that.referer_id = that.$route.query.referer_id
-        ? that.$route.query.referer_id : ''
+        ? that.$route.query.referer_id
+        : ''
     }
     axios
       .get(
-        'http://localhost/api/v1/courses/forestage/course/get-course-detail/',
+        'http://localhost/api/v1/courses/forestage/course/' +
+        'get-course-detail/',
         {
           params: {
             course_id: that.query_course_id,
@@ -329,7 +340,8 @@ export default {
       .then(function (response) {
         that.course = response.data
         that.course.price = parseFloat(response.data.price)
-        that.course.reward_percent = parseFloat(response.data.reward_percent)
+        that.course.reward_percent =
+          parseFloat(response.data.reward_percent)
         if (that.course.up_voted === true) {
           that.praise_color = 'green'
           that.praise_border_color = 'green'
@@ -347,12 +359,12 @@ export default {
       })
     that.user_status = that.$store.state.status
     that.share_qrcode_url =
-        shareQrcodeHost +
-        '?course_id=' +
-        that.query_course_id +
-        '&' +
-        'referer_id=' +
-        that.$store.state.user.customer_id
+      shareQrcodeHost +
+      '?course_id=' +
+      that.query_course_id +
+      '&' +
+      'referer_id=' +
+      that.$store.state.user.customer_id
   },
   mounted () {
     mygenerator = setInterval(this.generate_left_time, 1000)
@@ -370,11 +382,10 @@ export default {
       let minutes = Math.floor(
         (substract - days * (3600 * 24) - hours * 3600) / 60
       )
-      let seconds =
-          substract - days * (3600 * 24) - hours * 3600 - minutes * 60
+      let seconds = substract - days * (3600 * 24) - hours * 3600 - minutes * 60
       if (days >= 0 && hours >= 0 && minutes >= 0 && seconds >= 0) {
         this.left_time =
-            days + '天' + hours + '小时' + minutes + '分钟' + seconds + '秒'
+          days + '天' + hours + '小时' + minutes + '分钟' + seconds + '秒'
       } else {
         this.left_time = '0天0小时0分钟0秒'
       }
@@ -459,7 +470,8 @@ export default {
         this.$root.$emit('bv::hide::modal', 'pay-popup')
         axios
           .post(
-            'http://localhost/api/v1/courses/forestage/course/buy-course/',
+            'http://localhost/api/v1/courses/forestage/course/' +
+            'buy-course/',
             qs.stringify({
               course_id: that.query_course_id,
               payment_method: that.pay_method
@@ -476,7 +488,7 @@ export default {
               that.finishPay_error_msg = that.$t('error.object_not_found')
             } else if (
               error.response.data.message ===
-                'This course has already been purchased.'
+              'This course has already been purchased.'
             ) {
               that.finishPay_test = true
               that.finishPay_error_msg = that.$t(
@@ -506,7 +518,10 @@ export default {
       }
     },
     start_study: function () {
-      if (this.course.expire_time !== null && this.course.expire_duration !== 0) {
+      if (
+        this.course.expire_time !== null &&
+        this.course.expire_duration !== 0
+      ) {
         let due = new Date(this.course.expire_time)
         let now = new Date()
         let substract = Math.floor((due - now) / 1000)

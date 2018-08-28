@@ -51,10 +51,13 @@
                       V
                     </label>
                   </div>
-                  <div class="comment-wrap">&emsp;{{ replies[i-1].content }}</div>
+                  <div class="comment-wrap">&emsp;
+                    {{ replies[i-1].content }}
+                  </div>
                 </div>
                 <div
-                  v-if="replies[i-1].username === $store.state.user.username"
+                  v-if="replies[i-1].username ===
+                  $store.state.user.username"
                   class="delete-comment"
                   @click="delete_list_comment(i-1,replies[i-1].comment_id)">
                   <label>删除</label>
@@ -68,14 +71,18 @@
                 <div>
                   &emsp;{{ replies[i-1].up_votes }}
                   <b-img
-                    :src="replies[i-1].up_voted === true ? up_icon_after : up_icon_before"
+                    :src="replies[i-1].up_voted === true ? up_icon_after :
+                    up_icon_before"
                     class="vote-style "
-                    @click="modal_up_vote_reply(i-1, replies[i-1].comment_id)"/>
+                    @click="modal_up_vote_reply
+                  (i-1, replies[i-1].comment_id)"/>
                   &emsp; &emsp;{{ replies[i-1].down_votes }}
                   <b-img
-                    :src="replies[i-1].down_voted === true ? down_icon_after : down_icon_before"
+                    :src="replies[i-1].down_voted === true ? down_icon_after
+                    : down_icon_before"
                     class="vote-style "
-                    @click="modal_down_vote_reply(i-1, replies[i-1].comment_id)"/>
+                    @click="modal_down_vote_reply
+                  (i-1, replies[i-1].comment_id)"/>
                 </div>
               </div>
             </div>
@@ -106,12 +113,12 @@
         {{ created_error_msg }}
       </b-alert>
       <b-alert
-        :show="getallmessage_test"
+        :show="get_all_message_test"
         variant="danger"
         dismissible
         fade
-        @dismissed="getallmessage_test=false">
-        {{ getallmessage_error_msg }}
+        @dismissed="get_all_message_test=false">
+        {{ get_all_message_error_msg }}
       </b-alert>
       <b-alert
         :show="up_vote_test"
@@ -189,30 +196,37 @@
               </label>
             </div>
             <div
-              v-if="message_list[index-1].username === $store.state.user.username"
+              v-if="message_list[index-1].username ===
+              $store.state.user.username"
               id="delete-button"
               class="delete-comment"
-              @click="delete_comment(message_list[index-1].comment_id)">删除</div>
+              @click="delete_comment(message_list[index-1].comment_id)">
+              删除</div>
           </div>
-          <div class="comment-wrap">{{ message_list[index-1].content }}</div>
+          <div class="comment-wrap">{{ message_list[index-1].content }}
+          </div>
           <div class="time-remind">
             <div
               class="time-style">
               {{ (message_list[index-1].created_at).substring(0,10) }}
-              &nbsp;{{ (message_list[index-1].created_at).substring(11,19) }}</div>
+              &nbsp;{{ (message_list[index-1].created_at).substring(11,19) }}
+            </div>
             <div class="margin-right-1">
               {{ message_list[index-1].up_votes }}
               <b-img
                 id="praise-button"
-                :src="message_list[index-1].up_voted === true ? up_icon_after : up_icon_before"
+                :src="message_list[index-1].up_voted === true ?
+                up_icon_after : up_icon_before"
                 class="vote-style "
                 @click="up_vote(index-1,message_list[index-1].comment_id)"/>
               &emsp; {{ message_list[index-1].down_votes }}
               <b-img
                 id="detest-button"
-                :src="message_list[index-1].down_voted === true ? down_icon_after : down_icon_before"
+                :src="message_list[index-1].down_voted === true ?
+                down_icon_after : down_icon_before"
                 class="vote-style "
-                @click="down_vote(index-1,message_list[index-1].comment_id)"/>
+                @click="down_vote
+              (index-1,message_list[index-1].comment_id)"/>
             </div>
             <div
               id="reply-button"
@@ -231,36 +245,46 @@
                     <div class="row3">
                       {{ message_list[index-1].replies[i-1].username }}
                       <label
-                        v-if="message_list[index-1].replies[i-1].user_is_vip === true"
+                        v-if="message_list[index-1].replies[i-1].user_is_vip
+                        === true"
                         class="vip-style">
                         V
                       </label>
                     </div>
-                    <div class="comment-wrap">&emsp;{{ message_list[index-1].replies[i-1].content }}</div>
+                    <div class="comment-wrap">&emsp;{{ message_list[index-1].
+                    replies[i-1].content }}</div>
                   </div>
                   <div
-                    v-if="message_list[index-1].replies[i-1].username === $store.state.user.username"
+                    v-if="message_list[index-1].replies[i-1].username ===
+                    $store.state.user.username"
                     class="delete-comment"
-                    @click="delete_comment(message_list[index-1].replies[i-1].comment_id)">
+                    @click="delete_comment(message_list[index-1].replies[i-1]
+                    .comment_id)">
                     <label>删除</label>
                   </div>
                 </div>
                 <div style="display: flex; flex-direction: row;">
                   <label class="time-style">
-                    {{ (message_list[index-1].replies[i-1].created_at).substring(0,10) }}
-                    &nbsp;{{ (message_list[index-1].replies[i-1].created_at).substring(11,19) }}
+                    {{ (message_list[index-1].replies[i-1].created_at).
+                    substring(0,10) }}
+                    &nbsp;{{ (message_list[index-1].replies[i-1].created_at).
+                    substring(11,19) }}
                   </label>
                   <div>
                     &emsp;{{ message_list[index-1].replies[i-1].up_votes }}
                     <b-img
-                      :src="message_list[index-1].replies[i-1].up_voted === true ? up_icon_after : up_icon_before"
+                      :src="message_list[index-1].replies[i-1].up_voted ===
+                      true ? up_icon_after : up_icon_before"
                       class="vote-style "
-                      @click="up_vote_child_reply(index-1, i-1, message_list[index-1].replies[i-1].comment_id)"/>
+                      @click="up_vote_child_reply(index-1, i-1,
+                                                  message_list[index-1].replies[i-1].comment_id)"/>
                     &emsp; &emsp;{{ message_list[index-1].replies[i-1].down_votes }}
                     <b-img
-                      :src="message_list[index-1].replies[i-1].down_voted === true ? down_icon_after : down_icon_before"
+                      :src="message_list[index-1].replies[i-1].down_voted
+                      === true ? down_icon_after : down_icon_before"
                       class="vote-style "
-                      @click="down_vote_child_reply(index-1, i-1, message_list[index-1].replies[i-1].comment_id)"/>
+                      @click="down_vote_child_reply(index-1, i-1,
+                                                    message_list[index-1].replies[i-1].comment_id)"/>
                   </div>
                 </div>
               </div>
@@ -315,8 +339,8 @@ export default {
       message_list: [],
       created_test: false,
       created_error_msg: '',
-      getallmessage_test: false,
-      getallmessage_error_msg: '',
+      get_all_message_test: false,
+      get_all_message_error_msg: '',
       up_vote_test: false,
       up_vote_error_msg: '',
       down_vote_test: false,
@@ -345,7 +369,7 @@ export default {
   },
   created: function () {
     this.page = this.$route.query.page
-    this.getallmessage()
+    this.get_all_message()
   },
   methods: {
     change_list_page: function (page) {
@@ -359,15 +383,16 @@ export default {
     hide_reply_popup: function () {
       this.$root.$emit('bv::hide::modal', 'reply-popup')
     },
-    want_reply: function (commentId) {
-      this.reply_comment_id = commentId
+    want_reply: function (Id) {
+      this.reply_comment_id = Id
       this.$root.$emit('bv::show::modal', 'reply-popup')
     },
-    getallmessage: function () {
+    get_all_message: function () {
       let that = this
       axios
         .get(
-          'http://localhost/api/v1/courses/forestage/play/get-course-comments/',
+          'http://localhost/api/v1/courses/forestage/play/' +
+          'get-course-comments/',
           {
             params: {
               course_id: that.course_id,
@@ -377,27 +402,29 @@ export default {
           }
         )
         .then(function (response) {
-          console.log(response.data)
           that.rows = response.data.count
           that.message_list = response.data.content
           that.can_comment = true
         })
         .catch(function (error) {
           if (error.response.data.message === 'Object not found.') {
-            that.getallmessage_test = true
-            that.getallmessage_error_msg = that.$t('error.object_not_found')
-          } else if (error.response.data.message === 'Commenting is not allowed.') {
+            that.get_all_message_test = true
+            that.get_all_message_error_msg =
+              that.$t('error.object_not_found')
+          } else if (
+            error.response.data.message === 'Commenting is not allowed.'
+          ) {
             that.can_comment = false
           }
         })
     },
-    up_vote: function (index, msgCommentId) {
+    up_vote: function (index, Id) {
       let that = this
       axios
         .get(
-          'http://localhost/api/v1/courses/forestage/play/up-vote-comment?' +
-            'comment_id=' +
-            msgCommentId
+          'http://localhost/api/v1/courses/forestage/play/' +
+          'up-vote-comment?' +
+            'comment_id=' + Id
         )
         .then(function (response) {
           if (response.data.message === 'Object not found.') {
@@ -419,69 +446,72 @@ export default {
           that.up_vote_error_msg = error.response.data.message
         })
     },
-    up_vote_child_reply: function (index, replyIndex, msgCommentId) {
+    up_vote_child_reply: function (index, reply_index, Id) {
       let that = this
       axios
         .get(
-          'http://localhost/api/v1/courses/forestage/play/up-vote-comment?' +
-          'comment_id=' +
-          msgCommentId
-        )
-        .then(function (response) {
-          if (response.data.message === 'Object not found.') {
-            that.up_vote_test = true
-            that.up_vote_error_msg = that.$t('error.object_not_found')
-          } else if (response.data.message === 'Access denied.') {
-            that.up_vote_test = true
-            that.up_vote_error_msg = that.$t('error.access_denied')
-          } else if (response.data.up_voted === true) {
-            that.message_list[index].replies[replyIndex].up_votes = response.data.up_votes
-            that.message_list[index].replies[replyIndex].up_voted = true
-          } else if (response.data.up_voted === false) {
-            that.message_list[index].replies[replyIndex].up_votes = response.data.up_votes
-            that.message_list[index].replies[replyIndex].up_voted = false
-          }
-        })
-        .catch(function (error) {
-          that.up_vote_test = true
-          that.up_vote_error_msg = error.response.data.message
-        })
-    },
-    modal_up_vote_reply: function (replyIndex, msgCommentId) {
-      let that = this
-      axios
-        .get(
-          'http://localhost/api/v1/courses/forestage/play/up-vote-comment?' +
-          'comment_id=' +
-          msgCommentId
-        )
-        .then(function (response) {
-          if (response.data.message === 'Object not found.') {
-            that.up_vote_test = true
-            that.up_vote_error_msg = that.$t('error.object_not_found')
-          } else if (response.data.message === 'Access denied.') {
-            that.up_vote_test = true
-            that.up_vote_error_msg = that.$t('error.access_denied')
-          } else if (response.data.up_voted === true) {
-            that.replies[replyIndex].up_votes = response.data.up_votes
-            that.replies[replyIndex].up_voted = true
-          } else if (response.data.up_voted === false) {
-            that.replies[replyIndex].up_votes = response.data.up_votes
-            that.replies[replyIndex].up_voted = false
-          }
-        })
-        .catch(function (error) {
-          that.up_vote_test = true
-          that.up_vote_error_msg = error.response.data.message
-        })
-    },
-    down_vote: function (index, msgCommentId) {
-      let that = this
-      axios
-        .get(
-          'http://localhost/api/v1/courses/forestage/play/down-vote-comment?' +
+          'http://localhost/api/v1/courses/forestage/play' +
+          '/up-vote-comment?' +
             'comment_id=' +
-            msgCommentId
+            Id
+        )
+        .then(function (response) {
+          if (response.data.message === 'Object not found.') {
+            that.up_vote_test = true
+            that.up_vote_error_msg = that.$t('error.object_not_found')
+          } else if (response.data.message === 'Access denied.') {
+            that.up_vote_test = true
+            that.up_vote_error_msg = that.$t('error.access_denied')
+          } else if (response.data.up_voted === true) {
+            that.message_list[index].replies[reply_index].up_votes =
+              response.data.up_votes
+            that.message_list[index].replies[reply_index].up_voted = true
+          } else if (response.data.up_voted === false) {
+            that.message_list[index].replies[reply_index].up_votes =
+              response.data.up_votes
+            that.message_list[index].replies[reply_index].up_voted = false
+          }
+        })
+        .catch(function (error) {
+          that.up_vote_test = true
+          that.up_vote_error_msg = error.response.data.message
+        })
+    },
+    modal_up_vote_reply: function (reply_index, Id) {
+      let that = this
+      axios
+        .get(
+          'http://localhost/api/v1/courses/forestage/play/' +
+          'up-vote-comment?' +
+            'comment_id=' + Id
+        )
+        .then(function (response) {
+          if (response.data.message === 'Object not found.') {
+            that.up_vote_test = true
+            that.up_vote_error_msg = that.$t('error.object_not_found')
+          } else if (response.data.message === 'Access denied.') {
+            that.up_vote_test = true
+            that.up_vote_error_msg = that.$t('error.access_denied')
+          } else if (response.data.up_voted === true) {
+            that.replies[reply_index].up_votes = response.data.up_votes
+            that.replies[reply_index].up_voted = true
+          } else if (response.data.up_voted === false) {
+            that.replies[reply_index].up_votes = response.data.up_votes
+            that.replies[reply_index].up_voted = false
+          }
+        })
+        .catch(function (error) {
+          that.up_vote_test = true
+          that.up_vote_error_msg = error.response.data.message
+        })
+    },
+    down_vote: function (index, Id) {
+      let that = this
+      axios
+        .get(
+          'http://localhost/api/v1/courses/forestage/play/' +
+          'down-vote-comment?' +
+            'comment_id=' + Id
         )
         .then(function (response) {
           if (response.data.down_voted === true) {
@@ -502,21 +532,24 @@ export default {
           }
         })
     },
-    down_vote_child_reply: function (index, replyIndex, msgCommentId) {
+    down_vote_child_reply: function (index, reply_index, msgCommentId) {
       let that = this
       axios
         .get(
-          'http://localhost/api/v1/courses/forestage/play/down-vote-comment?' +
-          'comment_id=' +
-          msgCommentId
+          'http://localhost/api/v1/courses/forestage/play/' +
+          'down-vote-comment?' +
+            'comment_id=' +
+            msgCommentId
         )
         .then(function (response) {
           if (response.data.down_voted === true) {
-            that.message_list[index].replies[replyIndex].down_votes = response.data.down_votes
-            that.message_list[index].replies[replyIndex].down_voted = true
+            that.message_list[index].replies[reply_index].down_votes =
+              response.data.down_votes
+            that.message_list[index].replies[reply_index].down_voted = true
           } else if (response.data.down_voted === false) {
-            that.message_list[index].replies[replyIndex].down_votes = response.data.down_votes
-            that.message_list[index].replies[replyIndex].down_voted = false
+            that.message_list[index].replies[reply_index].down_votes =
+              response.data.down_votes
+            that.message_list[index].replies[reply_index].down_voted = false
           }
         })
         .catch(function (error) {
@@ -529,21 +562,22 @@ export default {
           }
         })
     },
-    modal_down_vote_reply: function (replyIndex, msgCommentId) {
+    modal_down_vote_reply: function (reply_index, msgCommentId) {
       let that = this
       axios
         .get(
-          'http://localhost/api/v1/courses/forestage/play/down-vote-comment?' +
-          'comment_id=' +
-          msgCommentId
+          'http://localhost/api/v1/courses/forestage/play/' +
+          'down-vote-comment?' +
+            'comment_id=' +
+            msgCommentId
         )
         .then(function (response) {
           if (response.data.down_voted === true) {
-            that.replies[replyIndex].down_votes = response.data.down_votes
-            that.replies[replyIndex].down_voted = true
+            that.replies[reply_index].down_votes = response.data.down_votes
+            that.replies[reply_index].down_voted = true
           } else if (response.data.down_voted === false) {
-            that.replies[replyIndex].down_votes = response.data.down_votes
-            that.replies[replyIndex].down_voted = false
+            that.replies[reply_index].down_votes = response.data.down_votes
+            that.replies[reply_index].down_voted = false
           }
         })
         .catch(function (error) {
@@ -564,16 +598,15 @@ export default {
     get_replies: function (commentId) {
       let that = this
       axios
-        .get(
-          'http://localhost/api/v1/courses/forestage/play/get-replies/', {
-            params: {
-              comment_id: commentId,
-              page_limit: that.modal_page_limit,
-              page: that.modal_page
-            }
-          })
+        .get('http://localhost/api/v1/courses/forestage/play/' +
+          'get-replies/', {
+          params: {
+            comment_id: commentId,
+            page_limit: that.modal_page_limit,
+            page: that.modal_page
+          }
+        })
         .then(function (response) {
-          console.log(response.data.content)
           that.replies = response.data.content
           that.modal_rows = response.data.count
         })
@@ -582,7 +615,8 @@ export default {
       let that = this
       axios
         .post(
-          'http://localhost/api/v1/courses/forestage/play/delete-comment/',
+          'http://localhost/api/v1/courses/forestage/play' +
+          '/delete-comment/',
           qs.stringify({
             comment_id: commentId
           })
@@ -590,13 +624,14 @@ export default {
         .then(function (response) {
           if (response.data.message === 'Object deleted.') {
             alert(that.$t('prompt.object_deleted'))
-            that.getallmessage()
+            that.get_all_message()
           }
         })
         .catch(function (error) {
           if (error.response.data.message === 'Object not found.') {
             that.delete_message_test = true
-            that.delete_message_error_msg = that.$t('error.object_not_found')
+            that.delete_message_error_msg =
+              that.$t('error.object_not_found')
           } else if (error.response.data.message === 'Access denied.') {
             that.delete_message_test = true
             that.delete_message_error_msg = that.$t('error.access_denied')
@@ -607,7 +642,8 @@ export default {
       let that = this
       axios
         .post(
-          'http://localhost/api/v1/courses/forestage/play/delete-comment/',
+          'http://localhost/api/v1/courses/forestage/play' +
+          '/delete-comment/',
           qs.stringify({
             comment_id: commentId
           })
@@ -617,13 +653,14 @@ export default {
             alert(that.$t('prompt.object_deleted'))
             that.replies.splice(index, 1)
             that.get_replies(that.get_all_reply_id)
-            that.getallmessage()
+            that.get_all_message()
           }
         })
         .catch(function (error) {
           if (error.response.data.message === 'Object not found.') {
             that.delete_message_test = true
-            that.delete_message_error_msg = that.$t('error.object_not_found')
+            that.delete_message_error_msg =
+              that.$t('error.object_not_found')
           } else if (error.response.data.message === 'Access denied.') {
             that.delete_message_test = true
             that.delete_message_error_msg = that.$t('error.access_denied')
@@ -646,7 +683,7 @@ export default {
         )
         .then(function (response) {
           if (response.data.message === 'Success.') {
-            that.getallmessage()
+            that.get_all_message()
           }
         })
         .catch(function (error) {
@@ -656,7 +693,9 @@ export default {
           } else if (error.response.data.message === 'Access denied.') {
             that.add_message_test = true
             that.add_message_error_msg = that.$t('error.access_denied')
-          } else if (error.response.data.message === 'Commenting is not allowed.') {
+          } else if (
+            error.response.data.message === 'Commenting is not allowed.'
+          ) {
             that.add_message_test = true
             that.add_message_error_msg = that.$t(
               'prompt.user_comment_not_allowed'
@@ -683,7 +722,7 @@ export default {
           )
           .then(function (response) {
             if (response.data.message === 'Success.') {
-              that.getallmessage()
+              that.get_all_message()
             }
           })
           .catch(function (error) {
@@ -708,7 +747,7 @@ export default {
     },
     change_page: function (page) {
       this.page = page
-      this.getallmessage()
+      this.get_all_message()
     }
   }
 }
