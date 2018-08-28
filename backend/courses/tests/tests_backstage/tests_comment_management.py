@@ -308,15 +308,6 @@ class CommentOperationTests(TestCase):
         )
         self.assertEqual(Comment.objects.filter(parent=reply_to).count(), 1)
 
-        response = self.client.post(
-            reverse('api:courses:backstage:add-comment'),
-            {
-                'reply_to_id': int(response_json_data['content'][0]['comment_id']),
-                'comment_content': 'This is yet another reply.'
-            }
-        )
-        self.assertEqual(response.status_code, 400)
-
     def test_delete_comment(self):
         self.client.login(phone_number='13312345678', password='123456')
         comment = Comment.objects.get(content='1234')

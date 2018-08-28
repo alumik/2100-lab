@@ -20,8 +20,7 @@ ERROR = {
     'admin_already_registered': 'Admin is already registered.',
     'message_send_failed': 'Message send failed.',
     'course_already_purchased': 'This course has already been purchased.',
-    'comment_not_allowed': 'Commenting is not allowed.',
-    'cannot_reply_a_reply': 'Cannot add replies to a reply.'
+    'comment_not_allowed': 'Commenting is not allowed.'
 }
 
 ADMIN_GROUPS_NAME = {
