@@ -163,7 +163,7 @@
         </div>
         <div class="price-time">
           <div
-            v-if="!course.can_access">
+            v-if="!course.can_access && course.price !== 0">
             <h6 v-if="!isNaN(get_now_price())">
               <simple-line-icons
                 icon="basket-loaded"
@@ -187,59 +187,79 @@
             </h6>
           </div>
           <div>
-            <h6 v-if="course.expire_time !== null">
+            <h6 v-if="course.expire_time !== null && course.expire_duration !==0">
               距离失效还有 {{ left_time }}</h6>
+            <div class="button-row">
+              <div v-show="course.can_access || (!course.can_access && $store.state.status === false && course.price===0)">
+                <b-button
+                  id="study-button"
+                  size="sm"
+                  variant="primary"
+                  class="my-btn"
+                  @click="start_study">
+                  开始学习
+                </b-button>
+              </div>
+              <div v-show="!course.can_access && course.price !== 0">
+                <b-button
+                  id="pay-button"
+                  size="sm"
+                  variant="primary"
+                  class="my-btn"
+                  @click="handle_pay_operate">
+                  立即购买
+                </b-button>
+              </div>
+            </div>
+            <div class="button-row">
+              <b-button
+                v-show="course.can_access"
+                id="study-button"
+                size="sm"
+                variant="primary"
+                class="my-btn"
+                @click="start_study">
+                开始学习
+              </b-button>
+              <b-button
+                v-show="!course.can_access"
+                id="pay-button"
+                size="sm"
+                variant="primary"
+                class="my-btn"
+                @click="handle_pay_operate">
+                立即购买
+              </b-button>
+              <b-button
+                v-b-modal.share-popup
+                id="share-button"
+                :title="share_instruction"
+                size="sm"
+                variant="primary"
+                class="my-btn share-margin"
+              >
+                分享
+              </b-button>
+              <b-button
+                id="praise-button"
+                :style="{background: praise_color, border: praise_border_color}"
+                size="sm"
+                class="my-btn"
+                @click="add_praise">
+                {{ course.up_votes }} 赞
+              </b-button>
+            </div>
           </div>
         </div>
-        <div class="button-row">
-          <b-button
-            v-show="course.can_access"
-            id="study-button"
-            size="sm"
-            variant="primary"
-            class="my-btn"
-            @click="start_study">
-            开始学习
-          </b-button>
-          <b-button
-            v-show="!course.can_access"
-            id="pay-button"
-            size="sm"
-            variant="primary"
-            class="my-btn"
-            @click="handle_pay_operate">
-            立即购买
-          </b-button>
-          <b-button
-            v-b-modal.share-popup
-            id="share-button"
-            :title="share_instruction"
-            size="sm"
-            variant="primary"
-            class="my-btn share-margin"
-          >
-            分享
-          </b-button>
-          <b-button
-            id="praise-button"
-            :style="{background: praise_color, border: praise_border_color}"
-            size="sm"
-            class="my-btn"
-            @click="add_praise">
-            {{ course.up_votes }} 赞
-          </b-button>
+        <div class="detail">
+          <div
+            id="detail-introduction"
+            class="container">
+            <h5>课程简介</h5>
+            <p>{{ course.description }}</p>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="detail">
-      <div
-        id="detail-introduction"
-        class="container">
-        <h5>课程简介</h5>
-        <p>{{ course.description }}</p>
-      </div>
-    </div>
-  </Basic>
+  </div></div></Basic>
 </template>
 
 <script>
@@ -289,11 +309,15 @@ export default {
   computed: {
     time_reminder: function () {
       let that = this
-      return (
-        '  该课程将于初次点开' +
-        that.change_duration_to_timestamp(that.course.expire_duration) +
-        '后不可再观看'
-      )
+      if (that.course.expire_duration !== 0) {
+        return (
+          '  该课程将于初次点开' +
+          that.change_duration_to_timestamp(that.course.expire_duration) +
+          '后不可再观看'
+        )
+      } else {
+        return '该课程将永久开放'
+      }
     },
     share_reminder: function () {
       let that = this
@@ -325,6 +349,7 @@ export default {
         that.course = response.data
         that.course.price = parseFloat(response.data.price)
         that.course.reward_percent = parseFloat(response.data.reward_percent)
+        console.log(that.course.expire_duration)
         if (that.course.up_voted === true) {
           that.praise_color = 'green'
           that.praise_border_color = 'green'
@@ -375,10 +400,17 @@ export default {
       }
     },
     change_duration_to_timestamp (duration) {
-      const hours = Math.floor(duration / 3600)
-      const minutes = Math.floor((duration - hours * 3600) / 60)
-      const seconds = duration - hours * 3600 - minutes * 60
-      return hours + '小时' + minutes + '分钟' + seconds + '秒'
+      const days = Math.floor(duration / (3600 * 24))
+      const hours = Math.floor((duration - days * (3600 * 24)) / 3600)
+      if (days > 0 && hours > 0) {
+        return days + '天' + hours + '小时'
+      } else if (days > 0 && hours === 0) {
+        return days + '天'
+      } else if (days === 0 && hours > 0) {
+        return hours + '小时'
+      } else if (days === 0 && hours === 0) {
+        return ''
+      }
     },
     pay_method_chose (payMethod) {
       if (payMethod === 1) {
@@ -493,7 +525,7 @@ export default {
       }
     },
     start_study: function () {
-      if (this.course.expire_time !== null) {
+      if (this.course.expire_time !== null && this.course.expire_duration !== 0) {
         let due = new Date(this.course.expire_time)
         let now = new Date()
         let substract = Math.floor((due - now) / 1000)
