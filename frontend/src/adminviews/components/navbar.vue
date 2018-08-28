@@ -52,6 +52,7 @@ export default {
           .then(res => {
             alert(res.data.message)
             this.$store.commit('status', false)
+            this.$store.commit('groups', [])
             this.$router.push({ path: '/admin' })
           })
           .catch(error => {
