@@ -24,81 +24,79 @@
       @dismissed="beforedestroy_error_msg=false">
       {{ beforedestroy_error_msg }}
     </b-alert>
-    <div
-      id="content">
+    <div class="study-background">
       <div
-        id="media"
-        class="media-style">
-        <div
-          id="image"
-          class="image-style">
-          <b-img
-            :src="now_picture"
-            class="course-image"/>
-        </div>
-        <div
-          id="audio"
-          class="audio-style">
-          <audio
-            ref="player"
-            :src="audio_src"
-            autoplay
-            controls
-            preload
-            type="audio/mpeg"
-            class="audio-player"/>
-        </div>
-      </div>
-      <div role="tablist">
-        <b-card>
+        class="container">
+        <div id="content">
           <div
-            id="introduction">
-            <b-row>
-              <b-col class="delete-margin text-left-style">
-                <h5>
-                  {{ course.title }}
-                </h5>
-              </b-col>
-              <b-col class="vote-style">
+            id="media"
+            class="media-style">
+            <div class="sub-media">
+              <div>
+                <div
+                  id="image"
+                  class="image-style">
+                  <b-img
+                    src="https://picsum.photos/400/250/?image=410"
+                    class="course-image"/>
+                <!--<b-img-->
+                <!--:src="now_picture"-->
+                <!--class="course-image"/>-->
+                </div>
+                <div class="audio-style">
+                  <audio
+                    id="audio"
+                    ref="player"
+                    :src="audio_src"
+                    autoplay
+                    controls
+                    preload
+                    type="audio/mpeg"
+                    class="audio-player"/>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="introduction">
+            <div class="introduction-style">
+              <div
+                class="delete-margin text-left-style">
+                <div style="font-size: 1.7rem;">{{ course.title }}&emsp;</div>
+                <div
+                  v-b-toggle.course-description
+                  id="watch-all"
+                  @click="changeFoldState">
+                  <simple-line-icons
+                    v-if="introduction_brandFold === true"
+                    icon="arrow-down-circle"
+                    size="small"
+                    color="#009966"/>
+                  <simple-line-icons
+                    v-else
+                    icon="arrow-up-circle"
+                    size="small"
+                    color="#FF6600"/>课程简介
+                </div>
+              </div>
+              <div class="vote-style">
                 {{ up_votes }}
                 <a
                   :style="{color: praise_course_color}"
                   class="heart-size"
                   @click="up_vote_course">&#10084;</a>
-              </b-col>
-            </b-row>
-            <div
-              id="description"
-              :style="{'max-height': isExpand}"
-              class="delete-margin text-left-style">
-              &emsp;&emsp;{{ course.description }}
+              </div>
             </div>
-            <span
-              id="expand-all"
-              class="text-right-style"
-              @click="changeFoldState">
-              <label
-                id="watch-all"
-                class="look-all">{{ introduction_brandFold ? '﹀展开':'︿收起' }}</label>
-            </span>
+            <b-collapse
+              id="course-description"
+              class="mt-2">
+              <div class="text-align-left">&emsp;&emsp;{{ course.description }}</div>
+            </b-collapse>
           </div>
-        </b-card>
-        <b-card
-          no-body>
-          <b-card-header
-            header-tag="header"
-            class="p-1"
-            role="tab">
-            留言板
-          </b-card-header>
-          <b-card-body>
-            <p
-              id="message-board"
-              class="card-text">
-              <MessageBoard :course_id="query_course_id"/>
-            </p>
-          </b-card-body>
-        </b-card>
+          <hr>
+          <MessageBoard
+            id="message-board"
+            :course_id="query_course_id"/>
+        </div>
       </div>
     </div>
   </Basic>
@@ -190,7 +188,7 @@ export default {
         var data = response.data
         that.up_votes = data.up_votes
         if (data.up_voted === true) {
-          that.praise_course_color = '#f00'
+          that.praise_course_color = '#F60'
         } else if (data.up_voted === false) {
           that.praise_course_color = '#ccc'
         }
@@ -228,7 +226,7 @@ export default {
         .then(function (response) {
           if (response.data.up_voted === true) {
             that.up_votes = response.data.up_votes
-            that.praise_course_color = '#f00'
+            that.praise_course_color = '#F60'
           } else if (response.data.up_voted === false) {
             that.up_votes = response.data.up_votes
             that.praise_course_color = '#ccc'
@@ -241,13 +239,7 @@ export default {
         })
     },
     changeFoldState () {
-      if (this.introduction_brandFold === true) {
-        this.isExpand = 'none'
-        this.introduction_brandFold = !this.introduction_brandFold
-      } else {
-        this.isExpand = '90px'
-        this.introduction_brandFold = !this.introduction_brandFold
-      }
+      this.introduction_brandFold = !this.introduction_brandFold
     },
     change_picture: function () {
       let that = this
@@ -270,58 +262,74 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+  .introduction-style {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 2;
+    flex-shrink: 2;
+    align-items: center;
+    margin: 2rem 0;
+  }
+
+  .audio-style {
+    height: 2.5rem;
+    vertical-align: center;
+  }
+
+  .text-align-left {
+    text-align: left;
+  }
+
+  .study-background {
+    padding: 0 5rem;
+    background-color: #f7f7f7;
+  }
+
   .media-style {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     width: 100%;
-    height: 80%;
-    height: 500px;
+    height: 50%;
+    padding: 1rem 0 0 0;
   }
 
   .image-style {
     width: 100%;
-    height: 90%;
+    height: 100%;
     padding: 0;
+    text-align: center;
+  }
+
+  .course-image {
+    width: 100%;
+    height: 100%;
+  }
+
+  .sub-media {
+    width: 70%;
+    height: 90%;
     text-align: center;
   }
 
   .delete-margin {
     margin: 0;
-  }
-
-  .look-all {
-    color: #686868;
-  }
-
-  .look-all:hover {
-    color: #000;
-  }
-
-  .course-image {
-    width: 60%;
-    height: 100%;
-  }
-
-  .audio-style {
-    width: 100%;
-    height: 30px;
-    margin-top: 10px;
-    text-align: center;
+    cursor: pointer;
   }
 
   .text-left-style {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 1rem;
     text-align: left;
   }
 
-  .text-right-style {
-    text-align: right;
-  }
-
   .audio-player {
-    width: 99%;
-    height: 100%;
+    width: 100%;
+    height: 2rem;
+    color: #222;
   }
 
   .vote-style {
@@ -330,32 +338,24 @@ export default {
   }
 
   .heart-size {
-    font-size: 15px;
+    font-size: 18px;
     color: #ccc;
     cursor: pointer;
   }
 
-  #description {
-    position: relative;
-    max-height: 90px;
-    overflow: hidden;
-    line-height: 18px;
+  .container {
+    padding: 0 3rem;
+    background-color: #fff;
   }
 
-  #description span {
-    position: absolute;
-    top: 72px;
-    right: 0;
-    line-height: 18px;
-    background-color: white;
-  }
+  @media (max-width: 500px) {
+    .study-background {
+      padding: 0;
+    }
 
-  .showmore {
-    max-height: none;
-  }
-
-  #description .showmore span {
-    top: unset;
-    bottom: 0;
+    .container {
+      padding: 0;
+      background-color: #fff;
+    }
   }
 </style>

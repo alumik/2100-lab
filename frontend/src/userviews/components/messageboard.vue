@@ -1,5 +1,12 @@
 <template>
   <div id="message-board">
+    <div class="text-align-left">
+      {{ rows }}
+      <simple-line-icons
+        icon="bubble"
+        size="small"
+        color="#009966"/>
+    </div>
     <div>
       <b-modal
         id="reply-popup"
@@ -30,46 +37,49 @@
         title="全部回复">
         <div
           v-for="i in replies.length"
-          id="replies-list"
-          :key="i">
-          <br>
+          :key="i"
+          class="reply-message">
           <div>
-            <b-row>
-              <b-col
-                class="text-align-left"
-                cols="4">
-                {{ replies[i-1].username }}
-              </b-col>
-              <b-col cols="6">
-                <label class="time-style">&emsp;
-                  {{ replies[i-1].created_at }}回复
+            <div>
+              <div class="row1">
+                <div class="row2">
+                  <div class="row3">
+                    {{ replies[i-1].username }}
+                    <label
+                      v-if="replies[i-1].user_is_vip === true"
+                      class="vip-style">
+                      V
+                    </label>
+                  </div>
+                  <div>&emsp;{{ replies[i-1].content }}</div>
+                </div>
+                <div
+                  v-if="replies[i-1].username === $store.state.user.username"
+                  class="delete-comment"
+                  @click="delete_list_comment(i-1,replies[i-1].comment_id)">
+                  <label>删除</label>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: row;">
+                <label class="time-style">
+                  {{ (replies[i-1].created_at).substring(0,10) }}
+                  &nbsp;{{ (replies[i-1].created_at).substring(11,19) }}
                 </label>
-              </b-col>
-              <b-col
-                v-if="replies[i-1].username === $store.state.user.username"
-                class="delete-comment"
-                @click="delete_list_comment(i-1,replies[i-1].comment_id)">
-                <label>×</label>
-              </b-col>
-            </b-row>
-            <b-row class="text-align-left">
-              <p class="message-content">{{ replies[i-1].content }}</p>
-            </b-row>
+                <div>
+                  &emsp;{{ replies[i-1].up_votes }}
+                  <b-img
+                    :src="replies[i-1].up_voted === true ? up_icon_after : up_icon_before"
+                    class="vote-style "
+                    @click="modal_up_vote_reply(i-1, replies[i-1].comment_id)"/>
+                  &emsp; &emsp;{{ replies[i-1].down_votes }}
+                  <b-img
+                    :src="replies[i-1].down_voted === true ? down_icon_after : down_icon_before"
+                    class="vote-style "
+                    @click="modal_down_vote_reply(i-1, replies[i-1].comment_id)"/>
+                </div>
+              </div>
+            </div>
           </div>
-          <b-row class="text-align-right">
-            <b-col>
-              {{ replies[i-1].up_votes }}
-              <b-img
-                :src="replies[i-1].up_voted === true ? up_icon_after : up_icon_before"
-                class="vote-style "
-                @click="modal_up_vote_reply(i-1, replies[i-1].comment_id)"/>
-              &emsp; &emsp;{{ replies[i-1].down_votes }}
-              <b-img
-                :src="replies[i-1].down_voted === true ? down_icon_after : down_icon_before"
-                class="vote-style "
-                @click="modal_down_vote_reply(i-1, replies[i-1].comment_id)"/>
-            </b-col>
-          </b-row>
         </div>
         <div>
           <Pagination
@@ -135,89 +145,113 @@
         @dismissed="add_message_test=false">
         {{ add_message_error_msg }}
       </b-alert>
-      <div class="form-style">
-        <div
-          v-for="index in message_list.length"
-          id="comment"
-          :key="index"
-          class="piece-of-message">
-          <div id="piece-of-message">
-            <b-row>
-              <b-col cols="1">
-                <img
-                  id="userimg"
-                  class="userimg"
-                  src="../../assets/logo.png">
-              </b-col>
-              <b-col cols="2">
-                {{ message_list[index-1].username }}
-              </b-col>
-              <b-col cols="4">
-                <label class="time-style">&emsp;{{ message_list[index-1].created_at }}评论</label>
-              </b-col>
-              <b-col>
-                <label
-                  id="reply-button"
-                  @click="want_reply(message_list[index-1].comment_id)">
-                  回复
-                </label>
-                <label
-                  id="watch-more"
-                  @click="watch_all_replies(message_list[index-1].comment_id)">
-                  更多回复
-                </label>
-              </b-col>
-              <b-col
-                v-if="message_list[index-1].username === $store.state.user.username"
-                id="delete-button"
-                class="delete-comment"
-                @click="delete_comment(message_list[index-1].comment_id)">
-                <label>×</label>
-              </b-col>
-            </b-row>
-            <p class="message-content">{{ message_list[index-1].content }}</p>
+      <div
+        class="comment-style" >
+        <div class="user-avatar">
+          <img
+            :src="$store.state.address + this.$store.state.user.avatar"
+            class="userimg">
+        </div>
+        <div class="message-area">
+          <textarea
+            id="input-message"
+            v-model="new_msg"
+            class="textarea-style"
+            placeholder="请输入留言"
+            @keyup.enter="add_comment"/>
+          <div
+            id="commit-button"
+            class="commit-button-style">
+            <b-button
+              class="add_comment"
+              @click="add_comment">发表<br>评论</b-button>
           </div>
-          <b-row class="text-align-right">
-            <b-col>
+        </div>
+      </div>
+      <div
+        v-for="index in message_list.length"
+        id="piece-of-message"
+        :key="index"
+        class="piece-of-message">
+        <div class="user-avatar">
+          <img
+            :src="$store.state.address + message_list[index-1].avatar"
+            class="userimg">
+        </div>
+        <div class="message-list-area">
+          <div class="message-username">
+            <div class="message-list-username">
+              {{ message_list[index-1].username }}
+              <label
+                v-if="message_list[index-1].user_is_vip === true"
+                class="vip-style">
+                V
+              </label>
+            </div>
+            <div
+              v-if="message_list[index-1].username === $store.state.user.username"
+              id="delete-button"
+              class="delete-comment"
+              @click="delete_comment(message_list[index-1].comment_id)">删除</div>
+          </div>
+          <div>{{ message_list[index-1].content }}</div>
+          <div class="time-remind">
+            <div
+              class="time-style">
+              {{ (message_list[index-1].created_at).substring(0,10) }}
+              &nbsp;{{ (message_list[index-1].created_at).substring(11,19) }}</div>
+            <div class="margin-right-1">
               {{ message_list[index-1].up_votes }}
               <b-img
                 id="praise-button"
                 :src="message_list[index-1].up_voted === true ? up_icon_after : up_icon_before"
                 class="vote-style "
                 @click="up_vote(index-1,message_list[index-1].comment_id)"/>
-              &emsp; &emsp;{{ message_list[index-1].down_votes }}
+              &emsp; {{ message_list[index-1].down_votes }}
               <b-img
                 id="detest-button"
                 :src="message_list[index-1].down_voted === true ? down_icon_after : down_icon_before"
                 class="vote-style "
                 @click="down_vote(index-1,message_list[index-1].comment_id)"/>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <div
-                v-for="i in message_list[index-1].replies.length"
-                :key="i">
-                <div>
-                  <b-row>
-                    <b-col class="text-align-left">
+            </div>
+            <div
+              id="reply-button"
+              @click="want_reply(message_list[index-1].comment_id)">
+              回复
+            </div>
+          </div>
+          <div
+            v-for="i in message_list[index-1].replies.length"
+            :key="i"
+            class="reply-message">
+            <div>
+              <div>
+                <div class="row1">
+                  <div class="row2">
+                    <div class="row3">
                       {{ message_list[index-1].replies[i-1].username }}
-                      <label class="time-style">&emsp;
-                        {{ message_list[index-1].replies[i-1].created_at }}
-                        回复{{ message_list[index-1].username }}</label>
-                    </b-col>
-                    <b-col
-                      v-if="message_list[index-1].replies[i-1].username === $store.state.user.username"
-                      class="delete-comment"
-                      @click="delete_comment(message_list[index-1].replies[i-1].comment_id)">
-                      <label>×</label>
-                    </b-col>
-                  </b-row>
-                  <p class="message-content">{{ message_list[index-1].replies[i-1].content }}</p>
+                      <label
+                        v-if="message_list[index-1].replies[i-1].user_is_vip === true"
+                        class="vip-style">
+                        V
+                      </label>
+                    </div>
+                    <div>&emsp;{{ message_list[index-1].replies[i-1].content }}</div>
+                  </div>
+                  <div
+                    v-if="message_list[index-1].replies[i-1].username === $store.state.user.username"
+                    class="delete-comment"
+                    @click="delete_comment(message_list[index-1].replies[i-1].comment_id)">
+                    <label>删除</label>
+                  </div>
                 </div>
-                <b-row class="text-align-right">
-                  <b-col>
-                    {{ message_list[index-1].replies[i-1].up_votes }}
+                <div style="display: flex; flex-direction: row;">
+                  <label class="time-style">
+                    {{ (message_list[index-1].replies[i-1].created_at).substring(0,10) }}
+                    &nbsp;{{ (message_list[index-1].replies[i-1].created_at).substring(11,19) }}
+                  </label>
+                  <div>
+                    &emsp;{{ message_list[index-1].replies[i-1].up_votes }}
                     <b-img
                       :src="message_list[index-1].replies[i-1].up_voted === true ? up_icon_after : up_icon_before"
                       class="vote-style "
@@ -227,26 +261,24 @@
                       :src="message_list[index-1].replies[i-1].down_voted === true ? down_icon_after : down_icon_before"
                       class="vote-style "
                       @click="down_vote_child_reply(index-1, i-1, message_list[index-1].replies[i-1].comment_id)"/>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
               </div>
-            </b-col>
-          </b-row>
-        </div>
-      </div>
-      <div>
-        <textarea
-          id="input-message"
-          v-model="new_msg"
-          class="textarea-style"
-          placeholder="请输入评论"
-          @keyup.enter="add_comment"/>
-        <br>
-        <div
-          id="commit-button"
-          class="commit-button-style">
-          <b-button
-            @click="add_comment">评论</b-button>
+            </div>
+          </div>
+          <div
+            v-if="message_list [index-1].reply_count !== 0"
+            class="all-reply">
+            <div class="margin-right-1">
+              共{{ message_list [index-1].reply_count }}条回复
+            </div>
+            <div
+              id="watch-more"
+              class="look-all"
+              @click="watch_all_replies(message_list[index-1].comment_id)">
+              点击查看
+            </div>
+          </div>
         </div>
       </div>
       <div>
@@ -293,7 +325,7 @@ export default {
       add_message_error_msg: '',
       delete_message_test: false,
       delete_message_error_msg: '',
-      page_limit: 1,
+      page_limit: 5,
       page: 1,
       rows: 0,
       modal_page_limit: 2,
@@ -345,6 +377,7 @@ export default {
           }
         )
         .then(function (response) {
+          console.log(response.data)
           that.rows = response.data.count
           that.message_list = response.data.content
           that.can_comment = true
@@ -353,9 +386,8 @@ export default {
           if (error.response.data.message === 'Object not found.') {
             that.getallmessage_test = true
             that.getallmessage_error_msg = that.$t('error.object_not_found')
-          } else if (error.response.data.message === 'Access denied.') {
-            that.getallmessage_test = true
-            that.getallmessage_error_msg = that.$t('error.access_denied')
+          } else if (error.response.data.message === 'Commenting is not allowed.') {
+            that.can_comment = false
           }
         })
     },
@@ -541,6 +573,7 @@ export default {
             }
           })
         .then(function (response) {
+          console.log(response.data.content)
           that.replies = response.data.content
           that.modal_rows = response.data.count
         })
@@ -623,9 +656,7 @@ export default {
           } else if (error.response.data.message === 'Access denied.') {
             that.add_message_test = true
             that.add_message_error_msg = that.$t('error.access_denied')
-          } else if (
-            error.response.data.message === 'Commenting is not allowed.'
-          ) {
+          } else if (error.response.data.message === 'Commenting is not allowed.') {
             that.add_message_test = true
             that.add_message_error_msg = that.$t(
               'prompt.user_comment_not_allowed'
@@ -684,13 +715,28 @@ export default {
 </script>
 
 <style scoped>
+.margin-right-1 {
+  margin-right: 1rem;
+}
+
 .time-style {
+  margin-right: 1rem;
+  font-size: 14px;
   color: #adb5bd;
 }
 
+.time-remind {
+  display: flex;
+  flex-direction: row;
+}
+
+.reply-message {
+  padding: 1rem 0 0 3rem;
+}
+
 .textarea-style {
-  width: 100%;
-  height: 30%;
+  width: 93%;
+  height: 70%;
   padding: 0;
   resize: none;
   border: solid 2px #ddd;
@@ -705,33 +751,88 @@ export default {
 }
 
 .commit-button-style {
-  width: 100%;
+  width: 8%;
+  height: 70%;
   text-align: right;
 }
 
-.form-style {
-  width: 100%;
-  padding: 0;
-  text-align: right;
+.all-reply {
+  display: flex;
+  flex-direction: row;
+  padding-left: 3rem;
+  font-size: 14px;
 }
 
-.message-content {
-  margin-bottom: 5px;
+.look-all {
+  color: #096;
+  cursor: pointer;
+}
+
+.row1 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.row2 {
+  display: flex;
+  flex-direction: row;
+}
+
+.row3 {
+  font-size: 14px;
+  font-weight: bold;
+  color: #999;
+}
+
+.text-align-left {
+  text-align: left;
+}
+
+.message-area {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 90%;
+  height: 100%;
+  border-bottom: 1px solid #eee;
+}
+
+.message-list-area {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 90%;
+  height: 100%;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.comment-style {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  height: 6rem;
+  margin: 1rem 0.5rem 1rem 0;
 }
 
 .piece-of-message {
-  width: 98%;
-  height: 50%;
-  margin: 10px;
-  text-align: left;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  height: auto;
+  margin: 1rem 0.5rem 1rem 0;
 }
 
-#operator {
-  text-align: left;
+.user-avatar {
+  width: 10%;
+  padding-top: 0.3rem;
+  vertical-align: center;
 }
 
 .vote-style {
-  height: 25px;
+  width: 15px;
+  height: 15px;
 }
 
 .vote-style:hover {
@@ -739,19 +840,42 @@ export default {
 }
 
 .userimg {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   margin-right: 20px;
   border-radius: 50%;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
-.text-align-left {
-  text-align: left;
+.delete-comment {
+  text-align: right;
 }
 
-.delete-comment {
-  color: #f00;
-  text-align: right;
+.add_comment {
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  background-color: #cce5ff;
+  border: none;
+}
+
+.message-username {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.message-list-username {
+  font-size: 15px;
+  font-weight: bold;
+  color: #333;
+}
+
+.vip-style {
+  font-size: 16px;
+  font-weight: bold;
+  color: rgba(255, 234, 18, 0.75);
 }
 </style>

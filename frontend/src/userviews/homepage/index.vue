@@ -98,7 +98,6 @@ export default {
         'http://localhost:8000/api/v1/courses/forestage/course/get-recent-courses'
       )
       .then(function (response) {
-        // console.log(response.data.free_courses)
         that.freecourselist = response.data.free_courses
         that.paidcourselist = response.data.paid_courses
       })
