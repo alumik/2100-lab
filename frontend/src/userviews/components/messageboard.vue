@@ -175,38 +175,46 @@
             src="../../assets/logo.png">
         </div>
         <div class="message-list-area">
-          <div>{{ message_list[index-1].username }}</div>
-          <div>{{ message_list[index-1].content }}</div>
-          <label class="time-style">&emsp;{{ message_list[index-1].created_at }}评论</label>
-          <label
-            id="reply-button"
-            @click="want_reply(message_list[index-1].comment_id)">
-            回复
-          </label>
-          <label
-            id="watch-more"
-            @click="watch_all_replies(message_list[index-1].comment_id)">
-            更多回复
-          </label>
-          <div
-            v-if="message_list[index-1].username === $store.state.user.username"
-            id="delete-button"
-            class="delete-comment"
-            @click="delete_comment(message_list[index-1].comment_id)">
-            <label>×</label>
+          <div style="display: flex; flex-direction: row; justify-content: space-between;">
+            <div>{{ message_list[index-1].username }}</div>
+            <div
+              v-if="message_list[index-1].username === $store.state.user.username"
+              id="delete-button"
+              class="delete-comment"
+              @click="delete_comment(message_list[index-1].comment_id)">删除</div>
           </div>
-          {{ message_list[index-1].up_votes }}
-          <b-img
-            id="praise-button"
-            :src="message_list[index-1].up_voted === true ? up_icon_after : up_icon_before"
-            class="vote-style "
-            @click="up_vote(index-1,message_list[index-1].comment_id)"/>
-          &emsp; &emsp;{{ message_list[index-1].down_votes }}
-          <b-img
-            id="detest-button"
-            :src="message_list[index-1].down_voted === true ? down_icon_after : down_icon_before"
-            class="vote-style "
-            @click="down_vote(index-1,message_list[index-1].comment_id)"/>
+          <div>{{ message_list[index-1].content }}</div>
+          <div style="display: flex; flex-direction: row;">
+            <div
+              class="time-style"
+              style="margin-right: 1rem;">
+              {{ (message_list[index-1].created_at).substring(0,10) }}
+              &nbsp;{{ (message_list[index-1].created_at).substring(11,19) }}</div>
+            <div style="margin-right: 1rem;">
+              {{ message_list[index-1].up_votes }}
+              <b-img
+                id="praise-button"
+                :src="message_list[index-1].up_voted === true ? up_icon_after : up_icon_before"
+                class="vote-style "
+                @click="up_vote(index-1,message_list[index-1].comment_id)"/>
+              &emsp; {{ message_list[index-1].down_votes }}
+              <b-img
+                id="detest-button"
+                :src="message_list[index-1].down_voted === true ? down_icon_after : down_icon_before"
+                class="vote-style "
+                @click="down_vote(index-1,message_list[index-1].comment_id)"/>
+            </div>
+            <div
+              id="reply-button"
+              @click="want_reply(message_list[index-1].comment_id)">
+              回复
+            </div>
+            <!--<div-->
+            <!--id="watch-more"-->
+            <!--@click="watch_all_replies(message_list[index-1].comment_id)">-->
+            <!--更多回复-->
+            <!--</div>-->
+          </div>
         </div>
         <!--<b-row>-->
         <!--<b-col>-->
@@ -720,9 +728,11 @@ export default {
 
 .message-list-area {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: space-around;
   width: 90%;
   height: 100%;
+  text-align: left;
   border-bottom: 1px solid #ccc;
 }
 
@@ -736,12 +746,13 @@ export default {
 
 .user-avatar {
   width: 10%;
-  vertical-align: center;
   padding-top: 0.3rem;
+  vertical-align: center;
 }
 
 .vote-style {
-  height: 25px;
+  width: 15px;
+  height: 15px;
 }
 
 .vote-style:hover {
@@ -761,7 +772,6 @@ export default {
 }
 
 .delete-comment {
-  color: #f00;
   text-align: right;
 }
 </style>
