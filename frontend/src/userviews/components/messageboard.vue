@@ -1,5 +1,12 @@
 <template>
   <div id="message-board">
+    <div style="text-align: left;">
+      {{ rows }}
+      <simple-line-icons
+        icon="bubble"
+        size="small"
+        color="#009966"/>
+    </div>
     <div>
       <b-modal
         id="reply-popup"
@@ -135,126 +142,111 @@
         @dismissed="add_message_test=false">
         {{ add_message_error_msg }}
       </b-alert>
-      <!--<div style="text-align: center; border-left: 1px solid #ccc; border-right: 1px solid #ccc;">-->
-      <!--<simple-line-icons-->
-      <!--icon="bubble"-->
-      <!--color="#999"-->
-      <!--size="small"/>-->
-      <!--</div>-->
-      <div style="margin-top: 2rem;">
-        <textarea
-          id="input-message"
-          v-model="new_msg"
-          class="textarea-style"
-          placeholder="请输入留言"
-          @keyup.enter="add_comment"/>
-        <br>
-        <div
-          id="commit-button"
-          class="commit-button-style">
-          <b-button
-            @click="add_comment">评论</b-button>
-          <hr>
+      <div
+        class="piece-of-message" >
+        <div class="user-avatar">
+          <img
+            :src="$store.state.address + this.$store.state.user.avatar"
+            class="userimg">
+        </div>
+        <div class="message-area">
+          <textarea
+            id="input-message"
+            v-model="new_msg"
+            class="textarea-style"
+            placeholder="请输入留言"
+            @keyup.enter="add_comment"/>
+          <div
+            id="commit-button"
+            class="commit-button-style">
+            <b-button
+              style="weight: 100%; height: 100%; background-color: #cce5ff; border: none; color: #333; font-size: 14px; font-weight: bold;"
+              @click="add_comment">发表<br>评论</b-button>
+          </div>
         </div>
       </div>
-      <div class="form-style">
-        <div
-          v-for="index in message_list.length"
-          id="comment"
-          :key="index"
-          class="piece-of-message">
-          <div id="piece-of-message">
-            <b-row>
-              <b-col cols="1">
-                <img
-                  id="userimg"
-                  class="userimg"
-                  src="../../assets/logo.png">
-              </b-col>
-              <b-col cols="2">
-                {{ message_list[index-1].username }}
-              </b-col>
-              <b-col cols="4">
-                <label class="time-style">&emsp;{{ message_list[index-1].created_at }}评论</label>
-              </b-col>
-              <b-col>
-                <label
-                  id="reply-button"
-                  @click="want_reply(message_list[index-1].comment_id)">
-                  回复
-                </label>
-                <label
-                  id="watch-more"
-                  @click="watch_all_replies(message_list[index-1].comment_id)">
-                  更多回复
-                </label>
-              </b-col>
-              <b-col
-                v-if="message_list[index-1].username === $store.state.user.username"
-                id="delete-button"
-                class="delete-comment"
-                @click="delete_comment(message_list[index-1].comment_id)">
-                <label>×</label>
-              </b-col>
-            </b-row>
-            <p class="message-content">{{ message_list[index-1].content }}</p>
-          </div>
-          <b-row class="text-align-right">
-            <b-col>
-              {{ message_list[index-1].up_votes }}
-              <b-img
-                id="praise-button"
-                :src="message_list[index-1].up_voted === true ? up_icon_after : up_icon_before"
-                class="vote-style "
-                @click="up_vote(index-1,message_list[index-1].comment_id)"/>
-              &emsp; &emsp;{{ message_list[index-1].down_votes }}
-              <b-img
-                id="detest-button"
-                :src="message_list[index-1].down_voted === true ? down_icon_after : down_icon_before"
-                class="vote-style "
-                @click="down_vote(index-1,message_list[index-1].comment_id)"/>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <div
-                v-for="i in message_list[index-1].replies.length"
-                :key="i">
-                <div>
-                  <b-row>
-                    <b-col class="text-align-left">
-                      {{ message_list[index-1].replies[i-1].username }}
-                      <label class="time-style">&emsp;
-                        {{ message_list[index-1].replies[i-1].created_at }}
-                        回复{{ message_list[index-1].username }}</label>
-                    </b-col>
-                    <b-col
-                      v-if="message_list[index-1].replies[i-1].username === $store.state.user.username"
-                      class="delete-comment"
-                      @click="delete_comment(message_list[index-1].replies[i-1].comment_id)">
-                      <label>×</label>
-                    </b-col>
-                  </b-row>
-                  <p class="message-content">{{ message_list[index-1].replies[i-1].content }}</p>
-                </div>
-                <b-row class="text-align-right">
-                  <b-col>
-                    {{ message_list[index-1].replies[i-1].up_votes }}
-                    <b-img
-                      :src="message_list[index-1].replies[i-1].up_voted === true ? up_icon_after : up_icon_before"
-                      class="vote-style "
-                      @click="up_vote_child_reply(index-1, i-1, message_list[index-1].replies[i-1].comment_id)"/>
-                    &emsp; &emsp;{{ message_list[index-1].replies[i-1].down_votes }}
-                    <b-img
-                      :src="message_list[index-1].replies[i-1].down_voted === true ? down_icon_after : down_icon_before"
-                      class="vote-style "
-                      @click="down_vote_child_reply(index-1, i-1, message_list[index-1].replies[i-1].comment_id)"/>
-                  </b-col>
-                </b-row>
-              </div>
-            </b-col>
-          </b-row>
+      <div
+        v-for="index in message_list.length"
+        :key="index"
+        class="piece-of-message">
+        <div class="user-avatar">
+          <img
+            class="userimg"
+            src="../../assets/logo.png">
         </div>
+        <div class="message-list-area">
+          <div>{{ message_list[index-1].username }}</div>
+          <div>{{ message_list[index-1].content }}</div>
+          <label class="time-style">&emsp;{{ message_list[index-1].created_at }}评论</label>
+          <label
+            id="reply-button"
+            @click="want_reply(message_list[index-1].comment_id)">
+            回复
+          </label>
+          <label
+            id="watch-more"
+            @click="watch_all_replies(message_list[index-1].comment_id)">
+            更多回复
+          </label>
+          <div
+            v-if="message_list[index-1].username === $store.state.user.username"
+            id="delete-button"
+            class="delete-comment"
+            @click="delete_comment(message_list[index-1].comment_id)">
+            <label>×</label>
+          </div>
+          {{ message_list[index-1].up_votes }}
+          <b-img
+            id="praise-button"
+            :src="message_list[index-1].up_voted === true ? up_icon_after : up_icon_before"
+            class="vote-style "
+            @click="up_vote(index-1,message_list[index-1].comment_id)"/>
+          &emsp; &emsp;{{ message_list[index-1].down_votes }}
+          <b-img
+            id="detest-button"
+            :src="message_list[index-1].down_voted === true ? down_icon_after : down_icon_before"
+            class="vote-style "
+            @click="down_vote(index-1,message_list[index-1].comment_id)"/>
+        </div>
+        <!--<b-row>-->
+        <!--<b-col>-->
+        <!--<div-->
+        <!--v-for="i in message_list[index-1].replies.length"-->
+        <!--:key="i">-->
+        <!--<div>-->
+        <!--<b-row>-->
+        <!--<b-col class="text-align-left">-->
+        <!--{{ message_list[index-1].replies[i-1].username }}-->
+        <!--<label class="time-style">&emsp;-->
+        <!--{{ message_list[index-1].replies[i-1].created_at }}-->
+        <!--回复{{ message_list[index-1].username }}</label>-->
+        <!--</b-col>-->
+        <!--<b-col-->
+        <!--v-if="message_list[index-1].replies[i-1].username === $store.state.user.username"-->
+        <!--class="delete-comment"-->
+        <!--@click="delete_comment(message_list[index-1].replies[i-1].comment_id)">-->
+        <!--<label>×</label>-->
+        <!--</b-col>-->
+        <!--</b-row>-->
+        <!--<p class="message-content">{{ message_list[index-1].replies[i-1].content }}</p>-->
+        <!--</div>-->
+        <!--<b-row class="text-align-right">-->
+        <!--<b-col>-->
+        <!--{{ message_list[index-1].replies[i-1].up_votes }}-->
+        <!--<b-img-->
+        <!--:src="message_list[index-1].replies[i-1].up_voted === true ? up_icon_after : up_icon_before"-->
+        <!--class="vote-style "-->
+        <!--@click="up_vote_child_reply(index-1, i-1, message_list[index-1].replies[i-1].comment_id)"/>-->
+        <!--&emsp; &emsp;{{ message_list[index-1].replies[i-1].down_votes }}-->
+        <!--<b-img-->
+        <!--:src="message_list[index-1].replies[i-1].down_voted === true ? down_icon_after : down_icon_before"-->
+        <!--class="vote-style "-->
+        <!--@click="down_vote_child_reply(index-1, i-1, message_list[index-1].replies[i-1].comment_id)"/>-->
+        <!--</b-col>-->
+        <!--</b-row>-->
+        <!--</div>-->
+        <!--</b-col>-->
+        <!--</b-row>-->
       </div>
       <div>
         <Pagination
@@ -696,8 +688,8 @@ export default {
 }
 
 .textarea-style {
-  width: 100%;
-  height: 30%;
+  width: 93%;
+  height: 70%;
   padding: 0;
   resize: none;
   border: solid 2px #ddd;
@@ -712,29 +704,40 @@ export default {
 }
 
 .commit-button-style {
-  width: 100%;
+  width: 8%;
+  height: 70%;
   text-align: right;
 }
 
-.form-style {
-  width: 100%;
-  padding: 0;
-  text-align: right;
+.message-area {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 90%;
+  height: 100%;
+  border-bottom: 1px solid #ccc;
 }
 
-.message-content {
-  margin-bottom: 5px;
+.message-list-area {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  height: 100%;
+  border-bottom: 1px solid #ccc;
 }
 
 .piece-of-message {
-  width: 98%;
-  height: 50%;
-  margin: 10px;
-  text-align: left;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  height: 6rem;
+  margin: 1rem 0.5rem 1rem 0;
 }
 
-#operator {
-  text-align: left;
+.user-avatar {
+  width: 10%;
+  vertical-align: center;
+  padding-top: 0.3rem;
 }
 
 .vote-style {
@@ -746,8 +749,8 @@ export default {
 }
 
 .userimg {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   margin-right: 20px;
   border-radius: 50%;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);

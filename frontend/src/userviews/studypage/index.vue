@@ -24,10 +24,9 @@
       @dismissed="beforedestroy_error_msg=false">
       {{ beforedestroy_error_msg }}
     </b-alert>
-    <div style="background-color: #f7f7f7; padding: 0 5rem;">
+    <div class="study-background">
       <div
-        class="container"
-        style="background-color: #fff; padding: 0 3rem;">
+        class="container">
         <div id="content">
           <div
             id="media"
@@ -60,7 +59,7 @@
               <div
                 class="delete-margin text-left-style"
                 style="margin-right: 1rem; display: flex; flex-direction: row; align-items: center;">
-                <div style="font-size: 2rem;">{{ course.title }}&emsp;</div>
+                <div style="font-size: 1.7rem;">{{ course.title }}&emsp;</div>
                 <div
                   v-b-toggle.course-description
                   @click="changeFoldState">
@@ -92,11 +91,6 @@
             </b-collapse>
           </div>
           <hr>
-          <div style="text-align: left;">
-            <simple-line-icons
-              icon="bubble"
-              size="small"/>留言
-          </div>
           <MessageBoard :course_id="query_course_id"/>
         </div>
       </div>
@@ -265,6 +259,11 @@ export default {
 </script>
 
 <style scoped>
+  .study-background {
+    padding: 0 5rem;
+    background-color: #f7f7f7;
+  }
+
   .media-style {
     display: flex;
     flex-direction: row;
@@ -316,5 +315,21 @@ export default {
     font-size: 18px;
     color: #ccc;
     cursor: pointer;
+  }
+
+  .container {
+    padding: 0 3rem;
+    background-color: #fff;
+  }
+
+  @media (max-width: 500px) {
+    .study-background {
+      padding: 0;
+    }
+
+    .container {
+      padding: 0;
+      background-color: #fff;
+    }
   }
 </style>
