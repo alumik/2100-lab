@@ -65,8 +65,7 @@
               </div>
               <div style="display: flex; flex-direction: row;">
                 <label class="time-style">
-                  {{ (replies[i-1].created_at).substring(0,10) }}
-                  &nbsp;{{ (replies[i-1].created_at).substring(11,19) }}
+                  {{ get_date(replies[i-1].created_at).substring(0,10) }}
                 </label>
                 <div>
                   &emsp;{{ replies[i-1].up_votes }}
@@ -208,8 +207,7 @@
           <div class="time-remind">
             <div
               class="time-style">
-              {{ (message_list[index-1].created_at).substring(0,10) }}
-              &nbsp;{{ (message_list[index-1].created_at).substring(11,19) }}
+              {{ get_date(message_list[index-1].created_at) }}
             </div>
             <div class="margin-right-1">
               {{ message_list[index-1].up_votes }}
@@ -265,10 +263,7 @@
                 </div>
                 <div style="display: flex; flex-direction: row;">
                   <label class="time-style">
-                    {{ (message_list[index-1].replies[i-1].created_at).
-                    substring(0,10) }}
-                    &nbsp;{{ (message_list[index-1].replies[i-1].created_at).
-                    substring(11,19) }}
+                    {{ get_date(message_list[index-1].replies[i-1].created_at) }}
                   </label>
                   <div>
                     &emsp;{{ message_list[index-1].replies[i-1].up_votes }}
@@ -372,6 +367,10 @@ export default {
     this.get_all_message()
   },
   methods: {
+    get_date: function (date) {
+      let temp = new Date(date)
+      return temp.toLocaleString()
+    },
     change_list_page: function (page) {
       let that = this
       that.modal_page = page
@@ -392,7 +391,7 @@ export default {
       axios
         .get(
           'http://localhost/api/v1/courses/forestage/play/' +
-          'get-course-comments/',
+            'get-course-comments/',
           {
             params: {
               course_id: that.course_id,
@@ -409,8 +408,7 @@ export default {
         .catch(function (error) {
           if (error.response.data.message === 'Object not found.') {
             that.get_all_message_test = true
-            that.get_all_message_error_msg =
-              that.$t('error.object_not_found')
+            that.get_all_message_error_msg = that.$t('error.object_not_found')
           } else if (
             error.response.data.message === 'Commenting is not allowed.'
           ) {
@@ -423,8 +421,9 @@ export default {
       axios
         .get(
           'http://localhost/api/v1/courses/forestage/play/' +
-          'up-vote-comment?' +
-            'comment_id=' + Id
+            'up-vote-comment?' +
+            'comment_id=' +
+            Id
         )
         .then(function (response) {
           if (response.data.message === 'Object not found.') {
@@ -451,7 +450,7 @@ export default {
       axios
         .get(
           'http://localhost/api/v1/courses/forestage/play' +
-          '/up-vote-comment?' +
+            '/up-vote-comment?' +
             'comment_id=' +
             Id
         )
@@ -482,8 +481,9 @@ export default {
       axios
         .get(
           'http://localhost/api/v1/courses/forestage/play/' +
-          'up-vote-comment?' +
-            'comment_id=' + Id
+            'up-vote-comment?' +
+            'comment_id=' +
+            Id
         )
         .then(function (response) {
           if (response.data.message === 'Object not found.') {
@@ -510,8 +510,9 @@ export default {
       axios
         .get(
           'http://localhost/api/v1/courses/forestage/play/' +
-          'down-vote-comment?' +
-            'comment_id=' + Id
+            'down-vote-comment?' +
+            'comment_id=' +
+            Id
         )
         .then(function (response) {
           if (response.data.down_voted === true) {
@@ -537,7 +538,7 @@ export default {
       axios
         .get(
           'http://localhost/api/v1/courses/forestage/play/' +
-          'down-vote-comment?' +
+            'down-vote-comment?' +
             'comment_id=' +
             msgCommentId
         )
@@ -567,7 +568,7 @@ export default {
       axios
         .get(
           'http://localhost/api/v1/courses/forestage/play/' +
-          'down-vote-comment?' +
+            'down-vote-comment?' +
             'comment_id=' +
             msgCommentId
         )
@@ -598,14 +599,16 @@ export default {
     get_replies: function (commentId) {
       let that = this
       axios
-        .get('http://localhost/api/v1/courses/forestage/play/' +
-          'get-replies/', {
-          params: {
-            comment_id: commentId,
-            page_limit: that.modal_page_limit,
-            page: that.modal_page
+        .get(
+          'http://localhost/api/v1/courses/forestage/play/' + 'get-replies/',
+          {
+            params: {
+              comment_id: commentId,
+              page_limit: that.modal_page_limit,
+              page: that.modal_page
+            }
           }
-        })
+        )
         .then(function (response) {
           that.replies = response.data.content
           that.modal_rows = response.data.count
@@ -615,8 +618,7 @@ export default {
       let that = this
       axios
         .post(
-          'http://localhost/api/v1/courses/forestage/play' +
-          '/delete-comment/',
+          'http://localhost/api/v1/courses/forestage/play' + '/delete-comment/',
           qs.stringify({
             comment_id: commentId
           })
@@ -630,8 +632,7 @@ export default {
         .catch(function (error) {
           if (error.response.data.message === 'Object not found.') {
             that.delete_message_test = true
-            that.delete_message_error_msg =
-              that.$t('error.object_not_found')
+            that.delete_message_error_msg = that.$t('error.object_not_found')
           } else if (error.response.data.message === 'Access denied.') {
             that.delete_message_test = true
             that.delete_message_error_msg = that.$t('error.access_denied')
@@ -642,8 +643,7 @@ export default {
       let that = this
       axios
         .post(
-          'http://localhost/api/v1/courses/forestage/play' +
-          '/delete-comment/',
+          'http://localhost/api/v1/courses/forestage/play' + '/delete-comment/',
           qs.stringify({
             comment_id: commentId
           })
@@ -659,8 +659,7 @@ export default {
         .catch(function (error) {
           if (error.response.data.message === 'Object not found.') {
             that.delete_message_test = true
-            that.delete_message_error_msg =
-              that.$t('error.object_not_found')
+            that.delete_message_error_msg = that.$t('error.object_not_found')
           } else if (error.response.data.message === 'Access denied.') {
             that.delete_message_test = true
             that.delete_message_error_msg = that.$t('error.access_denied')
