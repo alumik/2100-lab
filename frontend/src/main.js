@@ -56,27 +56,32 @@ const store = new Vuex.Store({
       {
         id: 1,
         isActive: false,
-        path: '/admin/course'
+        path: '/admin/course',
+        permit: 'course_admin'
       },
       {
         id: 2,
         isActive: false,
-        path: '/admin/message'
+        path: '/admin/message',
+        permit: 'comment_admin'
       },
       {
         id: 3,
         isActive: false,
-        path: '/admin/user'
+        path: '/admin/user',
+        permit: 'customer_admin'
       },
       {
         id: 4,
         isActive: false,
-        path: '/admin/order'
+        path: '/admin/order',
+        permit: 'order_admin'
       },
       {
         id: 5,
         isActive: false,
-        path: '/admin/log'
+        path: '/admin/log',
+        permit: 'log_admin'
       },
       {
         id: 6,
@@ -175,6 +180,9 @@ router.beforeEach(async (to, from, next) => {
   } else if (response.data.is_authenticated && response.data.is_staff) {
     for (let list of store.state.lists) {
       if (to.path.toString().includes(list.path)) {
+        if (!response.data.admin_groups.includes(list.permit)) {
+          next('/admin/main')
+        }
         sessionStorage.setItem('menu', list.id)
         sessionStorage.setItem('colors', parseInt(list.id) - 1)
       }
