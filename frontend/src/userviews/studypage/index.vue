@@ -290,11 +290,11 @@ export default {
   text-align: left;
 }
 
-  .study-background {
-    min-height: calc(100vh - 170px);
-    padding: 0 5rem;
-    background-color: #f7f7f7;
-  }
+.study-background {
+  min-height: calc(100vh - 170px);
+  padding: 0 5rem;
+  background-color: #f7f7f7;
+}
 
 .media-style {
   display: flex;
