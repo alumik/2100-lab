@@ -51,7 +51,7 @@
                       V
                     </label>
                   </div>
-                  <div>&emsp;{{ replies[i-1].content }}</div>
+                  <div class="comment-wrap">&emsp;{{ replies[i-1].content }}</div>
                 </div>
                 <div
                   v-if="replies[i-1].username === $store.state.user.username"
@@ -194,7 +194,7 @@
               class="delete-comment"
               @click="delete_comment(message_list[index-1].comment_id)">删除</div>
           </div>
-          <div>{{ message_list[index-1].content }}</div>
+          <div class="comment-wrap">{{ message_list[index-1].content }}</div>
           <div class="time-remind">
             <div
               class="time-style">
@@ -236,7 +236,7 @@
                         V
                       </label>
                     </div>
-                    <div>&emsp;{{ message_list[index-1].replies[i-1].content }}</div>
+                    <div class="comment-wrap">&emsp;{{ message_list[index-1].replies[i-1].content }}</div>
                   </div>
                   <div
                     v-if="message_list[index-1].replies[i-1].username === $store.state.user.username"
@@ -719,6 +719,11 @@ export default {
   margin-right: 1rem;
 }
 
+.comment-wrap {
+  word-break: normal;
+  word-wrap: break-word;
+}
+
 .time-style {
   margin-right: 1rem;
   font-size: 14px;
@@ -740,10 +745,6 @@ export default {
   padding: 0;
   resize: none;
   border: solid 2px #ddd;
-}
-
-.text-align-right {
-  text-align: right;
 }
 
 .textarea-style:focus {

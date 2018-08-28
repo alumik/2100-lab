@@ -27,7 +27,7 @@
             @click="open_detail_page(course.course_id)">
             <div style="border-radius: 25px;">
               <img
-                :src="example_src"
+                :src="$store.state.address+course.thumbnail"
                 class="course-image">
               <div style="padding: 15px;">
                 <h5 class="card-title">

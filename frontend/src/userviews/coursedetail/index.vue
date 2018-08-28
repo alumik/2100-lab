@@ -443,6 +443,7 @@ export default {
       } else {
         this.$root.$emit('bv::hide::modal', 'pay-popup')
       }
+      that.pay_remind_color = 'black'
     },
     hide_log_popup () {
       this.$root.$emit('bv::hide::modal', 'log-popup')
