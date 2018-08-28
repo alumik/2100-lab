@@ -145,7 +145,7 @@
         id="course-image"
         class="course-img-style">
         <b-img
-          :src="course_img_src_example"
+          :src="$store.state.address+course.thumbnail"
           fluid
           thumbnail
           alt="Responsive image Thumbnail"
