@@ -49,8 +49,7 @@ import axios from 'axios'
 export default {
   name: 'UserNavbar',
   data () {
-    return {
-    }
+    return {}
   },
   computed: {
     avatar () {
@@ -111,9 +110,9 @@ export default {
             that.$store.commit('status', false)
             that.$router.push({ path: '/' })
           })
-        //   .catch(error => {
-        //  console.log(error.message)
-        // })
+          .catch(error => {
+            console.log(error.message)
+          })
       } else {
         this.$router.push({ path: '/login' })
       }
@@ -122,7 +121,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .my-navbar {
   margin: 0;
   vertical-align: middle;

@@ -17,8 +17,6 @@
         id="nav_collapse"
         is-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-item>{{ $store.state.status ? '管理员' : '' }}
-          </b-nav-item>
           <b-nav-item
             id="logout"
             @click="log">
@@ -46,6 +44,7 @@
         </b-input-group>
         <b-button
           id="btn"
+          :disabled="disabled"
           type="submit"
           variant="outline-success"
           @click="check">
@@ -67,7 +66,8 @@ export default {
     return {
       phone_number: '',
       password: '',
-      error_message: ''
+      error_message: '',
+      disabled: false
     }
   },
   created () {
@@ -82,6 +82,7 @@ export default {
   },
   methods: {
     check (evt) {
+      this.disabled = true
       const regix = /^1\d{10}$/
       let result = this.phone_number.match(regix)
       if (result === null) {
@@ -104,6 +105,7 @@ export default {
             // this.error_message = '数据库错误'
           })
           .catch(error => {
+            this.disabled = false
             let errorMessage = error.response.data.message
             if (errorMessage === 'User is already authenticated.') {
               this.error_message = '用户已登录'

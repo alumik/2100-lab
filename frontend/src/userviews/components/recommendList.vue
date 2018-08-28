@@ -82,7 +82,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .remind {
     display: flex;
     justify-content: space-between;

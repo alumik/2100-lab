@@ -13,26 +13,38 @@ export default new Router({
     {
       path: '/burnedcourse',
       name: 'BurnedCourse',
-      component: () => import('@/userviews/burnedcoursepage/index'),
-      meta: {title: '课程已焚毁' + forestage_suffix}
+      meta: {
+        title: '课程已焚毁' + forestage_suffix,
+        requireAuth: false
+      },
+      component: () => import('@/userviews/burnedcoursepage/index')
     },
     {
       path: '/404',
       name: 'PageNotFound',
-      component: () => import('@/userviews/pagenotfound/index'),
-      meta: {title: '未找到页面' + forestage_suffix}
+      meta: {
+        title: '未找到页面' + forestage_suffix,
+        requireAuth: false
+      },
+      component: () => import('@/userviews/pagenotfound/index')
     },
     {
       path: '/allfreecourse',
       name: 'AllFreeCourse',
-      component: () => import('@/userviews/allcourselistpage/allFreeCoursePage'),
-      meta: {title: '免费课程' + forestage_suffix}
+      meta: {
+        title: '免费课程' + forestage_suffix,
+        requireAuth: false
+      },
+      component: () => import('@/userviews/allcourselistpage/allFreeCoursePage')
     },
     {
       path: '/allpaidcourse',
       name: 'AllPaidCourse',
-      component: () => import('@/userviews/allcourselistpage/allPaidCoursePage'),
-      meta: {title: '付费课程' + forestage_suffix}
+      meta: {
+        title: '付费课程' + forestage_suffix,
+        requireAuth: false
+      },
+      component: () => import('@/userviews/allcourselistpage/allPaidCoursePage')
     },
     {
       path: '/personal',
@@ -79,8 +91,11 @@ export default new Router({
     {
       path: '/coursedetail',
       name: 'CourseDetail',
-      component: () => import('@/userviews/coursedetail/index'),
-      meta: {title: '课程详情' + forestage_suffix}
+      meta: {
+        title: '课程详情' + forestage_suffix,
+        requireAuth: false
+      },
+      component: () => import('@/userviews/coursedetail/index')
     },
     {
       path: '/admin',

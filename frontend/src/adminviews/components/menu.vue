@@ -11,9 +11,11 @@
     <ul class="components">
       <li
         v-for="i in lists.length"
+        v-show="$store.state.groups.includes(i)"
         :key="i"
         :class="{ active: $store.state.menu.toString() === i.toString() }">
-        <a @click="jump(i)">
+        <a
+          @click="jump(i)">
           <simple-line-icons
             :icon="icons[i-1]"
             :color="colors[i-1]"
@@ -27,6 +29,7 @@
 
 <script>
 import './style/style.css'
+import axios from 'axios'
 export default {
   name: 'Menu',
   props: {
@@ -96,6 +99,26 @@ export default {
       colors: this.$store.state.colors
     }
   },
+  computed: {
+  },
+  async created () {
+    this.$store.commit('menu', sessionStorage.getItem('menu'))
+    this.$store.commit('colors', sessionStorage.getItem('colors'))
+    try {
+      let response = await axios.post(
+        'http://localhost:8000/api/v1/core/auth/is-authenticated/',
+        {
+          withCredentials: true
+        }
+      )
+      if (response.data.is_authenticated && response.data.is_staff) {
+        this.$store.commit('status')
+        this.$store.commit('groups', response.data.admin_groups)
+      }
+    } catch (error) {
+      alert(error.message)
+    }
+  },
   methods: {
     jump: function (id) {
       this.$emit('jump', id)
@@ -107,7 +130,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #sidebar {
   position: fixed;
   text-align: left;
