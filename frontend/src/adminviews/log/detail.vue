@@ -161,7 +161,7 @@ export default {
     compute_admin_name: function (name) {
       let index = name.search('_deleted_')
       if (index !== -1) {
-        return name.slice(0, index) + '\n' + '（已删除）'
+        return name.slice(0, index) + '（已删除）'
       } else {
         return name
       }

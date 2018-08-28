@@ -210,6 +210,10 @@ export default {
     },
     toggle_all (checked) {
       if (checked) {
+        this.select1 = []
+        this.select2 = []
+        this.select3 = []
+        this.select4 = []
         for (let i = 0; i < 4; i++) {
           this.select1.push(this.options1[i].value)
           this.select2.push(this.options2[i].value)
