@@ -270,7 +270,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .media-style {
     display: flex;
     flex-direction: column;

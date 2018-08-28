@@ -93,7 +93,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .container {
   padding: 20px 0 20px 0;
 }

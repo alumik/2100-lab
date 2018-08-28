@@ -130,7 +130,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #sidebar {
   position: fixed;
   text-align: left;
