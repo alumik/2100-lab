@@ -37,11 +37,8 @@
                   id="image"
                   class="image-style">
                   <b-img
-                    src="https://picsum.photos/400/250/?image=410"
+                    :src="now_picture"
                     class="course-image"/>
-                <!--<b-img-->
-                <!--:src="now_picture"-->
-                <!--class="course-image"/>-->
                 </div>
                 <div class="audio-style">
                   <audio
@@ -61,7 +58,7 @@
             <div class="introduction-style">
               <div
                 class="delete-margin text-left-style">
-                <div style="font-size: 1.7rem;">{{ course.title }}&emsp;
+                <div class="font-style">{{ course.title }}&emsp;
                 </div>
                 <div
                   v-b-toggle.course-description
@@ -272,6 +269,10 @@ export default {
 </script>
 
 <style>
+.font-style {
+  font-size: 1.7rem;
+}
+
 .introduction-style {
   display: flex;
   flex-direction: row;

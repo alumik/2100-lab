@@ -63,7 +63,7 @@
                   <label>删除</label>
                 </div>
               </div>
-              <div style="display: flex; flex-direction: row;">
+              <div class="zone">
                 <label class="time-style">
                   {{ get_date(replies[i-1].created_at).substring(0,10) }}
                 </label>
@@ -261,7 +261,7 @@
                     <label>删除</label>
                   </div>
                 </div>
-                <div style="display: flex; flex-direction: row;">
+                <div class="zone">
                   <label class="time-style">
                     {{ get_date(message_list[index-1].replies[i-1].created_at) }}
                   </label>
@@ -755,6 +755,11 @@ export default {
 <style scoped>
 .margin-right-1 {
   margin-right: 1rem;
+}
+
+.zone {
+  display: flex;
+  flex-direction: row;
 }
 
 .comment-wrap {

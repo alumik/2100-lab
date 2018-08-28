@@ -26,11 +26,11 @@
             lg="3"
             class="col-style"
             @click="open_detail_page(course.course_id)">
-            <div style="border-radius: 25px;">
+            <div class="border-radius">
               <img
                 :src="$store.state.address+course.thumbnail"
                 class="course-image">
-              <div style="padding: 15px;">
+              <div class="padding-style">
                 <h5 class="card-title">
                   {{ course.title }}
                 </h5>
@@ -84,6 +84,14 @@ export default {
 </script>
 
 <style scoped>
+.padding-style {
+  padding: 15px;
+}
+
+.border-radius {
+  border-radius: 25px;
+}
+
 .remind {
   display: flex;
   justify-content: space-between;
