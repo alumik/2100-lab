@@ -33,7 +33,9 @@
             class="media-style">
             <div class="sub-media">
               <div>
-                <div class="image-style">
+                <div
+                  id="image"
+                  class="image-style">
                   <b-img
                     src="https://picsum.photos/400/250/?image=410"
                     class="course-image"/>
@@ -41,8 +43,9 @@
                 <!--:src="now_picture"-->
                 <!--class="course-image"/>-->
                 </div>
-                <div style="vertical-align: center; height: 2.5rem;">
+                <div class="audio-style">
                   <audio
+                    id="audio"
                     ref="player"
                     :src="audio_src"
                     autoplay
@@ -55,13 +58,13 @@
             </div>
           </div>
           <div id="introduction">
-            <div style="margin: 2rem 0; display: flex; flex-direction: row; flex-grow: 2; flex-shrink: 2; align-items: center;">
+            <div class="introduction-style">
               <div
-                class="delete-margin text-left-style"
-                style="margin-right: 1rem; display: flex; flex-direction: row; align-items: center;">
+                class="delete-margin text-left-style">
                 <div style="font-size: 1.7rem;">{{ course.title }}&emsp;</div>
                 <div
                   v-b-toggle.course-description
+                  id="watch-all"
                   @click="changeFoldState">
                   <simple-line-icons
                     v-if="introduction_brandFold === true"
@@ -85,13 +88,14 @@
             </div>
             <b-collapse
               id="course-description"
-              style="width: auto;"
               class="mt-2">
-              <div style="text-align: left;">&emsp;&emsp;{{ course.description }}</div>
+              <div class="text-align-left">&emsp;&emsp;{{ course.description }}</div>
             </b-collapse>
           </div>
           <hr>
-          <MessageBoard :course_id="query_course_id"/>
+          <MessageBoard
+            id="message-board"
+            :course_id="query_course_id"/>
         </div>
       </div>
     </div>
@@ -258,7 +262,25 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+  .introduction-style {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 2;
+    flex-shrink: 2;
+    align-items: center;
+    margin: 2rem 0;
+  }
+
+  .audio-style {
+    height: 2.5rem;
+    vertical-align: center;
+  }
+
+  .text-align-left {
+    text-align: left;
+  }
+
   .study-background {
     padding: 0 5rem;
     background-color: #f7f7f7;
@@ -297,6 +319,10 @@ export default {
   }
 
   .text-left-style {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 1rem;
     text-align: left;
   }
 

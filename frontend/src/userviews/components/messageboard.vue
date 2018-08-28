@@ -37,10 +37,10 @@
         title="全部回复">
         <div
           v-for="i in replies.length"
-          id="replies-list"
-          :key="i">
-          <br>
+          :key="i"
+          class="reply-message">
           <div>
+<<<<<<< HEAD
             <b-row>
               <b-col
                 class="text-align-left"
@@ -50,33 +50,48 @@
               <b-col cols="6">
                 <label class="time-style">&emsp;
                   {{ replies[i-1].created_at }}回复
+=======
+            <div>
+              <div class="row1">
+                <div class="row2">
+                  <div class="row3">
+                    {{ replies[i-1].username }}
+                    <label
+                      v-if="replies[i-1].user_is_vip === true"
+                      class="vip-style">
+                      V
+                    </label>
+                  </div>
+                  <div>&emsp;{{ replies[i-1].content }}</div>
+                </div>
+                <div
+                  v-if="replies[i-1].username === $store.state.user.username"
+                  class="delete-comment"
+                  @click="delete_list_comment(i-1,replies[i-1].comment_id)">
+                  <label>删除</label>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: row;">
+                <label class="time-style">
+                  {{ (replies[i-1].created_at).substring(0,10) }}
+                  &nbsp;{{ (replies[i-1].created_at).substring(11,19) }}
+>>>>>>> Change the modal reply list sthyle. Ref #387
                 </label>
-              </b-col>
-              <b-col
-                v-if="replies[i-1].username === $store.state.user.username"
-                class="delete-comment"
-                @click="delete_list_comment(i-1,replies[i-1].comment_id)">
-                <label>×</label>
-              </b-col>
-            </b-row>
-            <b-row class="text-align-left">
-              <p class="message-content">{{ replies[i-1].content }}</p>
-            </b-row>
+                <div>
+                  &emsp;{{ replies[i-1].up_votes }}
+                  <b-img
+                    :src="replies[i-1].up_voted === true ? up_icon_after : up_icon_before"
+                    class="vote-style "
+                    @click="modal_up_vote_reply(i-1, replies[i-1].comment_id)"/>
+                  &emsp; &emsp;{{ replies[i-1].down_votes }}
+                  <b-img
+                    :src="replies[i-1].down_voted === true ? down_icon_after : down_icon_before"
+                    class="vote-style "
+                    @click="modal_down_vote_reply(i-1, replies[i-1].comment_id)"/>
+                </div>
+              </div>
+            </div>
           </div>
-          <b-row class="text-align-right">
-            <b-col>
-              {{ replies[i-1].up_votes }}
-              <b-img
-                :src="replies[i-1].up_voted === true ? up_icon_after : up_icon_before"
-                class="vote-style "
-                @click="modal_up_vote_reply(i-1, replies[i-1].comment_id)"/>
-              &emsp; &emsp;{{ replies[i-1].down_votes }}
-              <b-img
-                :src="replies[i-1].down_voted === true ? down_icon_after : down_icon_before"
-                class="vote-style "
-                @click="modal_down_vote_reply(i-1, replies[i-1].comment_id)"/>
-            </b-col>
-          </b-row>
         </div>
         <div>
           <Pagination
@@ -167,6 +182,7 @@
       </div>
       <div
         v-for="index in message_list.length"
+        id="piece-of-message"
         :key="index"
         class="piece-of-message">
         <div class="user-avatar">

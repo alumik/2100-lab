@@ -5,7 +5,7 @@ import Pagination from '@/components/pagination'
 import {shallowMount} from '@vue/test-utils'
 import BootstrapVue from 'bootstrap-vue'
 import Vue from 'vue'
-import Vuex from "vuex";
+import Vuex from 'vuex'
 
 Vue.use(BootstrapVue)
 
@@ -97,9 +97,9 @@ describe('留言板单元测试', () => {
     expect(wrapper.contains('#popup-pagination')).toBe(true)
   })
 
-  it('查看全部留言留言列表测试', () => {
+  it('查看全部留言列表测试', () => {
     wrapper.find('#watch-more').trigger('click')
-    expect(wrapper.contains('#replies-list')).toBe(true)
+    expect(wrapper.contains('#reply-list-popup')).toBe(true)
   })
 
   it('删除留言按钮渲染', () => {
