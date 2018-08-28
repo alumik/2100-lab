@@ -133,7 +133,9 @@ export default {
         }
       })
       .catch(error => {
-        this.error_message = '读取数据出错' + error.response.data.message
+        this.wrong_count_down = 0
+        this.success_count_down = 0
+        this.error_message = this.init_error_message(error.response.data.message)
         this.wrong_count_down = 5
       })
   },
@@ -195,7 +197,7 @@ export default {
         .catch(error => {
           this.wrong_count_down = 0
           this.success_count_down = 0
-          this.error_message = this.init_error_message(error.response.message)
+          this.error_message = this.init_error_message(error.response.data.message)
           this.wrong_count_down = 5
         })
     },
@@ -205,6 +207,8 @@ export default {
           return '用户无权限，拒绝访问'
         case 'Object not found.':
           return '查询的对象不存在'
+        default:
+          return '数据库查询出错'
       }
     },
     router_push () {
