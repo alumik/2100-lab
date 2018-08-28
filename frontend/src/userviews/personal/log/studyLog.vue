@@ -52,8 +52,7 @@ export default {
       ],
       fields: {
         course_codename: {
-          label: '课程代号',
-          sortable: false
+          label: '课程代号'
         },
         course_title: {
           label: '课程名'
@@ -62,8 +61,7 @@ export default {
           label: '学习时间'
         },
         expire_time: {
-          label: '过期时间',
-          variant: 'danger'
+          label: '过期时间'
         }
       },
       crumbs: [
@@ -157,6 +155,7 @@ export default {
 
 #info {
   flex-grow: 1;
+  overflow-x: auto;
 }
 
 .content {

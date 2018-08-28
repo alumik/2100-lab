@@ -87,6 +87,7 @@ export default {
       let result = this.phone_number.match(regix)
       if (result === null) {
         this.error_message = '请输入一个正确的手机号！'
+        this.disabled = false
       } else {
         this.error_message = ''
         axios

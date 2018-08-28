@@ -53,8 +53,7 @@ export default {
       responsive: 'lg',
       fields: {
         order_no: {
-          label: '订单号',
-          sortable: false
+          label: '订单号'
         },
         course_codename: {
           label: '课程编号'
@@ -66,8 +65,7 @@ export default {
           label: '创建时间'
         },
         money: {
-          label: '金额',
-          variant: 'warning'
+          label: '金额'
         }
       },
       crumbs: [
@@ -153,6 +151,7 @@ export default {
 
 #info {
   flex-grow: 1;
+  overflow-x: auto;
 }
 
 .content {
