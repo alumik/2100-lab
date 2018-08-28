@@ -164,7 +164,7 @@ export default {
     const that = this
     axios
       .get(
-        'http://localhost:8000/api/v1/customers/backstage/order-management/get-order-list/',
+        'http://localhost/api/v1/customers/backstage/order-management/get-order-list/',
         {
           params: {
             page_limit: that.per_page,
@@ -214,7 +214,7 @@ export default {
       }
       axios
         .get(
-          'http://localhost:8000/api/v1/customers/backstage/order-management/get-order-list/',
+          'http://localhost/api/v1/customers/backstage/order-management/get-order-list/',
           {
             params: {
               order_no: that.order_code,

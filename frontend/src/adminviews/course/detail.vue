@@ -168,7 +168,7 @@ export default {
   created: function () {
     axios
       .get(
-        'http://localhost:8000/api/v1/courses/backstage/course-management/get-course-detail',
+        'http://localhost/api/v1/courses/backstage/course-management/get-course-detail',
         {
           params: {
             course_id: this.$route.query.course_id
@@ -222,7 +222,7 @@ export default {
     delete_message: function () {
       axios
         .post(
-          'http://localhost:8000/api/v1/courses/backstage/course-management/delete-course/',
+          'http://localhost/api/v1/courses/backstage/course-management/delete-course/',
           qs.stringify({
             course_id: this.$route.query.course_id
           })

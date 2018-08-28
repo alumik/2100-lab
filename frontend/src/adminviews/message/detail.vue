@@ -109,7 +109,7 @@ export default {
     const that = this
     axios
       .get(
-        'http://localhost:8000/api/v1/courses/backstage/comment-management/get-comment-detail/',
+        'http://localhost/api/v1/courses/backstage/comment-management/get-comment-detail/',
         {
           params: {
             comment_id: that.$route.query.message_id
@@ -129,7 +129,7 @@ export default {
       const that = this
       axios
         .get(
-          'http://localhost:8000/api/v1/courses/backstage/comment-management/get-comment-detail/',
+          'http://localhost/api/v1/courses/backstage/comment-management/get-comment-detail/',
           {
             params: {
               comment_id: that.$route.query.message_id
@@ -176,7 +176,7 @@ export default {
       const that = this
       axios
         .post(
-          'http://localhost:8000/api/v1/courses/backstage/comment-management/delete-comment/',
+          'http://localhost/api/v1/courses/backstage/comment-management/delete-comment/',
           qs.stringify({
             comment_id: that.$route.query.message_id
           })
@@ -202,7 +202,7 @@ export default {
       const that = this
       axios
         .post(
-          'http://localhost:8000/api/v1/courses/backstage/comment-management/add-comment/',
+          'http://localhost/api/v1/courses/backstage/comment-management/add-comment/',
           qs.stringify({
             reply_to_id: that.$route.query.message_id,
             comment_content: val

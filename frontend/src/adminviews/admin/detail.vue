@@ -166,7 +166,7 @@ export default {
     this.admin_id = this.$route.query.admin_id
     axios
       .get(
-        'http://localhost:8000/api/v1/admin/backstage/admin-management/get-admin-detail/',
+        'http://localhost/api/v1/admin/backstage/admin-management/get-admin-detail/',
         {
           params: {
             admin_id: this.admin_id
@@ -264,7 +264,7 @@ export default {
       this.$refs.modal.hide()
       axios
         .post(
-          'http://localhost:8000/api/v1/admin/backstage/admin-management/delete-admin/',
+          'http://localhost/api/v1/admin/backstage/admin-management/delete-admin/',
           qs.stringify({
             admin_id: this.admin_id
           })

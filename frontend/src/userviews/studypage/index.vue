@@ -161,7 +161,7 @@ export default {
   created: function () {
     let that = this
     that.query_course_id = parseInt(that.$route.query.course_id)
-    axios.get('http://localhost:8000/api/v1/courses/forestage/play/get-course-assets?' +
+    axios.get('http://localhost/api/v1/courses/forestage/play/get-course-assets?' +
       'course_id=' + that.query_course_id)
       .then(function (response) {
         that.course = response.data
@@ -182,7 +182,7 @@ export default {
           that.assets_error_msg = that.$t('error.access_denied')
         }
       })
-    axios.get('http://localhost:8000/api/v1/courses/forestage/course/get-course-detail?' +
+    axios.get('http://localhost/api/v1/courses/forestage/course/get-course-detail?' +
       'course_id=' + that.query_course_id)
       .then(function (response) {
         var data = response.data
@@ -205,7 +205,7 @@ export default {
   },
   beforeDestroy () {
     let that = this
-    axios.get('http://localhost:8000/api/v1/courses/forestage/play/save-learning-log/', {params: {
+    axios.get('http://localhost/api/v1/courses/forestage/play/save-learning-log/', {params: {
       course_id: that.query_course_id,
       progress: that.audio_current_time
     }}).catch(function (error) {
@@ -221,7 +221,7 @@ export default {
   methods: {
     up_vote_course () {
       let that = this
-      axios.get('http://localhost:8000/api/v1/courses/forestage/course/up-vote-course?' +
+      axios.get('http://localhost/api/v1/courses/forestage/course/up-vote-course?' +
       'course_id=' + that.query_course_id)
         .then(function (response) {
           if (response.data.up_voted === true) {

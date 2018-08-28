@@ -116,7 +116,7 @@ export default {
     this.admin_id = this.$route.query.admin_id
     axios
       .get(
-        'http://localhost:8000/api/v1/admin/backstage/admin-management/get-admin-detail/',
+        'http://localhost/api/v1/admin/backstage/admin-management/get-admin-detail/',
         {
           params: {
             admin_id: this.admin_id
@@ -178,7 +178,7 @@ export default {
       }
       axios
         .post(
-          'http://localhost:8000/api/v1/admin/backstage/admin-management/change-admin-groups/',
+          'http://localhost/api/v1/admin/backstage/admin-management/change-admin-groups/',
           qs.stringify(
             {
               new_admin_groups: adminGroups,

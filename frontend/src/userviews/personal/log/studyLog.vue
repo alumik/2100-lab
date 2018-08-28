@@ -87,7 +87,7 @@ export default {
   async mounted () {
     let that = this
     let res = await axios.get(
-      'http://localhost:8000/api/v1/customers/forestage/personal-center/get-learning-logs/',
+      'http://localhost/api/v1/customers/forestage/personal-center/get-learning-logs/',
       {
         params: {
           page: that.currentPage,
@@ -111,7 +111,7 @@ export default {
     for (let i = 2; i <= that.page_nums; i++) {
       axios
         .get(
-          'http://localhost:8000/api/v1/customers/forestage/personal-center/get-learning-logs/',
+          'http://localhost/api/v1/customers/forestage/personal-center/get-learning-logs/',
           {
             params: {
               page: i,

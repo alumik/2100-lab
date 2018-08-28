@@ -97,7 +97,7 @@ export default {
       } else {
         axios
           .post(
-            'http://localhost:8000/api/v1/admin/backstage/admin-management/change-admin-password/',
+            'http://localhost/api/v1/admin/backstage/admin-management/change-admin-password/',
             qs.stringify({
               admin_id: this.$route.query.admin_id,
               new_password: this.new_password

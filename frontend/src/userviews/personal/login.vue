@@ -136,7 +136,7 @@ export default {
       that.code_disabled = true
       axios
         .post(
-          'http://localhost:8000/api/v1/customers/forestage/auth/get-verification-code/',
+          'http://localhost/api/v1/customers/forestage/auth/get-verification-code/',
           qs.stringify({
             phone_number: this.phone
           }),
@@ -175,7 +175,7 @@ export default {
       this.$router.push({ path: '/personal' })
     },
     handleCancel (evt) {
-      axios.post('http://localhost:8000/api/v1/core/auth/logout/', {
+      axios.post('http://localhost/api/v1/core/auth/logout/', {
         withCredentials: true
       })
     },
@@ -183,7 +183,7 @@ export default {
       let that = this
       axios
         .post(
-          'http://localhost:8000/api/v1/customers/forestage/auth/authenticate-customer/',
+          'http://localhost/api/v1/customers/forestage/auth/authenticate-customer/',
           qs.stringify({
             phone_number: this.phone.toString(),
             verification_code: this.code.toString()
@@ -194,7 +194,7 @@ export default {
           if (that.new_customer) {
             axios
               .post(
-                'http://localhost:8000/api/v1/customers/forestage/auth/get-eula/'
+                'http://localhost/api/v1/customers/forestage/auth/get-eula/'
               )
               .then(res => {
                 this.content = res.data.content
@@ -229,7 +229,7 @@ export default {
   },
   async beforeRouteEnter (to, from, next) {
     let response = await axios.post(
-      'http://localhost:8000/api/v1/core/auth/is-authenticated/',
+      'http://localhost/api/v1/core/auth/is-authenticated/',
       {
         withCredentials: true
       }

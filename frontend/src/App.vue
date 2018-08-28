@@ -12,7 +12,7 @@ export default {
     this.$store.commit('menu', sessionStorage.getItem('menu'))
     this.$store.commit('colors', sessionStorage.getItem('colors'))
     let response = await axios.post(
-      'http://localhost:8000/api/v1/core/auth/is-authenticated/',
+      'http://localhost/api/v1/core/auth/is-authenticated/',
       {
         withCredentials: true
       }
@@ -22,7 +22,7 @@ export default {
       try {
         if (response.data.is_staff) {
           let res = await axios.get(
-            'http://localhost:8000/api/v1/customers/forestage/personal-center/get-customer-detail/'
+            'http://localhost/api/v1/customers/forestage/personal-center/get-customer-detail/'
           )
           this.$store.commit('user', res.data)
           this.$store.commit('groups', response.data.admin_groups)
@@ -30,7 +30,7 @@ export default {
           this.$store.commit('menu', sessionStorage.getItem('menu'))
         } else {
           let res = await axios.get(
-            'http://localhost:8000/api/v1/customers/forestage/personal-center/get-customer-detail/'
+            'http://localhost/api/v1/customers/forestage/personal-center/get-customer-detail/'
           )
           this.$store.commit('user', res.data)
           this.$store.commit('colors', sessionStorage.getItem('colors'))

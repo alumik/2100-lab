@@ -59,7 +59,7 @@ export default {
   created () {
     // let that = this
     // axios
-    //   .post('http://localhost:8000/api/v1/core/auth/is-authenticated/')
+    //   .post('http://localhost/api/v1/core/auth/is-authenticated/')
     //   .then(res => {
     //     // console.log('登录状态：' + res.data.is_authenticated)
     //     if (res.data.is_authenticated) {
@@ -72,7 +72,7 @@ export default {
     if (this.$store.state.status) {
       axios
         .get(
-          'http://localhost:8000/api/v1/customers/forestage/personal-center/get-customer-detail/'
+          'http://localhost/api/v1/customers/forestage/personal-center/get-customer-detail/'
         )
         .then(res => {
           this.$store.commit('avatar', res.data.avatar)
@@ -88,7 +88,7 @@ export default {
     },
     personal () {
       axios
-        .post('http://localhost:8000/api/v1/core/auth/is-authenticated/', {
+        .post('http://localhost/api/v1/core/auth/is-authenticated/', {
           withCredentials: true
         })
         .then(res => {
@@ -101,7 +101,7 @@ export default {
       let that = this
       if (that.$store.state.status) {
         axios
-          .post('http://localhost:8000/api/v1/core/auth/logout/', {
+          .post('http://localhost/api/v1/core/auth/logout/', {
             withCredentials: true
           })
           .then(res => {

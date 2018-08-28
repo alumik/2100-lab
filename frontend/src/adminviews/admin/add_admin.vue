@@ -118,7 +118,7 @@ export default {
     send_message: function () {
       axios
         .post(
-          'http://localhost:8000/api/v1/admin/backstage/admin-management/add-admin/',
+          'http://localhost/api/v1/admin/backstage/admin-management/add-admin/',
           qs.stringify({
             phone_number: this.admin.phone_number,
             password: this.admin.password

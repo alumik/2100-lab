@@ -367,7 +367,7 @@ export default {
       let that = this
       axios
         .get(
-          'http://localhost:8000/api/v1/courses/forestage/play/get-course-comments/',
+          'http://localhost/api/v1/courses/forestage/play/get-course-comments/',
           {
             params: {
               course_id: that.course_id,
@@ -395,7 +395,7 @@ export default {
       let that = this
       axios
         .get(
-          'http://localhost:8000/api/v1/courses/forestage/play/up-vote-comment?' +
+          'http://localhost/api/v1/courses/forestage/play/up-vote-comment?' +
             'comment_id=' +
             msgCommentId
         )
@@ -423,7 +423,7 @@ export default {
       let that = this
       axios
         .get(
-          'http://localhost:8000/api/v1/courses/forestage/play/up-vote-comment?' +
+          'http://localhost/api/v1/courses/forestage/play/up-vote-comment?' +
           'comment_id=' +
           msgCommentId
         )
@@ -451,7 +451,7 @@ export default {
       let that = this
       axios
         .get(
-          'http://localhost:8000/api/v1/courses/forestage/play/up-vote-comment?' +
+          'http://localhost/api/v1/courses/forestage/play/up-vote-comment?' +
           'comment_id=' +
           msgCommentId
         )
@@ -479,7 +479,7 @@ export default {
       let that = this
       axios
         .get(
-          'http://localhost:8000/api/v1/courses/forestage/play/down-vote-comment?' +
+          'http://localhost/api/v1/courses/forestage/play/down-vote-comment?' +
             'comment_id=' +
             msgCommentId
         )
@@ -506,7 +506,7 @@ export default {
       let that = this
       axios
         .get(
-          'http://localhost:8000/api/v1/courses/forestage/play/down-vote-comment?' +
+          'http://localhost/api/v1/courses/forestage/play/down-vote-comment?' +
           'comment_id=' +
           msgCommentId
         )
@@ -533,7 +533,7 @@ export default {
       let that = this
       axios
         .get(
-          'http://localhost:8000/api/v1/courses/forestage/play/down-vote-comment?' +
+          'http://localhost/api/v1/courses/forestage/play/down-vote-comment?' +
           'comment_id=' +
           msgCommentId
         )
@@ -565,7 +565,7 @@ export default {
       let that = this
       axios
         .get(
-          'http://localhost:8000/api/v1/courses/forestage/play/get-replies/', {
+          'http://localhost/api/v1/courses/forestage/play/get-replies/', {
             params: {
               comment_id: commentId,
               page_limit: that.modal_page_limit,
@@ -582,7 +582,7 @@ export default {
       let that = this
       axios
         .post(
-          'http://localhost:8000/api/v1/courses/forestage/play/delete-comment/',
+          'http://localhost/api/v1/courses/forestage/play/delete-comment/',
           qs.stringify({
             comment_id: commentId
           })
@@ -607,7 +607,7 @@ export default {
       let that = this
       axios
         .post(
-          'http://localhost:8000/api/v1/courses/forestage/play/delete-comment/',
+          'http://localhost/api/v1/courses/forestage/play/delete-comment/',
           qs.stringify({
             comment_id: commentId
           })
@@ -638,7 +638,7 @@ export default {
       }
       axios
         .post(
-          'http://localhost:8000/api/v1/courses/forestage/play/add-comment/',
+          'http://localhost/api/v1/courses/forestage/play/add-comment/',
           qs.stringify({
             content: value,
             course_id: that.course_id
@@ -674,7 +674,7 @@ export default {
       if (that.reply_comment_id !== 0) {
         axios
           .post(
-            'http://localhost:8000/api/v1/courses/forestage/play/add-comment/',
+            'http://localhost/api/v1/courses/forestage/play/add-comment/',
             qs.stringify({
               content: value,
               course_id: that.course_id,

@@ -41,7 +41,7 @@ const store = new Vuex.Store({
       groups: []
     },
     groups: [],
-    address: 'http://localhost:8000/media/',
+    address: 'http://localhost/media/',
     menu: 0,
     colors: [
       '#204269',
@@ -170,7 +170,7 @@ Vue.component('simple-line-icons', SimpleLineIcons)
 router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title
   let response = await axios.post(
-    'http://localhost:8000/api/v1/core/auth/is-authenticated/',
+    'http://localhost/api/v1/core/auth/is-authenticated/',
     {
       withCredentials: true
     }

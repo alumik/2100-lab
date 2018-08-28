@@ -91,7 +91,7 @@ export default {
         this.error_message = ''
         axios
           .post(
-            'http://localhost:8000/api/v1/admin/backstage/auth/authenticate-admin/',
+            'http://localhost/api/v1/admin/backstage/auth/authenticate-admin/',
             qs.stringify({
               phone_number: this.phone_number,
               password: this.password
@@ -124,7 +124,7 @@ export default {
       let that = this
       if (that.$store.state.status) {
         axios
-          .post('http://localhost:8000/api/v1/core/auth/logout/', {
+          .post('http://localhost/api/v1/core/auth/logout/', {
             withCredentials: true
           })
           .then(res => {
@@ -142,7 +142,7 @@ export default {
   },
   async beforeRouteEnter (to, from, next) {
     let response = await axios.post(
-      'http://localhost:8000/api/v1/core/auth/is-authenticated/',
+      'http://localhost/api/v1/core/auth/is-authenticated/',
       {
         withCredentials: true
       }

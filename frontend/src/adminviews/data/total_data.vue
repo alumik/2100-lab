@@ -162,7 +162,7 @@ export default {
     }
     axios
       .get(
-        'http://localhost:8000/api/v1/data/data-management/get-overall-data/',
+        'http://localhost/api/v1/data/data-management/get-overall-data/',
         { params: { days: days } }
       )
       .then(function (response) {
@@ -208,7 +208,7 @@ export default {
       let days = this.get_days()
       axios
         .get(
-          'http://localhost:8000/api/v1/data/data-management/get-overall-data/',
+          'http://localhost/api/v1/data/data-management/get-overall-data/',
           { params: { days: days } }
         )
         .then(function (response) {
