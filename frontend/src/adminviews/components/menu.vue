@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import './style/style.css'
+import './style/admin_style.css'
 import axios from 'axios'
 export default {
   name: 'Menu',

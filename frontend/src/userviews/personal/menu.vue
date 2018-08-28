@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import './style/style.css'
+import './style/user_style.css'
 export default {
   name: 'Menu',
   props: {
