@@ -295,12 +295,6 @@ def add_comment(request):
     except Comment.DoesNotExist:
         return JsonResponse({'message': ERROR['object_not_found']}, status=404)
 
-    if reply_to.parent is not None:
-        return JsonResponse(
-            {'message': ERROR['cannot_reply_a_reply']},
-            status=400
-        )
-
     course = reply_to.course
     if not course.can_comment:
         return JsonResponse(
@@ -311,9 +305,11 @@ def add_comment(request):
     reply = Comment.objects.create(
         user=request.user,
         course=course,
-        content=comment_content,
-        parent=reply_to
+        content=comment_content
     )
+    if reply_to.parent is None:
+        reply.parent = reply_to
+        reply.save()
 
     AdminLog.objects.create(
         admin_user=request.user,
