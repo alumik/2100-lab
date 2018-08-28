@@ -12,11 +12,11 @@ describe('订单管理页面单元测试', () => {
     expect(wrapper.exists()).toBe(true)
   })
 
-  it('包含Basic组件', () => {
+  it('测试是否包含Basic组件', () => {
     expect(wrapper.contains(Basic)).toBe(true)
   })
 
-  it('包含翻页导航', () => {
+  it('测试是否包含翻页导航', () => {
     expect(wrapper.contains(Pagination)).toBe(true)
   })
 
@@ -54,10 +54,23 @@ describe('订单管理页面单元测试', () => {
     expect(wrapper.vm.user).toBe('小红')
   })
 
-  // it('测试是否进入订单详情页面', () => {
-  //   const button = wrapper.find('button')
-  //   expect(wrapper.vm.page_jump).toBe(false)
-  //   button.trigger('click')
-  //   expect(wrapper.vm.page_jump).toBe(true)
-  // })
+  it('测试compute_username函数是否正确', () => {
+    expect(wrapper.vm.compute_username('1_deleted_2')).toBe('1（已删除）')
+    expect(wrapper.vm.compute_username('123')).toBe('123')
+  })
+
+  it('测试get_state函数是否正确', () => {
+    expect(wrapper.vm.get_state(true)).toBe('已退款')
+    expect(wrapper.vm.get_state(false)).toBe('已完成')
+  })
+
+  it('测试change_page函数是否正确', () => {
+    expect(wrapper.vm.page).toBe(1)
+    wrapper.vm.change_page(2)
+    expect(wrapper.vm.page).toBe(2)
+  })
+
+  it('测试num_pages', () => {
+    expect(wrapper.vm.num_pages).toBe(0)
+  })
 })
