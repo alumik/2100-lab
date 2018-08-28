@@ -151,15 +151,6 @@ export default {
         return '未删除'
       }
     },
-    count_down_changed: function (val) {
-      const that = this
-      let t = setInterval(function () {
-        val -= 1
-        if (that.val === 0) {
-          clearInterval(t)
-        }
-      }, 1000)
-    },
     computed_message: function (val) {
       let temp = new Array(9)
       temp[0] = (val.created_at + '').slice(0, 10)
