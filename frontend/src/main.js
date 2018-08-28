@@ -180,7 +180,11 @@ router.beforeEach(async (to, from, next) => {
   } else if (response.data.is_authenticated && response.data.is_staff) {
     for (let list of store.state.lists) {
       if (to.path.toString().includes(list.path)) {
-        if (!response.data.admin_groups.includes(list.permit)) {
+        if (response.data.admin_groups.includes('super_admin')) {
+          sessionStorage.setItem('menu', list.id)
+          sessionStorage.setItem('colors', parseInt(list.id) - 1)
+          next()
+        } else if (!response.data.admin_groups.includes(list.permit)) {
           next('/admin/main')
         }
         sessionStorage.setItem('menu', list.id)
