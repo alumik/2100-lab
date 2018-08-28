@@ -9,7 +9,7 @@
       <b-input-group prepend="手机号">
         <b-form-input
           v-model="phone"
-          :state="phoneState"
+          :state="phone_state"
           type="text"/>
         <b-form-invalid-feedback id="inputLiveFeedback">
           手机号码不正确！
@@ -19,7 +19,7 @@
       <b-input-group prepend="验证码">
         <b-form-input
           v-model="code"
-          :state="codeState"
+          :state="code_state"
           type="text"
           aria-describedby="inputLiveFeedback"/>
         <b-input-group-append>
@@ -42,8 +42,8 @@
         @click="login">登录
       </b-button>
       <b-modal
-        v-model="modalShow"
-        :ok-disabled="okDisabled"
+        v-model="modal_show"
+        :ok-disabled="ok_disabled"
         size="lg"
         title="用户协议"
         centered
@@ -79,14 +79,14 @@ export default {
       code: '',
       correct_code: '',
       status: '获取验证码',
-      codeState: true,
-      phoneState: true,
+      code_state: true,
+      phone_state: true,
       seconds: 61,
       log_disabled: true,
       code_disabled: false,
       new_customer: false,
-      okDisabled: true,
-      modalShow: false,
+      ok_disabled: true,
+      modal_show: false,
       accept: '',
       content: '',
       course_id: -1
@@ -103,23 +103,23 @@ export default {
   watch: {
     accept: function (o) {
       if (o === 'accepted') {
-        this.okDisabled = false
+        this.ok_disabled = false
       } else {
-        this.okDisabled = true
+        this.ok_disabled = true
       }
     },
     phone: function (n) {
       if (n.length > 11) {
-        this.phoneState = false
+        this.phone_state = false
       } else {
-        this.phoneState = true
+        this.phone_state = true
       }
     },
     code: function (n) {
       if (n.length > 6) {
-        this.codeState = false
+        this.code_state = false
       } else {
-        this.codeState = true
+        this.code_state = true
       }
     }
   },
@@ -160,7 +160,7 @@ export default {
         .catch(error => {
           if (error) {
             that.code_disabled = false
-            that.phoneState = false
+            that.phone_state = false
           }
         })
     },
@@ -199,7 +199,7 @@ export default {
               .then(res => {
                 this.content = res.data.content
               })
-            this.modalShow = !this.modalShow
+            this.modal_show = !this.modal_show
           } else {
             this.$store.commit('status')
             this.$store.commit('username', response.data.username)
@@ -216,11 +216,11 @@ export default {
         })
         .catch(error => {
           if (error.response.data.message === 'Different phone number.') {
-            that.phoneState = false
+            that.phone_state = false
           } else if (
             error.response.data.message === 'Wrong verification code.'
           ) {
-            this.codeState = false
+            this.code_state = false
           } else {
             alert('请刷新重试')
           }

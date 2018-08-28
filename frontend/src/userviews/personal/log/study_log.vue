@@ -16,14 +16,14 @@
           <b-table
             :items="items"
             :fields="fields"
-            :current-page="currentPage"
-            :per-page="perPage"
+            :current-page="current_page"
+            :per-page="per_page"
             striped
             hover/>
           <b-pagination
             :total-rows="count"
-            :per-page="perPage"
-            v-model="currentPage"
+            :per-page="per_page"
+            v-model="current_page"
             class="my-0" />
         </div>
       </div>
@@ -76,10 +76,10 @@ export default {
       ],
       items: [],
       count: 0,
-      currentPage: 1,
-      perPage: 10,
+      current_page: 1,
+      per_page: 10,
       page_nums: 1,
-      pageOptions: [5, 10, 15]
+      page_options: [5, 10, 15]
     }
   },
   async mounted () {
@@ -88,8 +88,8 @@ export default {
       'http://localhost/api/v1/customers/forestage/personal-center/get-learning-logs/',
       {
         params: {
-          page: that.currentPage,
-          page_limit: that.perPage
+          page: that.current_page,
+          page_limit: that.per_page
         }
       }
     )
@@ -113,7 +113,7 @@ export default {
           {
             params: {
               page: i,
-              page_limit: that.perPage
+              page_limit: that.per_page
             }
           }
         )
