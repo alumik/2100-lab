@@ -187,8 +187,8 @@
         class="piece-of-message">
         <div class="user-avatar">
           <img
-            class="userimg"
-            src="../../assets/logo.png">
+            :src="$store.state.address + message_list[index-1].avatar"
+            class="userimg">
         </div>
         <div class="message-list-area">
           <div class="message-username">
