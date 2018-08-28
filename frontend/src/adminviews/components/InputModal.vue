@@ -8,6 +8,12 @@
     centered
     @ok="handle_ok"
     @shown="clear_input">
+    <Alert
+      :count_down="wrong_count_down"
+      :instruction="wrong"
+      variant="danger"
+      @decrease="wrong_count_down-1"
+      @zero="wrong_count_down=0"/>
     <form @submit.stop.prevent="handle_submit">
       <textarea
         v-model="input"
@@ -19,8 +25,10 @@
 </template>
 
 <script>
+import Alert from '../../components/alert'
 export default {
   name: 'InputModal',
+  components: {Alert},
   props: {
     id: {
       type: String,
@@ -45,7 +53,10 @@ export default {
   },
   data () {
     return {
-      input: ''
+      input: '',
+      dismiss_second: 5,
+      wrong_count_down: 0,
+      wrong: ''
     }
   },
   methods: {
@@ -55,7 +66,8 @@ export default {
     handle_ok (evt) {
       if (this.input === '') {
         evt.preventDefault()
-        alert('请输入内容后提交')
+        this.wrong = '请输入内容后提交'
+        this.wrong_count_down = this.dismiss_second
       } else {
         this.$emit('click', this.input)
         this.handle_submit()
