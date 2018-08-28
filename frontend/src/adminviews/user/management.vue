@@ -107,13 +107,10 @@
           </tbody>
         </table>
       </div>
-      <b-pagination
-        :total-rows="rows"
-        :per-page="per_page"
-        v-model="page"
-        align="center"
-        size="md"
-        @input="change_page"/>
+      <Pagination
+        :rows="rows"
+        :perpage="per_page"
+        @change="change_page"/>
     </div>
   </Basic>
 </template>
@@ -209,26 +206,35 @@ export default {
       this.$router.push({ name: 'UserDetail', query: { user_id: val } })
     },
     change_page: function (page) {
+      this.page = page
       this.search()
     },
-    search: function () {
-      const that = this
+    get_type_data: function () {
       let type
-      if (that.type === 'whole' || that.type === '') {
+      if (this.type === 'whole' || this.type === '') {
         type = '0'
-      } else if (that.type === 'normal') {
+      } else if (this.type === 'normal') {
         type = '1'
       } else {
         type = '2'
       }
+      return type
+    },
+    get_state_data: function () {
       let state
-      if (that.state === 'whole' || that.state === '') {
+      if (this.state === 'whole' || this.state === '') {
         state = '0'
-      } else if (that.state === 'not_banned') {
+      } else if (this.state === 'not_banned') {
         state = '1'
       } else {
         state = '2'
       }
+      return state
+    },
+    search: function () {
+      const that = this
+      let type = this.get_type_data()
+      let state = this.get_state_data()
       axios
         .get(
           'http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-list/',

@@ -12,8 +12,12 @@ describe('用户管理页面单元测试', () => {
     expect(wrapper.exists()).toBe(true)
   })
 
-  it('包含Basic组件', () => {
+  it('测试是否包含Basic组件', () => {
     expect(wrapper.contains(Basic)).toBe(true)
+  })
+
+  it('测试是否包含翻页导航', () => {
+    expect(wrapper.contains(Pagination)).toBe(true)
   })
 
   it('测试输入框渲染数量', () => {
@@ -50,5 +54,39 @@ describe('用户管理页面单元测试', () => {
     const input2 = inputs.at(2)
     input2.setValue('13102250001')
     expect(wrapper.vm.phone).toBe('13102250001')
+  })
+
+  it('测试get_type函数', () => {
+    expect(wrapper.vm.get_type(true)).toBe('认证用户')
+    expect(wrapper.vm.get_type(false)).toBe('普通用户')
+  })
+
+  it('测试get_state函数', () => {
+    expect(wrapper.vm.get_state(true)).toBe('已禁言')
+    expect(wrapper.vm.get_state(false)).toBe('未禁言')
+  })
+
+  it('测试get_type_data函数', () => {
+    wrapper.vm.type = 'whole'
+    expect(wrapper.vm.get_type_data()).toEqual('0')
+    wrapper.vm.type = 'normal'
+    expect(wrapper.vm.get_type_data()).toEqual('1')
+    wrapper.vm.type = 'authenticated'
+    expect(wrapper.vm.get_type_data()).toEqual('2')
+  })
+
+  it('测试get_state_data函数', () => {
+    wrapper.vm.state = 'whole'
+    expect(wrapper.vm.get_state_data()).toEqual('0')
+    wrapper.vm.state = 'not_banned'
+    expect(wrapper.vm.get_state_data()).toEqual('1')
+    wrapper.vm.state = 'is_banned'
+    expect(wrapper.vm.get_state_data()).toEqual('2')
+  })
+
+  it('测试change_page函数', () => {
+    expect(wrapper.vm.page).toBe(1)
+    wrapper.vm.change_page(2)
+    expect(wrapper.vm.page).toBe(2)
   })
 })
