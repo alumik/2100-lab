@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 
 import { shallowMount } from '@vue/test-utils'
-import OrderLog from '@/userviews/personal/log/orderLog.vue'
+import OrderLog from '@/userviews/personal/log/order_log.vue'
 
 describe('个人订单记录页面单元测试', () => {
   const wrapper = shallowMount(OrderLog)

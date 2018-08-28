@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 
 import { shallowMount } from '@vue/test-utils'
-import StudyLog from '@/userviews/personal/log/studyLog.vue'
+import StudyLog from '@/userviews/personal/log/study_log.vue'
 
 describe('个人学习记录页面单元测试', () => {
   const wrapper = shallowMount(StudyLog)

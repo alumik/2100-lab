@@ -33,7 +33,7 @@
               <b-form-input
                 v-model="value"
                 :disabled="disabled"
-                :state="nameState"
+                :state="name_state"
                 aria-describedby="inputLiveHelp"/>
               <b-input-group-append>
                 <b-btn
@@ -134,7 +134,7 @@ export default {
           href: '/personal'
         }
       ],
-      nameState: true,
+      name_state: true,
       avatar: '',
       file: '',
       value: this.$store.state.user.username,
@@ -150,7 +150,7 @@ export default {
   watch: {
     value (n) {
       this.status = '保存'
-      this.nameState = true
+      this.name_state = true
     }
   },
   mounted () {
@@ -213,7 +213,7 @@ export default {
             this.$store.commit('username', this.value)
           })
           .catch(() => {
-            that.nameState = false
+            that.name_state = false
           })
       }
     },

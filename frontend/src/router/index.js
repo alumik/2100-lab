@@ -79,13 +79,13 @@ export default new Router({
     {
       path: '/personal/studylog',
       name: 'StudyLog',
-      component: () => import('@/userviews/personal/log/studyLog'),
+      component: () => import('@/userviews/personal/log/study_log'),
       meta: {title: '学习记录' + forestage_suffix}
     },
     {
       path: '/personal/orderlog',
       name: 'OrderLog',
-      component: () => import('@/userviews/personal/log/orderLog'),
+      component: () => import('@/userviews/personal/log/order_log'),
       meta: {title: '订单记录' + forestage_suffix}
     },
     {
