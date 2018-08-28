@@ -1,6 +1,6 @@
 <template>
   <div id="message-board">
-    <div style="text-align: left;">
+    <div class="text-align-left">
       {{ rows }}
       <simple-line-icons
         icon="bubble"
@@ -160,7 +160,7 @@
             id="commit-button"
             class="commit-button-style">
             <b-button
-              style="weight: 100%; height: 100%; background-color: #cce5ff; border: none; color: #333; font-size: 14px; font-weight: bold;"
+              class="add_comment"
               @click="add_comment">发表<br>评论</b-button>
           </div>
         </div>
@@ -175,8 +175,15 @@
             src="../../assets/logo.png">
         </div>
         <div class="message-list-area">
-          <div style="display: flex; flex-direction: row; justify-content: space-between;">
-            <div style="font-size: 15px; color: #333; font-weight: bold;">{{ message_list[index-1].username }}</div>
+          <div class="message-username">
+            <div class="message-list-username">
+              {{ message_list[index-1].username }}
+              <label
+                v-if="message_list[index-1].user_is_vip === true"
+                class="vip-style">
+                V
+              </label>
+            </div>
             <div
               v-if="message_list[index-1].username === $store.state.user.username"
               id="delete-button"
@@ -184,13 +191,12 @@
               @click="delete_comment(message_list[index-1].comment_id)">删除</div>
           </div>
           <div>{{ message_list[index-1].content }}</div>
-          <div style="display: flex; flex-direction: row;">
+          <div class="time-remind">
             <div
-              class="time-style"
-              style="margin-right: 1rem;">
+              class="time-style">
               {{ (message_list[index-1].created_at).substring(0,10) }}
               &nbsp;{{ (message_list[index-1].created_at).substring(11,19) }}</div>
-            <div style="margin-right: 1rem;">
+            <div class="margin-right-1">
               {{ message_list[index-1].up_votes }}
               <b-img
                 id="praise-button"
@@ -213,12 +219,19 @@
           <div
             v-for="i in message_list[index-1].replies.length"
             :key="i"
-            style="padding: 1rem 0 0 3rem;">
+            class="reply-message">
             <div>
               <div>
-                <div style="display: flex; flex-direction: row; justify-content: space-between;">
-                  <div style="display: flex; flex-direction: row;">
-                    <div style="color: #999; font-size: 14px; font-weight: bold;">{{ message_list[index-1].replies[i-1].username }}</div>
+                <div class="row1">
+                  <div class="row2">
+                    <div class="row3">
+                      {{ message_list[index-1].replies[i-1].username }}
+                      <label
+                        v-if="message_list[index-1].replies[i-1].user_is_vip === true"
+                        class="vip-style">
+                        V
+                      </label>
+                    </div>
                     <div>&emsp;{{ message_list[index-1].replies[i-1].content }}</div>
                   </div>
                   <div
@@ -251,13 +264,13 @@
           </div>
           <div
             v-if="message_list [index-1].reply_count !== 0"
-            style="display: flex; flex-direction: row; padding-left: 3rem; font-size: 14px;">
-            <div style="margin-right: 1rem;">
+            class="all-reply">
+            <div class="margin-right-1">
               共{{ message_list [index-1].reply_count }}条回复
             </div>
             <div
               id="watch-more"
-              style="color: #009966; cursor: pointer;"
+              class="look-all"
               @click="watch_all_replies(message_list[index-1].comment_id)">
               点击查看
             </div>
@@ -360,6 +373,7 @@ export default {
           }
         )
         .then(function (response) {
+          console.log(response.data)
           that.rows = response.data.count
           that.message_list = response.data.content
           that.can_comment = true
@@ -697,9 +711,23 @@ export default {
 </script>
 
 <style scoped>
+.margin-right-1 {
+  margin-right: 1rem;
+}
+
 .time-style {
+  margin-right: 1rem;
   font-size: 14px;
   color: #adb5bd;
+}
+
+.time-remind {
+  display: flex;
+  flex-direction: row;
+}
+
+.reply-message {
+  padding: 1rem 0 0 3rem;
 }
 
 .textarea-style {
@@ -722,6 +750,39 @@ export default {
   width: 8%;
   height: 70%;
   text-align: right;
+}
+
+.all-reply {
+  display: flex;
+  flex-direction: row;
+  padding-left: 3rem;
+  font-size: 14px;
+}
+
+.look-all {
+  color: #096;
+  cursor: pointer;
+}
+
+.row1 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.row2 {
+  display: flex;
+  flex-direction: row;
+}
+
+.row3 {
+  font-size: 14px;
+  font-weight: bold;
+  color: #999;
+}
+
+.text-align-left {
+  text-align: left;
 }
 
 .message-area {
@@ -782,11 +843,35 @@ export default {
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
-.text-align-left {
-  text-align: left;
-}
-
 .delete-comment {
   text-align: right;
+}
+
+.add_comment {
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  background-color: #cce5ff;
+  border: none;
+}
+
+.message-username {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.message-list-username {
+  font-size: 15px;
+  font-weight: bold;
+  color: #333;
+}
+
+.vip-style {
+  font-size: 16px;
+  font-weight: bold;
+  color: rgba(255, 234, 18, 0.75);
 }
 </style>
