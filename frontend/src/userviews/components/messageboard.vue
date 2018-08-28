@@ -40,17 +40,6 @@
           :key="i"
           class="reply-message">
           <div>
-<<<<<<< HEAD
-            <b-row>
-              <b-col
-                class="text-align-left"
-                cols="4">
-                {{ replies[i-1].username }}
-              </b-col>
-              <b-col cols="6">
-                <label class="time-style">&emsp;
-                  {{ replies[i-1].created_at }}回复
-=======
             <div>
               <div class="row1">
                 <div class="row2">
@@ -75,7 +64,6 @@
                 <label class="time-style">
                   {{ (replies[i-1].created_at).substring(0,10) }}
                   &nbsp;{{ (replies[i-1].created_at).substring(11,19) }}
->>>>>>> Change the modal reply list sthyle. Ref #387
                 </label>
                 <div>
                   &emsp;{{ replies[i-1].up_votes }}
