@@ -99,8 +99,6 @@ export default {
       colors: this.$store.state.colors
     }
   },
-  computed: {
-  },
   async created () {
     this.$store.commit('menu', sessionStorage.getItem('menu'))
     this.$store.commit('colors', sessionStorage.getItem('colors'))

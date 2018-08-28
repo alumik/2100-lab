@@ -19,7 +19,7 @@
 <script>
 import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
-import BreadCrumb from '../../components/breadCrumb'
+import BreadCrumb from '../../components/bread_crumb'
 export default {
   name: 'Basic',
   components: { BreadCrumb, Menu, AdminNavbar },

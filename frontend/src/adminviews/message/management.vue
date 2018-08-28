@@ -149,8 +149,8 @@
 
 <script>
 import Pagination from '../../components/pagination'
-import ConfirmModal from '../components/ConfirmModal'
-import InputModal from '../components/InputModal'
+import ConfirmModal from '../components/confirm_modal'
+import InputModal from '../components/input_modal'
 import Basic from '../basic/basic'
 import axios from 'axios'
 import qs from 'qs'

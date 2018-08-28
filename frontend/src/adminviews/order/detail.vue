@@ -55,10 +55,10 @@
 </template>
 
 <script>
-import BreadCrumb from '../../components/breadCrumb'
+import BreadCrumb from '../../components/bread_crumb'
 import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
-import ConfirmModal from '../components/ConfirmModal'
+import ConfirmModal from '../components/confirm_modal'
 import Basic from '../basic/basic'
 import DetailTable from '../components/detail_table'
 import axios from 'axios'
@@ -114,7 +114,7 @@ export default {
     const that = this
     axios
       .get(
-        'http://localhost/api/v1/customers/backstage/order-management/get-order-detail/',
+        'http://localhost:8000/api/v1/customers/backstage/order-management/get-order-detail/',
         {
           params: {
             order_id: that.$route.query.order_id
@@ -135,7 +135,7 @@ export default {
       const that = this
       axios
         .post(
-          'http://localhost/api/v1/customers/backstage/order-management/order-refund/',
+          'http://localhost:8000/api/v1/customers/backstage/order-management/order-refund/',
           qs.stringify({ order_id: that.$route.query.order_id })
         )
         .then(function (response) {
@@ -154,7 +154,7 @@ export default {
         })
       axios
         .get(
-          'http://localhost/api/v1/customers/backstage/order-management/get-order-detail/',
+          'http://localhost:8000/api/v1/customers/backstage/order-management/get-order-detail/',
           {
             params: {
               order_id: that.$route.query.order_id

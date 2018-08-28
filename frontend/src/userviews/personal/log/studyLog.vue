@@ -33,7 +33,7 @@
 <script>
 import UserNavbar from '../../components/navbar'
 import UserMenu from '../menu'
-import BreadCrumb from '../../../components/breadCrumb'
+import BreadCrumb from '../../../components/bread_crumb'
 import axios from 'axios'
 
 export default {

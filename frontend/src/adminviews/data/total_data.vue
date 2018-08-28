@@ -86,7 +86,7 @@
 <script>
 import AdminNavbar from '../components/navbar'
 import Menu from '../components/menu'
-import BreadCrumb from '../../components/breadCrumb'
+import BreadCrumb from '../../components/bread_crumb'
 import Basic from '../basic/basic'
 import axios from 'axios'
 import Alert from '../../components/alert'
@@ -310,11 +310,6 @@ h5 {
 
 p {
   text-align: center;
-}
-
-.image {
-  width: 50px;
-  height: 50px;
 }
 
 .data {
