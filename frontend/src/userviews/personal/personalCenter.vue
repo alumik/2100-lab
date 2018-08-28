@@ -265,7 +265,7 @@ export default {
 
 .avatar_related {
   justify-content: space-between;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
 }
 
 img {

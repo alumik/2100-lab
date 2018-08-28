@@ -2,9 +2,9 @@
   <nav
     id="sidebar"
     ref="menu"
-    :class="{hide: hidden, 'sidebar': true}">
+    :class="{hide: hidden, 'sidemenu': true}">
     <div
-      class="sidebar-header"
+      class="sidemenu-header"
       @click="$router.push({path: '/admin/main'})">
       {{ $t('menu.header') }}
     </div>
@@ -136,11 +136,11 @@ export default {
   text-align: left;
 }
 
-.sidebar-header {
+.sidemenu-header {
   text-align: center;
 }
 
-.sidebar-header,
+.sidemenu-header,
 a {
   cursor: pointer;
 }
