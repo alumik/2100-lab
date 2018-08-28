@@ -40,25 +40,25 @@ export default {
 </script>
 
 <style scoped>
-  .link a {
-    color: #337ab7;
-  }
+.link a {
+  color: #337ab7;
+}
 
-  .link a:focus,
-  .link a:hover {
-    color: #204269;
-  }
+.link a:focus,
+.link a:hover {
+  color: #204269;
+}
 
-  .link::after {
-    padding-right: 5px;
-    padding-left: 5px;
-    color: #999;
-    content: '/';
-  }
+.link::after {
+  padding-right: 5px;
+  padding-left: 5px;
+  color: #999;
+  content: '/';
+}
 
-  .breadcrumb {
-    margin: 0;
-    background-color: white;
-    border-radius: 0;
-  }
+.breadcrumb {
+  margin: 0;
+  background-color: white;
+  border-radius: 0;
+}
 </style>

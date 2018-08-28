@@ -47,9 +47,9 @@ export default {
 </script>
 
 <style scoped>
-  .alert-div {
-    position: fixed;
-    top: 25%;
-    left: 45%;
-  }
+.alert-div {
+  position: fixed;
+  top: 25%;
+  left: 45%;
+}
 </style>

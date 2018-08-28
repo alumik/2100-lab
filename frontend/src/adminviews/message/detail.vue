@@ -60,8 +60,8 @@
 </template>
 
 <script>
-import ConfirmModal from '../components/ConfirmModal'
-import InputModal from '../components/InputModal'
+import ConfirmModal from '../components/confirm_modal'
+import InputModal from '../components/input_modal'
 import Basic from '../basic/basic'
 import DetailTable from '../components/detail_table'
 import axios from 'axios'

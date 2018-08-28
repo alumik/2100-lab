@@ -31,31 +31,31 @@ export default {
 </script>
 
 <style scoped>
-  .table-div {
-    padding-right: 15px;
-    padding-left: 15px;
-    overflow-x: auto;
-  }
+.table-div {
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow-x: auto;
+}
 
-  table {
-    margin-bottom: 20px;
-    font-size: 1rem;
-    border-top: 1px solid #d3d9df;
-    border-bottom: 1px solid #d3d9df;
-  }
+table {
+  margin-bottom: 20px;
+  font-size: 1rem;
+  border-top: 1px solid #d3d9df;
+  border-bottom: 1px solid #d3d9df;
+}
 
-  td {
-    word-break: break-all;
-    vertical-align: middle;
-  }
+td {
+  word-break: break-all;
+  vertical-align: middle;
+}
 
-  .col-3 {
-    font-weight: bold;
-    color: #337ab7;
-    background-color: #f3f4f6;
-  }
+.col-3 {
+  font-weight: bold;
+  color: #337ab7;
+  background-color: #f3f4f6;
+}
 
-  .col-9 {
-    color: #748085;
-  }
+.col-9 {
+  color: #748085;
+}
 </style>

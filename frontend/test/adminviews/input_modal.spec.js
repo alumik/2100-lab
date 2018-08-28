@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 
 import { shallowMount } from '@vue/test-utils'
-import InputModal from '@/adminviews/components/InputModal'
+import InputModal from '@/adminviews/components/input_modal'
 
 describe('InputModal单元测试', () => {
   const wrapper = shallowMount(InputModal)

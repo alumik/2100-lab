@@ -124,7 +124,7 @@
 
 <script>
 import Basic from '../basic/basic'
-import ConfirmModal from '../components/ConfirmModal'
+import ConfirmModal from '../components/confirm_modal'
 import axios from 'axios'
 import qs from 'qs'
 import Alert from '../../components/alert'
