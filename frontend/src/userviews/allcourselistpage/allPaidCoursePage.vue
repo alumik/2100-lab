@@ -51,7 +51,7 @@ export default {
       that.page = page
       that.get_course_list()
     },
-    get_course_list: function (page) {
+    get_course_list: function () {
       let that = this
       axios
         .get(
@@ -66,6 +66,7 @@ export default {
           }
         )
         .then(function (response) {
+          console.log(response)
           that.course_list = response.data.content
           that.rows = response.data.count
         })
