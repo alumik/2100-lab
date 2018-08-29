@@ -16,16 +16,16 @@
           variant="success"
           @decrease="success_count_down-1"
           @zero="success_count_down=0"/>
-        <h4 class="my-text">管理员账号：{{ admin_id }}</h4>
+        <h5 class="my-text">管理员账号：{{ admin_id }}</h5>
         <div>
-          <h4 class="my-text">权限选择：</h4>
+          <h5 class="my-text">权限选择：</h5>
           <b-form-group class="my-form-group">
             <b-form-checkbox
               v-model="all_selected"
               aria-controls="flavours"
               @change="toggle_all"
             >
-              <h4>{{ all_selected ? '取消全选' : '全选' }}</h4>
+              <h5>{{ all_selected ? '取消全选' : '全选' }}</h5>
             </b-form-checkbox>
             <b-form-checkbox-group
               id="flavors"
