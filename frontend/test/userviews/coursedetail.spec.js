@@ -93,16 +93,6 @@ describe('课程详情页单元测试', () => {
     expect(wrapper.contains('#share-qrcode')).toBe(true)
   })
 
-  it('分享模态框渲染取消按钮', () => {
-    wrapper.find('#share-button').trigger('click')
-    expect(wrapper.contains('#share-popup-cancel-button')).toBe(true)
-  })
-
-  it('分享模态框渲染取消按钮', () => {
-    wrapper.find('#share-button').trigger('click')
-    expect(wrapper.contains('#share-popup-finish-button')).toBe(true)
-  })
-
   it('点击学习按钮弹出模态框', () => {
     wrapper.find('#study-button').trigger('click')
     expect(wrapper.contains('#study-popup')).toBe(true)
@@ -111,8 +101,6 @@ describe('课程详情页单元测试', () => {
   it('点击学习按钮渲染模态框', () => {
     wrapper.vm.start_study()
     expect(wrapper.contains('#time_reminder')).toBe(true)
-    expect(wrapper.contains('#study-popup-cancel-button')).toBe(true)
-    expect(wrapper.contains('#study-popup-start-button')).toBe(true)
   })
 
   it('课程简介渲染', () => {
