@@ -4,6 +4,7 @@ import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import CourseDetail from '@/userviews/coursedetail/index'
 import Basic from '@/userviews/components/basic'
+import SocialShare from '@/userviews/components/socialShare'
 import {shallowMount} from '@vue/test-utils'
 import Vuex from 'vuex'
 Vue.use(Vuex)
@@ -85,12 +86,11 @@ describe('课程详情页单元测试', () => {
 
   it('分享模态框渲染提示语句', () => {
     wrapper.find('#share-button').trigger('click')
-    expect(wrapper.contains('#share-popup-textarea')).toBe(true)
+    expect(wrapper.contains('#share-remind')).toBe(true)
   })
 
-  it('分享模态框渲染分享二维码', () => {
-    wrapper.find('#share-button').trigger('click')
-    expect(wrapper.contains('#share-qrcode')).toBe(true)
+  it('渲染分享组件', () => {
+    expect(wrapper.contains(SocialShare)).toBe(true)
   })
 
   it('点击学习按钮弹出模态框', () => {

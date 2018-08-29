@@ -28,10 +28,9 @@
           class="share-icon"
           src="../../assets/wechat1.svg">
       </template>
-      扫一扫微信
       <qrcode
-        :options="{ size: 200 }"
-        value="www.baidu.com"/>
+        :options="{ size: 150 }"
+        :value="url"/>
     </b-dropdown>
     <a
       :href="zone_url"
