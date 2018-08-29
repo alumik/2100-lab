@@ -246,7 +246,7 @@ def toggle_vip(request):
 
 @permission_required('core.change_customuser')
 def toggle_banned(request):
-    """切换用户经验状态"""
+    """切换用户禁言状态"""
 
     customer_id = request.POST.get('customer_id')
 
