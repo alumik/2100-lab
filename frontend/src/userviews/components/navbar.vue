@@ -121,64 +121,72 @@ export default {
 </script>
 
 <style scoped>
-.my-navbar {
-  margin: 0;
-  vertical-align: middle;
-}
+  .my-navbar {
+    margin: 0;
+    vertical-align: middle;
+  }
 
-#userimg {
-  width: 40px;
-  height: 40px;
-  margin-right: 20px;
-  border-radius: 50%;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-}
+  #userimg {
+    width: 40px;
+    height: 40px;
+    margin-right: 20px;
+    border-radius: 50%;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  }
 
-.logo {
-  height: 50px;
-  margin: 0;
-  vertical-align: middle;
-}
+  .logo {
+    height: 50px;
+    margin-left: 28px;
+    vertical-align: middle;
+    cursor: pointer;
+  }
 
-.logo img {
-  height: 35px;
-}
+  .logo img {
+    height: 45px;
+    vertical-align: center;
+  }
 
-.nav-link {
-  padding: 0;
-}
+  .nav-link {
+    padding: 0;
+  }
 
-.navbar-dark .navbar-nav .nav-link {
-  color: #999;
-}
+  .navbar-dark .navbar-nav .nav-link {
+    color: #999;
+  }
 
-.navbar-dark .navbar-nav .nav-link:hover,
-.navbar-dark .navbar-nav .nav-link:focus {
-  color: lightgray;
-}
+  .navbar-dark .navbar-nav .nav-link:hover,
+  .navbar-dark .navbar-nav .nav-link:focus {
+    color: lightgray;
+  }
 
-.navbar {
-  padding: 10px 5px;
-  background-color: #fff !important;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-  opacity: 0.8;
-}
+  .navbar {
+    padding: 10px 5px;
+    background-color: #fff !important;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    opacity: 0.8;
+  }
 
-.navbar-toggler {
-  background-color: lightgray;
-}
+  .navbar-toggler {
+    background-color: lightgray;
+  }
 
-#userimg:hover {
-  -webkit-filter: brightness(150%);
-  filter: brightness(150%);
-}
+  #userimg:hover {
+    -webkit-filter: brightness(150%);
+    filter: brightness(150%);
+  }
 
-#logoimg:hover {
-  -webkit-filter: brightness(150%);
-  filter: brightness(150%);
-}
+  #logoimg:hover {
+    -webkit-filter: brightness(150%);
+    filter: brightness(150%);
+  }
 
-#logout {
-  padding: 6px;
-}
+  #logout {
+    padding: 6px;
+  }
+
+  .navbar-light .navbar-toggler {
+    margin: 0 15px;
+    border: none;
+    outline: none;
+  }
 </style>
