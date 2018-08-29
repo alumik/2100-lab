@@ -44,7 +44,7 @@ table {
   border-bottom: 1px solid #d3d9df;
 }
 
-td {
+.table td {
   word-break: break-all;
   vertical-align: middle;
 }

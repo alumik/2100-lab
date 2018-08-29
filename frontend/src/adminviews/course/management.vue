@@ -618,7 +618,7 @@ thead tr {
   color: #999;
 }
 
-td {
+.table td {
   vertical-align: middle;
 }
 

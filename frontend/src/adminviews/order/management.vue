@@ -283,7 +283,7 @@ table {
   border-top: 1px solid #d3d9df;
 }
 
-td {
+.table td {
   font-size: 1rem;
   vertical-align: middle;
 }
@@ -319,7 +319,7 @@ option {
   font-size: 18px;
 }
 
-thead tr {
+.table thead tr {
   font-weight: bold;
   color: #999;
 }
