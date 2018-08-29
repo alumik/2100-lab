@@ -72,7 +72,7 @@
       </b-modal>
       <div class="table-div">
         <table
-          class="table table-striped"
+          class="table"
           width="100%">
           <tbody>
             <tr>
@@ -303,15 +303,20 @@ h1 {
 
 .head-td {
   width: 35%;
+  font-weight: bold;
+  color: #337ab7;
+  background-color: #f3f4f6;
 }
 
 .content-td {
   width: 65%;
+  color: #748085;
 }
 
 .table-div {
   padding-right: 15px;
   padding-left: 15px;
+  text-align: center;
 }
 
 .table td {

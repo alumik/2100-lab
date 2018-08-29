@@ -174,9 +174,16 @@ export default {
 
 h1 {
   padding-left: 15px;
-  margin: 25px 0;
+  margin-top: 25px;
+  margin-bottom: 60px;
   color: #204269;
   text-align: left;
+}
+
+label {
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .form-group {
