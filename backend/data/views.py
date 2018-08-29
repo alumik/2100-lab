@@ -14,7 +14,56 @@ from data import utils
 
 @login_required
 def get_overall_data(request):
-    """数据分析第一页：获取总体数据"""
+    """数据分析第一页：获取总体数据
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/data/data-management/get-overall-data/
+
+    **传入参数/方法**
+
+    ::
+
+        {GET} days // 查询距今多少天内的数据
+
+    **返回值**
+
+    *错误：用户没有管理员权限* HTTP403
+
+    .. code-block:: javascript
+
+        {
+            message: 'Access denied.'
+        }
+
+    *成功：* HTTP200
+
+    .. code-block:: javascript
+
+        {
+            customers_count: 1,             // 新增用户数
+            income: 1.00,                   // 新增收入
+            courses_count: 1,               // 新增课程数
+            orders_count: 1,                // 新增订单数
+            top_up_voted_courses: [         // 点赞数排名前五课程（由高到低排列）
+                {
+                    title: 'Test course 1', // 课程标题
+                    up_votes: 2             // 课程点赞数
+                },
+                ...
+            ],
+            top_learned_courses: [          // 学习数排名前五课程（由高到低排列）
+                {
+                    title: 'Test course 1', // 课程标题
+                    learners: 2             // 课程学习人数
+                },
+                ...
+            ]
+        }
+
+    """
 
     if not request.user.is_superuser:
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
@@ -45,7 +94,52 @@ def get_overall_data(request):
 
 @login_required
 def get_data_by_time(request):
-    """数据分析第二页：获取时间对比数据"""
+    """数据分析第二页：获取时间对比数据"
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/data/data-management/get-data-by-time/
+
+    **传入参数/方法**
+
+    ::
+
+        {GET} start_timestamp // 查询开始时间戳
+        {GET} end_timestamp   // 查询结束时间戳
+        {GET} time_step       // 查询步长
+
+    **返回值**
+
+    *错误：用户没有管理员权限* HTTP403
+
+    .. code-block:: javascript
+
+        {
+            message: 'Access denied.'
+        }
+
+    *成功：* HTTP200
+
+    .. code-block:: javascript
+
+        {
+            content: [
+                {
+                    right_time: '2018-08-24', // 时间段右端点
+                    data: {
+                        customer_count: 1,    // 新增用户数
+                        income: 1.00,         // 新增收入
+                        courses_count: 1,     // 新增课程数
+                        orders_count: 1,      // 新增订单数
+                    }
+                },
+                ...
+            ]
+        }
+
+    """
 
     if not request.user.is_superuser:
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
