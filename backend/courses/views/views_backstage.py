@@ -309,7 +309,9 @@ def add_comment(request):
     )
     if reply_to.parent is None:
         reply.parent = reply_to
-        reply.save()
+    else:
+        reply.parent = reply_to.parent
+    reply.save()
 
     AdminLog.objects.create(
         admin_user=request.user,

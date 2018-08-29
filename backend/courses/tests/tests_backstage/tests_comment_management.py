@@ -349,3 +349,40 @@ class CommentOperationTests(TestCase):
         self.assertEqual(response.status_code, 200)
         response_json_data = json.loads(response.content)
         self.assertEqual(response_json_data['count'], 1)
+
+    def test_reply_to_reply(self):
+        self.client.login(phone_number='13312345678', password='123456')
+        user = get_user_model().objects.get(phone_number='13312345678')
+        course = Course.objects.create(
+            title='RTR',
+            description='RTR',
+            codename='RTR',
+        )
+        comment = Comment.objects.create(
+            user=user,
+            course=course,
+            content='Comment'
+        )
+        reply = Comment.objects.create(
+            user=user,
+            course=course,
+            content='Reply',
+            parent=comment
+        )
+
+        response = self.client.post(
+            reverse('api:courses:backstage:add-comment'),
+            {
+                'reply_to_id': reply.id,
+                'comment_content': 'RTR'
+            }
+        )
+
+        self.assertEqual(Comment.objects.filter(parent=comment).count(), 2)
+
+        response = self.client.get(
+            reverse('api:courses:forestage:get-course-comments'),
+            {'course_id': course.id}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content)['count'], 1)
