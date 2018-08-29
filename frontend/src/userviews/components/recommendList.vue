@@ -137,6 +137,11 @@ export default {
   transform: translate(0, -20px);
 }
 
+.wrap-style {
+  word-break: normal;
+  word-wrap: break-word;
+}
+
 .card-text-height {
   max-height: 5.5rem;
   overflow: hidden;

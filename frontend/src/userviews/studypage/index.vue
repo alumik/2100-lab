@@ -88,8 +88,8 @@
             </div>
             <b-collapse
               id="course-description"
-              class="mt-2">
-              <div class="text-align-left text-margin-description">
+              class="mt-2 wrap-style">
+              <div class="text-align-left">&emsp;&emsp;
                 {{ course.description }}</div>
             </b-collapse>
           </div>
@@ -318,6 +318,11 @@ export default {
   width: 100%;
   height: 50%;
   padding: 1rem 0 0 0;
+}
+
+.wrap-style {
+  word-break: normal;
+  word-wrap: break-word;
 }
 
 .image-style {

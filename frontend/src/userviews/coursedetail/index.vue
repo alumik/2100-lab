@@ -238,7 +238,7 @@
     <div class="detail">
       <div
         id="detail-introduction"
-        class="container">
+        class="container wrap-style">
         <h5>课程简介</h5>
         <p class="description">{{ course.description }}</p>
       </div>
@@ -562,9 +562,11 @@ export default {
     },
     get_now_price: function () {
       if (this.$store.state.user.reward_coin > this.course.price) {
+        console.log(1)
         this.can_paid_using_reward = true
         return 0
       } else {
+        console.log(2)
         return this.course.price - this.$store.state.user.reward_coin
       }
     }
@@ -608,6 +610,11 @@ export default {
 
 .share {
   margin-left: 1rem;
+}
+
+.wrap-style {
+  word-break: normal;
+  word-wrap: break-word;
 }
 
 h3,
