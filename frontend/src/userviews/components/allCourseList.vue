@@ -55,7 +55,7 @@ export default {
     },
     page_limit: {
       type: Number,
-      default: 10
+      default: 15
     },
     page: {
       type: Number,

@@ -208,10 +208,7 @@ export default {
       hours: '',
       prices: '',
       can_comment: '1',
-      comment_options: [
-        { text: '是', value: '1' },
-        { text: '否', value: '0' }
-      ],
+      comment_options: [{ text: '是', value: '1' }, { text: '否', value: '0' }],
       reward_percent: '',
       description: '',
       is_audio_changed: false,
@@ -219,7 +216,11 @@ export default {
     }
   },
   methods: {
-    receive_uploaded_resource: function (upload_pic_resourse, audio_file_list, thumb_file) {
+    receive_uploaded_resource: function (
+      upload_pic_resourse,
+      audio_file_list,
+      thumb_file
+    ) {
       this.is_uploaded = true
       if (audio_file_list.length === 1) {
         this.audio_file_list[0] = audio_file_list[0]
@@ -239,41 +240,48 @@ export default {
       this.image_file_list = image_data_list
     },
     upload_all_data () {
-      let formdata = new FormData()
-      for (let i = 0; i < this.image_file_list.length; i++) {
-        formdata.append('images', this.image_file_list[i].file)
-        formdata.append('load_times', this.image_file_list[i].time)
+      if (this.verify_data() === true) {
+        let form_data = new FormData()
+        for (let i = 0; i < this.image_file_list.length; i++) {
+          form_data.append('images', this.image_file_list[i].file)
+          form_data.append('load_times', this.image_file_list[i].time)
+        }
+        form_data.append('audio', this.audio_file_list[0])
+        form_data.append('title', this.title)
+        form_data.append('codename', this.codename)
+        form_data.append('days', this.days)
+        form_data.append('hours', this.hours)
+        form_data.append('price', this.prices)
+        form_data.append('can_comment', this.can_comment)
+        form_data.append('reward_percent', this.reward_percent * 0.01)
+        form_data.append('description', this.description)
+        form_data.append('thumbnail', this.thumb_file[0])
+        axios
+          .post(
+            'http://localhost/api/v1/courses/backstage/course-management/add-course/',
+            form_data
+          )
+          .then(response => {
+            this.wrong_count_down = 0
+            this.success_count_down = 0
+            this.error_message = '增加课程成功'
+            this.success_count_down = 3
+            setTimeout(
+              this.$router.push({
+                name: 'CourseManagement'
+              }),
+              3000
+            )
+          })
+          .catch(error => {
+            this.wrong_count_down = 0
+            this.success_count_down = 0
+            this.error_message = this.init_error_message(
+              error.response.data.message
+            )
+            this.wrong_count_down = 5
+          })
       }
-      formdata.append('audio', this.audio_file_list[0])
-      formdata.append('title', this.title)
-      formdata.append('codename', this.codename)
-      formdata.append('days', this.days)
-      formdata.append('hours', this.hours)
-      formdata.append('price', this.prices)
-      formdata.append('can_comment', this.can_comment)
-      formdata.append('reward_percent', this.reward_percent * 0.01)
-      formdata.append('description', this.description)
-      formdata.append('thumbnail', this.thumb_file[0])
-      axios
-        .post(
-          'http://localhost/api/v1/courses/backstage/course-management/add-course/',
-          formdata
-        )
-        .then(response => {
-          this.wrong_count_down = 0
-          this.success_count_down = 0
-          this.error_message = '增加课程成功'
-          this.success_count_down = 3
-          setTimeout(this.$router.push({
-            name: 'CourseManagement'
-          }), 3000)
-        })
-        .catch(error => {
-          this.wrong_count_down = 0
-          this.success_count_down = 0
-          this.error_message = this.init_error_message(error.response.data.message)
-          this.wrong_count_down = 5
-        })
     },
     init_error_message (message) {
       switch (message) {
@@ -284,6 +292,19 @@ export default {
         default:
           return '数据库查询出错'
       }
+    },
+    verify_data () {
+      if (
+        this.codename === '' ||
+        this.title === '' ||
+        parseFloat(this.price) < 0 ||
+        parseFloat(this.reward_percent) < 0
+      ) {
+        this.wrong_count_down = 5
+        this.error_message = '用户输入信息有误'
+        return false
+      }
+      return true
     }
   }
 }
