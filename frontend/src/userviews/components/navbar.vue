@@ -38,6 +38,13 @@
           @click="log">
           {{ $store.state.status ? '注销' : '登录' }}
         </b-nav-item>
+        <b-alert
+          :show="log_test"
+          variant="danger"
+          dismissible
+          @dismissed="log_test=false">
+          {{ log_test_error }}
+        </b-alert>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
@@ -49,7 +56,10 @@ import axios from 'axios'
 export default {
   name: 'UserNavbar',
   data () {
-    return {}
+    return {
+      log_test: false,
+      log_test_error: ''
+    }
   },
   computed: {
     avatar () {
@@ -61,7 +71,7 @@ export default {
       axios
         .get(
           'http://localhost/api/v1/customers/forestage/personal-center/' +
-          'get-customer-detail/'
+            'get-customer-detail/'
         )
         .then(res => {
           this.$store.commit('avatar', res.data.avatar)
@@ -94,13 +104,13 @@ export default {
             withCredentials: true
           })
           .then(res => {
-            // console.log(res.data.message)
             alert('您已登出')
             that.$store.commit('status', false)
             that.$router.push({ path: '/' })
           })
           .catch(error => {
-            console.log(error.message)
+            that.log_test = true
+            that.log_test_error = error.response.data.message
           })
       } else {
         this.$router.push({ path: '/login' })
