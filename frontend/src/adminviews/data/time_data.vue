@@ -139,8 +139,7 @@ export default {
       end_date: new Date(),
       begin_date: new Date(new Date().getTime() - 24 * 60 * 60 * 1000),
       options: {
-        format: 'YYYY/MM/DD',
-        useCurrent: true
+        format: 'YYYY/MM/DD'
       },
       month: '',
       day: '',

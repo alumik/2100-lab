@@ -110,7 +110,9 @@
           class="table">
           <tbody class="w-100">
             <tr class="row mx-0">
-              <td class="col-3">头像</td>
+              <td
+                id="avatar"
+                class="col-3">头像</td>
               <td class="col-9">
                 <img :src="avatar">
               </td>
@@ -479,8 +481,12 @@ table {
   vertical-align: middle;
 }
 
+#avatar {
+  line-height: 90px;
+}
+
 img {
-  width: 40px;
+  height: 90px;
 }
 
 .col-3 {

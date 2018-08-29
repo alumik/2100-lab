@@ -19,124 +19,88 @@
       {{ add_praise_error_msg }}
     </b-alert>
     <div id="modals">
-      <div>
-        <b-modal
-          id="share-popup"
-          hide-footer
-          title="分享二维码">
-          <textarea
-            v-if="course.price!=0"
-            id="share-popup-textarea"
-            :value="share_reminder"
-            readonly
-            class="my-4 modal-input textarea-style"/>
-          <p
-            v-else
-            class="my-4">
-            &emsp; &emsp;分享该课程的二维码，和小伙伴一起学习吧~
-          </p>
+      <b-modal
+        id="share-popup"
+        ref="modal"
+        title="分享二维码"
+        ok-title="完成分享"
+        cancel-title="取消"
+        centered
+        @ok="hide_share_popup"
+        @cancel="hide_share_popup">
+        <textarea
+          v-if="course.price!=0"
+          id="share-popup-textarea"
+          :value="share_reminder"
+          readonly
+          class="my-4 modal-input textarea-style"/>
+        <p
+          v-else
+          class="my-4">
+          &emsp; &emsp;分享该课程的二维码，和小伙伴一起学习吧~
+        </p>
+        <qrcode
+          id="share-qrcode"
+          :options="{ size: 200 }"
+          value="share_qrcode_url"/>
+      </b-modal>
+      <b-modal
+        id="log-popup"
+        ref="modal"
+        title="注意！"
+        ok-title="登录"
+        cancel-title="取消"
+        centered
+        @ok="open_log(query_course_id)"
+        @cancel="hide_log_popup">
+        <p>请先登录！</p>
+      </b-modal>
+      <b-modal
+        id="pay-popup"
+        ref="modal"
+        title="购买课程"
+        ok-title="完成支付"
+        cancel-title="取消"
+        @cancel="hide_pay_popup"
+        @ok="finishPay">
+        <p
+          v-if="!pay_method_chosen"
+          id="pay-select"
+          :style="{color: pay_remind_color}"
+          class="my-4">请选择支付方式</p>
+        <div
+          v-if="pay_method_chosen === false"
+          class="pay-method-style">
+          <img
+            class="pay-image"
+            src="../../assets/alipay.png"
+            @click="pay_method_chose(1)">
+          <img
+            class="pay-image"
+            src="../../assets/weixin.png"
+            @click="pay_method_chose(2)">
+        </div>
+        <div v-if="pay_method_chosen">
           <qrcode
-            id="share-qrcode"
             :options="{ size: 200 }"
-            value="share_qrcode_url"
-            class="qrcode-style"/>
-          <div class="modal-style">
-            <b-btn
-              id="share-popup-cancel-button"
-              @click="hide_share_popup">
-              取消
-            </b-btn>
-            <b-btn
-              id="share-popup-finish-button"
-              variant="primary"
-              @click="hide_share_popup">
-              完成分享
-            </b-btn>
-          </div>
-        </b-modal>
-      </div>
-      <div>
-        <b-modal
-          id="log-popup"
-          hide-footer
-          title="注意！">
-          <p>请先登录！</p>
-          <div class="modal-style">
-            <b-btn @click="hide_log_popup">
-              取消
-            </b-btn>
-            <b-btn
-              variant="primary"
-              @click="open_log(query_course_id)">
-              登录
-            </b-btn>
-          </div>
-        </b-modal>
-      </div>
-      <div>
-        <b-modal
-          id="pay-popup"
-          hide-footer
-          title="购买课程">
-          <h5
-            v-if="!pay_method_chosen"
-            :style="{color: pay_remind_color}"
-            class="my-4">请选择支付方式</h5>
-          <b-row
-            v-if="pay_method_chosen === false"
-            class="pay-method-style">
-            <b-col>
-              <b-button
-                variant="primary"
-                @click="pay_method_chose(1)">支付宝</b-button>
-            </b-col>
-            <b-col>
-              <b-button
-                variant="primary"
-                @click="pay_method_chose(2)">微信</b-button>
-            </b-col>
-          </b-row>
-          <div v-if="pay_method_chosen">
-            <qrcode
-              :options="{ size: 200 }"
-              value="pay_qrcode_url"
-              class="qrcode-margin-style"/>
-            <p>{{ pay_method === 1 ? '支付宝': '微信' }}</p>
-          </div>
-          <div class="modal-style">
-            <b-btn @click="hide_pay_popup">
-              取消</b-btn>
-            <b-btn
-              variant="primary"
-              @click="finishPay">
-              完成支付
-            </b-btn>
-          </div>
-        </b-modal>
-      </div>
-      <div>
-        <b-modal
-          id="study-popup"
-          hide-footer
-          title="注意!">
-          <input
-            id="time_reminder"
-            :value="time_reminder"
-            readonly
-            class="modal-input">
-          <div class="modal-style">
-            <b-btn
-              id="study-popup-cancel-button"
-              @click="hide_study_popup">
-              取消</b-btn>
-            <b-btn
-              id="study-popup-start-button"
-              variant="primary"
-              @click="open_study_page(course.course_id)">
-              我知道了</b-btn>
-          </div>
-        </b-modal>
-      </div>
+            value="pay_qrcode_url"
+            class="qrcode-margin-style"/>
+        </div>
+      </b-modal>
+      <b-modal
+        id="study-popup"
+        ref="modal"
+        title="注意!"
+        ok-title="我知道了"
+        cancel-title="取消"
+        @ok="open_study_page(course.course_id)"
+        @cancel="hide_study_popup">
+        <input
+          id="time_reminder"
+          :value="time_reminder"
+          readonly
+          class="modal-input">
+      </b-modal>
     </div>
     <div
       id="profile"
@@ -170,6 +134,13 @@
                 color="#ffd706"
                 class="icon"
                 size="small"/> 现价 ￥{{ get_now_price() }}  </h6>
+            <h6 v-else>
+              <simple-line-icons
+                icon="basket-loaded"
+                color="#ffd706"
+                class="icon"
+                size="small"/>该课程为免费课程。
+            </h6>
             <h6
               v-if="!isNaN($store.state.user.reward_coin) &&
               $store.state.user.reward_coin != 0.00">&emsp;&emsp;￥
@@ -188,6 +159,14 @@
                 class="icon"
                 size="small"/> 课程时效
               {{ change_duration_to_timestamp(course.expire_duration) }}
+            </h6>
+            <h6 v-else>
+              <simple-line-icons
+                icon="clock"
+                color="#ffd706"
+                class="icon"
+                size="small"/>
+              该课程为永久课程。
             </h6>
           </div>
           <div>
@@ -310,7 +289,7 @@ export default {
     share_reminder: function () {
       let that = this
       return (
-        '分享该课程的二维码，如果小伙伴点击你分享的链接购买课程,' +
+        '    分享该课程的二维码，如果小伙伴点击你分享的链接购买课程,' +
         '\n你就将获得' +
         that.course.price * that.course.reward_percent +
         '奖励金哦！'
@@ -599,10 +578,6 @@ h6 {
   width: 100%;
 }
 
-.modal-style {
-  text-align: right;
-}
-
 .my-btn {
   width: 80px;
   height: 40px;
@@ -610,15 +585,9 @@ h6 {
   font-size: 16px;
 }
 
-.qrcode-margin-style {
-  margin-left: 20px;
-}
-
-.qrcode-style {
-  margin-left: 20px;
-}
-
 .pay-method-style {
+  display: flex;
+  justify-content: center;
   height: 100px;
 }
 
@@ -648,6 +617,18 @@ h6 {
 h5,
 p {
   margin-bottom: 10px;
+}
+
+#pay-select {
+  font-size: 20px;
+  text-align: center;
+}
+
+.pay-image {
+  width: 100px;
+  height: 100px;
+  margin: 0 10px;
+  cursor: pointer;
 }
 
 @media (max-width: 950px) {
