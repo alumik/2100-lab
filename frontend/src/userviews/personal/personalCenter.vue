@@ -7,6 +7,18 @@
         :hidden="hidden"/>
       <div class="info">
         <BreadCrumb :items="items"/>
+        <Alert
+          :count_down="wrong_count_down"
+          :instruction="wrong"
+          variant="danger"
+          @decrease="wrong_count_down-1"
+          @zero="wrong_count_down=0"/>
+        <Alert
+          :count_down="success_count_down"
+          :instruction="success"
+          variant="success"
+          @decrease="success_count_down-1"
+          @zero="success_count_down=0"/>
         <div class="content">
           <b-row class="avatar_related">
             <b-img
@@ -113,10 +125,12 @@ import UserMenu from './menu'
 import BreadCrumb from '../../components/bread_crumb'
 import axios from 'axios'
 import qs from 'qs'
+import Alert from '../../components/alert'
 
 export default {
   name: 'PersonalCenter',
   components: {
+    Alert,
     UserNavbar,
     UserMenu,
     BreadCrumb
@@ -144,7 +158,12 @@ export default {
       money: this.$store.state.user.reward_coin,
       time: this.$store.state.user.date_joined,
       del_disabled: false,
-      input_phone: ''
+      input_phone: '',
+      wrong_count_down: 0,
+      wrong: '',
+      dismiss_second: 5,
+      success_count_down: 0,
+      success: ''
     }
   },
   watch: {
@@ -174,7 +193,8 @@ export default {
         this.$store.commit('date_joined', this.time)
       })
       .catch(error => {
-        alert(error.message)
+        this.wrong = error.response.data.message
+        this.wrong_count_down = this.dismiss_second
       })
   },
   methods: {
@@ -194,7 +214,8 @@ export default {
         .then(res => {
           this.$store.commit('avatar', res.data.new_avatar)
           that.avatar = this.$store.state.address + res.data.new_avatar
-          alert('头像上传成功')
+          this.success = '头像上传成功'
+          this.success_count_down = this.dismiss_second
           this.$router.push({ path: '/personal' })
         })
     },

@@ -1,5 +1,11 @@
 <template>
   <div id="message-board">
+    <Alert
+      :count_down="success_count_down"
+      :instruction="success"
+      variant="success"
+      @decrease="success_count_down-1"
+      @zero="success_count_down=0"/>
     <div class="text-align-left">
       {{ rows }}
       <simple-line-icons
@@ -359,7 +365,10 @@ export default {
       new_reply: '',
       child_reply_num: 0,
       get_all_reply_id: 0,
-      replies: []
+      replies: [],
+      dismiss_second: 5,
+      success_count_down: 0,
+      success: ''
     }
   },
   created: function () {
@@ -625,8 +634,9 @@ export default {
         )
         .then(function (response) {
           if (response.data.message === 'Object deleted.') {
-            alert(that.$t('prompt.object_deleted'))
             that.get_all_message()
+            that.success = that.$t('prompt.object_deleted')
+            that.success_count_down = that.dismiss_second
           }
         })
         .catch(function (error) {
@@ -650,10 +660,11 @@ export default {
         )
         .then(function (response) {
           if (response.data.message === 'Object deleted.') {
-            alert(that.$t('prompt.object_deleted'))
             that.replies.splice(index, 1)
             that.get_replies(that.get_all_reply_id)
             that.get_all_message()
+            that.success = that.$t('prompt.object_deleted')
+            that.success_count_down = that.dismiss_second
           }
         })
         .catch(function (error) {

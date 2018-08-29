@@ -1,5 +1,11 @@
 <template>
   <div>
+    <Alert
+      :count_down="wrong_count_down"
+      :instruction="wrong"
+      variant="danger"
+      @decrease="wrong_count_down-1"
+      @zero="wrong_count_down=0"/>
     <a
       id="sync-btn"
       class="btn"
@@ -128,9 +134,11 @@
 <script>
 import Basic from '../basic/basic'
 import PreSortPicture from './pre_sort_picture'
+import Alert from '../../components/alert'
+
 export default {
   name: 'SyncPicture',
-  components: { PreSortPicture, Basic },
+  components: { Alert, PreSortPicture, Basic },
   props: {
     image_data_list: {
       default: () => {},
@@ -150,7 +158,10 @@ export default {
       audio_file_url: '',
       attr: ['', 'primary'],
       now_number: 1,
-      work_done: false
+      work_done: false,
+      wrong_count_down: 0,
+      wrong: '',
+      dismiss_second: 5
     }
   },
   watch: {
@@ -201,7 +212,8 @@ export default {
         }
         this.$refs.sync_picture.show()
       } else {
-        alert('Upload Audio First')
+        this.wrong = 'Upload Audio First'
+        this.wrong_count_down = this.dismiss_second
       }
     },
     hide_modal () {
@@ -214,7 +226,8 @@ export default {
         this.$refs.sync_picture.hide()
         this.$refs.player.pause()
       } else {
-        alert('WORK NOT FINISHED')
+        this.wrong = 'WORK NOT FINISHED'
+        this.wrong_count_down = this.dismiss_second
       }
     }
   }
