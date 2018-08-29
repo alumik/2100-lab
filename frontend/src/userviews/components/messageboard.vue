@@ -888,6 +888,7 @@ export default {
 .vote-style {
   width: 15px;
   height: 15px;
+  cursor: pointer;
 }
 
 .vote-style:hover {
@@ -904,6 +905,7 @@ export default {
 
 .delete-comment {
   text-align: right;
+  cursor: pointer;
 }
 
 .add_comment {
@@ -932,5 +934,9 @@ export default {
   font-size: 16px;
   font-weight: bold;
   color: rgba(255, 234, 18, 0.75);
+}
+
+#reply-button {
+  cursor: pointer;
 }
 </style>
