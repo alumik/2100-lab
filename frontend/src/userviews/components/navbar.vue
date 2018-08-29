@@ -1,9 +1,7 @@
 <template>
   <b-navbar
-    id="user-navbar"
     :sticky="true"
     toggleable="md"
-    type="dark"
     variant="primary"
     class="my-navbar">
     <button
@@ -13,7 +11,6 @@
       <span class="navbar-toggler-icon"/>
     </button>
     <b-navbar-brand
-      id="logo"
       class="logo"
       @click="home">
       <img
@@ -136,12 +133,13 @@ export default {
 
 .logo {
   height: 50px;
-  margin: 0;
+  margin-left: 28px;
   vertical-align: middle;
+  cursor: pointer;
 }
 
 .logo img {
-  height: 35px;
+  height: 45px;
 }
 
 .nav-link {
@@ -180,5 +178,11 @@ export default {
 
 #logout {
   padding: 6px;
+}
+
+.navbar-light .navbar-toggler {
+  margin: 0 15px;
+  border: none;
+  outline: none;
 }
 </style>

@@ -2,7 +2,6 @@
   <b-navbar
     :sticky="true"
     :toggleable="toggleable"
-    type="light"
     variant="primary"
     class="navbar">
     <div class="container-fluid">
@@ -103,6 +102,11 @@ export default {
 
 .navbar-brand {
   padding: 0;
+}
+
+#logoimg:hover {
+  -webkit-filter: brightness(150%);
+  filter: brightness(150%);
 }
 
 .logout {
