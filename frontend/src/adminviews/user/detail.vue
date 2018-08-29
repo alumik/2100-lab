@@ -284,22 +284,22 @@ export default {
         }
       )
       .then(function (response) {
-        if (response.data.message === 'Object not found.') {
-          that.wrong = '无法查找到此用户的详情信息！'
-          that.wrong_count_down = that.dismiss_second
-        } else {
-          that.user = that.compute_user(response.data.customer_info)
-          that.is_banned = response.data.customer_info.is_banned
-          that.is_vip = response.data.customer_info.is_vip
-          that.is_deleted = response.data.customer_info.is_deleted
-          that.orders = response.data.recent_orders
-          that.course_logs = response.data.recent_learning_logs
-          that.avatar = that.$store.state.address + response.data.customer_info.avatar
-        }
+        that.user = that.compute_user(response.data.customer_info)
+        that.is_banned = response.data.customer_info.is_banned
+        that.is_vip = response.data.customer_info.is_vip
+        that.is_deleted = response.data.customer_info.is_deleted
+        that.orders = response.data.recent_orders
+        that.course_logs = response.data.recent_learning_logs
+        that.avatar = that.$store.state.address + response.data.customer_info.avatar
       })
       .catch(function (error) {
-        that.wrong = '获取用户详情失败！' + error
-        that.wrong_count_down = that.dismiss_second
+        if (error.response.data.message === 'Object not found.') {
+          that.wrong = '该用户不存在，无法查找详情信息！'
+          that.wrong_count_down = that.dismiss_second
+        } else {
+          that.wrong = '获取用户详情失败！'
+          that.wrong_count_down = that.dismiss_second
+        }
       })
   },
   methods: {
@@ -353,22 +353,22 @@ export default {
           })
         )
         .then(function (response) {
-          if (response.data.message === 'Object not found.') {
-            that.wrong = '无法更改此用户认证信息！'
-            that.wrong_count_down = that.dismiss_second
+          that.is_vip = !that.is_vip
+          if (that.is_vip) {
+            that.success = '您已经成功认证此用户！'
           } else {
-            that.is_vip = !that.is_vip
-            if (that.is_vip) {
-              that.success = '您已经成功认证此用户！'
-            } else {
-              that.success = '您已经成功取消此用户的认证！'
-            }
-            that.success_count_down = that.dismiss_second
+            that.success = '您已经成功取消此用户的认证！'
           }
+          that.success_count_down = that.dismiss_second
         })
         .catch(function (error) {
-          that.wrong = '认证失败！' + error
-          that.wrong_count_down = that.dismiss_second
+          if (error.response.data.message === 'Object not found.') {
+            that.wrong = '该用户不存在，无法更改认证信息！'
+            that.wrong_count_down = that.dismiss_second
+          } else {
+            that.wrong = '认证失败！'
+            that.wrong_count_down = that.dismiss_second
+          }
         })
     },
     ban_user: function () {
@@ -381,22 +381,22 @@ export default {
           })
         )
         .then(function (response) {
-          if (response.data.message === 'Object not found.') {
-            that.wrong = '无法禁言此用户！'
-            that.wrong_count_down = that.dismiss_second
+          that.is_banned = !that.is_banned
+          if (that.is_banned) {
+            that.success = '您已经成功禁言此用户！'
           } else {
-            that.is_banned = !that.is_banned
-            if (that.is_banned) {
-              that.success = '您已经成功禁言此用户！'
-            } else {
-              that.success = '您已经成功取消此用户的禁言！'
-            }
-            that.success_count_down = that.dismiss_second
+            that.success = '您已经成功取消此用户的禁言！'
           }
+          that.success_count_down = that.dismiss_second
         })
         .catch(function (error) {
-          that.wrong = '操作失败！' + error
-          that.wrong_count_down = that.dismiss_second
+          if (error.response.data.message === 'Object not found.') {
+            that.wrong = '该用户不存在，无法禁言此用户！'
+            that.wrong_count_down = that.dismiss_second
+          } else {
+            that.wrong = '禁言失败！'
+            that.wrong_count_down = that.dismiss_second
+          }
         })
     },
     delete_user: function () {
@@ -409,18 +409,18 @@ export default {
           })
         )
         .then(function (response) {
-          if (response.data.message === 'Object not found.') {
-            that.wrong = '无法删除此用户！'
-            that.wrong_count_down = that.dismiss_second
-          } else {
-            that.success = '您已经成功删除此用户！'
-            that.is_deleted = true
-            that.success_count_down = that.dismiss_second
-          }
+          that.success = '您已经成功删除此用户！'
+          that.is_deleted = true
+          that.success_count_down = that.dismiss_second
         })
         .catch(function (error) {
-          that.wrong = '删除失败！' + error
-          that.wrong_count_down = that.dismiss_second
+          if (error.response.data.message === 'Object not found.') {
+            that.wrong = '该用户不存在，无法删除此用户！'
+            that.wrong_count_down = that.dismiss_second
+          } else {
+            that.wrong = '删除失败！'
+            that.wrong_count_down = that.dismiss_second
+          }
         })
     }
   }

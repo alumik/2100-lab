@@ -90,6 +90,7 @@ import BreadCrumb from '../../components/bread_crumb'
 import Basic from '../basic/basic'
 import axios from 'axios'
 import Alert from '../../components/alert'
+
 export default {
   name: 'TotalData',
   components: { Alert, Basic, BreadCrumb, Menu, AdminNavbar },
@@ -174,8 +175,13 @@ export default {
         that.study_top.rows = response.data.top_learned_courses
       })
       .catch(function (error) {
-        that.wrong = '获取数据失败' + error
-        that.wrong_count_down = that.dismiss_second
+        if (error.response.data.message === 'Access denied.') {
+          that.wrong = '您没有权限获取数据！'
+          that.wrong_count_down = that.dismiss_second
+        } else {
+          that.wrong = '获取数据失败！'
+          that.wrong_count_down = that.dismiss_second
+        }
       })
   },
   methods: {
@@ -212,21 +218,21 @@ export default {
           { params: { days: days } }
         )
         .then(function (response) {
-          if (response.data.message === 'Access denied.') {
+          that.increased_users = response.data.customers_count
+          that.sale = response.data.income
+          that.increased_courses = response.data.courses_count
+          that.orders = response.data.orders_count
+          that.praise_top.rows = response.data.top_up_voted_courses
+          that.study_top.rows = response.data.top_learned_courses
+        })
+        .catch(function (error) {
+          if (error.response.data.message === 'Access denied.') {
             that.wrong = '您没有权限获取数据！'
             that.wrong_count_down = that.dismiss_second
           } else {
-            that.increased_users = response.data.customers_count
-            that.sale = response.data.income
-            that.increased_courses = response.data.courses_count
-            that.orders = response.data.orders_count
-            that.praise_top.rows = response.data.top_up_voted_courses
-            that.study_top.rows = response.data.top_learned_courses
+            that.wrong = '获取数据失败！'
+            that.wrong_count_down = that.dismiss_second
           }
-        })
-        .catch(function (error) {
-          that.wrong = '获取数据失败' + error
-          that.wrong_count_down = that.dismiss_second
         })
     },
     change_button_state: function (val) {

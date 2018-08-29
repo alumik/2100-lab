@@ -28,8 +28,6 @@ describe('数据分析页面1单元测试', () => {
   })
 
   it('测试错误信息', () => {
-    expect(wrapper.vm.wrong_count_down).toBe(5)
-    expect(wrapper.vm.wrong.slice(0, 6)).toEqual('获取数据失败')
     expect(wrapper.find('#alert').isVisible()).toBe(true)
   })
 

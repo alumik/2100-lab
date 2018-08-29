@@ -115,8 +115,10 @@ export default {
         }
       })
       .catch(function (error) {
-        that.wrong = '查询日志失败！' + error
-        that.wrong_count_down = that.dismiss_second
+        if (error) {
+          that.wrong = '查询日志失败！' + error
+          that.wrong_count_down = that.dismiss_second
+        }
       })
   },
   methods: {
@@ -150,8 +152,10 @@ export default {
           }
         })
         .catch(function (error) {
-          that.wrong = '查询日志失败！' + error
-          that.wrong_count_down = that.dismiss_second
+          if (error) {
+            that.wrong = '查询日志失败！'
+            that.wrong_count_down = that.dismiss_second
+          }
         })
     },
     compute_date: function (date) {
