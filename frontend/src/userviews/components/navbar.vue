@@ -140,6 +140,7 @@ export default {
 
 .logo img {
   height: 45px;
+  vertical-align: center;
 }
 
 .nav-link {
