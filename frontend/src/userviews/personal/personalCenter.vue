@@ -182,7 +182,6 @@ export default {
       this.hidden = !this.hidden
     },
     change: function (event) {
-      // let reader = new FileReader()
       let that = this
       let data = new FormData()
       data.set('new_avatar', event.target.files[0])

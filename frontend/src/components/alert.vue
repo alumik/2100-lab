@@ -32,10 +32,10 @@ export default {
   methods: {
     count_down_changed: function () {
       const that = this
-      let t = setInterval(function () {
+      let time = setInterval(function () {
         this.$emit('decrease')
         if (that.val === 0) {
-          clearInterval(t)
+          clearInterval(time)
         }
       }, 1000)
     },

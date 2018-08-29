@@ -137,7 +137,7 @@ export default {
       axios
         .post(
           'http://localhost/api/v1/customers/forestage/auth/' +
-          'get-verification-code/',
+            'get-verification-code/',
           qs.stringify({
             phone_number: this.phone
           }),
@@ -149,12 +149,12 @@ export default {
           that.status = '再次发送 '
           this.log_disabled = false
           that.seconds = that.seconds - 1
-          let t = setInterval(function () {
+          let time = setInterval(function () {
             that.seconds = that.seconds - 1
             if (that.seconds === -1) {
               that.code_disabled = false
               that.seconds = 61
-              clearInterval(t)
+              clearInterval(time)
             }
           }, 1000)
         })
@@ -185,7 +185,7 @@ export default {
       axios
         .post(
           'http://localhost/api/v1/customers/forestage/auth/' +
-          'authenticate-customer/',
+            'authenticate-customer/',
           qs.stringify({
             phone_number: this.phone.toString(),
             verification_code: this.code.toString()
@@ -197,7 +197,7 @@ export default {
             axios
               .post(
                 'http://localhost/api/v1/customers/forestage/auth/' +
-                'get-eula/'
+                  'get-eula/'
               )
               .then(res => {
                 this.content = res.data.content
