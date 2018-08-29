@@ -114,7 +114,7 @@ export default {
           .catch(error => {
             this.wrong_count_down = 0
             this.success_count_down = 0
-            this.init_error_message(error.response.data.message)
+            this.error_message = this.init_error_message(error.response.data.message)
             this.wrong_count_down = 5
           })
       }
