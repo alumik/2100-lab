@@ -274,7 +274,7 @@ export default {
     const that = this
     axios
       .get(
-        'http://localhost:8000/api/v1/customers/backstage/customer-management/get-customer-detail/',
+        'http://localhost/api/v1/customers/backstage/customer-management/get-customer-detail/',
         {
           params: {
             customer_id: that.$route.query.user_id
@@ -345,7 +345,7 @@ export default {
       const that = this
       axios
         .post(
-          'http://localhost:8000/api/v1/customers/backstage/customer-management/toggle-vip/',
+          'http://localhost/api/v1/customers/backstage/customer-management/toggle-vip/',
           qs.stringify({
             customer_id: that.$route.query.user_id
           })
@@ -373,7 +373,7 @@ export default {
       const that = this
       axios
         .post(
-          'http://localhost:8000/api/v1/customers/backstage/customer-management/toggle-banned/',
+          'http://localhost/api/v1/customers/backstage/customer-management/toggle-banned/',
           qs.stringify({
             customer_id: that.$route.query.user_id
           })
@@ -401,7 +401,7 @@ export default {
       const that = this
       axios
         .post(
-          'http://localhost:8000/api/v1/customers/backstage/customer-management/delete-customer/',
+          'http://localhost/api/v1/customers/backstage/customer-management/delete-customer/',
           qs.stringify({
             customer_id: that.$route.query.user_id
           })

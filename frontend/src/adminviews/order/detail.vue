@@ -114,7 +114,7 @@ export default {
     const that = this
     axios
       .get(
-        'http://localhost:8000/api/v1/customers/backstage/order-management/get-order-detail/',
+        'http://localhost/api/v1/customers/backstage/order-management/get-order-detail/',
         {
           params: {
             order_id: that.$route.query.order_id
@@ -135,7 +135,7 @@ export default {
       const that = this
       axios
         .post(
-          'http://localhost:8000/api/v1/customers/backstage/order-management/order-refund/',
+          'http://localhost/api/v1/customers/backstage/order-management/order-refund/',
           qs.stringify({ order_id: that.$route.query.order_id })
         )
         .then(function (response) {
@@ -154,7 +154,7 @@ export default {
         })
       axios
         .get(
-          'http://localhost:8000/api/v1/customers/backstage/order-management/get-order-detail/',
+          'http://localhost/api/v1/customers/backstage/order-management/get-order-detail/',
           {
             params: {
               order_id: that.$route.query.order_id
