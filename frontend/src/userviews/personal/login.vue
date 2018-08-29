@@ -16,7 +16,9 @@
         </b-form-invalid-feedback>
       </b-input-group>
       <br>
-      <b-input-group prepend="验证码">
+      <b-input-group
+        prepend="验证码"
+        @keyup.enter="login">
         <b-form-input
           v-model="code"
           :state="code_state"
@@ -39,7 +41,8 @@
         :disabled="log_disabled"
         type="submit"
         variant="success"
-        @click="login">登录
+        @click="login"
+      >登录
       </b-button>
       <b-modal
         v-model="modal_show"
@@ -137,7 +140,7 @@ export default {
       axios
         .post(
           'http://localhost/api/v1/customers/forestage/auth/' +
-          'get-verification-code/',
+            'get-verification-code/',
           qs.stringify({
             phone_number: this.phone
           }),
@@ -149,12 +152,12 @@ export default {
           that.status = '再次发送 '
           this.log_disabled = false
           that.seconds = that.seconds - 1
-          let t = setInterval(function () {
+          let time = setInterval(function () {
             that.seconds = that.seconds - 1
             if (that.seconds === -1) {
               that.code_disabled = false
               that.seconds = 61
-              clearInterval(t)
+              clearInterval(time)
             }
           }, 1000)
         })
@@ -166,14 +169,41 @@ export default {
         })
     },
     handleOk (evt) {
-      this.$store.commit('status')
-      if (this.course_id !== -1) {
-        this.$router.push({
-          path: '/coursedetail',
-          query: { course_id: this.course_id }
+      axios
+        .post(
+          'http://localhost/api/v1/customers/forestage/auth/' +
+            'authenticate-customer/',
+          qs.stringify({
+            phone_number: this.phone.toString(),
+            verification_code: this.code.toString()
+          }),
+          { withCredentials: true }
+        )
+        .then(response => {
+          this.$store.commit('status')
+          this.$store.commit('username', response.data.username)
+          this.$store.commit('phone', this.phone)
+          this.$store.commit('avatar', response.data.avatar)
+          if (this.course_id !== -1) {
+            this.$router.push({
+              path: '/coursedetail',
+              query: { course_id: this.course_id }
+            })
+          }
+          this.$router.push({ path: '/' })
         })
-      }
-      this.$router.push({ path: '/personal' })
+        .catch(error => {
+          this.modal_show = !this.modal_show
+          if (error.response.data.message === 'Different phone number.') {
+            this.phone_state = false
+          } else if (
+            error.response.data.message === 'Wrong verification code.'
+          ) {
+            this.code_state = false
+          } else {
+            alert('请刷新重试')
+          }
+        })
     },
     handleCancel (evt) {
       axios.post('http://localhost/api/v1/core/auth/logout/', {
@@ -182,28 +212,27 @@ export default {
     },
     login () {
       let that = this
-      axios
-        .post(
-          'http://localhost/api/v1/customers/forestage/auth/' +
-          'authenticate-customer/',
-          qs.stringify({
-            phone_number: this.phone.toString(),
-            verification_code: this.code.toString()
-          }),
-          { withCredentials: true }
-        )
-        .then(response => {
-          if (that.new_customer) {
-            axios
-              .post(
-                'http://localhost/api/v1/customers/forestage/auth/' +
-                'get-eula/'
-              )
-              .then(res => {
-                this.content = res.data.content
-              })
-            this.modal_show = !this.modal_show
-          } else {
+      if (that.new_customer) {
+        axios
+          .post(
+            'http://localhost/api/v1/customers/forestage/auth/' + 'get-eula/'
+          )
+          .then(res => {
+            this.content = res.data.content
+          })
+        this.modal_show = !this.modal_show
+      } else {
+        axios
+          .post(
+            'http://localhost/api/v1/customers/forestage/auth/' +
+              'authenticate-customer/',
+            qs.stringify({
+              phone_number: this.phone.toString(),
+              verification_code: this.code.toString()
+            }),
+            { withCredentials: true }
+          )
+          .then(response => {
             this.$store.commit('status')
             this.$store.commit('username', response.data.username)
             this.$store.commit('phone', this.phone)
@@ -215,19 +244,19 @@ export default {
               })
             }
             this.$router.push({ path: '/' })
-          }
-        })
-        .catch(error => {
-          if (error.response.data.message === 'Different phone number.') {
-            that.phone_state = false
-          } else if (
-            error.response.data.message === 'Wrong verification code.'
-          ) {
-            this.code_state = false
-          } else {
-            alert('请刷新重试')
-          }
-        })
+          })
+          .catch(error => {
+            if (error.response.data.message === 'Different phone number.') {
+              that.phone_state = false
+            } else if (
+              error.response.data.message === 'Wrong verification code.'
+            ) {
+              this.code_state = false
+            } else {
+              alert('请刷新重试')
+            }
+          })
+      }
     }
   },
   async beforeRouteEnter (to, from, next) {

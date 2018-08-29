@@ -50,7 +50,7 @@ export default {
             withCredentials: true
           })
           .then(res => {
-            alert(res.data.message)
+            alert('您已登出')
             this.$store.commit('status', false)
             this.$store.commit('groups', [])
             this.$router.push({ path: '/admin' })

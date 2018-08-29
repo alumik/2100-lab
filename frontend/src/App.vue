@@ -21,18 +21,18 @@ export default {
       this.$store.commit('status')
       try {
         if (response.data.is_staff) {
-          let res = await axios.get(
+          let response_two = await axios.get(
             'http://localhost/api/v1/customers/forestage/personal-center/get-customer-detail/'
           )
-          this.$store.commit('user', res.data)
+          this.$store.commit('user', response_two.data)
           this.$store.commit('groups', response.data.admin_groups)
           this.$store.commit('colors', sessionStorage.getItem('colors'))
           this.$store.commit('menu', sessionStorage.getItem('menu'))
         } else {
-          let res = await axios.get(
+          let response_two = await axios.get(
             'http://localhost/api/v1/customers/forestage/personal-center/get-customer-detail/'
           )
-          this.$store.commit('user', res.data)
+          this.$store.commit('user', response_two.data)
           this.$store.commit('colors', sessionStorage.getItem('colors'))
           this.$store.commit('menu', sessionStorage.getItem('menu'))
         }

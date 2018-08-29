@@ -30,8 +30,8 @@ def get_heroes(request):
 def get_recent_courses(request):
     """获取最近课程"""
 
-    free_courses = utils.get_courses('free', 10)
-    paid_courses = utils.get_courses('paid', 10)
+    free_courses = utils.get_courses('free', 8)
+    paid_courses = utils.get_courses('paid', 8)
     json_data = {
         'free_courses': [],
         'paid_courses': []

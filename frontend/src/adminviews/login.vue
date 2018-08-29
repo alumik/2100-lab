@@ -70,16 +70,6 @@ export default {
       disabled: false
     }
   },
-  created () {
-    if (this.$store.state.status) {
-      // this.$router.push({ path: '/admin/main' })
-    }
-  },
-  mounted () {
-    if (this.$store.state.status) {
-      // this.$router.push({ path: '/admin/main' })
-    }
-  },
   methods: {
     check (evt) {
       this.disabled = true
@@ -102,8 +92,6 @@ export default {
             this.$store.commit('status')
             this.$store.commit('username', response.data.username)
             this.$router.push({ path: '/admin/main' })
-            // evt.preventDefault()
-            // this.error_message = '数据库错误'
           })
           .catch(error => {
             this.disabled = false
