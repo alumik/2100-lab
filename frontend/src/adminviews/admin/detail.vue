@@ -314,6 +314,10 @@ h1 {
   padding-left: 15px;
 }
 
+.table td {
+  vertical-align: middle;
+}
+
 .button-group {
   display: inline-block;
   float: right;

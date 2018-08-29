@@ -266,12 +266,13 @@ input {
   align-items: center;
 }
 
-tr {
+.table tr {
   align-items: center;
 }
 
-tr td {
+.table tr td {
   width: 180px;
+  vertical-align: middle;
 }
 
 .checkbox-div {

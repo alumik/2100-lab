@@ -286,7 +286,7 @@ table {
   border-top: 1px solid #d3d9df;
 }
 
-td {
+.table td {
   vertical-align: middle;
 }
 
