@@ -253,7 +253,6 @@
 <script>
 import Basic from '../components/basic'
 import axios from 'axios'
-import './style.css'
 import qs from 'qs'
 
 const shareQrcodeHost = 'http://localhost:8080/coursedetail'
@@ -328,8 +327,7 @@ export default {
     }
     axios
       .get(
-        'http://localhost/api/v1/courses/forestage/course/' +
-        'get-course-detail/',
+        'http://localhost/api/v1/courses/forestage/course/' + 'get-course-detail/',
         {
           params: {
             course_id: that.query_course_id,
@@ -340,8 +338,7 @@ export default {
       .then(function (response) {
         that.course = response.data
         that.course.price = parseFloat(response.data.price)
-        that.course.reward_percent =
-          parseFloat(response.data.reward_percent)
+        that.course.reward_percent = parseFloat(response.data.reward_percent)
         if (that.course.up_voted === true) {
           that.praise_color = 'green'
           that.praise_border_color = 'green'
@@ -358,13 +355,8 @@ export default {
         }
       })
     that.user_status = that.$store.state.status
-    that.share_qrcode_url =
-      shareQrcodeHost +
-      '?course_id=' +
-      that.query_course_id +
-      '&' +
-      'referer_id=' +
-      that.$store.state.user.customer_id
+    that.share_qrcode_url = shareQrcodeHost + '?course_id=' + that.query_course_id +
+      '&' + 'referer_id=' + that.$store.state.user.customer_id
   },
   mounted () {
     mygenerator = setInterval(this.generate_left_time, 1000)
@@ -470,8 +462,7 @@ export default {
         this.$root.$emit('bv::hide::modal', 'pay-popup')
         axios
           .post(
-            'http://localhost/api/v1/courses/forestage/course/' +
-            'buy-course/',
+            'http://localhost/api/v1/courses/forestage/course/' + 'buy-course/',
             qs.stringify({
               course_id: that.query_course_id,
               payment_method: that.pay_method
@@ -545,3 +536,157 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+#profile {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding: 20px 0;
+  margin: 50px;
+}
+
+.origin-value {
+  text-decoration: line-through;
+}
+
+#course-image,
+#introduction {
+  width: 28%;
+  height: 250px;
+  margin: 0 50px;
+}
+
+#course-image {
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+.img-thumbnail {
+  width: 400px;
+  height: 250px;
+}
+
+h3,
+h5,
+p {
+  text-align: left;
+}
+
+h3 {
+  font-weight: bold;
+}
+
+#introduction {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  text-align: left;
+}
+
+.price-time {
+  padding: 10px 20px;
+}
+
+h6 {
+  margin: 3px 0;
+}
+
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.modal-style {
+  text-align: right;
+}
+
+.my-btn {
+  width: 80px;
+  height: 40px;
+  margin-right: 20px;
+  font-size: 16px;
+}
+
+.qrcode-margin-style {
+  margin-left: 20px;
+}
+
+.qrcode-style {
+  margin-left: 20px;
+}
+
+.pay-method-style {
+  height: 100px;
+}
+
+.modal-input {
+  width: 100%;
+  border: none;
+}
+
+.textarea-style {
+  height: 60px;
+  resize: none;
+  outline: none;
+}
+
+.detail {
+  height: calc(100% - 360px);
+  padding: 5% 0;
+  background-color: #eee;
+}
+
+#detail-introduction {
+  width: 58%;
+  padding: 20px 50px;
+  background-color: white;
+}
+
+h5,
+p {
+  margin-bottom: 10px;
+}
+
+@media (max-width: 950px) {
+  #profile {
+    display: block;
+    padding: 10px 0;
+    margin: 2px;
+  }
+
+  #course-image,
+  #introduction {
+    width: 80%;
+    height: 250px;
+    padding: 5px;
+  }
+
+  #introduction {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    text-align: center;
+  }
+
+  .detail {
+    margin: 0;
+  }
+
+  #detail-introduction {
+    width: 75%;
+    padding: 20px;
+  }
+
+  .button-row {
+    justify-content: center;
+  }
+
+  .my-btn {
+    margin: 0 5px;
+  }
+}
+</style>
