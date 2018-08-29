@@ -69,11 +69,8 @@ describe('订单详情页面单元测试', () => {
   })
 
   it('测试refund函数', () => {
-    expect(wrapper.vm.wrong_count_down).toBe(wrapper.vm.dismiss_second)
     expect(wrapper.vm.is_refunded).toBe(false)
     wrapper.find('#refund-button').trigger('click')
-    expect(wrapper.vm.wrong_count_down).toBe(wrapper.vm.dismiss_second)
     expect(wrapper.vm.is_refunded).toBe(false)
-    expect(wrapper.vm.wrong.substr(0, 4)).toEqual('获取订单')
   })
 })
