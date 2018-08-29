@@ -182,8 +182,10 @@ export default {
         }
       })
       .catch(function (error) {
-        that.wrong = '加载用户失败！' + error
-        that.wrong_count_down = that.dismiss_second
+        if (error) {
+          that.wrong = '加载用户失败！'
+          that.wrong_count_down = that.dismiss_second
+        }
       })
   },
   methods: {
@@ -260,8 +262,10 @@ export default {
           }
         })
         .catch(function (error) {
-          that.wrong = '查询用户失败！' + error
-          that.wrong_count_down = that.dismiss_second
+          if (error) {
+            that.wrong = '加载用户失败！'
+            that.wrong_count_down = that.dismiss_second
+          }
         })
     }
   }

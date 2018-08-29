@@ -104,22 +104,22 @@ export default {
         }
       )
       .then(function (response) {
-        if (response.data.message === 'Object not found.') {
-          that.wrong = '无法查找到此用户的学习记录！'
-          that.wrong_count_down = that.dismiss_second
+        that.logs = response.data.content
+        that.rows = response.data.count
+        if (response.data.num_pages === 0) {
+          that.num_pages = 1
         } else {
-          that.logs = response.data.content
-          that.rows = response.data.count
-          if (response.data.num_pages === 0) {
-            that.num_pages = 1
-          } else {
-            that.num_pages = response.data.num_pages
-          }
+          that.num_pages = response.data.num_pages
         }
       })
       .catch(function (error) {
-        that.wrong = '获取此用户的学习记录失败！' + error
-        that.wrong_count_down = that.dismiss_second
+        if (error.response.data.message === 'Object not found.') {
+          that.wrong = '该用户不存在，无法查找学习记录！'
+          that.wrong_count_down = that.dismiss_second
+        } else {
+          that.wrong = '获取此用户的学习记录失败！'
+          that.wrong_count_down = that.dismiss_second
+        }
       })
   },
   methods: {
@@ -138,22 +138,22 @@ export default {
           }
         )
         .then(function (response) {
-          if (response.data.message === 'Object not found.') {
-            that.wrong = '无法查找到此用户的学习记录！'
-            that.wrong_count_down = that.dismiss_second
+          that.logs = response.data.content
+          that.rows = response.data.count
+          if (response.data.num_pages === 0) {
+            that.num_pages = 1
           } else {
-            that.logs = response.data.content
-            that.rows = response.data.count
-            if (response.data.num_pages === 0) {
-              that.num_pages = 1
-            } else {
-              that.num_pages = response.data.num_pages
-            }
+            that.num_pages = response.data.num_pages
           }
         })
         .catch(function (error) {
-          that.wrong = '获取此用户的学习记录失败！' + error
-          that.wrong_count_down = that.dismiss_second
+          if (error.response.data.message === 'Object not found.') {
+            that.wrong = '该用户不存在，无法查找学习记录！'
+            that.wrong_count_down = that.dismiss_second
+          } else {
+            that.wrong = '获取此用户的学习记录失败！' + error
+            that.wrong_count_down = that.dismiss_second
+          }
         })
     },
     compute_date: function (val) {

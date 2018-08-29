@@ -182,8 +182,10 @@ export default {
         }
       })
       .catch(function (error) {
-        that.wrong = '加载订单失败！' + error
-        that.wrong_count_down = that.dismiss_second
+        if (error) {
+          that.wrong = '加载订单失败！'
+          that.wrong_count_down = that.dismiss_second
+        }
       })
   },
   methods: {
@@ -237,8 +239,10 @@ export default {
           }
         })
         .catch(function (error) {
-          that.wrong = '查询订单失败！' + error
-          that.wrong_count_down = that.dismiss_second
+          if (error) {
+            that.wrong = '加载订单失败！'
+            that.wrong_count_down = that.dismiss_second
+          }
         })
     },
     to_detail: function (val) {

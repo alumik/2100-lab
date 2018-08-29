@@ -126,8 +126,13 @@ export default {
         that.is_refunded = response.data.is_refunded
       })
       .catch(function (error) {
-        that.wrong = '获取订单详情失败！' + error
-        that.wrong_count_down = that.dismiss_second
+        if (error.response.data.message === 'Object not found.') {
+          that.wrong = '该订单不存在！'
+          that.wrong_count_down = that.dismiss_second
+        } else {
+          that.wrong = '获取订单详情失败！'
+          that.wrong_count_down = that.dismiss_second
+        }
       })
   },
   methods: {
@@ -143,14 +148,16 @@ export default {
             that.success = '您已经成功退款。'
             that.is_refunded = true
             that.success_count_down = that.dismiss_second
-          } else {
-            that.wrong = '你所要退款的订单不存在，退款失败！'
-            that.wrong_count_down = that.dismiss_second
           }
         })
         .catch(function (error) {
-          that.wrong = '退款失败！' + error
-          that.wrong_count_down = that.dismiss_second
+          if (error.response.data.message === 'Object not found.') {
+            that.wrong = '你所要退款的订单不存在，退款失败！'
+            that.wrong_count_down = that.dismiss_second
+          } else {
+            that.wrong = '退款失败！' + error
+            that.wrong_count_down = that.dismiss_second
+          }
         })
       axios
         .get(
@@ -166,8 +173,13 @@ export default {
           that.is_refunded = response.data.is_refunded
         })
         .catch(function (error) {
-          that.wrong = '获取订单详情失败！' + error
-          that.wrong_count_down = that.dismiss_second
+          if (error.response.data.message === 'Object not found.') {
+            that.wrong = '该订单不存在！'
+            that.wrong_count_down = that.dismiss_second
+          } else {
+            that.wrong = '获取订单详情失败！'
+            that.wrong_count_down = that.dismiss_second
+          }
         })
     },
     compute_order: function (val) {

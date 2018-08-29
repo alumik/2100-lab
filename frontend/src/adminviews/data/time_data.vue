@@ -268,8 +268,13 @@ export default {
             that.data_empty = false
           })
           .catch(function (error) {
-            that.wrong = '获取信息失败！' + error
-            that.wrong_count_down = that.dismiss_second
+            if (error.response.data.message === 'Access denied.') {
+              that.wrong = '您没有权限获取数据！'
+              that.wrong_count_down = that.dismiss_second
+            } else {
+              that.wrong = '获取数据失败！'
+              that.wrong_count_down = that.dismiss_second
+            }
           })
       }
     }

@@ -140,8 +140,13 @@ export default {
           that.message = that.computed_message(response.data)
         })
         .catch(function (error) {
-          that.wrong = '获取留言详情失败！' + error
-          that.wrong_count_down = that.dismiss_second
+          if (error.response.data.message === 'Object not found.') {
+            that.wrong = '该留言不存在！'
+            that.wrong_count_down = that.dismiss_second
+          } else {
+            that.wrong = '获取留言详情失败！'
+            that.wrong_count_down = that.dismiss_second
+          }
         })
     },
     compute_state: function (deleted) {
@@ -182,20 +187,20 @@ export default {
           })
         )
         .then(function (response) {
-          if (response.data.message === 'Object not found.') {
-            that.wrong = '你所删除的留言不存在，删除失败！'
-            that.wrong_count_down = that.dismiss_second
-            that.success = '您已经成功删除此留言。'
-            that.success_count_down = that.dismiss_second
-          } else {
+          if (response.data.message === 'Object deleted.') {
             that.search()
             that.success = '您已经成功删除此留言。'
             that.success_count_down = that.dismiss_second
           }
         })
         .catch(function (error) {
-          that.wrong = '删除失败！' + error
-          that.wrong_count_down = that.dismiss_second
+          if (error.response.data.message === 'Object not found.') {
+            that.wrong = '你所删除的留言不存在，删除失败！'
+            that.wrong_count_down = that.dismiss_second
+          } else {
+            that.wrong = '删除失败！' + error
+            that.wrong_count_down = that.dismiss_second
+          }
         })
     },
     reply_message: function (val) {
@@ -212,14 +217,19 @@ export default {
           if (response.data.message === 'Success.') {
             that.success = '您已经成功回复此留言。'
             that.success_count_down = that.dismiss_second
-          } else {
-            that.wrong = '您所回复留言的课程不存在，回复失败！'
-            that.wrong_count_down = that.dismiss_second
           }
         })
         .catch(function (error) {
-          that.wrong = '回复失败！' + error
-          that.wrong_count_down = that.dismiss_second
+          if (error.response.data.message === 'Object not found.') {
+            that.wrong = '您所回复留言的课程不存在，回复失败！'
+            that.wrong_count_down = that.dismiss_second
+          } else if (error.response.data.message === 'Commenting is not allowed.') {
+            that.wrong = '该留言不能回复，回复失败！'
+            that.wrong_count_down = that.dismiss_second
+          } else {
+            that.wrong = '回复失败！' + error
+            that.wrong_count_down = that.dismiss_second
+          }
         })
     }
   }
