@@ -178,7 +178,13 @@ import qs from 'qs'
 import Alert from '../../components/alert'
 export default {
   name: 'EditCourse',
-  components: { Alert, SyncPicture, PreSortPicture, UploadSourceForEdit, Basic },
+  components: {
+    Alert,
+    SyncPicture,
+    PreSortPicture,
+    UploadSourceForEdit,
+    Basic
+  },
   data: function () {
     return {
       items: [
@@ -215,10 +221,7 @@ export default {
         origin_image_file_list: [],
         origin_thumb_file_list: []
       },
-      comment_options: [
-        { text: '是', value: '1' },
-        { text: '否', value: '0' }
-      ],
+      comment_options: [{ text: '是', value: '1' }, { text: '否', value: '0' }],
       thumb_file: '',
       audio_file_list: [],
       image_file_list: [],
@@ -248,7 +251,9 @@ export default {
       .catch(error => {
         this.wrong_count_down = 0
         this.success_count_down = 0
-        this.error_message = this.init_error_message(error.response.data.message)
+        this.error_message = this.init_error_message(
+          error.response.data.message
+        )
         this.wrong_count_down = 5
       })
   },
@@ -273,7 +278,8 @@ export default {
       )
       this.course.origin_audio_file_list[0] = data.audio
       this.course.origin_image_file_list = data.images
-      this.course.origin_thumb_file_list[0] = this.$store.state.address + data.thumbnail
+      this.course.origin_thumb_file_list[0] =
+        this.$store.state.address + data.thumbnail
       if (this.course.origin_image_file_list.length > 0) {
         for (let i = 0; i < this.course.origin_image_file_list.length; i++) {
           let addPath = this.$store.state.address
@@ -294,8 +300,13 @@ export default {
         this.audio_file_list.push(this.course.origin_audio_file_list[0])
       }
     },
-    receive_uploaded_resource: function (upload_pic_resourse, audio_file_list, origin_delete_image_index,
-      upload_thumb_resource, is_thumb_change) {
+    receive_uploaded_resource: function (
+      upload_pic_resourse,
+      audio_file_list,
+      origin_delete_image_index,
+      upload_thumb_resource,
+      is_thumb_change
+    ) {
       this.is_uploaded = true
       if (is_thumb_change === true) {
         this.is_thumb_change = true
@@ -303,7 +314,11 @@ export default {
         this.course.origin_thumb_file_list[0] = upload_thumb_resource[0]['data']
       }
       this.image_file_list.length = 0
-      if (audio_file_list && audio_file_list.length === 1 && audio_file_list[0]) {
+      if (
+        audio_file_list &&
+        audio_file_list.length === 1 &&
+        audio_file_list[0]
+      ) {
         this.is_audio_changed = true
         this.audio_file_list = audio_file_list
         this.course.origin_audio_file_list[0] = audio_file_list[0].name
@@ -345,43 +360,52 @@ export default {
       this.image_file_list = image_datalist
     },
     upload_all_data: function () {
-      let form_data = this.initial_form_data()
-      axios
-        .post(
-          'http://localhost/api/v1/courses/backstage/course-management/edit-course/',
-          form_data
-        )
-        .then(response => {
-          this.wrong_count_down = 0
-          this.success_count_down = 0
-          this.error_message = '修改课程成功'
-          this.success_count_down = 3
-          setTimeout(this.$router.push({
-            name: 'CourseManagement'
-          }), 3000)
-        })
-        .catch(error => {
-          this.wrong_count_down = 0
-          this.success_count_down = 0
-          this.error_message = this.init_error_message(error.response.data.message)
-          this.wrong_count_down = 5
-        })
-      axios
-        .post(
-          'http://localhost/api/v1/courses/backstage/course-management/delete-course-images/',
-          qs.stringify(
-            {
-              delete_list: this.delete_origin_image_index_list
-            },
-            { arrayFormat: 'repeat' }
+      if (this.verify_data() === true) {
+        let form_data = this.initial_form_data()
+        axios
+          .post(
+            'http://localhost/api/v1/courses/backstage/course-management/edit-course/',
+            form_data
           )
-        )
-        .catch(error => {
-          this.wrong_count_down = 0
-          this.success_count_down = 0
-          this.error_message = this.init_error_message(error.response.data.message)
-          this.wrong_count_down = 5
-        })
+          .then(response => {
+            this.wrong_count_down = 0
+            this.success_count_down = 0
+            this.error_message = '修改课程成功'
+            this.success_count_down = 3
+            setTimeout(
+              this.$router.push({
+                name: 'CourseManagement'
+              }),
+              3000
+            )
+          })
+          .catch(error => {
+            this.wrong_count_down = 0
+            this.success_count_down = 0
+            this.error_message = this.init_error_message(
+              error.response.data.message
+            )
+            this.wrong_count_down = 5
+          })
+        axios
+          .post(
+            'http://localhost/api/v1/courses/backstage/course-management/delete-course-images/',
+            qs.stringify(
+              {
+                delete_list: this.delete_origin_image_index_list
+              },
+              { arrayFormat: 'repeat' }
+            )
+          )
+          .catch(error => {
+            this.wrong_count_down = 0
+            this.success_count_down = 0
+            this.error_message = this.init_error_message(
+              error.response.data.message
+            )
+            this.wrong_count_down = 5
+          })
+      }
     },
     initial_form_data: function () {
       let form_data = new FormData()
@@ -421,6 +445,19 @@ export default {
         default:
           return '数据库查询出错'
       }
+    },
+    verify_data () {
+      if (
+        this.course.codename === '' ||
+        this.course.title === '' ||
+        parseFloat(this.course.price) < 0 ||
+        parseFloat(this.course.reward_percent) < 0
+      ) {
+        this.wrong_count_down = 5
+        this.error_message = '用户输入信息有误'
+        return false
+      }
+      return true
     }
   }
 }
