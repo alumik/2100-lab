@@ -152,4 +152,8 @@ export default {
   padding: 3rem;
   margin: 0;
 }
+
+.height-change {
+  max-height: calc(0.382 * 100vw);
+}
 </style>
