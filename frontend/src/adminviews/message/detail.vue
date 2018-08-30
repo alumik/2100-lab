@@ -106,7 +106,8 @@ export default {
     }
   },
   /**
-   * 该函数初始化留言详情页面，通过get方法向后端发送comment_id，表示当前详情页的留言ID，
+   * 该函数初始化留言详情页面，
+   * 通过get方法向后端发送comment_id，表示当前详情页的留言ID，
    * 获取该留言的详细信息，并赋值给message变量，
    * 获取信息失败时，根据返回的错误显示相应的提示信息。
    */
@@ -136,9 +137,9 @@ export default {
   },
   methods: {
     /**
-     * 该函数删除留言成功后，为刷新页面信息而调用，
+     * 该函数刷新订单详情，
      * 获取该留言的详细信息，并赋值给message变量，
-     * 获取信息失败时，根据返回的错误显示相应的提示信息。
+     * 捕捉错误并提示信息。
      */
     search: function () {
       const that = this
@@ -165,7 +166,7 @@ export default {
         })
     },
     /**
-     * 该函数接受一个boolean类型的参数，通过真假判断
+     * 该函数接收一个boolean类型的参数，
      * 返回一个字符串，表示留言是否被删除。
      * @param deleted
      * @returns {string}
@@ -178,8 +179,8 @@ export default {
       }
     },
     /**
-     * 该函数在给message变量赋值时调用，接受一个从后端获取的Object类型的对象，
-     * 返回一个包含留言详情信息的有序数组
+     * 该函数接收一个从后端获取的Object类型的对象，
+     * 返回一个包含留言详情信息的有序数组。
      * @param val
      * @returns {any[]}
      */
@@ -205,9 +206,10 @@ export default {
       return temp
     },
     /**
-     * 该函数在删除留言时调用，通过post方法向后端发送表示该留言ID的数据comment_id,
-     * 在删除成功时，获取后端发送的删除成功信息，失败时获取失败相应信息，
-     * 针对上述获取的信息显示提示信息
+     * 该函数删除留言，
+     * 通过post方法向后端发送表示该留言ID的数据comment_id,
+     * 获取后端执行操作后的返回信息，
+     * 进行操作成功、失败的提示。
      */
     delete_message: function () {
       const that = this
@@ -236,7 +238,8 @@ export default {
         })
     },
     /**
-     * 该函数在回复留言时调用，接受一个表示留言内容的val，
+     * 该函数回复留言，
+     * 接收一个表示留言内容的字符串参数，
      * 通过post方法发送表示留言ID的reply_to_id以及表示回复内容的comment_content，
      * 并根据后端返回的成功或失败信息，显示提示。
      * @param val

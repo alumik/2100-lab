@@ -163,7 +163,7 @@ export default {
   /**
    * 该函数在初始化订单管理页面时调用，
    * 通过post方法向后端发送每页最大数据量和当前页数，
-   * 并接受后端返回的订单、订单总数及页面总页数的信息，
+   * 并接收后端返回的订单、订单总数及页面总页数的信息，
    * 并捕捉错误信息进行提示
    */
   created () {
@@ -196,7 +196,7 @@ export default {
   },
   methods: {
     /**
-     * 该函数接受一个表示用户名的字符串，
+     * 该函数接收一个表示用户名的字符串，
      * 根据用户是否被删除返回处理过后的字符串类型的用户名
      * @param name
      * @returns {*}
@@ -210,7 +210,7 @@ export default {
       }
     },
     /**
-     * 该函数接受一个boolean类型的参数，
+     * 该函数接收一个boolean类型的参数，
      * 返回一个表示订单是否被退款的字符串
      * @param deleted
      * @returns {*}
@@ -270,7 +270,7 @@ export default {
         })
     },
     /**
-     * 该函数接受一个表示留言ID的参数，并跳转到该详情页面。
+     * 该函数接收一个表示留言ID的参数，并跳转到该详情页面。
      * @param val
      */
     to_detail: function (val) {
@@ -278,7 +278,7 @@ export default {
       this.$router.push({ name: 'OrderDetail', query: { order_id: val } })
     },
     /**
-     * 该函数接受一个表示页数的参数，
+     * 该函数接收一个表示页数的参数，
      * 更改页数并进行查询操作。
      * @param page
      */
