@@ -10,7 +10,7 @@
           class="course"
           @click="open_detail_page(course.course_id)">
           <img
-            :src="example_src"
+            :src="$store.state.address + course.thumbnail"
             class="image">
           <div class="introduction">
             <h5>{{ course.title }}</h5>
@@ -64,11 +64,6 @@ export default {
     rows: {
       type: Number,
       default: 0
-    }
-  },
-  data () {
-    return {
-      example_src: 'https://picsum.photos/400/300/?image=32'
     }
   },
   methods: {

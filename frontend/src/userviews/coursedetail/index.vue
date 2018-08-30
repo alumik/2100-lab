@@ -22,27 +22,27 @@
       <b-modal
         id="share-popup"
         ref="modal"
-        title="分享二维码"
-        ok-title="完成分享"
+        title="分享说明"
+        ok-title="我知道了"
         cancel-title="取消"
         centered
         @ok="hide_share_popup"
         @cancel="hide_share_popup">
-        <textarea
-          v-if="course.price!=0"
-          id="share-popup-textarea"
-          :value="share_reminder"
-          readonly
-          class="my-4 modal-input textarea-style"/>
+        <p
+          id="share-remind"
+          class="my-4">
+          &emsp; &emsp;{{ share_instruction }}
+        </p>
+        <p
+          v-if="course.price !== 0"
+          class="my-4">
+          &emsp; &emsp;{{ share_reminder }}
+        </p>
         <p
           v-else
           class="my-4">
-          &emsp; &emsp;分享该课程的二维码，和小伙伴一起学习吧~
+          &emsp; &emsp;分享该免费课程，和小伙伴一起徜徉在实验的海洋里吧！
         </p>
-        <qrcode
-          id="share-qrcode"
-          :options="{ size: 200 }"
-          value="share_qrcode_url"/>
       </b-modal>
       <b-modal
         id="log-popup"
@@ -98,6 +98,20 @@
         <input
           id="time_reminder"
           :value="time_reminder"
+          readonly
+          class="modal-input">
+      </b-modal>
+      <b-modal
+        id="using-reward-popup"
+        ref="modal"
+        title="注意!"
+        ok-title="我知道了"
+        cancel-title="取消"
+        @ok="using_reward_finish_pay"
+        @cancel="hide_using_reward_popup">
+        <input
+          id="using-reward"
+          value="确定使用奖励金购买该课程？"
           readonly
           class="modal-input">
       </b-modal>
@@ -176,6 +190,10 @@
               距离失效还有 {{ left_time }}</h6>
           </div>
         </div>
+        <SocialShare
+          :url="share_qrcode_url"
+          class="share"
+        />
         <div class="button-row">
           <b-button
             v-show="course.can_access || (!course.can_access
@@ -199,12 +217,11 @@
           <b-button
             v-b-modal.share-popup
             id="share-button"
-            :title="share_instruction"
             size="sm"
             variant="primary"
             class="my-btn share-margin"
           >
-            分享
+            分享说明
           </b-button>
           <b-button
             id="praise-button"
@@ -223,7 +240,7 @@
         id="detail-introduction"
         class="container">
         <h5>课程简介</h5>
-        <p>{{ course.description }}</p>
+        <p>&emsp;&emsp;{{ course.description }}</p>
       </div>
     </div>
   </Basic>
@@ -233,6 +250,7 @@
 import Basic from '../components/basic'
 import axios from 'axios'
 import qs from 'qs'
+import SocialShare from '../components/socialShare'
 
 const shareQrcodeHost = 'http://localhost:8080/coursedetail'
 var mygenerator = null
@@ -240,7 +258,8 @@ var mygenerator = null
 export default {
   name: 'CourseDetail',
   components: {
-    Basic
+    Basic,
+    SocialShare
   },
   data () {
     return {
@@ -269,7 +288,8 @@ export default {
       finishPay_error_msg: '',
       share_qrcode_url: '',
       referer_id: '',
-      left_time: ''
+      left_time: '',
+      can_paid_using_reward: false
     }
   },
   computed: {
@@ -289,7 +309,7 @@ export default {
     share_reminder: function () {
       let that = this
       return (
-        '    分享该课程的二维码，如果小伙伴点击你分享的链接购买课程,' +
+        '    分享该课程，如果小伙伴点击你分享的课程并购买,' +
         '\n你就将获得' +
         that.course.price * that.course.reward_percent +
         '奖励金哦！'
@@ -417,6 +437,9 @@ export default {
     hide_share_popup () {
       this.$root.$emit('bv::hide::modal', 'share-popup')
     },
+    hide_using_reward_popup () {
+      this.$root.$emit('bv::hide::modal', 'using-reward-popup')
+    },
     hide_pay_popup () {
       let that = this
       if (that.pay_method_chosen === true) {
@@ -468,6 +491,36 @@ export default {
           })
       }
     },
+    using_reward_finish_pay () {
+      let that = this
+      axios
+        .post(
+          'http://localhost/api/v1/courses/forestage/course/' + 'buy-course/',
+          qs.stringify({
+            course_id: that.query_course_id,
+            payment_method: 0
+          })
+        )
+        .then(function (response) {
+          if (response.data.message === 'Success.') {
+            that.course.can_access = true
+          }
+        })
+        .catch(function (error) {
+          if (error.response.data.message === 'Object not found.') {
+            that.finishPay_test = true
+            that.finishPay_error_msg = that.$t('error.object_not_found')
+          } else if (
+            error.response.data.message ===
+            'This course has already been purchased.'
+          ) {
+            that.finishPay_test = true
+            that.finishPay_error_msg = that.$t(
+              'error.course_already_purchased'
+            )
+          }
+        })
+    },
     open_study_page: function (id) {
       this.$router.push({
         name: 'StudyPage',
@@ -481,7 +534,9 @@ export default {
       })
     },
     handle_pay_operate: function () {
-      if (this.$store.state.status === true) {
+      if (this.can_paid_using_reward === true) {
+        this.$root.$emit('bv::show::modal', 'using-reward-popup')
+      } else if (this.$store.state.status === true) {
         this.$root.$emit('bv::show::modal', 'pay-popup')
       } else {
         this.$root.$emit('bv::show::modal', 'log-popup')
@@ -507,6 +562,7 @@ export default {
     },
     get_now_price: function () {
       if (this.$store.state.user.reward_coin > this.course.price) {
+        this.can_paid_using_reward = true
         return 0
       } else {
         return this.course.price - this.$store.state.user.reward_coin
@@ -544,6 +600,10 @@ export default {
 .img-thumbnail {
   width: 400px;
   height: 250px;
+}
+
+.share {
+  margin-left: 1rem;
 }
 
 h3,
