@@ -31,17 +31,17 @@
         <p
           id="share-remind"
           class="my-4">
-          &emsp; &emsp;{{ share_instruction }}
+          {{ share_instruction }}
         </p>
         <p
           v-if="course.price !== 0"
           class="my-4">
-          &emsp; &emsp;{{ share_reminder }}
+          {{ share_reminder }}
         </p>
         <p
           v-else
           class="my-4">
-          &emsp; &emsp;分享该免费课程，和小伙伴一起徜徉在实验的海洋里吧！
+          分享该免费课程，和小伙伴一起徜徉在实验的海洋里吧！
         </p>
       </b-modal>
       <b-modal
@@ -116,130 +116,132 @@
           class="modal-input">
       </b-modal>
     </div>
-    <div
-      id="profile"
-      class="row profile-style">
+    <div class="container">
       <div
-        id="course-image"
-        class="course-img-style">
-        <b-img
-          :src="$store.state.address+course.thumbnail"
-          fluid
-          thumbnail
-          alt="Responsive image Thumbnail"
-          class="img-thumbnail"/>
-      </div>
-      <div
-        id="introduction"
-        class="introduction-style">
+        id="profile"
+        class="row profile-style container">
         <div
-          id="page-title"
-          class="content-style">
-          <h3>
-            {{ course.title }}
-          </h3>
+          id="course-image"
+          class="course-img-style">
+          <b-img
+            :src="$store.state.address+course.thumbnail"
+            fluid
+            thumbnail
+            alt="Responsive image Thumbnail"
+            class="img-thumbnail"/>
         </div>
-        <div class="price-time">
+        <div
+          id="introduction"
+          class="introduction-style">
           <div
-            v-if="!course.can_access">
-            <h6
-              v-if="!course.can_access &&
-              course.price !== 0">
-              <simple-line-icons
-                icon="basket-loaded"
-                color="#ffd706"
-                class="icon"
-                size="small"/> 现价 ￥{{ get_now_price() }}  </h6>
-            <h6 v-else>
-              <simple-line-icons
-                icon="basket-loaded"
-                color="#ffd706"
-                class="icon"
-                size="small"/>该课程为免费课程。
-            </h6>
-            <h6
-              v-if="!isNaN($store.state.user.reward_coin) &&
-              $store.state.user.reward_coin != 0.00">&emsp;&emsp;￥
-              <label
-                v-if="!isNaN(course.price)"
-                class="origin-value">{{ course.price }}</label>
-            </h6>
+            id="page-title"
+            class="content-style">
+            <h3>
+              {{ course.title }}
+            </h3>
           </div>
-          <div>
-            <h6
-              v-if="course.expire_duration !==0 &&
-                !isNaN(course.expire_duration) &&
-                $store.state.user.is_vip === false &&
-              $store.state.user.is_staff === false">
-              <simple-line-icons
-                icon="clock"
-                color="#ffd706"
-                class="icon"
-                size="small"/> 课程时效
-              {{ change_duration_to_timestamp(course.expire_duration) }}
-            </h6>
-            <h6
-              v-else-if="$store.state.user.is_vip !== true
-              && $store.state.user.is_staff === false">
-              <simple-line-icons
-                icon="clock"
-                color="#ffd706"
-                class="icon"
-                size="small"/>
-              该课程为永久课程。
-            </h6>
+          <div class="price-time">
+            <div
+              v-if="!course.can_access">
+              <h6
+                v-if="!course.can_access &&
+                course.price !== 0">
+                <simple-line-icons
+                  icon="basket-loaded"
+                  color="#ffd706"
+                  class="icon"
+                  size="small"/> 现价 ￥{{ get_now_price() }}  </h6>
+              <h6 v-else>
+                <simple-line-icons
+                  icon="basket-loaded"
+                  color="#ffd706"
+                  class="icon"
+                  size="small"/>该课程为免费课程。
+              </h6>
+              <h6
+                v-if="!isNaN($store.state.user.reward_coin) &&
+                $store.state.user.reward_coin != 0.00">￥
+                <label
+                  v-if="!isNaN(course.price)"
+                  class="origin-value">{{ course.price }}</label>
+              </h6>
+            </div>
+            <div>
+              <h6
+                v-if="course.expire_duration !==0 &&
+                  !isNaN(course.expire_duration) &&
+                  $store.state.user.is_vip === false &&
+                $store.state.user.is_staff === false">
+                <simple-line-icons
+                  icon="clock"
+                  color="#ffd706"
+                  class="icon"
+                  size="small"/> 课程时效
+                {{ change_duration_to_timestamp(course.expire_duration) }}
+              </h6>
+              <h6
+                v-else-if="$store.state.user.is_vip !== true
+                && $store.state.user.is_staff === false">
+                <simple-line-icons
+                  icon="clock"
+                  color="#ffd706"
+                  class="icon"
+                  size="small"/>
+                该课程为永久课程。
+              </h6>
+            </div>
+            <div>
+              <h6
+                v-if="course.expire_time !== null &&
+                  course.expire_duration !==0 &&
+                  $store.state.user.is_vip === false &&
+                $store.state.user.is_staff === false">
+                距离失效还有 {{ left_time }}</h6>
+            </div>
           </div>
-          <div>
-            <h6
-              v-if="course.expire_time !== null &&
-                course.expire_duration !==0 &&
-                $store.state.user.is_vip === false &&
-              $store.state.user.is_staff === false">
-              距离失效还有 {{ left_time }}</h6>
+          <SocialShare
+            :url="share_qrcode_url"
+            class="share"
+          />
+          <div class="button-row">
+            <b-button
+              v-show="course.can_access || (!course.can_access
+              && $store.state.status === false && course.price===0)"
+              id="study-button"
+              size="sm"
+              variant="primary"
+              class="my-btn"
+              @click="start_study">
+              开始学习
+            </b-button>
+            <b-button
+              v-show="!course.can_access && course.price !== 0"
+              id="pay-button"
+              size="sm"
+              variant="primary"
+              class="my-btn"
+              @click="handle_pay_operate">
+              立即购买
+            </b-button>
+            <b-button
+              v-b-modal.share-popup
+              id="share-button"
+              size="sm"
+              variant="primary"
+              class="my-btn share-margin"
+            >
+              分享说明
+            </b-button>
+            <b-button
+              id="praise-button"
+              :style="{background: praise_color,
+                       border: praise_border_color}"
+              size="sm"
+              class="my-btn"
+              @click="add_praise">
+              {{ course.up_votes }} 赞
+            </b-button>
           </div>
-        </div>
-        <SocialShare
-          :url="share_qrcode_url"
-          class="share"
-        />
-        <div class="button-row">
-          <b-button
-            v-show="course.can_access || (!course.can_access
-            && $store.state.status === false && course.price===0)"
-            id="study-button"
-            size="sm"
-            variant="primary"
-            class="my-btn"
-            @click="start_study">
-            开始学习
-          </b-button>
-          <b-button
-            v-show="!course.can_access && course.price !== 0"
-            id="pay-button"
-            size="sm"
-            variant="primary"
-            class="my-btn"
-            @click="handle_pay_operate">
-            立即购买
-          </b-button>
-          <b-button
-            v-b-modal.share-popup
-            id="share-button"
-            size="sm"
-            variant="primary"
-            class="my-btn share-margin"
-          >
-            分享说明
-          </b-button>
-          <b-button
-            id="praise-button"
-            :style="{background: praise_color,
-                     border: praise_border_color}"
-            size="sm"
-            class="my-btn"
-            @click="add_praise">
-            {{ course.up_votes }} 赞
-          </b-button>
         </div>
       </div>
     </div>
@@ -248,7 +250,7 @@
         id="detail-introduction"
         class="container wrap-style">
         <h5>课程简介</h5>
-        <p>&emsp;&emsp;{{ course.description }}</p>
+        <p>{{ course.description }}</p>
       </div>
     </div>
   </Basic>
@@ -334,7 +336,8 @@ export default {
     }
     axios
       .get(
-        'http://localhost/api/v1/courses/forestage/course/' + 'get-course-detail/',
+        'http://localhost/api/v1/courses/forestage/course/' +
+          'get-course-detail/',
         {
           params: {
             course_id: that.query_course_id,
@@ -362,8 +365,13 @@ export default {
         }
       })
     that.user_status = that.$store.state.status
-    that.share_qrcode_url = shareQrcodeHost + '?course_id=' + that.query_course_id +
-      '&' + 'referer_id=' + that.$store.state.user.customer_id
+    that.share_qrcode_url =
+      shareQrcodeHost +
+      '?course_id=' +
+      that.query_course_id +
+      '&' +
+      'referer_id=' +
+      that.$store.state.user.customer_id
   },
   mounted () {
     mygenerator = setInterval(this.generate_left_time, 1000)
@@ -523,9 +531,7 @@ export default {
             'This course has already been purchased.'
           ) {
             that.finishPay_test = true
-            that.finishPay_error_msg = that.$t(
-              'error.course_already_purchased'
-            )
+            that.finishPay_error_msg = that.$t('error.course_already_purchased')
           }
         })
     },
@@ -603,6 +609,11 @@ export default {
 #course-image {
   overflow: hidden;
   vertical-align: middle;
+}
+
+p,
+h6 {
+  text-indent: 30px;
 }
 
 .img-thumbnail {
