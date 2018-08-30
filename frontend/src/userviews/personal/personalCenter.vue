@@ -88,7 +88,7 @@
                 disabled/>
             </b-input-group>
           </b-row>
-          <b-row style="text-align: right;">
+          <b-row class="delete">
             <b-button
               v-b-modal.modal
               :disabled="del_disabled">
@@ -352,6 +352,10 @@ img {
 
 [placeholder='请输入自己的手机号'] {
   margin-bottom: 15px;
+}
+
+.delete {
+  text-align: right;
 }
 
 @media (max-width: 500px) {
