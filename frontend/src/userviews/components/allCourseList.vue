@@ -82,12 +82,25 @@ export default {
     }
   },
   methods: {
+    /**
+     * 页面跳转
+     * 打开课程详情页面
+     * @params id 课程id
+     * 跳转将课程id传给课程详情页面 */
     open_detail_page: function (id) {
       this.$router.push({ name: 'CourseDetail', query: { course_id: id } })
     },
+    /**
+     * 改变页码
+     * @params page 分页器当前页码
+     * 发送给父组件该分页组件的页码值
+     * 传入函数：change_page
+     * */
     change_page: function (page) {
       this.$emit('change_page', page)
     },
+    /**
+     * */
     compute_message: function (message, val) {
       if (message) {
         if (message.length > val) {

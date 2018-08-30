@@ -319,6 +319,43 @@ export default {
       default: 0
     }
   },
+  /**
+   * @return {
+   *     username:string,用户名
+   *     new_msg:string,添加的留言
+   *     message_list:array,全端留言列表
+   *     created_tet: boolean,判断是否正确访问API
+   *     created_error_msg: string,访问API如错误返回的信息
+   *     get_all_message_test: boolean,判断是否正确访问留言列表API
+   *     get_all_message_error_msg: string，访问API如错误返回的信息
+   *     up_vote_test: boolean,判断点赞是否正确访问API
+   *     up_vote_error_msg: string，访问API如错误返回的信息
+   *     down_vote_test: boolean，判断点踩是否正确访问API
+   *     down_vote_error_msg: string，访问API如错误返回的信息
+   *     add_message_test: boolean，判断添加留言是否正确访问API
+   *     add_message_error_msg: string，访问API如错误返回的信息
+   *     delete_message_test: boolean，判断删除留言是否正确访问API
+   *     delete_message_error_msg: string，访问API如错误返回的信息
+   *     page_limit: number，每页留言的条数
+   *     page: number,当前留言板的页码值
+   *     rows: number,当前留言板留言的总条数
+   *     modal_page_limit: number，留言子楼全部留言
+   *     modal_page: number,留言子楼当前的页码
+   *     modal_rows: number,子楼总留言数,
+   *     up_icon_before: string,点赞按钮的点赞前样式
+   *     up_icon_after: string,点赞按钮的点赞后的样式
+   *     down_icon_before: string，点踩按钮的点踩前的样式
+   *     down_icon_after: string，点踩按钮的点踩后的样式,
+   *     can_comment: boolean,当前课程是否可以评论
+   *     reply_comment_id: number,当前渲染留言回复的留言ID
+   *     new_reply: string,新添加的留言
+   *     child_reply_num: number,子楼回复的数量
+   *     get_all_reply_id: number,查询所有回复的留言的ID
+   *     replies: array,查询所有回复的留言数组
+   *     dismiss_second: number,提示框自动消失的时间
+   *     success_count_down: number,成功关闭的时间
+   *     success: string，成功的提示信息
+   * } */
   data () {
     return {
       username: '小可爱',
@@ -362,20 +399,49 @@ export default {
     this.get_all_message()
   },
   methods: {
+    /**
+     * 工具函数
+     * 将从数据库中读取的数据
+     * 转换成本地时间以及标准形式 */
     get_date: function (date) {
       let temp = new Date(date)
       return temp.toLocaleString()
     },
+    /**
+     * 子组件传值
+     * 接受分页器子组件的页码值
+     * 将该页面的页码信息设置为分页器的当前指向的页码 */
+    change_list_page: function (page) {
+      let that = this
+      that.modal_page = page
+      that.get_replies(that.get_all_reply_id)
+    },
+    /**
+     * 关闭回复留言列表的弹框
+     */
     hide_reply_list_popup: function () {
       this.$root.$emit('bv::hide::modal', 'reply-list-popup')
     },
+    /**
+     * 关闭回复留言的弹框
+     */
     hide_reply_popup: function () {
       this.$root.$emit('bv::hide::modal', 'reply-popup')
     },
+    /**
+     * 打开回复留言的弹框
+     * 接收所回复留言的ID
+     */
     want_reply: function (Id) {
       this.reply_comment_id = Id
       this.$root.$emit('bv::show::modal', 'reply-popup')
     },
+    /**
+     * 访问后端api
+     * 获取全部留言
+     * 发送课程ID、每页展示留言条数、当前页码
+     * 获得总留言条数、总留言里列表、当前课程是否可评论
+     */
     get_all_message: function () {
       let that = this
       axios
@@ -406,6 +472,14 @@ export default {
           }
         })
     },
+    /**
+     * 给留言点赞
+     * 传入前端留言列表访问留言的索引值
+     * 传入当前留言的ID
+     * 如访问成功且未点赞，则点赞数加1
+     * 如访问成功且已点赞，则点赞数减1
+     * 如没有点赞和点踩权限，则提示错误信息
+     * */
     up_vote: function (index, Id) {
       let that = this
       axios
@@ -435,6 +509,15 @@ export default {
           that.up_vote_error_msg = error.response.data.message
         })
     },
+    /**
+     * 给子楼回复点赞
+     * 传入前端留言列表访问留言的索引值
+     * 传入当前留言的ID
+     * 传入当前留言的回复ID
+     * 如访问成功且未点赞，则点赞数加1
+     * 如访问成功且已点赞，则点赞数减1
+     * 如没有点赞和点踩权限，则提示错误信息
+     * */
     up_vote_child_reply: function (index, reply_index, Id) {
       let that = this
       axios
@@ -466,6 +549,14 @@ export default {
           that.up_vote_error_msg = error.response.data.message
         })
     },
+    /**
+     * 给模态框中子楼回复点赞
+     * 传入留言所有回复列表中当前回复的索引
+     * 传入当前留言的ID
+     * 如访问成功且未点赞，则点赞数加1
+     * 如访问成功且已点赞，则点赞数减1
+     * 如没有点赞和点踩权限，则提示错误信息
+     * */
     modal_up_vote_reply: function (reply_index, Id) {
       let that = this
       axios
@@ -495,6 +586,14 @@ export default {
           that.up_vote_error_msg = error.response.data.message
         })
     },
+    /**
+     * 给留言点踩
+     * 传入前端留言列表访问留言的索引值
+     * 传入当前留言的ID
+     * 如访问成功且未点踩，则点踩数加1
+     * 如访问成功且已点踩，则点踩数减1
+     * 如没有点赞和点踩权限，则提示错误信息
+     * */
     down_vote: function (index, Id) {
       let that = this
       axios
@@ -523,6 +622,15 @@ export default {
           }
         })
     },
+    /**
+     * 给子楼回复点踩
+     * 传入前端留言列表访问留言的索引值
+     * 传入当前留言的ID
+     * 传入当前留言的回复ID
+     * 如访问成功且未点踩，则点踩数加1
+     * 如访问成功且已点踩，则点踩数减1
+     * 如没有点赞和点踩权限，则提示错误信息
+     * */
     down_vote_child_reply: function (index, reply_index, msgCommentId) {
       let that = this
       axios
@@ -553,6 +661,14 @@ export default {
           }
         })
     },
+    /**
+     * 给模态框中子楼回复点踩
+     * 传入留言所有回复列表中当前回复的索引
+     * 传入当前留言的ID
+     * 如访问成功且未点踩，则点踩数加1
+     * 如访问成功且已点踩，则点踩数减1
+     * 如没有点赞和点踩权限，则提示错误信息
+     * */
     modal_down_vote_reply: function (reply_index, msgCommentId) {
       let that = this
       axios
@@ -581,11 +697,23 @@ export default {
           }
         })
     },
+    /**
+     * 查看当前留言所有回复
+     * 传入留言ID
+     * 调用获取全部回复的API
+     * 并弹出显示当前留言的所有回复的模态框 */
     watch_all_replies: function (commentId) {
       this.get_all_reply_id = commentId
       this.get_replies(commentId)
       this.$root.$emit('bv::show::modal', 'reply-list-popup')
     },
+    /**
+     * 获取全部留言
+     * 传入留言ID
+     * 向后端发送留言ID、每页显示留言数目、模态框中留言列表的当前页码
+     * 接受到当前留言当前页码的回复
+     * 接受到回复的总条数
+     * */
     get_replies: function (commentId) {
       let that = this
       axios
