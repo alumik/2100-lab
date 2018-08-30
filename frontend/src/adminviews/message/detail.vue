@@ -70,6 +70,19 @@ import Alert from '../../components/alert'
 export default {
   name: 'MessageDetail',
   components: { Alert, DetailTable, Basic, InputModal, ConfirmModal },
+  /**
+   * @returns {{
+   * items: *[], 面包屑路由地址
+   * titles: Array, 留言详情标题
+   * message: Array, 留言详情数据
+   * dismiss_second: number,
+   * wrong_count_down: number,
+   * wrong: string,
+   * success_count_down: number,
+   * success: string
+   * Alert组件所需参数
+   * }}
+   */
   data () {
     return {
       items: [

@@ -123,6 +123,28 @@ import Alert from '../../components/alert'
 export default {
   name: 'OrderManagement',
   components: { Alert, Basic, Pagination },
+  /**
+   * @returns {{
+   * items: *[], 面包屑路由地址
+   * titles: Array, 订单列表标题
+   * orders: Array, 订单列表数据
+   * order_code: string，
+   * course_code: string,
+   * course_name: string,
+   * user: string,
+   * state: string，
+   * 订单列表查询条件数据
+   * rows: number, 数据总条数
+   * page: number, 当前页数
+   * per_page: number, 单页数据条数
+   * num_pages: number, 数据总页数
+   * page_jump: boolean, 页面跳转标志
+   * dismiss_second: number,
+   * wrong_count_down: number,
+   * wrong: string,
+   * Alert组件所需参数
+   * }}
+   */
   data () {
     return {
       items: [
@@ -145,19 +167,19 @@ export default {
         { label: '操作' }
       ],
       orders: [],
-      rows: 0,
       order_code: '',
       course_code: '',
       course_name: '',
       user: '',
       state: '',
       page_jump: false,
+      rows: 0,
       page: 1,
       per_page: 15,
+      num_pages: 0,
       dismiss_second: 5,
       wrong_count_down: 0,
-      wrong: '',
-      num_pages: 0
+      wrong: ''
     }
   },
   /**

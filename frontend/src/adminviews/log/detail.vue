@@ -52,6 +52,22 @@ import Alert from '../../components/alert'
 export default {
   name: 'LogDetail',
   components: { Alert, Pagination, Basic },
+  /**
+   * @returns {{
+   * items: *[], 面包屑路由地址
+   * titles: Array, 日志列表标题
+   * logs: Array, 日志列表数据
+   * select: Array, 所选日志项目
+   * rows: number, 数据总条数
+   * page: number, 当前页数
+   * per_page: number, 单页数据条数
+   * num_pages: number, 数据总页数
+   * dismiss_second: number,
+   * wrong_count_down: number,
+   * wrong: string
+   * Alert组件所需参数
+   * }}
+   */
   data () {
     return {
       items: [
@@ -70,14 +86,14 @@ export default {
       ],
       titles: [{ label: '时间' }, { label: '管理员名称' }, { label: '内容' }],
       logs: [],
-      rows: 20,
+      select: [],
+      rows: 0,
       page: 1,
       per_page: 15,
+      num_pages: 0,
       dismiss_second: 5,
       wrong_count_down: 0,
-      wrong: '',
-      select: [],
-      num_pages: 0
+      wrong: ''
     }
   },
   /**

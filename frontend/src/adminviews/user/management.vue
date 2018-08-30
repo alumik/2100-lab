@@ -124,6 +124,28 @@ import Alert from '../../components/alert'
 export default {
   name: 'UserManagement',
   components: { Alert, Basic, Pagination },
+  /**
+   * @returns {{
+   * items: *[], 面包屑路由地址
+   * titles: Array, 用户列表标题
+   * users: Array, 用户列表数据
+   * user_id: string，
+   * user_name: string,
+   * phone: string,
+   * type: string,
+   * state: string，
+   * 用户列表查询条件数据
+   * rows: number, 数据总条数
+   * page: number, 当前页数
+   * per_page: number, 单页数据条数
+   * num_pages: number, 数据总页数
+   * page_jump: boolean, 页面跳转标志
+   * dismiss_second: number,
+   * wrong_count_down: number,
+   * wrong: string,
+   * Alert组件所需参数
+   * }}
+   */
   data () {
     return {
       items: [
@@ -145,19 +167,19 @@ export default {
         { label: '操作' }
       ],
       users: [],
-      rows: 0,
       user_id: '',
       user_name: '',
       phone: '',
       type: '',
       state: '',
       page_jump: false,
+      rows: 0,
       page: 1,
       per_page: 15,
+      num_pages: 0,
       dismiss_second: 5,
       wrong_count_down: 0,
-      wrong: '',
-      num_pages: 0
+      wrong: ''
     }
   },
   /**

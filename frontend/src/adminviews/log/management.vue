@@ -108,6 +108,30 @@ import Alert from '../../components/alert'
 export default {
   name: 'LogManagement',
   components: { Alert, Basic },
+  /**
+   * @returns {{
+   * items: *[], 面包屑路由地址
+   * admin_id: string, 管理员名称
+   * end_date: object,
+   * begin_date: object,
+   * options: object,
+   * 日历数据及配置
+   * select1: Array,
+   * options1: Array,
+   * select2: Array,
+   * options2: Array,
+   * select3: Array,
+   * options3: Array,
+   * select4: Array,
+   * options4: Array,
+   * 复选框数据
+   * page_jump: boolean, 页面跳转标志
+   * dismiss_second: number,
+   * wrong_count_down: number,
+   * wrong: string
+   * Alert组件所需参数
+   * }}
+   */
   data () {
     return {
       items: [
@@ -120,12 +144,12 @@ export default {
           active: true
         }
       ],
+      admin_id: '',
       begin_date: new Date(new Date().getTime() - 24 * 60 * 60 * 1000),
       end_date: new Date(),
       options: {
         format: 'YYYY/MM/DD'
       },
-      admin_id: '',
       select1: [],
       options1: [
         { text: '增加管理员', value: 1 },

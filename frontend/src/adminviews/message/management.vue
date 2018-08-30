@@ -158,6 +158,32 @@ import Alert from '../../components/alert'
 export default {
   name: 'MessageManagement',
   components: { Alert, Basic, InputModal, ConfirmModal, Pagination },
+  /**
+   * @returns {{
+   * items: *[], 面包屑路由地址
+   * titles: Array, 留言列表标题
+   * messages: Array, 留言列表数据
+   * user: string，
+   * course_code: string,
+   * course_name: string,
+   * state: string，
+   * 留言列表查询条件数据
+   * reply: string, 回复留言内容
+   * reply_id: string, 所回复留言的id
+   * delete_id: string, 所删除留言的id
+   * rows: number, 数据总条数
+   * page: number, 当前页数
+   * per_page: number, 单页数据条数
+   * num_pages: number, 数据总页数
+   * page_jump: boolean, 页面跳转标志
+   * dismiss_second: number,
+   * wrong_count_down: number,
+   * wrong: string,
+   * success_count_down: number,
+   * success: string
+   * Alert组件所需参数
+   * }}
+   */
   data () {
     return {
       items: [
@@ -170,7 +196,6 @@ export default {
           active: true
         }
       ],
-      rows: 0,
       messages: null,
       titles: [
         { label: this.$t('message.header1') },
@@ -186,17 +211,18 @@ export default {
       course_name: '',
       state: '',
       reply: '',
+      reply_id: '',
+      delete_id: '',
       page_jump: false,
+      rows: 0,
       per_page: 15,
       page: 1,
+      num_pages: 0,
+      dismiss_second: 5,
       wrong: '',
       success: '',
-      dismiss_second: 5,
       wrong_count_down: 0,
-      success_count_down: 0,
-      delete_id: '',
-      reply_id: '',
-      num_pages: 0
+      success_count_down: 0
     }
   },
   /**
