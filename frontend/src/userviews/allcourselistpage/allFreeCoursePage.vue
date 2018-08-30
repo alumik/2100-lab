@@ -12,9 +12,11 @@
       <AllCourseList
         id="all-free"
         :page_title="page_title"
+        :another_page_title="another_page_title"
         :course_list="course_list"
         :rows="rows"
-        @change_page="change_page"/>
+        @change_page="change_page"
+        @to_another_page="to_another_page"/>
     </div>
   </Basic>
 </template>
@@ -33,6 +35,7 @@ export default {
   data () {
     return {
       page_title: '免费课程',
+      another_page_title: '付费课程',
       course_list: [],
       course_type: 'free',
       page_limit: 15,
@@ -73,6 +76,9 @@ export default {
           that.created_test = true
           that.created_error_msg = error.response.data.message
         })
+    },
+    to_another_page: function () {
+      this.$router.push({ path: '/allpaidcourse' })
     }
   }
 }

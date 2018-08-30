@@ -1,7 +1,18 @@
 <template>
   <div>
     <div class="body container">
-      <h4>{{ page_title }}</h4>
+      <div class="title">
+        <h4>{{ page_title }}</h4>
+        <div class="another-page">
+          <simple-line-icons
+            style="display: inline;"
+            icon="arrow-right"
+            color="#FCE1E5"
+            class="icon"
+            size="large"/>
+          <span @click="to_another_page">{{ another_page_title }}</span>
+        </div>
+      </div>
       <div
         v-for="course in course_list"
         id="course-list"
@@ -47,6 +58,10 @@ export default {
       type: String,
       default: ''
     },
+    another_page_title: {
+      type: String,
+      default: ''
+    },
     course_list: {
       type: Array,
       default: function () {
@@ -83,6 +98,9 @@ export default {
       } else {
         return ''
       }
+    },
+    to_another_page: function () {
+      this.$emit('to_another_page')
     }
   }
 }
@@ -93,7 +111,9 @@ export default {
   padding: 20px 0 20px 0;
 }
 
-h4 {
+.title {
+  display: flex;
+  justify-content: space-between;
   margin: 20px 0 20px 0;
   text-align: left;
   vertical-align: center;
@@ -110,6 +130,10 @@ h4 {
 
 .wrap-style {
   word-break: break-word;
+}
+
+span {
+  cursor: pointer;
 }
 
 .image {
