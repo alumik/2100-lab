@@ -36,7 +36,8 @@ const store = new Vuex.Store({
       is_banned: '',
       date_joined: '',
       updated_at: '',
-      groups: []
+      groups: [],
+      is_staff: false
     },
     groups: [],
     address: 'http://localhost/media/',
@@ -152,6 +153,9 @@ const store = new Vuex.Store({
           i++
         }
       }
+    },
+    staff (state, is_staff = true) {
+      state.user.is_staff = is_staff
     }
   }
 })
