@@ -88,8 +88,8 @@
             </div>
             <b-collapse
               id="course-description"
-              class="mt-2">
-              <div class="text-align-left text-margin-description">
+              class="mt-2 wrap-style">
+              <div class="text-align-left">&emsp;&emsp;
                 {{ course.description }}</div>
             </b-collapse>
           </div>
@@ -181,8 +181,7 @@ export default {
           that.assets_test = true
           that.assets_error_msg = that.$t('error.object_not_found')
         } else if (error.response.data.message === 'Access denied.') {
-          that.assets_test = true
-          that.assets_error_msg = that.$t('error.access_denied')
+          that.$router.push({name: 'PageNotFound'})
         }
       })
     axios.get('http://localhost/api/v1/courses/forestage/course/' +
@@ -318,6 +317,11 @@ export default {
   width: 100%;
   height: 50%;
   padding: 1rem 0 0 0;
+}
+
+.wrap-style {
+  word-break: normal;
+  word-wrap: break-word;
 }
 
 .image-style {

@@ -21,22 +21,22 @@
           @zero="success_count_down=0"/>
         <div class="content">
           <b-row class="avatar_related">
-            <b-img
-              :src="avatar"
-              thumbnail
-              fluid
-              alt="Thumbnail"/>
-            <button
-              type="button"
-              class="btn btn-warning btn-lg">
-              修改头像
+            <div class="img-height">
+              <b-img
+                :src="avatar"
+                thumbnail
+                fluid
+                class="userimg"
+                alt="Thumbnail"/>
               <b-form-file
                 v-model="file"
                 :class="{'upload': true}"
+                class="avatar-style"
                 plain
+                title="更换头像"
                 accept="image/*"
                 @change="change"/>
-            </button>
+            </div>
           </b-row>
           <b-row>
             <b-input-group
@@ -50,7 +50,6 @@
               <b-input-group-append>
                 <b-btn
                   id="change"
-                  variant="outline-success"
                   @click="editable">{{ status }}</b-btn>
               </b-input-group-append>
               <b-form-invalid-feedback id="inputLiveFeedback">
@@ -70,7 +69,6 @@
           </b-row>
           <b-row>
             <b-input-group
-              class="money"
               size="lg"
               prepend="奖励金"
               append="币">
@@ -90,12 +88,10 @@
                 disabled/>
             </b-input-group>
           </b-row>
-          <b-row>
+          <b-row style="text-align: right;">
             <b-button
               v-b-modal.modal
-              :disabled="del_disabled"
-              size="lg"
-              variant="danger">
+              :disabled="del_disabled">
               删除账号
             </b-button>
             <b-modal
@@ -108,7 +104,6 @@
                 type="text"
                 placeholder="请输入自己的手机号"/>
               <b-btn
-                variant="outline-danger"
                 block
                 @click="Delete">确认删除</b-btn>
             </b-modal>
@@ -263,6 +258,17 @@ export default {
 </script>
 
 <style scoped>
+.was-validated .form-control:valid,
+.form-control.is-valid,
+.was-validated .custom-select:valid,
+.custom-select.is-valid {
+  border-color: #ced4da;
+}
+
+.img-height {
+  height: 200px;
+}
+
 #page {
   height: 100%;
 }
@@ -277,9 +283,17 @@ export default {
 }
 
 .content {
-  max-width: 600px;
+  max-width: 500px;
   padding: 20px;
   margin-left: 40px;
+  text-align: center;
+}
+
+.avatar-style {
+  bottom: 180px !important;
+  left: 25px !important;
+  width: 150px !important;
+  height: 150px !important;
 }
 
 .row {
@@ -288,8 +302,15 @@ export default {
   margin-bottom: 10px;
 }
 
+.userimg {
+  width: 200px;
+  height: 200px;
+  margin-right: 20px;
+  border-radius: 50%;
+}
+
 .avatar_related {
-  justify-content: space-between;
+  justify-content: center;
   margin-bottom: 30px;
 }
 
@@ -325,15 +346,18 @@ img {
   background-color: white;
 }
 
-.money .input-group-text {
-  background-color: #ffeaa4;
-}
-
 .input-group-append .input-group-text {
   width: auto;
 }
 
 [placeholder='请输入自己的手机号'] {
   margin-bottom: 15px;
+}
+
+@media (max-width: 500px) {
+  .content {
+    padding: 20px;
+    margin-left: 0;
+  }
 }
 </style>

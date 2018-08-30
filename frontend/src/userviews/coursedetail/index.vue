@@ -116,131 +116,139 @@
           class="modal-input">
       </b-modal>
     </div>
-    <div class="container">
-      <div id="profile">
+    <div
+      id="profile"
+      class="row profile-style">
+      <div
+        id="course-image"
+        class="course-img-style">
+        <b-img
+          :src="$store.state.address+course.thumbnail"
+          fluid
+          thumbnail
+          alt="Responsive image Thumbnail"
+          class="img-thumbnail"/>
+      </div>
+      <div
+        id="introduction"
+        class="introduction-style">
         <div
-          id="course-image"
-          class="course-img-style">
-          <b-img
-            :src="$store.state.address+course.thumbnail"
-            fluid
-            thumbnail
-            alt="Responsive image Thumbnail"
-            class="img-thumbnail"/>
+          id="page-title"
+          class="content-style">
+          <h3>
+            {{ course.title }}
+          </h3>
         </div>
-        <div
-          id="introduction"
-          class="introduction-style">
+        <div class="price-time">
           <div
-            id="page-title"
-            class="content-style">
-            <h3>
-              {{ course.title }}
-            </h3>
+            v-if="!course.can_access">
+            <h6
+              v-if="!course.can_access &&
+              course.price !== 0">
+              <simple-line-icons
+                icon="basket-loaded"
+                color="#ffd706"
+                class="icon"
+                size="small"/> 现价 ￥{{ get_now_price() }}  </h6>
+            <h6 v-else>
+              <simple-line-icons
+                icon="basket-loaded"
+                color="#ffd706"
+                class="icon"
+                size="small"/>该课程为免费课程。
+            </h6>
+            <h6
+              v-if="!isNaN($store.state.user.reward_coin) &&
+              $store.state.user.reward_coin != 0.00">&emsp;&emsp;￥
+              <label
+                v-if="!isNaN(course.price)"
+                class="origin-value">{{ course.price }}</label>
+            </h6>
           </div>
-          <div class="price-time">
-            <div
-              v-if="!course.can_access">
-              <h6 v-if="!course.can_access && course.price !== 0">
-                <simple-line-icons
-                  icon="basket-loaded"
-                  color="#ffd706"
-                  class="icon"
-                  size="small"/> 现价 ￥{{ get_now_price() }}  </h6>
-              <h6 v-else>
-                <simple-line-icons
-                  icon="basket-loaded"
-                  color="#ffd706"
-                  class="icon"
-                  size="small"/>该课程为免费课程。
-              </h6>
-              <h6
-                v-if="!isNaN($store.state.user.reward_coin) &&
-                $store.state.user.reward_coin != 0.00">&emsp;&emsp;￥
-                <label
-                  v-if="!isNaN(course.price)"
-                  class="origin-value">{{ course.price }}</label>
-              </h6>
-            </div>
-            <div>
-              <h6
-                v-if="course.expire_duration !==0 &&
-                !isNaN(course.expire_duration)">
-                <simple-line-icons
-                  icon="clock"
-                  color="#ffd706"
-                  class="icon"
-                  size="small"/> 课程时效
-                {{ change_duration_to_timestamp(course.expire_duration) }}
-              </h6>
-              <h6 v-else>
-                <simple-line-icons
-                  icon="clock"
-                  color="#ffd706"
-                  class="icon"
-                  size="small"/>
-                该课程为永久课程。
-              </h6>
-            </div>
-            <div>
-              <h6
-                v-if="course.expire_time !== null &&
-                course.expire_duration !==0">
-                距离失效还有 {{ left_time }}</h6>
-            </div>
+          <div>
+            <h6
+              v-if="course.expire_duration !==0 &&
+                !isNaN(course.expire_duration) &&
+                $store.state.user.is_vip === false &&
+              $store.state.user.is_staff === false">
+              <simple-line-icons
+                icon="clock"
+                color="#ffd706"
+                class="icon"
+                size="small"/> 课程时效
+              {{ change_duration_to_timestamp(course.expire_duration) }}
+            </h6>
+            <h6
+              v-else-if="$store.state.user.is_vip !== true
+              && $store.state.user.is_staff === false">
+              <simple-line-icons
+                icon="clock"
+                color="#ffd706"
+                class="icon"
+                size="small"/>
+              该课程为永久课程。
+            </h6>
           </div>
-          <SocialShare
-            :url="share_qrcode_url"
-            class="share"
-          />
-          <div class="button-row">
-            <b-button
-              v-show="course.can_access || (!course.can_access
-              && $store.state.status === false && course.price===0)"
-              id="study-button"
-              size="sm"
-              variant="primary"
-              class="my-btn"
-              @click="start_study">
-              开始学习
-            </b-button>
-            <b-button
-              v-show="!course.can_access && course.price !== 0"
-              id="pay-button"
-              size="sm"
-              variant="primary"
-              class="my-btn"
-              @click="handle_pay_operate">
-              立即购买
-            </b-button>
-            <b-button
-              v-b-modal.share-popup
-              id="share-button"
-              size="sm"
-              variant="primary"
-              class="my-btn share-margin"
-            >
-              分享说明
-            </b-button>
-            <b-button
-              id="praise-button"
-              :style="{background: praise_color,
-                       border: praise_border_color}"
-              size="sm"
-              class="my-btn"
-              @click="add_praise">
-              {{ course.up_votes }} 赞
-            </b-button>
+          <div>
+            <h6
+              v-if="course.expire_time !== null &&
+                course.expire_duration !==0 &&
+                $store.state.user.is_vip === false &&
+              $store.state.user.is_staff === false">
+              距离失效还有 {{ left_time }}</h6>
           </div>
+        </div>
+        <SocialShare
+          :url="share_qrcode_url"
+          class="share"
+        />
+        <div class="button-row">
+          <b-button
+            v-show="course.can_access || (!course.can_access
+            && $store.state.status === false && course.price===0)"
+            id="study-button"
+            size="sm"
+            variant="primary"
+            class="my-btn"
+            @click="start_study">
+            开始学习
+          </b-button>
+          <b-button
+            v-show="!course.can_access && course.price !== 0"
+            id="pay-button"
+            size="sm"
+            variant="primary"
+            class="my-btn"
+            @click="handle_pay_operate">
+            立即购买
+          </b-button>
+          <b-button
+            v-b-modal.share-popup
+            id="share-button"
+            size="sm"
+            variant="primary"
+            class="my-btn share-margin"
+          >
+            分享说明
+          </b-button>
+          <b-button
+            id="praise-button"
+            :style="{background: praise_color,
+                     border: praise_border_color}"
+            size="sm"
+            class="my-btn"
+            @click="add_praise">
+            {{ course.up_votes }} 赞
+          </b-button>
         </div>
       </div>
     </div>
     <div class="detail">
       <div
         id="detail-introduction"
-        class="container">
+        class="container wrap-style">
         <h5>课程简介</h5>
-        <p class="description">{{ course.description }}</p>
+        <p>&emsp;&emsp;{{ course.description }}</p>
       </div>
     </div>
   </Basic>
@@ -573,10 +581,6 @@ export default {
 </script>
 
 <style scoped>
-.description {
-  text-indent: 2rem;
-}
-
 #profile {
   display: flex;
   align-items: stretch;
@@ -608,6 +612,11 @@ export default {
 
 .share {
   margin-left: 1rem;
+}
+
+.wrap-style {
+  word-break: normal;
+  word-wrap: break-word;
 }
 
 h3,

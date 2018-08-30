@@ -66,7 +66,6 @@ export default {
           }
         )
         .then(function (response) {
-          console.log(response)
           that.course_list = response.data.content
           that.rows = response.data.count
         })

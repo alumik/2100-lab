@@ -50,8 +50,7 @@
                   $store.state.user.username"
                   class="delete-comment"
                   @click="delete_list_comment(i-1,replies[i-1].comment_id)">
-                  <label>删除</label>
-                </div>
+                  删除</div>
               </div>
               <div class="modal-zone">
                 <label class="time-style">
@@ -260,9 +259,7 @@
                     $store.state.user.username"
                     class="delete-comment"
                     @click="delete_comment(message_list[index-1].replies[i-1]
-                    .comment_id)">
-                    <label>删除</label>
-                  </div>
+                    .comment_id)">删除</div>
                 </div>
                 <div class="zone">
                   <label class="time-style">
