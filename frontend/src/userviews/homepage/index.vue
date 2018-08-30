@@ -28,7 +28,8 @@
           <b-carousel-slide
             :caption="carousellist[0] ? carousellist[0].caption : ''"
             :img-src="carousellist[0] ? $store.state.address+
-            carousellist[0].image : ''"
+            carousellist[0].image : '//user-assets.sxlcdn.com/images/170814/FpZwQkvM2TZeBBwl21F5kdNuUANA.jpg?' +
+            'imageMogr2/strip/thumbnail/2000x1500>/quality/90!/interlace/1/format/jpeg'"
             img-width="1024"
             img-height="250"
             class="height-change"
@@ -36,7 +37,8 @@
           <b-carousel-slide
             :caption="carousellist[1] ? carousellist[1].caption : ''"
             :img-src="carousellist[1] ? $store.state.address+
-            carousellist[1].image : ''"
+            carousellist[1].image : 'http://user-assets.sxlcdn.com/images/170814/FqT_2HP4cJvS2AYN61fz8lcVq8qZ.GIF?'+
+            'imageMogr2/strip/thumbnail/2000x1500%3E/quality/90!/format/gif'"
             img-width="1024"
             img-height="250"
             class="height-change"
@@ -44,7 +46,8 @@
           <b-carousel-slide
             :caption="carousellist[2] ? carousellist[2].caption : ''"
             :img-src="carousellist[2] ? $store.state.address+
-            carousellist[2].image : ''"
+            carousellist[2].image : '//user-assets.sxlcdn.com/images/170814/FsnphZv9Oyrrb3jzfey280s07VvC.jpg?' +
+            'imageMogr2/strip/thumbnail/1200x9000>/quality/90!/interlace/1/format/jpeg'"
             img-width="1024"
             img-height="250"
             class="height-change"
@@ -52,7 +55,8 @@
           <b-carousel-slide
             :caption="carousellist[3] ? carousellist[3].caption : ''"
             :img-src="carousellist[3] ? $store.state.address+
-            carousellist[3].image : ''"
+            carousellist[3].image : '//user-assets.sxlcdn.com/images/170814/Fj7zqHIvtHv87AlY63ZmFKPf-lB_.jpg?' +
+            'imageMogr2/strip/thumbnail/1200x9000>/quality/90!/interlace/1/format/jpeg'"
             img-width="1024"
             img-height="250"
             class="height-change"
