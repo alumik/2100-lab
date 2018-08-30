@@ -359,7 +359,8 @@ export default {
         this.codename === '' ||
         this.title === '' ||
         parseFloat(this.price) < 0 ||
-        parseFloat(this.reward_percent) < 0
+        parseFloat(this.reward_percent) < 0 ||
+        parseFloat(this.course.expire_duration_hour) >= 24
       ) {
         this.wrong_count_down = 5
         this.error_message = '用户输入信息有误'

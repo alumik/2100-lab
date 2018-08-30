@@ -1,3 +1,14 @@
+/**
+ * 对图片进行剪裁函数
+ * @param url
+ * @param width
+ * @param height
+ * @param callback
+ * 根据传入URL读取图片信息
+ * 根据width和height进行canvas上的图片剪裁
+ * 回调函数将剪裁后的数据发回
+ */
+
 export default function resize_image (url, width, height, callback) {
   var sourceImage = new Image()
 

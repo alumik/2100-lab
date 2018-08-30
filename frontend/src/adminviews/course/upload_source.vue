@@ -183,6 +183,27 @@ export default {
       default: '新增课程'
     }
   },
+  /**
+   * @returns {{
+   * audio_file_list: Array,
+   * audio_name: string,
+   * 上传音频存储区
+   *
+   * placeholder: string,
+   * 上传提示信息存储区
+   *
+   * origin_image_list: Array,
+   * 已有图片信息存储区
+   *
+   * image_data_list: Array,
+   * image_file_list: Array,
+   * 新上传图片信息存储区
+   *
+   * thumb_data: string,
+   * thumb_file: string
+   * 课程缩略图信息存储区
+   * }}
+   */
   data () {
     return {
       audio_file_list: [],
@@ -196,14 +217,25 @@ export default {
     }
   },
   computed: {
+    /**
+     * 计算是否有上传图片的函数
+     * @returns {boolean}
+     */
     has_images () {
       return this.image_data_list.length > 0
     },
+    /**
+     * 计算是否有缩略图的函数
+     * @returns {boolean}
+     */
     has_thumbs () {
       return this.thumb_data !== ''
     }
   },
   methods: {
+    /**
+     * 处理上传音频的函数
+     */
     handle_audio_file_change () {
       let input = this.$refs.input_audio
       let files = input.files
@@ -213,6 +245,10 @@ export default {
         this.audio_name = files[0].name
       }
     },
+    /**
+     * 处理上传图片文件的函数
+     * 将文件进行剪裁之后上传文件信息和图片信息
+     */
     handle_picture_file_change () {
       let input = this.$refs.input
       let files = input.files
@@ -232,6 +268,9 @@ export default {
         reader.readAsDataURL(file)
       }
     },
+    /**
+     * 处理缩略图的函数
+     */
     handle_thumb_file_change () {
       let input = this.$refs.input_th
       let files = input.files
@@ -251,29 +290,56 @@ export default {
         reader.readAsDataURL(file)
       }
     },
+    /**
+     * 处理图片拖动函数
+     * @param e
+     */
     handle_pic_drop (e) {
       let files = e.dataTransfer.files
       this.preview(files)
     },
+    /**
+     * 打开图片上传框的函数
+     */
     open_pic_input () {
       this.$refs.input.click()
     },
+    /**
+     * 打开缩略图上传框的函数
+     */
     open_thumb_input () {
       this.$refs.input_th.click()
     },
+    /**
+     * 删除图片列表中图片的函数
+     * @param index
+     */
     delete_img (index) {
       this.image_data_list.splice(index, 1)
       this.image_file_list.splice(index, 1)
     },
+    /**
+     * 打开上传资源模态框函数
+     */
     show_modal () {
       this.$refs.upload_source.show()
     },
+    /**
+     * 关闭上传资源模态框函数
+     */
     hide_modal () {
       this.$refs.upload_source.hide()
     },
+    /**
+     * 打开音频上传入口的函数
+     */
     open_audio_entrance () {
       this.$refs.input_audio.click()
     },
+    /**
+     * 上传已有数据资源
+     * 将图片打包为带序号和时间戳数据域的列表上传
+     */
     upload_resource () {
       let upload_picture_resourse = []
       for (let i = 1; i <= this.image_data_list.length; i++) {

@@ -201,6 +201,13 @@
 import resize_image from './resize'
 export default {
   name: 'UploadSourceForEdit',
+  /**
+   * 预上传数据
+   * 课程序号
+   * 课程已有图片库
+   * 课程已有音频库
+   * 课程已有缩略图
+   */
   props: {
     course_id: {
       type: String,
@@ -219,6 +226,31 @@ export default {
       default: () => {}
     }
   },
+  /**
+   * @returns {{
+   * is_thumb_change: boolean,
+   * 缩略图是否更新标志变量
+   *
+   * thumb_data: string,
+   * thumb_file: string,
+   * 课程已有缩略图信息
+   *
+   * audio_file_list: Array,
+   * audio_name: string,
+   * 课程音频信息
+   *
+   * placeholder: string,
+   * 课程图片上传提示信息
+   *
+   * image_data_list: Array,
+   * image_file_list: Array,
+   * origin_image_copy_list: Array,
+   * 课程已有图片信息
+   *
+   * origin_delete_image_index: Array
+   * 删除原有图片信息
+   * }}
+   */
   data () {
     return {
       is_thumb_change: false,
@@ -234,17 +266,32 @@ export default {
     }
   },
   computed: {
+    /**
+     * 检测是否有新增上传图片
+     * @returns {boolean}
+     */
     has_images () {
       return this.image_data_list.length > 0
     },
+    /**
+     * 检测是否已有图片
+     * @returns {boolean}
+     */
     has_origin_images () {
       return this.origin_image_copy_list.length > 0
     },
+    /**
+     * 检测是否有缩略图
+     * @returns {boolean}
+     */
     has_thumbs () {
       return this.origin_thumb_list.length !== 0 || this.thumb_data !== ''
     }
   },
   methods: {
+    /**
+     * 处理缩略图图片更换
+     */
     handle_thumb_file_change () {
       let input = this.$refs.input_th
       let files = input.files
@@ -265,6 +312,9 @@ export default {
         reader.readAsDataURL(file)
       }
     },
+    /**
+     * 处理音频文件更换
+     */
     handle_audio_file_change () {
       let input = this.$refs.input_audio
       let files = input.files
@@ -274,6 +324,9 @@ export default {
         this.audio_name = files[0].name
       }
     },
+    /**
+     * 处理图片资源更换
+     */
     handle_picture_file_change () {
       let input = this.$refs.input
       let files = input.files
@@ -293,20 +346,38 @@ export default {
         reader.readAsDataURL(file)
       }
     },
+    /**
+     * 处理拖拽事件
+     * @param e
+     */
     handle_pic_drop (e) {
       let files = e.dataTransfer.files
       this.preview(files)
     },
+    /**
+     * 打开上传图片文件选择框
+     */
     open_pic_input () {
       this.$refs.input.click()
     },
+    /**
+     * 打开缩略图文件选择框
+     */
     open_thumb_input () {
       this.$refs.input_th.click()
     },
+    /**
+     * 删除新上传图片函数
+     * @param index
+     */
     delete_img (index) {
       this.image_data_list.splice(index, 1)
       this.image_file_list.splice(index, 1)
     },
+    /**
+     * 删除已有的图片函数
+     * @param index
+     */
     delete_origin_img (index) {
       let i = 0
       for (i = 0; i < this.origin_image_copy_list.length; i++) {
@@ -317,6 +388,10 @@ export default {
       this.origin_image_copy_list.splice(i, 1)
       this.origin_delete_image_index.push(index)
     },
+    /**
+     * 打开上传资源模态框函数
+     * 进行数据的深层拷贝
+     */
     show_modal () {
       this.thumb_data = this.origin_thumb_list[0]
       this.origin_image_copy_list.length = 0
@@ -330,13 +405,23 @@ export default {
       }
       this.$refs.upload_source.show()
     },
+    /**
+     * 关闭上传资源模态框
+     * 清空一切操作
+     */
     hide_modal () {
       this.origin_delete_image_index.length = 0
       this.$refs.upload_source.hide()
     },
+    /**
+     * 打开上传音频文件入口
+     */
     open_audio_entrance () {
       this.$refs.input_audio.click()
     },
+    /**
+     * 上传资源：缩略图/图片/音频
+     */
     upload_resource () {
       let upload_pic_resource = []
       for (let i = 1; i <= this.image_data_list.length; i++) {
