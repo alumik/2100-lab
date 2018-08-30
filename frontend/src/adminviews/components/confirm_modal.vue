@@ -14,6 +14,13 @@
 <script>
 export default {
   name: 'ConfirmModal',
+  /**
+   * id: string, 模态框id
+   * title: string, 模态框标题
+   * ok_title: string, 确认按钮标题
+   * cancel_title: string, 取消按钮标题
+   * text: string 模态框内内容
+   */
   props: {
     id: {
       type: String,
@@ -37,6 +44,10 @@ export default {
     }
   },
   methods: {
+    /**
+     * 该函数处理确认按钮事件，
+     * 触发click事件，关闭模态框。
+     */
     click_ok: function () {
       this.$emit('click')
       this.$refs.modal.hide()
