@@ -160,6 +160,12 @@ export default {
       num_pages: 0
     }
   },
+  /**
+   * 该函数在初始化用户管理页面时被调用，
+   * 通过get方法向后端发送单页最大数据量及当前页数的数据，
+   * 并获得后端发送的用户数据，
+   * 进行错误捕捉并进行相应提示。
+   */
   created () {
     const that = this
     axios
@@ -189,6 +195,12 @@ export default {
       })
   },
   methods: {
+    /**
+     * 该函数接收Boolean类型的参数，
+     * 返回表示是否被认证的字符串。
+     * @param val
+     * @returns {string}
+     */
     get_type: function (val) {
       if (val) {
         return '认证用户'
@@ -196,6 +208,12 @@ export default {
         return '普通用户'
       }
     },
+    /**
+     * 该函数接收Boolean类型的参数，
+     * 返回表示是否被禁言的字符串。
+     * @param val
+     * @returns {string}
+     */
     get_state: function (val) {
       if (val) {
         return '已禁言'
@@ -203,14 +221,30 @@ export default {
         return '未禁言'
       }
     },
+    /**
+     * 该函数接收一个表示用户ID的参数，
+     * 并跳转到相应用户ID的详情页面。
+     * @param val
+     */
     to_detail: function (val) {
       this.page_jump = true
       this.$router.push({ name: 'UserDetail', query: { user_id: val } })
     },
+    /**
+     * 该函数接收一个表示页数的参数，
+     * 更改当前页数，
+     * 并进行查询操作刷新界面。
+     * @param page
+     */
     change_page: function (page) {
       this.page = page
       this.search()
     },
+    /**
+     * 该函数将表示用户类型的type变量的字符串转化为由相对应数字构成的字符串，
+     * 返回转换后的字符串。
+     * @returns {string}
+     */
     get_type_data: function () {
       let type
       if (this.type === 'whole' || this.type === '') {
@@ -222,6 +256,11 @@ export default {
       }
       return type
     },
+    /**
+     * 该函数将表示禁言状态的state变量的字符串转化为由相对应数字构成的字符串，
+     * 返回转换后的字符串。
+     * @returns {string}
+     */
     get_state_data: function () {
       let state
       if (this.state === 'whole' || this.state === '') {
@@ -233,6 +272,11 @@ export default {
       }
       return state
     },
+    /**
+     * 该函数通过get方法向后端发送表示用户ID、用户名、电话号码、是否为VIP、是否被禁言、单页最大数据量、当前页数的数据，
+     * 并获得后端发送的用户数据、用户总数以及总页数的数据，
+     * 并捕捉错误进行相应提示。
+     */
     search: function () {
       const that = this
       let type = this.get_type_data()

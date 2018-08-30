@@ -272,6 +272,12 @@ export default {
       avatar: ''
     }
   },
+  /**
+   * 该函数在用户详情页面初始化时调用，
+   * 向后端通过get方法发送该页面用户ID的数据，
+   * 获得后端发送的该用户的详细信息，
+   * 并捕捉错误进行相应提示。
+   */
   created () {
     const that = this
     axios
@@ -303,6 +309,13 @@ export default {
       })
   },
   methods: {
+    /**
+     * 该函数接收一个存储用户数据的Object对象，
+     * 并将其转化为有序数组，
+     * 返回该数组。
+     * @param val
+     * @returns {Array}
+     */
     compute_user: function (val) {
       let temp = []
       temp[0] = val.username
@@ -312,6 +325,12 @@ export default {
       temp[4] = val.updated_at.slice(0, 10)
       return temp
     },
+    /**
+     * 该函数接收Boolean类型的参数，
+     * 并返回表示订单是否被退款的字符串。
+     * @param val
+     * @returns {string}
+     */
     compute_state: function (val) {
       if (val) {
         return '已退款'
@@ -319,9 +338,22 @@ export default {
         return '未退款'
       }
     },
+    /**
+     * 该函数接收表示日期的字符串，
+     * 转换为只包含年月日的字段，
+     * 返回处理后的字符串。
+     * @param val
+     * @returns {*}
+     */
     compute_date: function (val) {
       return val.slice(0, 10)
     },
+    /**
+     * 该函数接收Boolean类型的参数，
+     * 返回表示课程是否被焚毁的字符串。
+     * @param val
+     * @returns {string}
+     */
     compute_burnt: function (val) {
       if (val) {
         return '已焚毁'
@@ -329,6 +361,9 @@ export default {
         return '未焚毁'
       }
     },
+    /**
+     * 该函数使页面跳转到所选定用户的学习记录页面。
+     */
     to_course: function () {
       this.page_jump_course = true
       this.$router.push({
@@ -336,6 +371,9 @@ export default {
         query: { user_id: this.$route.query.user_id }
       })
     },
+    /**
+     * 该函数使页面跳转到所选定用户的订单记录页面。
+     */
     to_order () {
       this.page_jump_order = true
       this.$router.push({
@@ -343,6 +381,12 @@ export default {
         query: { user_id: this.$route.query.user_id }
       })
     },
+    /**
+     * 该函数认证用户，
+     * 向后端通过post方法发送要认证用户的ID，
+     * 获得后端操执行作后的信息，
+     * 进行相应操作成功或失败的提示。
+     */
     authenticate_user: function () {
       const that = this
       axios
@@ -371,6 +415,12 @@ export default {
           }
         })
     },
+    /**
+     * 该函数禁言用户，
+     * 向后端通过post方法发送要禁言用户的ID，
+     * 获得后端执行操作后的信息，
+     * 返回相应操作成功和操作失败的信息。
+     */
     ban_user: function () {
       const that = this
       axios
@@ -399,6 +449,12 @@ export default {
           }
         })
     },
+    /**
+     * 该函数删除用户，
+     * 向后端通过post方法发送要删除用户的ID，
+     * 获得后端执行操作后的提示信息，
+     * 并进行操作成功、失败的提示。
+     */
     delete_user: function () {
       const that = this
       axios
