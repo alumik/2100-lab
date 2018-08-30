@@ -6,6 +6,7 @@ import {shallowMount} from '@vue/test-utils'
 import BootstrapVue from 'bootstrap-vue'
 import Vue from 'vue'
 import Vuex from 'vuex'
+import InputModal from '@/adminviews/components/input_modal'
 
 Vue.use(BootstrapVue)
 
@@ -83,8 +84,8 @@ describe('留言板单元测试', () => {
 
   it('回复留言弹窗渲染', () => {
     wrapper.find('#reply-button').trigger('click')
-    expect(wrapper.contains('#reply-popup')).toBe(true)
-    expect(wrapper.contains('#reply-input')).toBe(true)
+    expect(wrapper.contains(InputModal)).toBe(true)
+    // expect(wrapper.contains('#reply-input')).toBe(true)
   })
 
   it('查看全部留言弹窗测试', () => {

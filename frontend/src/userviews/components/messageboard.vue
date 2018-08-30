@@ -13,29 +13,13 @@
         size="small"
         color="#009966"/>
     </div>
-    <div>
-      <b-modal
-        id="reply-popup"
-        hide-footer
-        title="回复留言">
-        <textarea
-          id="reply-input"
-          v-model="new_reply"
-          class="textarea-style"
-          placeholder="请输入回复"
-          @keyup.enter="reply_comment"/>
-        <div>
-          <b-btn @click="hide_reply_popup">
-            取消
-          </b-btn>
-          <b-btn
-            variant="primary"
-            @click="reply_comment(reply_comment_id)">
-            回复
-          </b-btn>
-        </div>
-      </b-modal>
-    </div>
+    <InputModal
+      id="reply-popup"
+      :input="new_reply"
+      ok_title="回复"
+      title="回复留言"
+      placeholder="请输入你要回复的内容"
+      @click="reply_comment"/>
     <div>
       <b-modal
         id="reply-list-popup"
@@ -44,9 +28,9 @@
         <div
           v-for="i in replies.length"
           :key="i"
-          class="reply-message">
+          class="modal-reply-message">
           <div>
-            <div>
+            <div class="modal-each-message">
               <div class="row1">
                 <div class="row2">
                   <div class="row3">
@@ -57,7 +41,7 @@
                       V
                     </label>
                   </div>
-                  <div class="comment-wrap">&emsp;
+                  <div class="comment-wrap">
                     {{ replies[i-1].content }}
                   </div>
                 </div>
@@ -69,19 +53,20 @@
                   <label>删除</label>
                 </div>
               </div>
-              <div class="zone">
+              <div class="modal-zone">
                 <label class="time-style">
                   {{ get_date(replies[i-1].created_at).substring(0,10) }}
                 </label>
                 <div>
-                  &emsp;{{ replies[i-1].up_votes }}
+                  {{ replies[i-1].up_votes }}
                   <b-img
+                    id="vote-up"
                     :src="replies[i-1].up_voted === true ? up_icon_after :
                     up_icon_before"
                     class="vote-style "
                     @click="modal_up_vote_reply
                   (i-1, replies[i-1].comment_id)"/>
-                  &emsp; &emsp;{{ replies[i-1].down_votes }}
+                  {{ replies[i-1].down_votes }}
                   <b-img
                     :src="replies[i-1].down_voted === true ? down_icon_after
                     : down_icon_before"
@@ -90,21 +75,18 @@
                   (i-1, replies[i-1].comment_id)"/>
                 </div>
               </div>
+              <hr>
             </div>
           </div>
         </div>
-        <div>
-          <Pagination
-            id="popup-pagination"
-            :rows="modal_rows"
-            :perpage="modal_page_limit"
-            @change="change_list_page"/>
-        </div>
-        <div>
-          <b-btn @click="hide_reply_list_popup">
-            返回
-          </b-btn>
-        </div>
+        <b-pagination
+          id="popup-pagination"
+          :total-rows="modal_rows"
+          :per-page="modal_page_limit"
+          v-model="modal_page"
+          align="center"
+          size="sm"
+          @input="get_replies(get_all_reply_id)"/>
       </b-modal>
     </div>
     <div v-if="!can_comment">该课程已禁止评论！</div>
@@ -208,12 +190,19 @@
               @click="delete_comment(message_list[index-1].comment_id)">
               删除</div>
           </div>
-          <div class="comment-wrap">{{ message_list[index-1].content }}
+          <div
+            id="comment"
+            class="comment-wrap">{{ message_list[index-1].content }}
           </div>
           <div class="time-remind">
             <div
               class="time-style">
               {{ get_date(message_list[index-1].created_at) }}
+              <span
+                id="reply-button"
+                @click="want_reply(message_list[index-1].comment_id)">
+                回复
+              </span>
             </div>
             <div class="margin-right-1">
               {{ message_list[index-1].up_votes }}
@@ -221,9 +210,9 @@
                 id="praise-button"
                 :src="message_list[index-1].up_voted === true ?
                 up_icon_after : up_icon_before"
-                class="vote-style "
+                class="vote-style"
                 @click="up_vote(index-1,message_list[index-1].comment_id)"/>
-              &emsp; {{ message_list[index-1].down_votes }}
+              {{ message_list[index-1].down_votes }}
               <b-img
                 id="detest-button"
                 :src="message_list[index-1].down_voted === true ?
@@ -232,10 +221,18 @@
                 @click="down_vote
               (index-1,message_list[index-1].comment_id)"/>
             </div>
+          </div>
+          <div
+            v-if="message_list [index-1].reply_count !== 0"
+            class="all-reply">
+            <div class="margin-right-1">
+              共{{ message_list [index-1].reply_count }}条回复
+            </div>
             <div
-              id="reply-button"
-              @click="want_reply(message_list[index-1].comment_id)">
-              回复
+              id="watch-more"
+              class="look-all"
+              @click="watch_all_replies(message_list[index-1].comment_id)">
+              点击查看
             </div>
           </div>
           <div
@@ -255,7 +252,7 @@
                         V
                       </label>
                     </div>
-                    <div class="comment-wrap">&emsp;{{ message_list[index-1].
+                    <div class="comment-wrap">{{ message_list[index-1].
                     replies[i-1].content }}</div>
                   </div>
                   <div
@@ -272,14 +269,15 @@
                     {{ get_date(message_list[index-1].replies[i-1].created_at) }}
                   </label>
                   <div>
-                    &emsp;{{ message_list[index-1].replies[i-1].up_votes }}
+                    {{ message_list[index-1].replies[i-1].up_votes }}
                     <b-img
+                      id="vote-up"
                       :src="message_list[index-1].replies[i-1].up_voted ===
                       true ? up_icon_after : up_icon_before"
                       class="vote-style "
                       @click="up_vote_child_reply(index-1, i-1,
                                                   message_list[index-1].replies[i-1].comment_id)"/>
-                    &emsp; &emsp;{{ message_list[index-1].replies[i-1].down_votes }}
+                    {{ message_list[index-1].replies[i-1].down_votes }}
                     <b-img
                       :src="message_list[index-1].replies[i-1].down_voted
                       === true ? down_icon_after : down_icon_before"
@@ -289,19 +287,6 @@
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div
-            v-if="message_list [index-1].reply_count !== 0"
-            class="all-reply">
-            <div class="margin-right-1">
-              共{{ message_list [index-1].reply_count }}条回复
-            </div>
-            <div
-              id="watch-more"
-              class="look-all"
-              @click="watch_all_replies(message_list[index-1].comment_id)">
-              点击查看
             </div>
           </div>
         </div>
@@ -321,10 +306,14 @@
 import axios from 'axios'
 import qs from 'qs'
 import Pagination from '../../components/pagination'
+import Alert from '../../components/alert'
+import InputModal from '../../adminviews/components/input_modal'
 
 export default {
   name: 'MessageBoard',
   components: {
+    InputModal,
+    Alert,
     Pagination
   },
   props: {
@@ -353,7 +342,7 @@ export default {
       page_limit: 5,
       page: 1,
       rows: 0,
-      modal_page_limit: 2,
+      modal_page_limit: 5,
       modal_page: 1,
       modal_rows: 0,
       up_icon_before: require('../../assets/up-before.png'),
@@ -379,11 +368,6 @@ export default {
     get_date: function (date) {
       let temp = new Date(date)
       return temp.toLocaleString()
-    },
-    change_list_page: function (page) {
-      let that = this
-      that.modal_page = page
-      that.get_replies(that.get_all_reply_id)
     },
     hide_reply_list_popup: function () {
       this.$root.$emit('bv::hide::modal', 'reply-list-popup')
@@ -714,10 +698,9 @@ export default {
         })
       that.new_msg = ''
     },
-    reply_comment: function () {
+    reply_comment: function (val) {
       let that = this
-      const value = that.new_reply && that.new_reply.trim()
-      if (!value) {
+      if (!val) {
         return
       }
       if (that.reply_comment_id !== 0) {
@@ -725,7 +708,7 @@ export default {
           .post(
             'http://localhost/api/v1/courses/forestage/play/add-comment/',
             qs.stringify({
-              content: value,
+              content: val,
               course_id: that.course_id,
               reply_to_id: that.reply_comment_id
             })
@@ -753,7 +736,6 @@ export default {
           })
       }
       that.$root.$emit('bv::hide::modal', 'reply-popup')
-      that.new_reply = ''
     },
     change_page: function (page) {
       this.page = page
@@ -764,22 +746,20 @@ export default {
 </script>
 
 <style scoped>
-.margin-right-1 {
-  margin-right: 1rem;
-}
-
 .zone {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
 }
 
 .comment-wrap {
-  word-break: normal;
-  word-wrap: break-word;
+  text-indent: 2rem;
+  word-break: break-word;
 }
 
 .time-style {
-  margin-right: 1rem;
+  padding-top: 3px;
+  margin: 0;
   font-size: 14px;
   color: #adb5bd;
 }
@@ -787,6 +767,7 @@ export default {
 .time-remind {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
 }
 
 .reply-message {
@@ -814,7 +795,6 @@ export default {
 .all-reply {
   display: flex;
   flex-direction: row;
-  padding-left: 3rem;
   font-size: 14px;
 }
 
@@ -859,6 +839,7 @@ export default {
   justify-content: space-around;
   width: 90%;
   height: 100%;
+  padding-bottom: 8px;
   text-align: left;
   border-bottom: 1px solid #eee;
 }
@@ -938,5 +919,27 @@ export default {
 
 #reply-button {
   cursor: pointer;
+}
+
+.modal-reply-message {
+  padding: 0 2px;
+  margin: 2px;
+}
+
+.modal-each-message {
+  padding: 0 2px;
+}
+
+.modal-zone {
+  display: flex;
+  justify-content: space-between;
+}
+
+div .row3 {
+  padding-top: 2px;
+}
+
+#comment {
+  margin: 12px 0;
 }
 </style>
