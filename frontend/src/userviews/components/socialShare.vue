@@ -81,14 +81,6 @@ export default {
   padding: 0;
 }
 
-.btn {
-  padding: 0;
-}
-
-.btn-lg {
-  padding: 0;
-}
-
 .share-icon {
   width: 40px;
   height: 40px;
