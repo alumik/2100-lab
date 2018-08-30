@@ -222,6 +222,7 @@ export default {
           that.$t('error.access_denied')
       }
     })
+    that.removeEventListeners()
   },
   methods: {
     up_vote_course () {
@@ -263,7 +264,8 @@ export default {
     },
     _currentTime: function () {
       const self = this
-      self.audio_current_time = parseInt(self.$refs.player.currentTime)
+      self.audio_current_time =
+        parseInt(self.$refs.player ? self.$refs.player.currentTime : '')
     }
   }
 }
