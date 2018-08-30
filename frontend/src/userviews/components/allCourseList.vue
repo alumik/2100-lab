@@ -132,6 +132,10 @@ export default {
   word-break: break-word;
 }
 
+span {
+  cursor: pointer;
+}
+
 .image {
   width: 300px;
   height: 200px;
