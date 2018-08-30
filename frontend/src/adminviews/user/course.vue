@@ -53,6 +53,21 @@ import Alert from '../../components/alert'
 export default {
   name: 'Course',
   components: { Alert, Basic, Pagination },
+  /**
+   * @returns {{
+   * items: *[], 面包屑路由地址
+   * titles: Array, 用户学习记录标题
+   * logs: Array, 用户学习记录数据
+   * rows: number, 数据总条数
+   * page: number, 当前页数
+   * per_page: number, 单页数据条数
+   * num_pages: number, 数据总页数
+   * dismiss_second: number,
+   * wrong_count_down: number,
+   * wrong: string
+   * Alert组件所需参数
+   * }}
+   */
   data () {
     return {
       items: [
@@ -84,10 +99,10 @@ export default {
       rows: 10,
       page: 1,
       per_page: 15,
+      num_pages: 0,
       wrong_count_down: 0,
       dismiss_second: 5,
-      wrong: '',
-      num_pages: 0
+      wrong: ''
     }
   },
   /**
