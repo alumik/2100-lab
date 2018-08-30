@@ -25,7 +25,7 @@ def get_courses(course_type, limit=None):
 def can_access(course, customer):
     """判断课程是否能够访问"""
 
-    if course.is_free():
+    if course.is_free() or customer.is_vip or customer.is_staff:
         return True
     try:
         OrderLog.objects.get(course=course, customer=customer, refunded_at=None)
@@ -45,8 +45,10 @@ def check_learning_log(course, customer):
         learning_log = LearningLog.objects.create(
             course=course,
             customer=customer,
-            expire_time=course.expire_duration + timezone.now()
         )
+        if not customer.is_staff and not customer.is_vip:
+            learning_log.expire_time = course.expire_duration + timezone.now()
+            learning_log.save()
     return learning_log.progress
 
 
