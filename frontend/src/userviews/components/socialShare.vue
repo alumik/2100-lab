@@ -19,8 +19,8 @@
     </a>
     <b-dropdown
       dropup
-      style="padding: 0;"
       variant="link"
+      class="weixin"
       size="lg"
       no-caret>
       <template slot="button-content">
@@ -68,7 +68,7 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
 .share-zone {
   display: flex;
   flex-direction: row;
@@ -77,11 +77,7 @@ export default {
   height: 40px;
 }
 
-.btn {
-  padding: 0;
-}
-
-.btn-lg {
+.weixin >>> button {
   padding: 0;
 }
 
