@@ -89,7 +89,7 @@
             <b-collapse
               id="course-description"
               class="mt-2 wrap-style">
-              <div class="text-align-left">&emsp;&emsp;
+              <div class="text-align-left">
                 {{ course.description }}</div>
             </b-collapse>
           </div>
@@ -296,12 +296,9 @@ export default {
   vertical-align: center;
 }
 
-.text-margin-description {
-  text-indent: 2rem;
-}
-
 .text-align-left {
   text-align: left;
+  text-indent: 2rem;
 }
 
 .study-background {

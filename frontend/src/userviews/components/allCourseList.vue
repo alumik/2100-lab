@@ -26,10 +26,10 @@
           <div class="introduction wrap-style">
             <h5>{{ course.title }}</h5>
             <p id="text-one">
-              &emsp;&emsp;{{ compute_message(course.description, 120) }}
+              {{ compute_message(course.description, 120) }}
             </p>
             <p id="text-two">
-              &emsp;&emsp;{{ compute_message(course.description, 12) }}
+              {{ compute_message(course.description, 12) }}
             </p>
           </div>
         </div>
@@ -107,6 +107,10 @@ export default {
 </script>
 
 <style scoped>
+p {
+  text-indent: 2rem;
+}
+
 .container {
   padding: 20px 0 20px 0;
 }
