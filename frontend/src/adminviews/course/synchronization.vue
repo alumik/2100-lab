@@ -139,6 +139,12 @@ import Alert from '../../components/alert'
 export default {
   name: 'SyncPicture',
   components: { Alert, PreSortPicture, Basic },
+  /**
+   * 预传入数据
+   * 图片数据
+   * 音频数据
+   * 音频是否被更换标志变量（如果更换则应该重置排序时间戳）
+   */
   props: {
     image_data_list: {
       default: () => {},
@@ -153,6 +159,25 @@ export default {
       type: Boolean
     }
   },
+  /**
+   * @returns {{
+   * audio_file_url: string,
+   * 音频URL，用于读取音频
+   *
+   * attr: string[],
+   * 存储时间戳
+   *
+   * now_number: number,
+   * work_done: boolean,
+   * 当前已完成图片时间对应的数量
+   * 工作是否完成标志变量
+   *
+   * wrong_count_down: number,
+   * wrong: string,
+   * dismiss_second: number
+   * 错误信息提示
+   * }}
+   */
   data () {
     return {
       audio_file_url: '',
@@ -164,6 +189,10 @@ export default {
       dismiss_second: 5
     }
   },
+  /**
+   * 检测当前标记图片的位置
+   * 用于蓝色提示框的移动渲染
+   */
   watch: {
     now_number (new_value, old_value) {
       this.attr[new_value] = 'primary'
@@ -176,6 +205,10 @@ export default {
     }
   },
   methods: {
+    /**
+     * 时间戳标记函数
+     * 第一个时间戳会自动开启音频播放
+     */
     choose () {
       if (this.now_number === 1) {
         this.$refs.player.play()
@@ -185,15 +218,30 @@ export default {
         this.now_number += 1
       }
     },
+    /**
+     * 上方图片区点击函数
+     * 更换当前排序图片的位置
+     * @param img
+     */
     click (img) {
       this.now_number = img.index
     },
+    /**
+     * 删除本张图片时间戳函数
+     * @param index
+     */
     delete_some_data (index) {
       if (this.image_data_list[index - 1]) {
         this.image_data_list[index - 1].time = ''
         this.now_number = index
       }
     },
+    /**
+     * 显示音图片同步模态框函数
+     * 判断当前已完成工作的图片位置
+     *
+     * 判断是否上传音频
+     */
     show_modal () {
       for (
         ;
@@ -216,10 +264,17 @@ export default {
         this.wrong_count_down = this.dismiss_second
       }
     },
+    /**
+     * 隐藏音图片同步函数模态框
+     */
     hide_modal () {
       this.$refs.sync_picture.hide()
       this.$refs.player.pause()
     },
+    /**
+     * 将时间戳数据上传到父组件
+     * 停止音频播放
+     */
     upload_time_data () {
       if (this.now_number - 1 === this.image_data_list.length) {
         this.$emit('sync_picture_audio', this.image_data_list)

@@ -96,6 +96,11 @@
 <script>
 export default {
   name: 'PreSortPicture',
+  /**
+   * 预传入信息列表：
+   * 预传入图片列表
+   * 是否有上传更新标志变量
+   */
   props: {
     choose_image_data_list_origin: {
       default: () => {},
@@ -106,6 +111,18 @@ export default {
       type: Boolean
     }
   },
+  /**
+   * @returns {{
+   * sort_image_data_list: Array,
+   * 排序好图片数据存储区
+   * choose_image_data_list: Array,
+   * 传入图片信息拷贝的存储区
+   * now_index: number,
+   * 当前排序图片数量变量
+   * is_returned: boolean
+   * 结果是否上传标志变量
+   * }}
+   */
   data: function () {
     return {
       sort_image_data_list: [],
@@ -115,6 +132,12 @@ export default {
     }
   },
   methods: {
+    /**
+     * 打开预排序模态框函数
+     * 进行数据预处理
+     * 如果当前排序结果已上传或者上传图片列表有更新
+     * 就重新深拷贝图片信息至存储区
+     */
     show_modal () {
       if (this.is_returned === true || this.is_uploaded === true) {
         this.$emit('update_is_uploaded', this.is_uploaded)
@@ -131,6 +154,10 @@ export default {
       }
       this.$refs.edit_picture.show()
     },
+    /**
+     * 将图片从未排序区弹到已排序区处理函数
+     * @param img
+     */
     dropout (img) {
       let index = img.index
       for (let i = index; i < this.choose_image_data_list.length; i++) {
@@ -141,6 +168,10 @@ export default {
       this.now_index += 1
       this.sort_image_data_list.push(img)
     },
+    /**
+     * 将图片从已排序区弹到未排序区处理函数
+     * @param img
+     */
     dropback (img) {
       this.now_index -= 1
       for (let i = img.index; i < this.sort_image_data_list.length; i++) {
@@ -150,6 +181,11 @@ export default {
       img.index = this.choose_image_data_list.length + 1
       this.choose_image_data_list.push(img)
     },
+    /**
+     * 发送处理结果函数
+     * 如果图片全部处理完毕，则发出信号并把排序好的图片列表发到父组件
+     * 更新标志变量
+     */
     send_modal () {
       if (
         this.sort_image_data_list.length ===
@@ -163,6 +199,9 @@ export default {
         this.is_returned = true
       }
     },
+    /**
+     * 关闭预排序图片模态框函数
+     */
     hide_modal () {
       this.$emit('reset_is_uploaded', this.is_uploaded)
       for (let i = 1; i <= this.choose_image_data_list_origin.length; i++) {

@@ -268,7 +268,37 @@ export default {
    * items: *[], 路由跳转信息
    *
    * courses: Array,
-   * codename: string, title: string, rows: number, error_message: string, wrong_count_down: number, success_count_down: number, per_limit: number, page: number, num_pages: number, placeholder: string, origin_image_list: Array, image_data_list: Array, file_name_list: Array, delete_origin_list: Array, input_content: string}}
+   * 存储课程信息列表
+   *
+   * codename: string,
+   * title: string,
+   * rows: number,
+   * 存储课程查询更改信息
+   *
+   * error_message: string,
+   * wrong_count_down: number,
+   * success_count_down: number,
+   * 存储错误信息内容和倒计时信息
+   *
+   * per_limit: number,
+   * page: number,
+   * num_pages: number,
+   * 存储分页信息和翻页信息
+   *
+   * placeholder: string,
+   * 存储更换封面图的提示信息
+   *
+   * origin_image_list: Array,
+   * image_data_list: Array,
+   * file_name_list: Array,
+   * 存储旧封面图/新上传封面图信息
+   *
+   * delete_origin_list: Array,
+   * 删除封面图索引信息
+   *
+   * input_content: string
+   * 存储每个上传封面图的封面文字信息
+   * }}
    */
   data: function () {
     return {
@@ -300,11 +330,20 @@ export default {
       input_content: ''
     }
   },
+  /**
+   * 判断是否有旧封面图的计算函数
+   */
   computed: {
     has_images () {
       return this.image_data_list.length > 0
     }
   },
+  /**
+   * 发起对当前已有课程信息的查询
+   * 发送分页信息和课程名与课程代码的查询限制信息
+   * 接收回应，存储分页信息和课程内容
+   * 接收错误，进行五秒钟错误提示
+   */
   created: function () {
     axios
       .get(
@@ -340,6 +379,14 @@ export default {
       })
   },
   methods: {
+    /**
+     * 页面跳转函数
+     *
+     * 打开更换头图请求，得到请求后，存储已有头图的路径信息
+     *
+     * 页面跳转到详情信息页与编辑信息页
+     * @param id
+     */
     jump: function (id) {
       if (id === 0) {
         this.$router.push({ name: 'AddCourse' })
@@ -375,6 +422,10 @@ export default {
         })
       }
     },
+    /**
+     * 对课程类表信息进行有选择的查询函数
+     * 发送查询条件
+     */
     change: function () {
       axios
         .get(
@@ -409,6 +460,12 @@ export default {
           this.wrong_count_down = 5
         })
     },
+    /**
+     * 更新顶部页码函数
+     * 处理当查询不到内容时，返回1页
+     * @param page
+     * @returns {*}
+     */
     update_num_pages: function (page) {
       if (page === 0) {
         return 1
@@ -416,26 +473,49 @@ export default {
         return page
       }
     },
+    /**
+     * 更新底部页码函数，触发换页函数
+     * @param current_page
+     */
     change_page: function (current_page) {
       this.page = current_page
       this.change()
     },
+    /**
+     * 处理文件上传函数，调用预览函数
+     */
     handle_file_change () {
       let input = this.$refs.input
       let files = input.files
       this.preview(files)
     },
+    /**
+     * 处理文件拖动事件的函数
+     * @param e
+     */
     handle_drop (e) {
       let files = e.dataTransfer.files
       this.preview(files)
     },
+    /**
+     * 打开上传文件模态框的函数
+     */
     open_input () {
       this.$refs.input.click()
     },
+    /**
+     * 处理删除首页新上传图片的函数
+     * @param index
+     */
     delete_img (index) {
       this.image_data_list.splice(index, 1)
       this.file_name_list.splice(index, 1)
     },
+    /**
+     * 图片预览函数
+     * @param files
+     * 调用resize进行图片剪裁，之后保存图片相对路径以及图片具体信息
+     */
     preview (files) {
       let _this = this
       if (!files || !window.FileReader) return
@@ -452,6 +532,11 @@ export default {
         reader.readAsDataURL(file)
       }
     },
+    /**
+     * 上传信息函数
+     * 将更新后的头图信息（文字+图片）打包上传到服务器
+     * 不设置错误处理函数
+     */
     upload_data () {
       let update_text = this.input_content.split('\n')
       if (update_text.length < this.file_name_list.length) {
@@ -483,6 +568,11 @@ export default {
       this.input_content = ''
       this.$refs.upload_picture.hide()
     },
+    /**
+     * 处理删除原有图片的队列的函数
+     * 按序号找到对应图片从存储区删除
+     * @param index
+     */
     delete_origin_img (index) {
       this.delete_origin_list.push(index)
       let i = -1
@@ -493,9 +583,17 @@ export default {
       }
       this.origin_image_list.splice(i, 1)
     },
+    /**
+     * 关闭封面图片处理的模态框
+     */
     hide_modal () {
       this.$refs.upload_picture.hide()
     },
+    /**
+     * 错误信息转换函数
+     * @param message
+     * @returns {string}
+     */
     init_error_message (message) {
       switch (message) {
         case 'Access denied.':
