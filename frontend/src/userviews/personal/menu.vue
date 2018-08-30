@@ -49,7 +49,7 @@ export default {
   max-width: 200px;
   height: 100vh;
   color: darkblue;
-  background: #f5f5f5;
+  background: #fafafa;
   transition: all 0.3s;
 }
 
@@ -67,7 +67,7 @@ export default {
   padding: 20px;
   font-size: 1.25rem;
   cursor: pointer;
-  background: #f3f5ee;
+  background: rgba(250, 252, 245, 0.07);
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1) inset;
 }
 
