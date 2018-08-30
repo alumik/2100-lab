@@ -64,6 +64,21 @@ import Alert from '../../components/alert'
 export default {
   name: 'AddAdmin',
   components: { Alert, Basic },
+  /**
+   * @returns {
+   * {
+   * items: *[], 路由管理
+   * admin: { 管理员信息保存集合
+   * phone_number: null, 手机号不能为空
+   * password: null, 密码不能为空
+   * password_again: null 第二次输入密码不能为空且必须与第一次输入密码相同
+   * },
+   * wrong_count_down: number, 失败倒计时秒数
+   * success_count_down: number, 成功倒计时秒数
+   * error_message: string 信息报错提示信息
+   * }
+   * }
+   */
   data: function () {
     return {
       items: [
@@ -90,7 +105,21 @@ export default {
       error_message: ''
     }
   },
+  /**
+   * 记录使用的所有函数方法
+   * check_format
+   * send_message
+   * init_error_message
+   **/
   methods: {
+    /**
+     * 函数用于输入检验数据格式：
+     * 手机号不可为空
+     * 密码不可为空
+     * 再次输入密码不可为空且必须与第一次输入密码相同
+     *
+     * 格式检验通过之后调用发送函数
+     */
     check_format: function () {
       if (this.admin.phone_number === null) {
         this.error_message = '请输入手机号'
@@ -115,6 +144,12 @@ export default {
         this.send_message()
       }
     },
+    /**
+     *函数用于向后端发送一个请求
+     * 请求内容为用户输入的手机号和密码
+     * 捕获回应后会显示添加成功信息，三秒钟后重定向
+     * 捕获错误后会发出错误提示
+     */
     send_message: function () {
       axios
         .post(
@@ -142,6 +177,11 @@ export default {
           _this.wrong_count_down = 5
         })
     },
+    /**
+     *信息转换函数 将错误信息转换为中文
+     * @param message 后端发来的错误信息
+     * @returns {string} 转换为的中文
+     */
     init_error_message (message) {
       switch (message) {
         case 'Access denied.':

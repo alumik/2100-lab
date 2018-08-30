@@ -49,6 +49,16 @@ import Alert from '../../components/alert'
 export default {
   name: 'ChangeName',
   components: { Alert, Basic },
+  /**
+   * @returns {{
+   * items: *[], 路由跳转信息
+   * new_name: null, 新用户名，不可为空
+   * old_name: null, 旧用户名，从后端取得
+   * wrong_count_down: number, 错误倒计时
+   * success_count_down: number, 正确倒计时
+   * error_message: string 错误信息提示
+   * }}
+   */
   data: function () {
     return {
       items: [
@@ -78,6 +88,11 @@ export default {
       error_message: ''
     }
   },
+  /**
+   * 向后端发送请求，发送用户ID
+   * 得到回应，赋值旧用户名
+   * 得到错误，输出借用转换函数得到的错误信息
+   */
   created () {
     axios
       .get(
@@ -99,6 +114,14 @@ export default {
       })
   },
   methods: {
+    /**
+     * 发送请求函数
+     * 新名字不为空，且不应该与旧名字相同
+     *
+     * 发送请求，发送用户ID和新名字
+     * 得到回复，输出三秒新名字的信息
+     * 得到错误，输出五秒借用转换函数得到的错误信息
+     */
     submit_message: function () {
       if (this.new_name === null) {
         this.error_message = '请输入新名字'
