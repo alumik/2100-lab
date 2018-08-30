@@ -36,7 +36,7 @@
             type="text"/>
         </b-input-group>
         <br>
-        <b-input-group prepend="&nbsp密&nbsp&nbsp码&nbsp">
+        <b-input-group prepend="密码">
           <b-form-input
             v-model="password"
             type="password"/>
@@ -201,5 +201,10 @@ export default {
 #btn {
   margin-top: 40px;
   margin-bottom: 20px;
+}
+
+.input-group-text {
+  min-width: 70px;
+  max-width: 70px;
 }
 </style>

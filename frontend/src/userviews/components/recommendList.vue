@@ -35,7 +35,7 @@
                   {{ course.title }}
                 </h5>
                 <p class="card-text card-text-height">
-                  &emsp;&emsp;{{ course.description }}
+                  {{ course.description }}
                 </p>
               </div>
             </div>
@@ -141,6 +141,8 @@ export default {
   max-height: 5.5rem;
   overflow: hidden;
   font-size: 15px;
+  text-align: justify;
+  text-indent: 2rem;
 }
 
 .card-title {
