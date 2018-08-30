@@ -80,6 +80,13 @@ export default {
       num_pages: 0
     }
   },
+  /**
+   * 该函数在初始化日志界面时调用，
+   * 将表示选择项目的字符串转化为字符串，
+   * 通过get方法向后端发送单页最大数据量，当前页数，用户名称，开始结束时间戳及选择项目的数据，
+   * 获得后端发送的日志信息，
+   * 并捕捉错误进行信息提示。
+   */
   created () {
     let temp = this.$route.query.select.split(',')
     for (let i = 0; i < temp.length; i++) {
@@ -122,6 +129,11 @@ export default {
       })
   },
   methods: {
+    /**
+     * 该函数接受表示页数的参数，
+     * 修改当前页数，并进行查询操作。
+     * @param page
+     */
     change_page: function (page) {
       this.page = page
       const that = this
@@ -158,10 +170,24 @@ export default {
           }
         })
     },
+    /**
+     * 该函数接受一个表示日期的字符串，
+     * 将UTC时间转化为当地时间，
+     * 并返回转换后的字符串
+     * @param date
+     * @returns {string}
+     */
     compute_date: function (date) {
       let temp = new Date(date)
       return temp.toLocaleString()
     },
+    /**
+     * 该函数接受一个表示管理员名称的字符串参数，
+     * 并通过是否被删除进行转换，
+     * 返回转换后的管理员名称的字符串参数。
+     * @param name
+     * @returns {*}
+     */
     compute_admin_name: function (name) {
       let index = name.search('_deleted_')
       if (index !== -1) {

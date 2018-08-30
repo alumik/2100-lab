@@ -160,6 +160,10 @@ export default {
       dismiss_second: 5
     }
   },
+  /**
+   * 计算属性indeterminate为true表示选项部分选中，否则选项全选或全部未选，
+   * 根据四个select数组的长度判断值
+   */
   computed: {
     indeterminate: function () {
       if (
@@ -182,6 +186,10 @@ export default {
     }
   },
   methods: {
+    /**
+     * 该函数计算开始时间和结束时间的时间戳，判断时间合理性，
+     * 不合理提示错误信息，合理则跳转到日志页面，并传递用户名称、开始日期、结束日期及选择项目的信息
+     */
     to_detail: function () {
       let begin_date = Date.parse(this.begin_date) / 1000
       let end_date = Date.parse(this.end_date) / 1000
@@ -208,6 +216,12 @@ export default {
         })
       }
     },
+    /**
+     * 点击全选按钮触发此函数，
+     * 接受Boolean类型参数checked，表示点击全选后是否处于全选状态，
+     * 并进行全选或全部未选操作
+     * @param checked
+     */
     toggle_all (checked) {
       if (checked) {
         this.select1 = []
