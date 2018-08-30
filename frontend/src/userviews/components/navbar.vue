@@ -135,6 +135,7 @@ export default {
 
   .logo {
     height: 50px;
+    padding: 0;
     margin-left: 28px;
     vertical-align: middle;
     cursor: pointer;
