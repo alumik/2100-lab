@@ -110,6 +110,12 @@ export default {
       is_refunded: false
     }
   },
+  /**
+   * 该函数在初始化订单详情页面时调用，
+   * 通过get方法向后端发送当前页面订单ID的数据，
+   * 获得后端发送的订单详情信息，
+   * 并捕获错误进行判断，进行相应提示。
+   */
   created () {
     const that = this
     axios
@@ -136,6 +142,12 @@ export default {
       })
   },
   methods: {
+    /**
+     * 该函数在进行退款时调用，
+     * 通过get方法向后端发送当前页面订单ID的数据，
+     * 获得后端发送的信息，并进行错误捕捉及判断，
+     * 进行操作成功及失败的相应提示，同时再次查询刷新页面。
+     */
     refund: function () {
       const that = this
       axios

@@ -105,6 +105,12 @@ export default {
       success: ''
     }
   },
+  /**
+   * 该函数初始化留言详情页面，
+   * 通过get方法向后端发送comment_id，表示当前详情页的留言ID，
+   * 获取该留言的详细信息，并赋值给message变量，
+   * 获取信息失败时，根据返回的错误显示相应的提示信息。
+   */
   created () {
     const that = this
     axios
@@ -120,11 +126,21 @@ export default {
         that.message = that.computed_message(response.data)
       })
       .catch(function (error) {
-        that.wrong = '获取留言详情失败！' + error
-        that.wrong_count_down = that.dismiss_second
+        if (error.response.data.message === 'Object not found.') {
+          that.wrong = '该留言不存在！'
+          that.wrong_count_down = that.dismiss_second
+        } else {
+          that.wrong = '获取留言详情失败！'
+          that.wrong_count_down = that.dismiss_second
+        }
       })
   },
   methods: {
+    /**
+     * 该函数刷新订单详情，
+     * 获取该留言的详细信息，并赋值给message变量，
+     * 捕捉错误并提示信息。
+     */
     search: function () {
       const that = this
       axios
@@ -149,6 +165,12 @@ export default {
           }
         })
     },
+    /**
+     * 该函数接收一个boolean类型的参数，
+     * 返回一个字符串，表示留言是否被删除。
+     * @param deleted
+     * @returns {string}
+     */
     compute_state: function (deleted) {
       if (deleted) {
         return '已删除'
@@ -156,6 +178,12 @@ export default {
         return '未删除'
       }
     },
+    /**
+     * 该函数接收一个从后端获取的Object类型的对象，
+     * 返回一个包含留言详情信息的有序数组。
+     * @param val
+     * @returns {any[]}
+     */
     computed_message: function (val) {
       let temp = new Array(9)
       temp[0] = (val.created_at + '').slice(0, 10)
@@ -177,6 +205,12 @@ export default {
       temp[8] = val.content
       return temp
     },
+    /**
+     * 该函数删除留言，
+     * 通过post方法向后端发送表示该留言ID的数据comment_id,
+     * 获取后端执行操作后的返回信息，
+     * 进行操作成功、失败的提示。
+     */
     delete_message: function () {
       const that = this
       axios
@@ -203,6 +237,13 @@ export default {
           }
         })
     },
+    /**
+     * 该函数回复留言，
+     * 接收一个表示留言内容的字符串参数，
+     * 通过post方法发送表示留言ID的reply_to_id以及表示回复内容的comment_content，
+     * 并根据后端返回的成功或失败信息，显示提示。
+     * @param val
+     */
     reply_message: function (val) {
       const that = this
       axios

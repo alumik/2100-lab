@@ -39,7 +39,7 @@
                   class="date-picker"/>
               </div>
               <div class="col-md-3">
-                <div>步长</div>
+                <div>时间间隔</div>
                 <div class="step">
                   <b-input-group
                     append="月">
@@ -167,11 +167,24 @@ export default {
     }
   },
   methods: {
+    /**
+     * 该函数实现数据分析页面tab跳转，
+     * 接收标识标签的参数，
+     * 判断不为当前标签页则跳转。
+     * @param val
+     */
     change_tab: function (val) {
       if (val === 0) {
         this.$router.push('/admin/data/total')
       }
     },
+    /**
+     *该函数获得时间周期，
+     * 判断输入框内容是否存在及合法，
+     * 不合法返回-1或-2，
+     * 合法则返回时间周期的Number常量。
+     * @returns {number}
+     */
     get_step: function () {
       if (this.day === '' && this.month === '') {
         return -1
@@ -187,6 +200,13 @@ export default {
         return 30 * month + day
       }
     },
+    /**
+     * 该函数获取开始时间和结束时间，
+     * 判断开始时间和结束时间是否符合规范，
+     * 不合乎规范返回-1，
+     * 合乎规范则返回包含开始时间时间戳和结束时间时间戳的数组。
+     * @returns {*}
+     */
     get_start_end_time: function () {
       let start = Date.parse(this.begin_date) / 1000
       let end = Date.parse(this.end_date) / 1000
@@ -199,6 +219,12 @@ export default {
         return temp
       }
     },
+    /**
+     * 该函数判断开始时间、结束时间以及时间周期是否规范，
+     * 不合规范返回-1，
+     * 合乎规范返回包含开始时间、结束时间和时间周期的数组。
+     * @returns {*}
+     */
     check_date: function () {
       let step = this.get_step()
       if (step === -1 || step === 0) {
@@ -222,6 +248,11 @@ export default {
       temp[2] = step
       return temp
     },
+    /**
+     * 该函数接收后端发送的Object对象，
+     * 将数据转换为图表所需数据。
+     * @param val
+     */
     get_data: function (val) {
       this.charts_users.rows = []
       this.charts_money.rows = []
@@ -246,6 +277,13 @@ export default {
         })
       }
     },
+    /**
+     * 该函数获取数据，
+     * 向后端通过get方法发送开始时间时间戳、结束时间时间戳和时间周期，
+     * 获得后端发送的数据信息，
+     * 捕捉错误并进行相应提示。
+     * @returns {null}
+     */
     search: function () {
       const that = this
       let data = this.check_date()

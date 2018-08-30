@@ -90,6 +90,12 @@ export default {
       num_pages: 0
     }
   },
+  /**
+   * 该函数初始化用户相关订单页面，
+   * 向后端通过get方法发送当前页面用户ID，当前页数以及单页最大数据量的数据，
+   * 获得后端发送的订单数据、数据总条数及总页数，
+   * 捕捉错误并进行相应提示。
+   */
   created () {
     const that = this
     axios
@@ -123,6 +129,12 @@ export default {
       })
   },
   methods: {
+    /**
+     * 该函数接收Boolean类型的参数，
+     * 返回表示订单是否退款的字符串。
+     * @param val
+     * @returns {string}
+     */
     compute_state: function (val) {
       if (val) {
         return '已退款'
@@ -130,6 +142,12 @@ export default {
         return '未退款'
       }
     },
+    /**
+     * 该函数实现页面的跳转，
+     * 接收表示跳转后页数的参数，
+     * 更改当前页数，进行查询操作刷新页面数据。
+     * @param page
+     */
     change_page: function (page) {
       this.page = page
       const that = this

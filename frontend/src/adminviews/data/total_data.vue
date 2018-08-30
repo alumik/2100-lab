@@ -143,6 +143,12 @@ export default {
       wrong: ''
     }
   },
+  /**
+   * 该函数初始化数据分析总体分析页面，
+   * 向后端通过get方法发送所需数据距今天数，
+   * 获取后端发送的相关数据，
+   * 进行错误捕捉并进行提示信息。
+   */
   created () {
     const that = this
     let i
@@ -162,10 +168,9 @@ export default {
       days = 182
     }
     axios
-      .get(
-        'http://localhost/api/v1/data/data-management/get-overall-data/',
-        { params: { days: days } }
-      )
+      .get('http://localhost/api/v1/data/data-management/get-overall-data/', {
+        params: { days: days }
+      })
       .then(function (response) {
         that.increased_users = response.data.customers_count
         that.sale = response.data.income
@@ -185,11 +190,22 @@ export default {
       })
   },
   methods: {
+    /**
+     * 该函数实现数据分析页面tab跳转，
+     * 接收标识标签的参数，
+     * 判断不为当前标签页则跳转。
+     * @param val
+     */
     change_tab: function (val) {
       if (val === 1) {
         this.$router.push('/admin/data/time')
       }
     },
+    /**
+     * 该函数根据页面上按钮组的选择，
+     * 返回表示所需数据距今天数的Number类型常量
+     * @returns {number}
+     */
     get_days: function () {
       let i
       for (i = 0; i < this.buttons.length; i++) {
@@ -209,14 +225,19 @@ export default {
       }
       return days
     },
+    /**
+     * 该函数获取数据，
+     * 向后端通过get方法发送所需数据距今天数，
+     * 获取后端发送的相关数据，
+     * 进行错误捕捉并进行提示信息。
+     */
     search: function () {
       const that = this
       let days = this.get_days()
       axios
-        .get(
-          'http://localhost/api/v1/data/data-management/get-overall-data/',
-          { params: { days: days } }
-        )
+        .get('http://localhost/api/v1/data/data-management/get-overall-data/', {
+          params: { days: days }
+        })
         .then(function (response) {
           that.increased_users = response.data.customers_count
           that.sale = response.data.income
@@ -235,6 +256,13 @@ export default {
           }
         })
     },
+    /**
+     * 该函数改变所选按钮状态，
+     * 接收一个表示当前选中按钮下标的参数，
+     * 根据所选参数改变按钮状态，
+     * 执行获取数据操作，刷新页面数据。
+     * @param val
+     */
     change_button_state: function (val) {
       for (let i = 0; i < this.buttons.length; i++) {
         if (i === val) {

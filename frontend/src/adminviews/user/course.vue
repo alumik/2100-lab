@@ -90,6 +90,12 @@ export default {
       num_pages: 0
     }
   },
+  /**
+   * 该函数初始化用户学习记录页面，
+   * 向后端通过get方法发送当前页面用户ID，当前页数以及单页最大数据量的数据，
+   * 获得后端返回的学习记录信息，记录总条数以及总页数，
+   * 进行错误捕捉进行相应提示。
+   */
   created () {
     const that = this
     axios
@@ -123,6 +129,12 @@ export default {
       })
   },
   methods: {
+    /**
+     * 该函数实现翻页，
+     * 获取表示翻页后页数的参数，
+     * 更改当前页数，并执行查询操作更新页面数据。
+     * @param page
+     */
     change_page: function (page) {
       this.page = page
       const that = this
@@ -156,9 +168,22 @@ export default {
           }
         })
     },
+    /**
+     * 该函数接收一个表示日期的字符串参数，
+     * 截取表示年月日的字符串，
+     * 返回转换后的字符串。
+     * @param val
+     * @returns {*}
+     */
     compute_date: function (val) {
       return val.slice(0, 10)
     },
+    /**
+     * 该函数接收Boolean类型的参数，
+     * 返回表示课程是否被焚毁的字符串。
+     * @param val
+     * @returns {string}
+     */
     compute_burnt: function (val) {
       if (val) {
         return '已焚毁'
