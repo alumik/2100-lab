@@ -94,6 +94,29 @@ import Alert from '../../components/alert'
 export default {
   name: 'TotalData',
   components: { Alert, Basic, BreadCrumb, Menu, AdminNavbar },
+  /**
+   * @returns {{
+   * items: *[], 面包屑路由地址
+   * buttons: *[], 数据时段选择按钮
+   * increased_users: number, 新增用户数
+   * sale: number, 新增销售额
+   * increased_courses: number, 新增课程数
+   * orders: number, 新增订单数
+   * colors1: Array,
+   * colors2: Array,
+   * 图表颜色
+   * praise_top: object,
+   * study_top: object,
+   * 图表数据
+   * praise_top_setting: object,
+   * study_top_setting: object,
+   * 图表设置
+   * dismiss_second: number,
+   * wrong_count_down: number,
+   * wrong: string
+   * Alert组件所需参数
+   * }}
+   */
   data () {
     return {
       items: [

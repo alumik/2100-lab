@@ -122,6 +122,34 @@ import Alert from '../../components/alert'
 export default {
   name: 'TimeData',
   components: { Alert, Basic, BreadCrumb, Menu, AdminNavbar },
+  /**
+   * @returns {{
+   * items: *[], 面包屑路由地址
+   * end_date: object,
+   * begin_date: object,
+   * options: object,
+   * 日历数据及配置
+   * month: string,
+   * day: string,
+   * 时间周期数据
+   * charts_users: object,
+   * charts_money: object,
+   * charts_courses: object,
+   * charts_orders: object,
+   * 图表相关数据
+   * data_empty: boolean,
+   * 图表数据是否存在
+   * money_settings: object,
+   * 图表配置
+   * colors1: Array,
+   * colors2: Array,
+   * 图表颜色
+   * dismiss_second: number,
+   * wrong_count_down: number,
+   * wrong: string
+   * Alert组件所需参数
+   * }}
+   */
   data () {
     return {
       items: [
@@ -134,8 +162,6 @@ export default {
           active: true
         }
       ],
-      colors1: ['#cd4c46'],
-      colors2: ['#5b9bd1'],
       end_date: new Date(),
       begin_date: new Date(new Date().getTime() - 24 * 60 * 60 * 1000),
       options: {
@@ -151,7 +177,6 @@ export default {
         columns: ['日期', '新增销售额'],
         rows: []
       },
-      money_settings: { area: true },
       charts_courses: {
         columns: ['日期', '新增课程数'],
         rows: []
@@ -160,10 +185,13 @@ export default {
         columns: ['日期', '新增订单数'],
         rows: []
       },
+      data_empty: true,
+      money_settings: { area: true },
+      colors1: ['#cd4c46'],
+      colors2: ['#5b9bd1'],
       dismiss_second: 5,
       wrong_count_down: 0,
-      wrong: '',
-      data_empty: true
+      wrong: ''
     }
   },
   methods: {

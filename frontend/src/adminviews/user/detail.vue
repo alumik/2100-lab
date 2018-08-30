@@ -225,10 +225,31 @@ import qs from 'qs'
 export default {
   name: 'UserDetail',
   components: { Alert, Basic, ConfirmModal, BreadCrumb, AdminNavbar, Menu },
+  /**
+   * @returns {{
+   * items: *[], 面包屑路由地址
+   * titles: Array, 用户详情标题
+   * user: Array, 用户详情数据
+   * avatar: string, 用户头像链接
+   * order_titles: Array, 用户相关订单标题
+   * orders: Array, 用户相关订单数据
+   * course_titles: Array, 用户学习记录标题
+   * course_logs: Array, 用户学习记录数据
+   * is_banned: boolean, 标志用户是否禁言
+   * is_vip: boolean, 标志用户是否为认证用户
+   * is_deleted: boolean, 标志用户是否被删除
+   * page_jump_course: boolean, 跳转学习记录页面标志
+   * page_jump_order: boolean, 跳转相关订单页面标志
+   * dismiss_second: number,
+   * wrong_count_down: number,
+   * wrong: string,
+   * success_count_down: number,
+   * success: string
+   * Alert组件所需参数
+   * }}
+   */
   data () {
     return {
-      titles: ['用户名', '手机号码', '奖励金', '注册时间', '修改时间'],
-      user: new Array(5),
       items: [
         {
           text: '主页',
@@ -243,6 +264,9 @@ export default {
           active: true
         }
       ],
+      titles: ['用户名', '手机号码', '奖励金', '注册时间', '修改时间'],
+      user: new Array(5),
+      avatar: '',
       order_titles: [
         { label: '订单编号' },
         { label: '课程代码' },
@@ -259,17 +283,16 @@ export default {
         { label: '是否焚毁' }
       ],
       course_logs: [],
+      is_banned: false,
+      is_vip: false,
+      is_deleted: false,
       page_jump_course: false,
       page_jump_order: false,
       dismiss_second: 5,
       wrong_count_down: 0,
       wrong: '',
       success_count_down: 0,
-      success: '',
-      is_banned: false,
-      is_vip: false,
-      is_deleted: false,
-      avatar: ''
+      success: ''
     }
   },
   /**
@@ -307,6 +330,7 @@ export default {
           that.wrong_count_down = that.dismiss_second
         }
       })
+    console.log(typeof this.avatar)
   },
   methods: {
     /**

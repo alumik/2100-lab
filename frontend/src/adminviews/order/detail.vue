@@ -75,6 +75,20 @@ export default {
     BreadCrumb,
     Menu
   },
+  /**
+   * @returns {{
+   * items: *[], 面包屑路由地址
+   * titles: Array, 订单详情标题
+   * order: Array, 订单详情数据
+   * is_refunded: boolean, 标志订单是否退款
+   * dismiss_second: number,
+   * wrong_count_down: number,
+   * wrong: string,
+   * success_count_down: number,
+   * success: string
+   * Alert组件所需参数
+   * }}
+   */
   data () {
     return {
       items: [
@@ -102,12 +116,12 @@ export default {
         '金额',
         '状态'
       ],
+      is_refunded: false,
       dismiss_second: 5,
       wrong_count_down: 0,
       wrong: '',
       success_count_down: 0,
-      success: '',
-      is_refunded: false
+      success: ''
     }
   },
   /**
