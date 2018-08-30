@@ -199,6 +199,11 @@ export default {
       num_pages: 0
     }
   },
+  /**
+   * 该函数为初始化留言管理页面时调用，向后端发送表示每页最大数据条数的page_limit和当前页数page，
+   * 获取后端发送的留言信息数据，数据总条数以及总页数，
+   * 并捕捉错误信息进行相应提示。
+   */
   created () {
     const that = this
     axios
@@ -228,13 +233,29 @@ export default {
       })
   },
   methods: {
+    /**
+     * 该函数接受一个表示留言ID的参数，并跳转到该详情页面
+     * @param val
+     */
     to_detail: function (val) {
       this.page_jump = true
       this.$router.push({ name: 'MessageDetail', query: { message_id: val } })
     },
+    /**
+     * 该函数接受一个表示日期的字符串参数，
+     * 并返回字符串的前十位
+     * @param date
+     * @returns {*}
+     */
     compute_date: function (date) {
       return date.slice(0, 10)
     },
+    /**
+     * 该函数接受一个boolean类型的参数，
+     * 返回一个表示留言是否被删除的字符串
+     * @param deleted
+     * @returns {*}
+     */
     compute_state: function (deleted) {
       if (deleted) {
         return this.$t('message.state3')
@@ -242,6 +263,12 @@ export default {
         return this.$t('message.state2')
       }
     },
+    /**
+     * 该函数接受一个表示用户名的字符串，
+     * 根据用户是否被删除返回处理过后的字符串类型的用户名
+     * @param name
+     * @returns {*}
+     */
     compute_username: function (name) {
       let index = name.search('_deleted_')
       if (index !== -1) {
@@ -250,6 +277,12 @@ export default {
         return name
       }
     },
+    /**
+     * 该函数接受一个字符串类型的字符串，表示留言内容，
+     * 并对超出7个字符的字符串进行处理，返回处理后的字符串
+     * @param content
+     * @returns {*}
+     */
     compute_message: function (content) {
       if (content.length > 7) {
         return content.slice(0, 7) + '...'
@@ -257,6 +290,11 @@ export default {
         return content
       }
     },
+    /**
+     * 该函数在翻页或者查询时调用，
+     * 通过get方法向后端发送表示用户名、课程代码、课程名、删除状态、页面最大数据量及当前页数的数据，
+     * 获得后端返回的查询过后的数据，获得数据失败时显示相应信息
+     */
     search: function () {
       const that = this
       let state
@@ -297,10 +335,20 @@ export default {
           }
         })
     },
+    /**
+     * 该函数接受一个表示页数的参数，
+     * 更改页数并进行查询操作
+     * @param page
+     */
     change_page: function (page) {
       this.page = page
       this.search()
     },
+    /**
+     * 该函数在删除留言时调用，通过post方法向后端发送表示该留言ID的数据comment_id,
+     * 在删除成功时，获取后端发送的删除成功信息，失败时获取失败相应信息，
+     * 针对上述获取的信息显示提示信息
+     */
     delete_message: function () {
       const that = this
       axios
@@ -327,6 +375,12 @@ export default {
           }
         })
     },
+    /**
+     * 该函数在回复留言时调用，接受一个表示留言内容的val，
+     * 通过post方法发送表示留言ID的reply_to_id以及表示回复内容的comment_content，
+     * 并根据后端返回的成功或失败信息，显示提示。
+     * @param val
+     */
     reply_message: function (val) {
       const that = this
       axios
