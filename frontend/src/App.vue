@@ -34,6 +34,7 @@ export default {
             'http://localhost/api/v1/customers/forestage/personal-center/get-customer-detail/'
           )
           this.$store.commit('user', response_two.data)
+          this.$store.commit('staff', false)
           this.$store.commit('colors', sessionStorage.getItem('colors'))
           this.$store.commit('menu', sessionStorage.getItem('menu'))
         }
