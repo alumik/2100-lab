@@ -171,6 +171,11 @@ export default {
           }
         })
     },
+    /**
+     * handleOk，代表发送处理新用户同意协议后的事件
+     * @constructor
+     * @param {Event} evt - 发生的事件.
+     */
     handleOk (evt) {
       axios
         .post(
