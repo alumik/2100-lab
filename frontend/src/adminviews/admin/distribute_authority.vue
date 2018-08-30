@@ -211,7 +211,7 @@ export default {
     /**
      * 发送信息函数
      * 发送经选择后的当前用户权限信息
-     * 得到回应，显示三秒成功信息，执行路由跳转函数
+     * 得到回应，显示之后成功信息，执行路由跳转函数
      * 得到错误，显示五秒错误信息
      */
     submit_message () {
@@ -235,7 +235,7 @@ export default {
           this.success_count_down = 0
           this.error_message = '分配权限成功'
           this.success_count_down = 3
-          setTimeout(this.router_push, 3000)
+          this.router_push()
         })
         .catch(error => {
           this.wrong_count_down = 0

@@ -155,7 +155,6 @@ const store = new Vuex.Store({
       }
     },
     staff (state, is_staff = true) {
-      console.log(false)
       state.user.is_staff = is_staff
     }
   }

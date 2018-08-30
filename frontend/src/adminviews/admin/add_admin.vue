@@ -147,7 +147,7 @@ export default {
     /**
      *函数用于向后端发送一个请求
      * 请求内容为用户输入的手机号和密码
-     * 捕获回应后会显示添加成功信息，三秒钟后重定向
+     * 捕获回应后会显示添加成功信息，之后重定向
      * 捕获错误后会发出错误提示
      */
     send_message: function () {
@@ -165,9 +165,7 @@ export default {
           _this.success_count_down = 0
           _this.error_message = '添加成功'
           _this.success_count_down = 3
-          setTimeout(function () {
-            _this.$router.push({ name: 'AdminManagement' })
-          }, 3000)
+          _this.$router.push({ name: 'AdminManagement' })
         })
         .catch(error => {
           let _this = this

@@ -266,12 +266,9 @@ export default {
             this.success_count_down = 0
             this.error_message = '增加课程成功'
             this.success_count_down = 3
-            setTimeout(
-              this.$router.push({
-                name: 'CourseManagement'
-              }),
-              3000
-            )
+            this.$router.push({
+              name: 'CourseManagement'
+            })
           })
           .catch(error => {
             this.wrong_count_down = 0
