@@ -181,8 +181,7 @@ export default {
           that.assets_test = true
           that.assets_error_msg = that.$t('error.object_not_found')
         } else if (error.response.data.message === 'Access denied.') {
-          that.assets_test = true
-          that.assets_error_msg = that.$t('error.access_denied')
+          that.$router.push({name: 'PageNotFound'})
         }
       })
     axios.get('http://localhost/api/v1/courses/forestage/course/' +

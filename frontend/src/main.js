@@ -32,7 +32,7 @@ const store = new Vuex.Store({
       phone_number: '',
       avatar: 'default/customers/avatars/2100_lab.jpg',
       reward_coin: '0.00',
-      is_vip: '',
+      is_vip: false,
       is_banned: '',
       date_joined: '',
       updated_at: '',

@@ -137,9 +137,8 @@ export default {
   transform: translate(0, -20px);
 }
 
-.wrap-style {
-  word-break: normal;
-  word-wrap: break-word;
+p {
+  word-break: break-word;
 }
 
 .card-text-height {

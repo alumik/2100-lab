@@ -12,13 +12,13 @@
           <img
             :src="$store.state.address + course.thumbnail"
             class="image">
-          <div class="introduction">
+          <div class="introduction wrap-style">
             <h5>{{ course.title }}</h5>
             <p id="text-one">
-              {{ compute_message(course.description, 120) }}
+              &emsp;&emsp;{{ compute_message(course.description, 120) }}
             </p>
             <p id="text-two">
-              {{ compute_message(course.description, 12) }}
+              &emsp;&emsp;{{ compute_message(course.description, 12) }}
             </p>
           </div>
         </div>
@@ -106,6 +106,10 @@ h4 {
   cursor: pointer;
   border-top: 1px solid #e6e6e6;
   border-bottom: 1px solid #e6e6e6;
+}
+
+.wrap-style {
+  word-break: break-word;
 }
 
 .image {
