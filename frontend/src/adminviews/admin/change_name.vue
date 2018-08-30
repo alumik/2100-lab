@@ -119,7 +119,7 @@ export default {
      * 新名字不为空，且不应该与旧名字相同
      *
      * 发送请求，发送用户ID和新名字
-     * 得到回复，输出三秒新名字的信息
+     * 得到回复，输出之后新名字的信息
      * 得到错误，输出五秒借用转换函数得到的错误信息
      */
     submit_message: function () {
@@ -143,7 +143,7 @@ export default {
             this.success_count_down = 3
             this.error_message =
               '修改姓名成功，新用户名为：' + response.data.new_username
-            setTimeout(this.router_push, 3000)
+            this.router_push()
           })
           .catch(error => {
             this.wrong_count_down = 0

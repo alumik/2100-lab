@@ -451,10 +451,8 @@ export default {
         for (let i = update_text.length; i < this.file_name_list.length; i++) {
           update_text[i] = ''
         }
-        console.log(update_text)
       }
       let form_data = new FormData()
-      console.log(this.file_name_list)
       for (let i = 0; i < this.file_name_list.length; i++) {
         form_data.append('heroes', this.file_name_list[i])
         form_data.append('captions', update_text[i])

@@ -107,7 +107,7 @@ export default {
      * 否则提示五秒钟错误
      *
      * 发送请求，包括用户ID和新密码
-     * 得到回应，提示三秒成功信息，路由函数页面跳转
+     * 得到回应，提示之后成功信息，路由函数页面跳转
      * 得到错误，提示五秒，信息转换函数返回错误信息内容
      */
     submit_message: function () {
@@ -135,7 +135,7 @@ export default {
             this.error_message = response.data.message
             this.error_message = '修改密码成功'
             this.success_count_down = 3
-            setTimeout(this.router_push, 3000)
+            this.router_push()
           })
           .catch(error => {
             this.wrong_count_down = 0
