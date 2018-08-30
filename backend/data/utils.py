@@ -63,7 +63,7 @@ def get_top_up_voted_courses(start_time, end_time):
     for courses_up_vote in courses_up_votes:
         top_up_voted_courses.append(
             {
-                'title': Course.objects.get(id=courses_up_vote['course']).title,
+                'title': Course.all_objects.get(id=courses_up_vote['course']).title,
                 'up_votes': courses_up_vote['total']
             }
         )
@@ -83,7 +83,7 @@ def get_top_learned_courses(start_time, end_time):
     for learning_log in learning_logs:
         top_learned_courses.append(
             {
-                'title': Course.objects.get(id=learning_log['course']).title,
+                'title': Course.all_objects.get(id=learning_log['course']).title,
                 'learners': learning_log['total']
             }
         )
