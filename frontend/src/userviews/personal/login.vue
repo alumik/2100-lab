@@ -134,6 +134,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * send函数，代表发送验证码事件
+     */
     send () {
       let that = this
       that.code_disabled = true
