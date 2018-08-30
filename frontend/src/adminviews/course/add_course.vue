@@ -180,6 +180,36 @@ import Alert from '../../components/alert'
 export default {
   name: 'AddCourse',
   components: { Alert, SyncPicture, PreSortPicture, UploadSource, Basic },
+  /**
+   * @returns {{
+   * items: *[], 路由地址
+   *
+   * error_message: string,
+   * wrong_count_down: number,
+   * success_count_down: number,
+   * 信息提示存储及倒计时
+   *
+   * audio_file_list: Array,
+   * image_file_list: Array,
+   * thumb_file: Array,
+   * 音频/图片/缩略图存储数组
+   *
+   * title: string,
+   * codename: string,
+   * days: string,
+   * hours: string,
+   * prices: string,
+   * can_comment: string,
+   * comment_options: *[],
+   * reward_percent: string,
+   * description: string,
+   * 课程基本信息存储区域
+   *
+   * is_audio_changed: boolean,
+   * is_uploaded: boolean
+   * 音频/图片已更新标志变量
+   * }}
+   */
   data: function () {
     return {
       items: [
@@ -216,6 +246,13 @@ export default {
     }
   },
   methods: {
+    /**
+     * 接收上传数据的函数
+     * @param upload_pic_resourse
+     * @param audio_file_list
+     * @param thumb_file
+     * 更改上传标志变量的状态，添加文件到存储区
+     */
     receive_uploaded_resource: function (
       upload_pic_resourse,
       audio_file_list,
@@ -229,6 +266,11 @@ export default {
       this.image_file_list = upload_pic_resourse
       this.thumb_file[0] = thumb_file
     },
+    /**
+     * 接收排序后数据的函数
+     * 将排序后数据深拷贝至存储区，更新图片index值
+     * @param sorted_pic
+     */
     receive_sorted_pictures (sorted_pic) {
       this.image_file_list.length = 0
       for (let i = 1; i <= sorted_pic.length; i++) {
@@ -236,9 +278,20 @@ export default {
         this.image_file_list[i - 1].index = i
       }
     },
+    /**
+     * 接收同步后数据的函数
+     * 将同步后的数据浅拷贝至数据区
+     * @param image_data_list
+     */
     receive_sync_data (image_data_list) {
       this.image_file_list = image_data_list
     },
+    /**
+     * 上传所有数据的函数，进行数据验证
+     * 验证通过后，将所有更改数据添加到form_data中并发送请求
+     * 得到回应，显示成功信息，三秒钟后跳转
+     * 得到错误，显示五秒钟经函数转换后的错误提示信息
+     */
     upload_all_data () {
       if (this.verify_data() === true) {
         let form_data = new FormData()
@@ -280,6 +333,11 @@ export default {
           })
       }
     },
+    /**
+     * 生成错误信息函数
+     * @param message
+     * @returns {string}
+     */
     init_error_message (message) {
       switch (message) {
         case 'Access denied.':
@@ -290,6 +348,12 @@ export default {
           return '数据库查询出错'
       }
     },
+    /**
+     * 验证数据函数
+     * 课程代码、课程名不能为空
+     * 课程价格、奖励金比例不能为负数
+     * @returns {boolean}
+     */
     verify_data () {
       if (
         this.codename === '' ||
