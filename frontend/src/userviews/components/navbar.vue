@@ -3,7 +3,6 @@
     id="user-navbar"
     :sticky="true"
     toggleable="md"
-    type="dark"
     variant="primary"
     class="my-navbar">
     <button
@@ -167,7 +166,7 @@ export default {
   }
 
   .navbar-toggler {
-    background-color: lightgray;
+    outline: none;
   }
 
   #userimg:hover {
