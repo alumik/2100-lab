@@ -157,9 +157,25 @@ export default {
 
 .content {
   padding: 20px;
+  margin-top: 60px;
 }
 
 .my-0 {
   justify-content: center;
+}
+
+#breadcrumb {
+  display: none;
+  padding: 20px;
+}
+
+@media (max-width: 768px) {
+  #breadcrumb {
+    display: flex;
+  }
+
+  .content {
+    margin-top: 0;
+  }
 }
 </style>

@@ -48,7 +48,7 @@ export default {
   min-width: 200px;
   max-width: 200px;
   height: 100vh;
-  color: #5610a7;
+  color: darkblue;
   background: #f5f5f5;
   transition: all 0.3s;
 }
@@ -87,17 +87,12 @@ a:focus {
   display: block;
   padding: 10px;
   font-size: 1.1em;
-  color: #5e0057;
-}
-
-#sidebar ul li a:hover {
-  color: #f5f1fb;
-  background: #8d6592;
+  color: darkblue;
 }
 
 #sidebar ul li.active > a,
 a[aria-expanded='true'] {
-  color: #8d4e91;
-  background: #fff;
+  color: dodgerblue;
+  background-color: white;
 }
 </style>
