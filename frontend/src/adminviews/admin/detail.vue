@@ -131,6 +131,24 @@ import Alert from '../../components/alert'
 export default {
   name: 'AdminDetail',
   components: { Alert, ConfirmModal, Basic },
+  /**
+   * @returns {{
+   * items: *[], 路由跳转信息
+   * admin: {
+   * admin_id: string, 用户ID，数据库自增数据段
+   * username: string, 用户名，默认为手机号
+   * phone_number: string, 用户手机号
+   * date_joined: string, 用户加入时间
+   * updated_at: string, 用户最近登录时间
+   * admin_groups: string 用户权限组
+   * },
+   * admin_id: number, 当前访问用户ID
+   * error_message: string, 错误信息提示
+   * wrong_count_down: number, 错误信息倒计时
+   * success_count_down: number, 正确信息倒计时
+   * test_router: number 路由跳转信息
+   * }}
+   */
   data: function () {
     return {
       items: [
@@ -162,6 +180,12 @@ export default {
       test_router: -1
     }
   },
+  /**
+   * 将路由ID存储到访问用户ID中
+   * 发送请求，访问用户ID
+   * 得到回应，调用数据初始化函数获取当前用户信息
+   * 得到错误，调用信息转换函数显示五秒
+   */
   created () {
     this.admin_id = this.$route.query.admin_id
     axios
@@ -184,6 +208,11 @@ export default {
       })
   },
   methods: {
+    /**
+     * 错误信息转换函数
+     * @param message
+     * @returns {string}
+     */
     init_error_message (message) {
       switch (message) {
         case 'Access denied.':
@@ -194,6 +223,11 @@ export default {
           return '数据库查询出错'
       }
     },
+    /**
+     * 用户信息生成函数
+     * @param response
+     * 权限管理注意超级管理员权限的显示
+     */
     initial_data (response) {
       this.admin.admin_id = response.data.admin_id
       this.admin.username = response.data.username
@@ -220,6 +254,11 @@ export default {
         }
       }
     },
+    /**
+     * 权限英中转换的函数
+     * @param permission
+     * @returns {string}
+     */
     transfer_permission (permission) {
       switch (permission) {
         case 'comment_admin':
@@ -236,6 +275,10 @@ export default {
           return '超级管理员权限'
       }
     },
+    /**
+     * 路由跳转函数：分配权限页面、更改密码页面、更改用户名页面
+     * @param id
+     */
     jump: function (id) {
       if (id === 1) {
         this.test_router = 1
@@ -257,9 +300,17 @@ export default {
         })
       }
     },
+    /**
+     * 显示删除模态框
+     */
     show_delete_modal () {
       this.$refs.modal.show()
     },
+    /**
+     * 删除模态框提交键点击后提交请求函数
+     * 得到回应，展示删除成功信息
+     * 得到错误，展示错误信息
+     */
     click_ok: function () {
       this.$refs.modal.hide()
       axios

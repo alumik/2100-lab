@@ -100,6 +100,23 @@ import Alert from '../../components/alert'
 export default {
   name: 'AdminManagement',
   components: { Alert, Pagination, Basic },
+  /**
+   * @returns {{
+   * items: *[], 路由信息
+   * admins: Array, 管理员信息
+   * username: string, 查询的用户名信息
+   * phone_number: string, 查询的用户手机号信息
+   * page: number, 页码信息
+   * rows: number, 总计记录数量信息
+   * per_limit: number, 每页记录数量
+   * error_message: string, 错误信息
+   * wrong_count_down: number, 错误信息显示时间
+   * success_count_down: number, 成功信息显示时间
+   * query_id: number, 想要查询的管理员的ID
+   * test_router: boolean, 路由测试信息
+   * num_pages: number 总共页数信息
+   * }}
+   */
   data: function () {
     return {
       items: [
@@ -126,6 +143,12 @@ export default {
       num_pages: 0
     }
   },
+  /**
+   * 页面初始化，发送请求得到当前管理员列表信息
+   * 发送查询条件：用户名+用户手机号+每页限制数量+页码数
+   * 得到回应，保存记录信息
+   * 得到错误，显示错误信息五秒
+   */
   created: function () {
     axios
       .get(
@@ -162,6 +185,10 @@ export default {
       })
   },
   methods: {
+    /**
+     * 路由跳转函数，目标是管理员详细信息界面
+     * @param id
+     */
     jump: function (id) {
       if (id === -1) {
         this.test_router = true
@@ -174,6 +201,12 @@ export default {
         })
       }
     },
+    /**
+     * 具体条件查询函数
+     * 根据用户输入的具体查询条件来执行查询操作
+     * 得到回应，存储和显示查询到的信息
+     * 得到错误，显示五秒错误信息
+     */
     change: function () {
       axios
         .get(
@@ -205,6 +238,11 @@ export default {
           this.wrong_count_down = 5
         })
     },
+    /**
+     * 生成错误信息
+     * @param message
+     * @returns {string}
+     */
     init_error_message (message) {
       switch (message) {
         case 'Access denied.':
@@ -215,10 +253,19 @@ export default {
           return '数据库查询出错'
       }
     },
+    /**
+     * 换页函数
+     * @param currentpage
+     */
     change_page: function (currentpage) {
       this.page = currentpage
       this.change()
     },
+    /**
+     * 更新页码函数
+     * @param page
+     * @returns {*}
+     */
     update_num_pages: function (page) {
       if (page === 0) {
         return 1

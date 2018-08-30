@@ -54,6 +54,17 @@ import Alert from '../../components/alert'
 export default {
   name: 'ChangeCode',
   components: { Alert, Basic },
+  /**
+   * @returns {
+   * {
+   * items: *[], 路由信息
+   * new_password: null, 新输入的密码，不能为空
+   * new_password_again: null, 重复的新输入的密码，不能为空，且必须与第一次密码相同
+   * wrong_count_down: number, 失败时倒计时秒数
+   * success_count_down: number, 成功时倒计时秒数
+   * error_message: string 错误信息提示
+   * }}
+   */
   data: function () {
     return {
       items: [
@@ -83,7 +94,22 @@ export default {
       error_message: ''
     }
   },
+  /**
+   * submit_message 发送请求函数
+   * router_push 路由转换函数
+   * init_error_message 错误信息转换函数
+   */
   methods: {
+    /**
+     * 发送请求函数
+     * 用户输入的新密码不能为空
+     * 用户重复输入密码不能为空，且必须与第一次输入密码一致
+     * 否则提示五秒钟错误
+     *
+     * 发送请求，包括用户ID和新密码
+     * 得到回应，提示三秒成功信息，路由函数页面跳转
+     * 得到错误，提示五秒，信息转换函数返回错误信息内容
+     */
     submit_message: function () {
       if (this.new_password === null) {
         this.error_message = '请输入新密码'

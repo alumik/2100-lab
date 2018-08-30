@@ -58,6 +58,19 @@ import Alert from '../../components/alert'
 export default {
   name: 'DistributeAuthority',
   components: { Alert, Basic },
+  /**
+   * @returns {{
+   * items: *[], 路由跳转信息
+   * admin_id: string, 用户ID信息
+   * flavours: string[], 权限组信息
+   * selected: Array, 用户勾选权限信息
+   * error_message: string, 错误信息
+   * wrong_count_down: number, 错误信息提示时间
+   * success_count_down: number, 正确信息提示时间
+   * all_selected: boolean, 全选标记器
+   * test_router: boolean 跳转测试器
+   * }}
+   */
   data: function () {
     return {
       items: [
@@ -96,6 +109,10 @@ export default {
       test_router: false
     }
   },
+  /**
+   * 监测函数 selected
+   * 检测每次用户勾选变化，涉及与全选按钮是否勾选的逻辑交互
+   */
   watch: {
     selected () {
       if (
@@ -112,6 +129,12 @@ export default {
       }
     }
   },
+  /**
+   * 渲染函数
+   * 发送请求，发送用户ID信息
+   * 得到回复，对当前用户权限信息进行保存和显示
+   * 得到错误，显示五秒经转换函数输出的错误信息
+   */
   mounted () {
     this.admin_id = this.$route.query.admin_id
     axios
@@ -140,9 +163,18 @@ export default {
       })
   },
   methods: {
+    /**
+     * 全选函数
+     * @param checked
+     */
     toggle_all (checked) {
       this.selected = checked ? this.flavours.slice() : []
     },
+    /**
+     * 接受权限信息转换函数
+     * @param permission
+     * @returns {string}
+     */
     transfer_permission (permission) {
       switch (permission) {
         case 'comment_admin':
@@ -157,6 +189,11 @@ export default {
           return '订单管理权限'
       }
     },
+    /**
+     * 发送权限信息转换函数
+     * @param sel
+     * @returns {string}
+     */
     reverse_permission (sel) {
       switch (sel) {
         case '留言管理权限':
@@ -171,6 +208,12 @@ export default {
           return 'order_admin'
       }
     },
+    /**
+     * 发送信息函数
+     * 发送经选择后的当前用户权限信息
+     * 得到回应，显示三秒成功信息，执行路由跳转函数
+     * 得到错误，显示五秒错误信息
+     */
     submit_message () {
       let adminGroups = []
       for (let sel of this.selected) {
@@ -201,6 +244,11 @@ export default {
           this.wrong_count_down = 5
         })
     },
+    /**
+     * 错误信息生成函数
+     * @param message
+     * @returns {string}
+     */
     init_error_message (message) {
       switch (message) {
         case 'Access denied.':
@@ -211,6 +259,9 @@ export default {
           return '数据库查询出错'
       }
     },
+    /**
+     * 路由跳转函数
+     */
     router_push () {
       this.$router.push({
         name: 'AdminDetail',
