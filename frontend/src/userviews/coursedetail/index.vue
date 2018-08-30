@@ -132,11 +132,30 @@
           id="introduction"
           class="introduction-style">
           <div
-            id="page-title"
-            class="content-style">
-            <h3>
-              {{ course.title }}
-            </h3>
+            v-if="!course.can_access">
+            <h6
+              v-if="!course.can_access &&
+                course.price !== 0 &&
+              !isNaN(get_now_price())">
+              <simple-line-icons
+                icon="basket-loaded"
+                color="#ffd706"
+                class="icon"
+                size="small"/> 现价 ￥{{ get_now_price() }}  </h6>
+            <h6 v-else>
+              <simple-line-icons
+                icon="basket-loaded"
+                color="#ffd706"
+                class="icon"
+                size="small"/>该课程为免费课程。
+            </h6>
+            <h6
+              v-if="!isNaN($store.state.user.reward_coin) &&
+              $store.state.user.reward_coin != 0.00">&emsp;&emsp;￥
+              <label
+                v-if="!isNaN(course.price)"
+                class="origin-value">{{ course.price }}</label>
+            </h6>
           </div>
           <div>
             <h6
