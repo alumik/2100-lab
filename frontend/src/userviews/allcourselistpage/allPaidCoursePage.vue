@@ -32,6 +32,18 @@ export default {
     AllCourseList,
     Basic
   },
+  /**
+   * @returns {IterableIterator<{
+   * page_title: string, 列表名称
+   * course_list: Array, 课程列表
+   * course_type: string, 课程类型（免费、付费）
+   * page_limit: number, 每页将展示的课程数目
+   * page: number, rows: number, 页码
+   * created_test: boolean, 获取数据测试
+   * created_error_msg: string 获取数据返回错误信息
+   * }>
+   * }
+   */
   data () {
     return {
       page_title: '付费课程',
@@ -45,15 +57,33 @@ export default {
       created_error_msg: ''
     }
   },
+  /**
+   * 向后端发送请求
+   * 获取课程列表
+   */
   created () {
     this.get_course_list()
   },
   methods: {
+    /**
+     * 点击子组件分页器
+     * 改变父组件的页码
+     */
     change_page: function (page) {
       let that = this
       that.page = page
       that.get_course_list()
     },
+    /**
+     * 获取课程列表
+     * 发送数据：
+     *   课程类型
+     *   每页显示课程数
+     *   当前页码
+     *
+     *   像后端发送请求
+     *   得到回复，获取相应类型、相应数量课程列表
+     *   得到错误，弹出错误信息 */
     get_course_list: function () {
       let that = this
       axios
