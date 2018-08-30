@@ -134,6 +134,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * send函数，代表发送验证码事件
+     */
     send () {
       let that = this
       that.code_disabled = true
@@ -168,6 +171,11 @@ export default {
           }
         })
     },
+    /**
+     * handleOk，代表发送处理新用户同意协议后的事件
+     * @constructor
+     * @param {Event} evt - 发生的事件.
+     */
     handleOk (evt) {
       axios
         .post(
