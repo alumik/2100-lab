@@ -160,6 +160,12 @@ export default {
       num_pages: 0
     }
   },
+  /**
+   * 该函数在初始化订单管理页面时调用，
+   * 通过post方法向后端发送每页最大数据量和当前页数，
+   * 并接受后端返回的订单、订单总数及页面总页数的信息，
+   * 并捕捉错误信息进行提示
+   */
   created () {
     const that = this
     axios
@@ -189,6 +195,12 @@ export default {
       })
   },
   methods: {
+    /**
+     * 该函数接受一个表示用户名的字符串，
+     * 根据用户是否被删除返回处理过后的字符串类型的用户名
+     * @param name
+     * @returns {*}
+     */
     compute_username: function (name) {
       let index = name.search('_deleted_')
       if (index !== -1) {
@@ -197,6 +209,12 @@ export default {
         return name
       }
     },
+    /**
+     * 该函数接受一个boolean类型的参数，
+     * 返回一个表示订单是否被退款的字符串
+     * @param deleted
+     * @returns {*}
+     */
     get_state: function (val) {
       if (val) {
         return '已退款'
@@ -204,6 +222,12 @@ export default {
         return '已完成'
       }
     },
+    /**
+     * 该函数在翻页或者查询时调用，
+     * 通过get方法向后端发送表示订单编号、课程代码、课程名、用户名、是否退款、单页最大数据量及当前页数的数据，
+     * 获得后端返回的查询过后的订单信息及符合条件的订单总条数，
+     * 并捕捉错误进行判断，返回相应的提示信息。
+     */
     search: function () {
       const that = this
       let state
@@ -245,10 +269,19 @@ export default {
           }
         })
     },
+    /**
+     * 该函数接受一个表示留言ID的参数，并跳转到该详情页面。
+     * @param val
+     */
     to_detail: function (val) {
       this.page_jump = true
       this.$router.push({ name: 'OrderDetail', query: { order_id: val } })
     },
+    /**
+     * 该函数接受一个表示页数的参数，
+     * 更改页数并进行查询操作。
+     * @param page
+     */
     change_page: function (page) {
       this.page = page
       this.search()
