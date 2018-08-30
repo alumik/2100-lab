@@ -99,7 +99,8 @@ def authenticate_customer(request):
             'is_new_customer': new_customer,
             'customer_id': user.id,
             'username': user.username,
-            'avatar': str(user.avatar)
+            'avatar': str(user.avatar),
+            'is_staff': user.is_staff
         }
     )
 

@@ -234,6 +234,7 @@ export default {
           )
           .then(response => {
             this.$store.commit('status')
+            this.$store.commit('staff', response.data.is_staff)
             this.$store.commit('username', response.data.username)
             this.$store.commit('phone', this.phone)
             this.$store.commit('avatar', response.data.avatar)

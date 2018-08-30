@@ -90,6 +90,7 @@ export default {
           )
           .then(response => {
             this.$store.commit('status')
+            this.$store.commit('staff')
             this.$store.commit('username', response.data.username)
             this.$router.push({ path: '/admin/main' })
           })
