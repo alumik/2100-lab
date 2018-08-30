@@ -70,10 +70,6 @@ describe('课程详情页单元测试', () => {
     expect(wrapper.findAll('.my-btn').length).toEqual(4)
   })
 
-  it('测试课程简介渲染', () => {
-    expect(wrapper.contains('.profile-style')).toBe(true)
-  })
-
   it('点击按钮课程点赞数增加', () => {
     wrapper.find('#praise-button').trigger('click')
     expect(wrapper.vm.course.num_of_praise).toBe(wrapper.vm.course.num_of_praise)
@@ -104,7 +100,7 @@ describe('课程详情页单元测试', () => {
   })
 
   it('课程简介渲染', () => {
-    expect(wrapper.contains('#introduction')).toBe(true)
+    expect(wrapper.contains('#detail-introduction')).toBe(true)
   })
 
   it('点击分享按钮弹出模态框', () => {
