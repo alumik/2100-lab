@@ -58,7 +58,7 @@
             <div class="introduction-style">
               <div
                 class="delete-margin text-left-style">
-                <div class="font-style">{{ course.title }}&emsp;
+                <div class="font-style margin-course-title">{{ course.title }}
                 </div>
                 <div
                   v-b-toggle.course-description
@@ -66,11 +66,13 @@
                   @click="changeFoldState">
                   <simple-line-icons
                     v-if="introduction_brandFold === true"
+                    class="icon-margin"
                     icon="arrow-down"
                     size="small"
                     color="#009966"/>
                   <simple-line-icons
                     v-else
+                    class="icon-margin"
                     icon="arrow-up"
                     size="small"
                     color="#FF6600"/>课程简介
@@ -87,7 +89,7 @@
             <b-collapse
               id="course-description"
               class="mt-2">
-              <div class="text-align-left">&emsp;&emsp;
+              <div class="text-align-left text-margin-description">
                 {{ course.description }}</div>
             </b-collapse>
           </div>
@@ -269,8 +271,16 @@ export default {
 </script>
 
 <style>
+.icon-margin {
+  margin-right: 10px;
+}
+
 .font-style {
   font-size: 1.7rem;
+}
+
+.margin-course-title {
+  margin-right: 10px;
 }
 
 .introduction-style {
@@ -285,6 +295,10 @@ export default {
 .audio-style {
   height: 2.5rem;
   vertical-align: center;
+}
+
+.text-margin-description {
+  text-indent: 2rem;
 }
 
 .text-align-left {
