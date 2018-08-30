@@ -117,9 +117,7 @@
       </b-modal>
     </div>
     <div class="container">
-      <div
-        id="profile"
-        class="row profile-style container">
+      <div id="profile">
         <div
           id="course-image"
           class="course-img-style">
@@ -613,7 +611,7 @@ export default {
 
 p,
 h6 {
-  text-indent: 30px;
+  text-indent: 2rem;
 }
 
 .img-thumbnail {
