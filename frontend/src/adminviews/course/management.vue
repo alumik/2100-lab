@@ -263,6 +263,13 @@ import Alert from '../../components/alert'
 export default {
   name: 'CourseManagement',
   components: { Alert, Pagination, Basic },
+  /**
+   * @returns {{
+   * items: *[], 路由跳转信息
+   *
+   * courses: Array,
+   * codename: string, title: string, rows: number, error_message: string, wrong_count_down: number, success_count_down: number, per_limit: number, page: number, num_pages: number, placeholder: string, origin_image_list: Array, image_data_list: Array, file_name_list: Array, delete_origin_list: Array, input_content: string}}
+   */
   data: function () {
     return {
       items: [

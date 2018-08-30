@@ -185,6 +185,52 @@ export default {
     UploadSourceForEdit,
     Basic
   },
+  /**
+   * @returns {{
+   * items: *[], 路由存储
+   *
+   * course_id: number,
+   * 存储要编辑课程的id
+   *
+   * course: {
+   * title: string,
+   * codename: string,
+   * expire_duration_day: string,
+   * expire_duration_hour: string,
+   * price: string,
+   * reward_percent: string,
+   * description: string,
+   * can_comment: string,
+   * 课程信息存储区
+   *
+   * origin_audio_file_list: Array,
+   * origin_image_file_list: Array,
+   * origin_thumb_file_list: Array
+   * 课程已有音频/图片/缩略图存储区
+   * },
+   *
+   * comment_options: *[],
+   * 可否评论，选项信息存储
+   *
+   * thumb_file: string,
+   * audio_file_list: Array,
+   * image_file_list: Array,
+   * 更新后的音频/图片/缩略图存储区
+   *
+   * delete_origin_image_index_list: Array,
+   * 被删除的原有图片存储区
+   *
+   * error_message: string,
+   * wrong_count_down: number,
+   * success_count_down: number,
+   * 错误信息存储区
+   *
+   * is_uploaded: boolean,
+   * is_audio_changed: boolean,
+   * is_thumb_change: boolean
+   * 课程资料/课程音频/课程缩略图更改标志变量
+   * }}
+   */
   data: function () {
     return {
       items: [
@@ -234,6 +280,12 @@ export default {
       is_thumb_change: false
     }
   },
+  /**
+   * 生成页面函数：存储当前访问课程ID
+   * 发送请求：发送当前课程ID
+   * 接收回复：初始化变量
+   * 接收错误：五秒钟展示错误提示信息
+   */
   created () {
     this.course_id = this.$route.query.course_id
     axios
@@ -258,6 +310,13 @@ export default {
       })
   },
   methods: {
+    /**
+     * 初始化信息
+     * 转换可否评论状态为前台可识别状态
+     * 转换焚毁时间格式
+     * 转换图片/音频/缩略图图片路径
+     * @param data
+     */
     initial_data (data) {
       this.course.title = data.title
       this.course.codename = data.codename
@@ -300,6 +359,16 @@ export default {
         this.audio_file_list.push(this.course.origin_audio_file_list[0])
       }
     },
+    /**
+     * 接收上传资料函数
+     * @param upload_pic_resourse
+     * @param audio_file_list
+     * @param origin_delete_image_index
+     * @param upload_thumb_resource
+     * @param is_thumb_change
+     * 更新上传标志变量
+     * 判断缩略图/音频/图片是否有更新，更新对应存储区
+     */
     receive_uploaded_resource: function (
       upload_pic_resourse,
       audio_file_list,
@@ -350,15 +419,34 @@ export default {
         })
       }
     },
+    /**
+     * 接收排序后图片
+     * @param sort_image_datalist
+     * 深拷贝排序后结果并更新index值
+     */
     receive_sorted_pictures: function (sort_image_datalist) {
       this.image_file_list.length = 0
       for (let i = 0; i < sort_image_datalist.length; i++) {
         this.image_file_list.push(sort_image_datalist[i])
       }
     },
+    /**
+     * 接收同步信息
+     * @param image_datalist
+     * 浅拷贝同步后的时间戳
+     */
     receive_sync_data: function (image_datalist) {
       this.image_file_list = image_datalist
     },
+    /**
+     * 上传所有信息
+     * 先进行信息验证，再进行数据上传
+     * 接收回复，展示三秒修改成功信息后进行页面跳转
+     * 接收错误，展示五秒错误信息
+     *
+     * 同时上传删除图片的序号信息
+     * 同步进行
+     */
     upload_all_data: function () {
       if (this.verify_data() === true) {
         let form_data = this.initial_form_data()
@@ -404,6 +492,11 @@ export default {
           })
       }
     },
+    /**
+     * 上传数据初始化
+     * 判断音频/图片/缩略图是否有更新，依据状态同步更新数据
+     * @returns {FormData}
+     */
     initial_form_data: function () {
       let form_data = new FormData()
       form_data.append('course_id', this.course_id)
@@ -433,6 +526,11 @@ export default {
       }
       return form_data
     },
+    /**
+     * 信息转换函数
+     * @param message
+     * @returns {string}
+     */
     init_error_message (message) {
       switch (message) {
         case 'Access denied.':
@@ -443,6 +541,12 @@ export default {
           return '数据库查询出错'
       }
     },
+    /**
+     * 数据验证函数
+     * 课程名与课程代码不能为空
+     * 分销比例和售卖金额不能为负数
+     * @returns {boolean}
+     */
     verify_data () {
       if (
         this.course.codename === '' ||

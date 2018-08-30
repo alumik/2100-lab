@@ -133,6 +133,29 @@ import qs from 'qs'
 export default {
   name: 'BackendCourseDetail',
   components: { Alert, ConfirmModal, Basic },
+  /**
+   * @returns {{
+   * items: *[], 路由路径存储
+   *
+   * test_router: number,
+   * error_message: string,
+   * wrong_count_down: number,
+   * success_count_down: number,
+   * 错误信息存储区
+   *
+   * course: {
+   * codename: string,
+   * name: string,
+   * time: string,
+   * price: string,
+   * reward_percent: string,
+   * created_at: string,
+   * updated_at: string,
+   * description: string
+   * }
+   * 已存课程信息存储区
+   * }}
+   */
   data: function () {
     return {
       items: [
@@ -165,6 +188,12 @@ export default {
       }
     }
   },
+  /**
+   * 生成页面函数
+   * 发送请求：发送课程ID
+   * 接收回应：将信息存入存储区
+   * 接收错误：将转换后的错误信息展示五秒钟
+   */
   created: function () {
     axios
       .get(
@@ -202,6 +231,10 @@ export default {
       })
   },
   methods: {
+    /**
+     * 路由跳转函数
+     * @param id
+     */
     jump: function (id) {
       this.test_router = id
       this.$router.push({
@@ -209,6 +242,11 @@ export default {
         query: { course_id: this.$route.query.course_id }
       })
     },
+    /**
+     * 错误信息生成函数
+     * @param message
+     * @returns {string}
+     */
     init_error_message (message) {
       switch (message) {
         case 'Access denied.':
@@ -219,6 +257,12 @@ export default {
           return '数据库查询出错'
       }
     },
+    /**
+     * 发送删除课程请求的函数
+     * 发送删除课程ID
+     * 接收回应，展示删除成功信息三秒钟，之后跳转
+     * 接收错误，展示错误信息五秒钟
+     */
     delete_message: function () {
       axios
         .post(

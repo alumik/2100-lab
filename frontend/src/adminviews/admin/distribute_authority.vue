@@ -171,7 +171,7 @@ export default {
       this.selected = checked ? this.flavours.slice() : []
     },
     /**
-     * 接受权限信息转换函数
+     * 接收权限信息转换函数
      * @param permission
      * @returns {string}
      */
