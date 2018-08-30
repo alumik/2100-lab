@@ -16,7 +16,12 @@
 <script>
 import Basic from '../components/basic'
 import $ from 'jquery'
-
+/**
+ * jquery监听浏览器返回事件
+ * @params event 点击事件
+ * 如果发生点击返回事件
+ *浏览器进入用户端首页
+ * 并将404页面放入返回的路径 */
 $(document).ready(function (event) {
   if (window.history && window.history.pushState) {
     $(window).on('popstate', function () {
