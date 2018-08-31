@@ -17,6 +17,12 @@
 <script>
 export default {
   name: 'DetailTable',
+  /**
+   * @returns {{
+   * titles: Array, 表格标题
+   * data: Array, 表格数据
+   * }}
+   */
   props: {
     titles: {
       type: Array,

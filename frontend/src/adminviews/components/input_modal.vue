@@ -29,6 +29,13 @@ import Alert from '../../components/alert'
 export default {
   name: 'InputModal',
   components: {Alert},
+  /**
+   * id: string, 模态框id
+   * title: string, 模态框标题
+   * ok_title: string, 确认按钮标题
+   * cancel_title: string, 取消按钮标题
+   * placeholder: string 占位符内容
+   */
   props: {
     id: {
       type: String,
@@ -51,6 +58,15 @@ export default {
       default: ''
     }
   },
+  /**
+   * @returns {{
+   * input: string, 模态框中输入内容
+   * dismiss_second: number,
+   * wrong_count_down: number,
+   * wrong: string
+   * Alert组件所需数据
+   * }}
+   */
   data () {
     return {
       input: '',
@@ -60,9 +76,18 @@ export default {
     }
   },
   methods: {
+    /**
+     * 该函数清空输入框中内容
+     */
     clear_input () {
       this.input = ''
     },
+    /**
+     * 该函数接受一个事件参数，处理确认按钮请求，判断输入内容是否为空，
+     * 输入内容为空，提示错误，
+     * 输入内容不为空，触发click函数，关闭模态框
+     * @param evt
+     */
     handle_ok (evt) {
       if (this.input === '') {
         evt.preventDefault()
@@ -73,6 +98,9 @@ export default {
         this.handle_submit()
       }
     },
+    /**
+     * 该函数关闭模态框并清空输入内容
+     */
     handle_submit () {
       this.$refs.modal.hide()
       this.clear_input()

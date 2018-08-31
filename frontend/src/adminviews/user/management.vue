@@ -142,7 +142,7 @@ export default {
    * page_jump: boolean, 页面跳转标志
    * dismiss_second: number,
    * wrong_count_down: number,
-   * wrong: string,
+   * wrong: string
    * Alert组件所需参数
    * }}
    */
