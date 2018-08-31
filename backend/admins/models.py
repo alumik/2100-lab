@@ -31,7 +31,7 @@ class AdminLog(models.Model):
         )
 
     def as_dict(self):
-        """将模型转换为字典"""
+        """获取字典"""
 
         return {
             'admin_log_id': self.id,

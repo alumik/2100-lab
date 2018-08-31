@@ -48,11 +48,6 @@ urlpatterns = [
         name='get-eula'
     ),
     path(
-        'auth/get-generate-time/',
-        views_forestage.get_generate_time,
-        name='get-generate-time'
-    ),
-    path(
         'auth/get-verification-code/',
         views_forestage.get_verification_code,
         name='get-verification-code'

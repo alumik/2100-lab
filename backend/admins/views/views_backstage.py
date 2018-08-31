@@ -21,20 +21,22 @@ def authenticate_admin(request):
 
     **示例URL**
 
-    ::
+    .. code-block:: html
 
-        localhost/api/v1/admin/backstage/auth/authenticate-admin/
+        http://localhost/api/v1/admin/backstage/auth/authenticate-admin/
 
     **传入参数/方法**
 
-    ::
-
-        POST phone_number 电话号码
-        POST password 密码
+    ============ ==== ========
+    参数         方法 说明
+    ============ ==== ========
+    phone_number POST 电话号码
+    password     POST 密码
+    ============ ==== ========
 
     **返回值**
 
-    *错误：用户已登录* HTTP400
+    HTTP400：用户已登录
 
     .. code:: javascript
 
@@ -42,7 +44,7 @@ def authenticate_admin(request):
             message: 'User is already authenticated.'
         }
 
-    *错误：电话号码或密码错误* HTTP400
+    HTTP400：电话号码或密码错误
 
     .. code:: javascript
 
@@ -50,7 +52,7 @@ def authenticate_admin(request):
             message: 'Invalid phone number or password.'
         }
 
-    *错误：用户没有管理员权限* HTTP403
+    HTTP403：用户没有管理员权限
 
     .. code:: javascript
 
@@ -58,18 +60,17 @@ def authenticate_admin(request):
             message: 'Access denied.'
         }
 
-    *成功：* HTTP200
+    HTTP200
 
     .. code:: javascript
 
         {
             admin_id: 1,          // 管理员ID
             username: 'John',     // 管理员名称
-            admin_groups: [
+            admin_groups: [       // 管理员权限组
                 'customer_admin',
-                'order_admin'
                 ...
-            ]                     // 管理员权限组
+            ]
         }
 
     """
@@ -114,22 +115,23 @@ def get_admin_list(request):
 
     **示例URL**
 
-    ::
+    .. code-block:: html
 
-        localhost/api/v1/admin/backstage/admin-management/get-admin-list/
+        http://localhost/api/v1/admin/backstage/admin-management/get-admin-list/
 
     **传入参数/方法**
-
-    ::
-
-        GET phone_number 管理员电话号码筛选字段
-        GET username 管理员名称筛选字段
-        GET page 当前页码
-        GET page_limit 一页数量
+    ============ ==== =====================
+    参数         方法 说明
+    ============ ==== =====================
+    phone_number GET  管理员电话号码筛选字段
+    username     GET  管理员名称筛选字段
+    page         GET  当前页码
+    page_limit   GET  每页最大显示数量
+    ============ ==== =====================
 
     **返回值**
 
-    *错误：管理员权限不足* HTTP403
+    HTTP403：管理员权限不足
 
     .. code:: javascript
 
@@ -137,7 +139,7 @@ def get_admin_list(request):
             message: 'Access denied.'
         }
 
-    *成功：* HTTP200
+    HTTP200
 
     .. code:: javascript
 
@@ -149,12 +151,12 @@ def get_admin_list(request):
             num_pages: 12,                        // 总页码数
             content: [
                 {
-                    'admin_id': 12, // 管理员ID
+                    'admin_id': 12, // 管理员ID   // 管理员ID
                     'username': 'John Smith'      // 管理员名称
                     'phone_number': '12345678901' // 管理员电话号码
-                }
+                },
                 ...
-            ]                                     // 该页内容
+            ]
         }
 
     """
@@ -178,7 +180,23 @@ def get_admin_list(request):
 
 @login_required
 def get_admin_detail(request):
-    """获取管理员详情"""
+    """获取管理员详情
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/admin/backstage/admin-management/get-admin-detail/
+
+    **传入参数/方法**
+
+    ======== ==== ================
+    参数     方法 说明
+    ======== ==== ================
+    admin_id GET  要查询的管理员ID
+    ======== ==== ================
+
+    """
 
     if not request.user.is_superuser:
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
