@@ -20,7 +20,8 @@ ERROR = {
     'admin_already_registered': 'Admin is already registered.',
     'message_send_failed': 'Message send failed.',
     'course_already_purchased': 'This course has already been purchased.',
-    'comment_not_allowed': 'Commenting is not allowed.'
+    'comment_not_allowed': 'Commenting is not allowed.',
+    'integrity_error': 'Database integrity error.'
 }
 
 ADMIN_GROUPS_NAME = {

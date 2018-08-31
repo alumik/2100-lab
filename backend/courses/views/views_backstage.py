@@ -4,6 +4,7 @@ from decimal import Decimal
 import datetime
 
 from django.contrib.auth.decorators import permission_required
+from django.db import IntegrityError
 from django.http import JsonResponse
 
 from admins.models import AdminLog
@@ -84,29 +85,32 @@ def add_course(request):
     title = request.POST.get('title')
     codename = request.POST.get('codename')
     expire_duration = datetime.timedelta(
-        days=int(request.POST.get('days')),
-        hours=int(request.POST.get('hours'))
+        days=int(request.POST.get('days', '0')),
+        hours=int(request.POST.get('hours', '0'))
     )
-    price = float(request.POST.get('price'))
+    price = float(request.POST.get('price', '0.00'))
     can_comment = request.POST.get('can_comment') == '1'
-    reward_percent = float(request.POST.get('reward_percent'))
+    reward_percent = float(request.POST.get('reward_percent', '0.00'))
     description = request.POST.get('description')
     images = request.FILES.getlist('images', [])
-    audio = request.FILES.get('audio')
+    audio = request.FILES.get('audio', '')
     load_times = request.POST.getlist('load_times', [])
-    thumbnail = request.FILES.get('thumbnail')
+    thumbnail = request.FILES.get('thumbnail', '')
 
-    course = Course.objects.create(
-        title=title,
-        codename=codename,
-        expire_duration=expire_duration,
-        price=Decimal(price),
-        can_comment=can_comment,
-        reward_percent=Decimal(reward_percent),
-        description=description,
-        audio=audio,
-        thumbnail=thumbnail
-    )
+    try:
+        course = Course.objects.create(
+            title=title,
+            codename=codename,
+            expire_duration=expire_duration,
+            price=Decimal(price),
+            can_comment=can_comment,
+            reward_percent=Decimal(reward_percent),
+            description=description,
+            audio=audio,
+            thumbnail=thumbnail
+        )
+    except IntegrityError:
+        return JsonResponse({'message': ERROR['integrity_error']}, status=400)
 
     for image in images:
         Image.objects.create(
