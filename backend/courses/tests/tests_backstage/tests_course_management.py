@@ -242,6 +242,25 @@ class CourseOperationsTests(TestCase):
         self.assertTrue(course.can_comment)
         self.assertEqual(course.reward_percent, Decimal('0.50'))
 
+    def test_add_course_integrity_error(self):
+        Course.objects.create(
+            title='Integrity Error',
+            description='Integrity Error',
+            codename='Integrity Error'
+        )
+        self.client.login(phone_number='13312345678', password='123456')
+
+        response = self.client.post(
+            reverse('api:courses:backstage:add-course'),
+            {
+                'title': 'Integrity Error',
+                'codename': 'Integrity Error',
+                'description': 'Integrity Error'
+            }
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(json.loads(response.content)['message'], 'Database integrity error.')
+
     def test_delete_course_images(self):
         self.client.login(phone_number='13312345678', password='123456')
         course = Course.objects.create(
