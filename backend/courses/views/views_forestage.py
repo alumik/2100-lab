@@ -79,7 +79,7 @@ def get_recent_courses(request):
         {
             free_courses: [                     // 最近8个免费课程
                 {
-                    course_id: 1,               // 课程代码
+                    course_id: 1,               // 课程ID
                     thumbnail: 'uploads/1.png', // 缩略图
                     title: 'Data Structure',    // 课程名
                     description: '...'          // 简介
@@ -88,7 +88,7 @@ def get_recent_courses(request):
             ],
             paid_courses: [                     // 最近8个付费课程
                 {
-                    course_id: 2,               // 课程代码
+                    course_id: 2,               // 课程ID
                     thumbnail: 'uploads/2.png', // 缩略图
                     title: 'Math',              // 课程名
                     description: '...'          // 简介
@@ -143,7 +143,7 @@ def get_course_list(request):
             num_pages: 1,                       // 总页数
             content: [
                 {
-                    course_id: 1,               // 课程代码
+                    course_id: 1,               // 课程ID
                     thumbnail: 'uploads/1.png', // 缩略图
                     title: 'Data Structure',    // 课程名
                     description: '...'          // 简介

@@ -15,7 +15,50 @@ from courses.models import Course, Comment, Image, Hero
 
 @permission_required('courses.view_course')
 def get_course_list(request):
-    """获取课程列表"""
+    """获取课程列表
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/courses/backstage/course-management/get-course-list/
+
+    **传入参数**
+
+    ========== ==== ==================
+    参数       方法 说明
+    ========== ==== ==================
+    page       GET  当前页码
+    page_limit GET  每页最大显示数量
+    codename   GET  筛选参数：课程代码
+    title      GET  筛选参数：课程名
+    ========== ==== ==================
+
+    **返回值**
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            codename: '',                                          // 筛选参数：课程代码
+            title: '',                                             // 筛选参数：课程名
+            count: 2,                                              // 总条数
+            page: 2,                                               // 当前页码
+            num_pages: 1,                                          // 总页数
+            content: [
+                {
+                    course_id: 1,                                  // 课程ID
+                    codename: 'SOFT001',                           // 课程代码
+                    title: 'Data Structure',                       // 课程名
+                    price: '100.00',                               // 价格
+                    updated_at: '2018-08-31 16:46:44.794596+00:00' // 修改时间
+                },
+                ...
+            ]
+        }
+
+    """
 
     codename = request.GET.get('codename', '')
     title = request.GET.get('title', '')
@@ -32,7 +75,50 @@ def get_course_list(request):
 
 @permission_required('courses.view_course')
 def get_course_detail(request):
-    """获取课程详情"""
+    """获取课程详情
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/courses/backstage/course-management/get-course-detail/
+
+    **传入参数**
+
+    ========= ==== ======
+    参数      方法 说明
+    ========= ==== ======
+    course_id GET  课程ID
+    ========= ==== ======
+
+    **返回值**
+
+    HTTP404：课程未找到
+
+    .. code-block:: javascript
+
+        {
+            message: 'Object not found.'
+        }
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            course_id: 1,                                   // 课程ID
+            codename: 'SOFT001',                            // 课程代码
+            title: 'Data Structure',                        // 课程名
+            up_votes: 1,                                    // 点赞数
+            expire_duration: 86400,                         // 课程时效
+            price: '100.00',                                // 价格
+            reward_percent: '0.50',                         // 奖励金比例
+            created_at: '2018-08-31 16:46:44.794596+00:00', // 创建日期
+            updated_at: '2018-08-31 16:46:44.794596+00:00', // 修改日期
+            description: '...'                              // 简介
+        }
+
+    """
 
     course_id = request.GET.get('course_id')
 
@@ -59,7 +145,41 @@ def get_course_detail(request):
 
 @permission_required('courses.delete_course')
 def delete_course(request):
-    """删除课程"""
+    """删除课程
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/courses/backstage/course-management/delete-course/
+
+    **传入参数**
+
+    ========= ==== ======
+    参数      方法 说明
+    ========= ==== ======
+    course_id POST 课程ID
+    ========= ==== ======
+
+    **返回值**
+
+    HTTP404：课程未找到
+
+    .. code-block:: javascript
+
+        {
+            message: 'Object not found.'
+        }
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            message: 'Object deleted.'
+        }
+
+    """
 
     course_id = request.POST.get('course_id')
 
@@ -80,7 +200,52 @@ def delete_course(request):
 
 @permission_required('courses.add_course')
 def add_course(request):
-    """添加课程"""
+    """添加课程
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/courses/backstage/course-management/add-course/
+
+    **传入参数**
+
+    ================ ==== ==============
+    参数             方法 说明
+    ================ ==== ==============
+    title            POST 课程名
+    codename         POST 课程代码
+    days             POST 课程时效天数
+    hours            POST 课程时效小时数
+    price            POST 价格
+    can_comment      POST 能否评论
+    reward_percent   POST 奖励金比例
+    description      POST 简介
+    images           POST 图片文件
+    audio            POST 音频文件
+    load_times       POST 加载时间
+    thumbnail        POST 缩略图
+    ================ ==== ==============
+
+    **返回值**
+
+    HTTP400：数据库错误
+
+    .. code-block:: javascript
+
+        {
+            message: 'Database integrity error.'
+        }
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            message: 'Success.'
+        }
+
+    """
 
     title = request.POST.get('title')
     codename = request.POST.get('codename')
@@ -127,30 +292,57 @@ def add_course(request):
     return JsonResponse({'message': INFO['success']})
 
 
-@permission_required('courses.delete_image')
-def delete_course_images(request):
-    """删除课程"""
-
-    delete_list = request.POST.getlist('delete_list', [])
-
-    deleted = []
-    for image_id in delete_list:
-        try:
-            image = Image.objects.get(id=int(image_id))
-            image.delete()
-            deleted.append(int(image_id))
-        except Image.DoesNotExist:
-            pass
-    return JsonResponse(
-        {
-            'deleted': deleted
-        }
-    )
-
-
 @permission_required('courses.change_course')
 def edit_course(request):
-    """编辑课程"""
+    """编辑课程
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/courses/backstage/course-management/edit-course/
+
+    **传入参数**
+
+    ================ ==== ==============
+    参数             方法 说明
+    ================ ==== ==============
+    course_id        POST 课程ID
+    title            POST 课程名
+    codename         POST 课程代码
+    days             POST 课程时效天数
+    hours            POST 课程时效小时数
+    price            POST 价格
+    can_comment      POST 能否评论
+    reward_percent   POST 奖励金比例
+    description      POST 简介
+    audio            POST 音频文件
+    thumbnail        POST 缩略图
+    image_files      POST 图片文件
+    image_ids        POST 图片ID
+    load_times_files POST 加载时间文件
+    load_times_ids   POST 加载时间ID
+    ================ ==== ==============
+
+    **返回值**
+
+    HTTP404：课程未找到
+
+    .. code-block:: javascript
+
+        {
+            message: 'Object not found.'
+        }
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            message: 'Success.'
+        }
+
+    """
 
     course_id = request.POST.get('course_id')
 
@@ -202,9 +394,110 @@ def edit_course(request):
     return JsonResponse({'message': INFO['success']})
 
 
+@permission_required('courses.delete_image')
+def delete_course_images(request):
+    """删除课程图片
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/courses/backstage/course-management/delete-course-images/
+
+    **传入参数**
+
+    =========== ==== ==================
+    参数        方法 说明
+    =========== ==== ==================
+    delete_list POST 要删除的图片ID列表
+    =========== ==== ==================
+
+    **返回值**
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            deleted: [ // 已删除的图片ID列表
+                1,
+                ...
+            ]
+        }
+
+    """
+
+    delete_list = request.POST.getlist('delete_list', [])
+
+    deleted = []
+    for image_id in delete_list:
+        try:
+            image = Image.objects.get(id=int(image_id))
+            image.delete()
+            deleted.append(int(image_id))
+        except Image.DoesNotExist:
+            pass
+    return JsonResponse(
+        {
+            'deleted': deleted
+        }
+    )
+
+
 @permission_required('courses.change_course')
 def get_course_assets(request):
-    """获取课程播放资源"""
+    """获取课程播放资源
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/courses/backstage/course-management/get-course-assets/
+
+    **传入参数**
+
+    ========= ==== ======
+    参数      方法 说明
+    ========= ==== ======
+    course_id GET  课程ID
+    ========= ==== ======
+
+    **返回值**
+
+    HTTP404：课程未找到
+
+    .. code-block:: javascript
+
+        {
+            message: 'Object not found.'
+        }
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            course_id: 1,                        // 课程ID
+            title: 'Data Structure',             // 课程名
+            codename: 'SOFT001',                 // 课程代码
+            expire_duration: 86400,              // 课程时效
+            price: '100.00',                     // 价格
+            can_comment: true,                   // 能否评论
+            reward_percent: '0.50',              // 奖励金比例
+            description: '...',                  // 简介
+            audio: 'uploads/1.mp3',              // 课程音频
+            thumbnail: 'uploads/1.png',          // 缩略图
+            'images': [                          // 课程图片
+                {
+                    image_id: 1,                 // 图片ID
+                    image_path: 'uploads/1.png', // 图片路径
+                    load_time: 100               // 图片载入时间
+                },
+                ...
+            ]
+        }
+
+    """
 
     course_id = request.GET.get('course_id')
 
@@ -235,7 +528,56 @@ def get_course_assets(request):
 
 @permission_required('courses.view_comment')
 def get_comment_list(request):
-    """获取评论列表"""
+    """获取留言列表
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/courses/backstage/comment-management/get-comment-list/
+
+    **传入参数**
+
+    =============== ==== ====================
+    参数            方法 说明
+    =============== ==== ====================
+    page            GET  当前页码
+    page_limit      GET  每页最大显示数量
+    username        GET  筛选参数：用户名
+    course_codename GET  筛选参数：课程代码
+    course_title    GET  筛选参数：课程名
+    is_deleted      GET  筛选参数：是否被删除
+    =============== ==== ====================
+
+    **返回值**
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            username: '',                                           // 筛选参数：用户名
+            course_codename: '',                                    // 筛选参数：课程代码
+            course_title: '',                                       // 筛选参数：课程名
+            is_deleted: '0',                                        // 筛选参数：是否被删除
+            count: 2,                                               // 总条数
+            page: 2,                                                // 当前页码
+            num_pages: 1,                                           // 总页数
+            content: [
+                {
+                    comment_id: 1,
+                    created_at: '2018-08-31 16:46:44.794596+00:00', // 创建时间
+                    username: 'John',                               // 用户名
+                    course_codename: 'SOFT001',                     // 课程代码
+                    course_title: 'Data Structure',                 // 课程名
+                    content: '...',                                 // 留言内容
+                    is_deleted: false                               // 是否被删除
+                },
+                ...
+            ]
+        }
+
+    """
 
     username = request.GET.get('username', '')
     course_codename = request.GET.get('course_codename', '')
@@ -262,7 +604,50 @@ def get_comment_list(request):
 
 @permission_required('courses.view_comment')
 def get_comment_detail(request):
-    """获取评论详情"""
+    """获取留言详情
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/courses/backstage/comment-management/get-comment-detail/
+
+    **传入参数**
+
+    ========== ==== ======
+    参数       方法 说明
+    ========== ==== ======
+    comment_id GET  留言ID
+    ========== ==== ======
+
+    **返回值**
+
+    HTTP404：留言未找到
+
+    .. code-block:: javascript
+
+        {
+            message: 'Object not found.'
+        }
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            comment_id: 1,                                  // 留言ID
+            created_at: '2018-08-31 16:46:44.794596+00:00', // 创建时间
+            username: 'John',                               // 用户名
+            course_codename: 'SOFT001',                     // 课程代码
+            course_title: 'Data Structure',                 // 课程名
+            is_deleted: false,                              // 是否已删除
+            deleted_at: null,                               // 删除时间
+            up_votes: 1,                                    // 点赞数
+            down_votes: 0,                                  // 点踩数
+            content: '...'                                  // 内容
+        }
+
+    """
 
     comment_id = request.GET.get('comment_id')
 
@@ -289,7 +674,50 @@ def get_comment_detail(request):
 
 @permission_required('courses.add_comment')
 def add_comment(request):
-    """回复评论"""
+    """回复评论
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/courses/backstage/comment-management/add-comment/
+
+    **传入参数**
+
+    =============== ==== ==============
+    参数            方法 说明
+    =============== ==== ==============
+    reply_to_id     POST 要回复的评论ID
+    comment_content POST 回复内容
+    =============== ==== ==============
+
+    **返回值**
+
+    HTTP404：留言未找到
+
+    .. code-block:: javascript
+
+        {
+            message: 'Object not found.'
+        }
+
+    HTTP403：课程禁止评论
+
+    .. code-block:: javascript
+
+        {
+            message: 'Commenting is not allowed.'
+        }
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            message: 'Success.'
+        }
+
+    """
 
     reply_to_id = request.POST.get('reply_to_id', '-1')
     comment_content = request.POST.get('comment_content')
@@ -329,7 +757,41 @@ def add_comment(request):
 
 @permission_required('courses.delete_comment')
 def delete_comment(request):
-    """删除评论"""
+    """删除留言
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/courses/backstage/comment-management/delete-comment/
+
+    **传入参数**
+
+    ========== ==== ======
+    参数       方法 说明
+    ========== ==== ======
+    comment_id POST 留言ID
+    ========== ==== ======
+
+    **返回值**
+
+    HTTP404：留言未找到
+
+    .. code-block:: javascript
+
+        {
+            message: 'Object not found.'
+        }
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            message: 'Object deleted.'
+        }
+
+    """
 
     comment_id = request.POST.get('comment_id')
 
@@ -350,7 +812,34 @@ def delete_comment(request):
 
 @permission_required('courses.add_hero')
 def add_hero(request):
-    """添加头图"""
+    """添加头图
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/courses/backstage/course-management/add-hero/
+
+    **传入参数**
+
+    ======== ==== ========
+    参数     方法 说明
+    ======== ==== ========
+    heroes   POST 头图图片
+    captions POST 头图文字
+    ======== ==== ========
+
+    **返回值**
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            message: 'Success.'
+        }
+
+    """
 
     heroes = request.FILES.getlist('heroes', [])
     captions = request.POST.getlist('captions', [])
@@ -366,7 +855,36 @@ def add_hero(request):
 
 @permission_required('courses.delete_hero')
 def delete_hero(request):
-    """删除头图"""
+    """删除头图
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/courses/backstage/course-management/delete-hero/
+
+    **传入参数**
+
+    =========== ==== ==================
+    参数        方法 说明
+    =========== ==== ==================
+    delete_list POST 要删除的头图ID列表
+    =========== ==== ==================
+
+    **返回值**
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            deleted: [ // 已删除的头图ID列表
+                1,
+                ...
+            ]
+        }
+
+    """
 
     delete_list = request.POST.getlist('delete_list', [])
 
