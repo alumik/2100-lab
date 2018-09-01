@@ -269,12 +269,33 @@ export default {
     Basic,
     SocialShare
   },
+  /**
+   * @return {
+   * user_status: Boolean, 用户状态[登录/未登录]
+   * query_course_id: Boolean, 查询该课程详情使用的课程id
+   * pay_qrcode_url: String, 二维码支付链接
+   * share_instruction: String, 分享机制说明
+   * course: Object, 显示课程详情的课程对象
+   * created_test: Boolean, 后端获取数据判断
+   * created_error_msg: String, 后端读取课程详情失败返回的错误信息
+   * add_praise_test: Boolean, 点赞操作与后端连接判断
+   * add_praise_error_msg: String, 后端进行点赞操作失败返回的错误信息
+   * praise_color: String, 课程点赞心形字符颜色
+   * praise_border_color: String, 课程点赞心形字符边框
+   * pay_method: Number, 用户支付方式选择：0，奖励金，1，支付宝，2，微信
+   * pay_method_chosen: Boolean, 是否已选择支付方式
+   * pay_remind_color: String, 支付提醒字体颜色
+   * finishPay_test: Boolean, 支付测试
+   * finishPay_error_msg: String, 支付失败返回错误信息
+   * share_qrcode_url: String, 分享二维码链接
+   * referer_id: String, 分享用户ID
+   * left_time: String， 用户观看课程剩余时间
+   * can_paid_using_reward: Boolean，是否可以使用奖励金支付
+   } */
   data () {
     return {
       user_status: null,
       query_course_id: 0,
-      connection_test: false,
-      connection_err_msg: 'Server access failed. ',
       course_img_src_example: 'https://picsum.photos/1024/480/?image=54',
       pay_qrcode_url: 'http://www.jisuanke.com',
       share_instruction:
@@ -301,6 +322,10 @@ export default {
     }
   },
   computed: {
+    /**
+     * 时间提醒
+     * 如果课程有效时间不为0 则返回课程时效
+     * 如果课程有效时间为0，则返回提示该课程为“永久开放” */
     time_reminder: function () {
       let that = this
       if (that.course.expire_duration !== 0) {
@@ -313,7 +338,9 @@ export default {
         return '该课程将永久开放'
       }
     },
-
+    /**
+     * 分享提醒
+     * 返回奖励金提醒 */
     share_reminder: function () {
       let that = this
       return (
@@ -324,6 +351,16 @@ export default {
       )
     }
   },
+  /**
+   * 获取课程详情数据
+   * 首先通过route query获取用户查询的课程id
+   * 并获取分享链接用户id
+   * 若有分享用户，则将id传给后端
+   * 若没有分享用户，则将空值传给后端
+   * 向后端发送课程ID和分享用户ID
+   * 获取课程详情后同时渲染响应点赞状态
+   * 课程查询失败将返回失败原因
+   * 获取分享用户ID生成分享二维码的链接 */
   created () {
     let that = this
     that.query_course_id = that.$route.query.course_id
@@ -371,10 +408,20 @@ export default {
       'referer_id=' +
       that.$store.state.user.customer_id
   },
+  /**
+   * 设定计时器
+   * 绑定函数和时间间隔 */
   mounted () {
     mygenerator = setInterval(this.generate_left_time, 1000)
   },
   methods: {
+    /**
+     * 计算剩余时间
+     * 获取阅后即焚时间
+     * 返回距离截止时间的时间差
+     * 将时间转为“天/时/分/秒”
+     * 当时间差为0，则停止计时
+     * 将返回“0天0时0分0秒” */
     generate_left_time () {
       let due = new Date(this.course.expire_time)
       let now = new Date()
@@ -395,6 +442,8 @@ export default {
         this.left_time = '0天0小时0分钟0秒'
       }
     },
+    /**
+     * 将时间间隔转为时刻 */
     change_duration_to_timestamp (duration) {
       const days = Math.floor(duration / (3600 * 24))
       const hours = Math.floor((duration - days * (3600 * 24)) / 3600)
@@ -408,6 +457,10 @@ export default {
         return ''
       }
     },
+    /**
+     * 支付方式选择
+     * 如果支付方式为1，则返回支付宝支付二维码
+     * 如果支付方式为2，则返回微信支付二维码 */
     pay_method_chose (payMethod) {
       if (payMethod === 1) {
         this.pay_method = 1
@@ -418,6 +471,13 @@ export default {
       }
       this.pay_method_chosen = true
     },
+    /**
+     * 给课程点赞
+     * 如果用户还未登录，则跳转到登录窗口
+     * 如果用户已登录，则向后端发送点赞请求
+     * 如果点赞成功，课程点赞数加一，点赞状态变为已点赞
+     * 如果二次点赞，课程点赞数减一，点赞状态变为未点赞
+     * 如果点赞失败，返回点赞失败信息 */
     add_praise () {
       let that = this
       if (that.$store.state.status === false) {
@@ -448,12 +508,20 @@ export default {
           })
       }
     },
+    /**
+     * 关闭分享弹窗 */
     hide_share_popup () {
       this.$root.$emit('bv::hide::modal', 'share-popup')
     },
+    /**
+     * 关闭使用奖励金弹窗 */
     hide_using_reward_popup () {
       this.$root.$emit('bv::hide::modal', 'using-reward-popup')
     },
+    /**
+     * 关闭支付弹窗
+     * 如果支付方式已选择，则恢复到为选择的状态，提示字体恢复为黑色
+     * 如果支付方式未选择，关闭支付窗口 */
     hide_pay_popup () {
       let that = this
       if (that.pay_method_chosen === true) {
@@ -470,6 +538,15 @@ export default {
     hide_study_popup () {
       this.$root.$emit('bv::hide::modal', 'study-popup')
     },
+    /**
+     * 完成支付
+     * 支付方式如果未选择
+     * 支付提醒字体为红色
+     * 支付方式如果已选择
+     * 则关闭支付窗口
+     * 并向后端发送支付请求，传送课程ID和支付方式
+     * 如支付成功，则支付状态变为已支付
+     * 如支付失败，则返回失败信息 */
     finishPay () {
       let that = this
       if (this.pay_method_chosen === false) {
@@ -505,6 +582,11 @@ export default {
           })
       }
     },
+    /**
+     * 使用奖励金支付
+     * 向后端传送课程id及支付方式0
+     * 如发送成功，课程状态为可以观看
+     * 如发送失败，返回失败信息 */
     using_reward_finish_pay () {
       let that = this
       axios
@@ -533,18 +615,31 @@ export default {
           }
         })
     },
+    /**
+     * 打开学习页面
+     * 页面跳转至学习页面，并传送课程id */
     open_study_page: function (id) {
       this.$router.push({
         name: 'StudyPage',
         query: { course_id: parseInt(id) }
       })
     },
+    /**
+     * 打开登录页面
+     * 跳转至登录页面
+     * 传送登录来源为课程详情页
+     * 传送课程ID，方便登录后的跳转 */
     open_log: function (id) {
       this.$router.push({
         name: 'Login',
         params: { source: 'coursedetail', course_id: id }
       })
     },
+    /**
+     * 处理支付操作
+     * 如果使用奖励金支付，则弹出奖励金支付窗口
+     * 如果奖励金不足，弹出普通支付窗口
+     * 如果未登录，弹出登录提示窗口 */
     handle_pay_operate: function () {
       if (this.can_paid_using_reward === true) {
         this.$root.$emit('bv::show::modal', 'using-reward-popup')
@@ -554,6 +649,13 @@ export default {
         this.$root.$emit('bv::show::modal', 'log-popup')
       }
     },
+    /**
+     * 开始学习
+     * 如果课程时效不为空且不为0
+     *    如果已焚毁，跳转至已焚毁页面
+     *    如果未焚毁，判断用户是否已登录
+     *       如果已登录，则跳转至课程学习页面
+     *       如果未登录，则弹出登录提示框 */
     start_study: function () {
       if (
         this.course.expire_time !== null &&
@@ -572,6 +674,12 @@ export default {
         this.$root.$emit('bv::show::modal', 'log-popup')
       }
     },
+    /**
+     * 显示课程现价
+     * 如果用户奖励金金额大于课程原价
+     * 则奖励金支付方式优先
+     * 如果用户奖励金金额不足课程原价
+     * 则返回课程原价和用户奖励金的差价 */
     get_now_price: function () {
       if (this.$store.state.user.reward_coin > this.course.price) {
         this.can_paid_using_reward = true

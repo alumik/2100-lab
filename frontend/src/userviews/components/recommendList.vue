@@ -63,12 +63,11 @@ export default {
       }
     }
   },
-  data () {
-    return {
-      example_src: 'https://picsum.photos/400/300/?image=79'
-    }
-  },
   methods: {
+    /**
+     * 查看更多
+     * 如果当前列表为免费列表，查看更多将跳转到全部免费课程页
+     * 如果当前列表为付费列表，查看更多将跳转到全部付费课程页 */
     watch_more: function () {
       if (this.course_type === 'free') {
         this.$router.push({ name: 'AllFreeCourse' })
@@ -76,6 +75,10 @@ export default {
         this.$router.push({ name: 'AllPaidCourse' })
       }
     },
+    /**
+     * 跳转课程详情页
+     * 接收课程id
+     * 跳转至并将id传至课程详情页 */
     open_detail_page: function (id) {
       this.$router.push({ name: 'CourseDetail', query: { course_id: id } })
     }

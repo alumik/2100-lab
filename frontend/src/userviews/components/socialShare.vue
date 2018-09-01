@@ -54,12 +54,18 @@ export default {
     }
   },
   computed: {
+    /**
+     * 返回新浪微博跳转链接 */
     sina_url: function () {
       return 'http://v.t.sina.com.cn/share/share.php?url=' + this.url + '&title=\'2100实验室\''
     },
+    /**
+     * 返回腾讯qq跳转链接 */
     qq_url: function () {
       return 'http://connect.qq.com/widget/shareqq/index.html?title=2100实验室&url=' + this.url
     },
+    /**
+     * 返回qq空间跳转链接 */
     zone_url: function () {
       return 'http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + this.url + '&title=\'2100实验室\''
     }

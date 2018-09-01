@@ -732,6 +732,12 @@ export default {
           that.modal_rows = response.data.count
         })
     },
+    /**
+     * 删除留言
+     * 接收留言ID，并发送给后端
+     * 发送成功将删除该留言
+     * 发送失败将提示失败原因
+     * */
     delete_comment: function (commentId) {
       let that = this
       axios
@@ -758,6 +764,14 @@ export default {
           }
         })
     },
+    /**
+     * 删除模态框子楼的留言回复
+     * 接收在本地回复数组的索引值
+     * 接收留言的ID
+     * 向后端发送数据
+     * 如发送成功，将删除该留言的该条回复
+     * 如发送失败，将提示错误信息
+     * */
     delete_list_comment: function (index, commentId) {
       let that = this
       axios
@@ -786,6 +800,11 @@ export default {
           }
         })
     },
+    /**
+     * 添加留言
+     * 通过绑定留言内容并向后端发送
+     * 发送成功将在留言列表中添加新评论的内容
+     * 发送失败将提示失败信息 */
     add_comment: function () {
       let that = this
       const value = that.new_msg && that.new_msg.trim()
@@ -823,6 +842,12 @@ export default {
         })
       that.new_msg = ''
     },
+    /**
+     * 回复评论
+     * 接收留言内容
+     * 向后端发送回复内容、课程ID、留言ID
+     * 如发送成功将回复内容添加到留言的回复列表
+     * 如发送失败将提示失败信息 */
     reply_comment: function (val) {
       let that = this
       if (!val) {
@@ -862,6 +887,12 @@ export default {
       }
       that.$root.$emit('bv::hide::modal', 'reply-popup')
     },
+    /**
+     * 改变页码
+     * @params page 分页器当前页码
+     * 发送给父组件该分页组件的页码值
+     * 传入函数：change_page
+     * */
     change_page: function (page) {
       this.page = page
       this.get_all_message()
