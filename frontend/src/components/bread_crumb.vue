@@ -17,12 +17,19 @@
 <script>
 export default {
   name: 'BreadCrumb',
+  /**
+   * items: Array 面包屑所需名称及链接数据
+   */
   props: {
     items: {
       type: Array,
       default: null
     }
   },
+  /**
+   * links: Array, 面包屑中非active部分数据
+   * current: object, 面包屑中 active部分数据
+   */
   computed: {
     links: function () {
       return this.items.slice(0, this.items.length - 1)
@@ -31,6 +38,9 @@ export default {
       return this.items[this.items.length - 1]
     }
   },
+  /**
+   * 该函数实现点击面包屑跳转。
+   */
   methods: {
     jump: function (val) {
       this.$router.push(val)
