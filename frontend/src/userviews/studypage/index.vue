@@ -114,6 +114,27 @@ export default {
     Basic,
     MessageBoard
   },
+  /**
+   * @returns {
+   *  query_course_id: number,查询资源的课程iID
+   *  assets_test: boolean,获取课程资源测试
+   *  assets_error_msg: string,获取课程资源失败返回信息
+   *  detail_test: boolean,获取课程详情测试
+   *  detail_error_msg: string,获取课程详情失败返回信息
+   *  up_vote_test: boolean,点赞课程测试
+   *  up_vote_error_msg: string,点餐课程失败返回信息
+   *  now_picture: string,当前展示图片路径
+   *  now_picture_index: number,当前展示图片索引
+   *  audio_current_time: number,音频当前播放时刻
+   *  audio_duration: number,音频长度
+   *  audio_piece_num: number,音频分段数
+   *  introduction_brandFold: boolean,课程简介收起判断
+   *  course: object,课程对象
+   *  up_votes: number,课程点赞数
+   *  beforedestroy_test: boolean,学习记录后端发送数据测试
+   *  praise_course_color: string,点赞课程字符颜色
+   *  audio_src: string,音频资源路径
+   * } */
   data () {
     return {
       query_course_id: 0,
@@ -139,6 +160,11 @@ export default {
     }
   },
   watch: {
+    /**
+     * 监听音频当前时间
+     * 如果当前时间处在0时刻，自动播放第一张图
+     * 如果当前时间处在最后一张图片时间及以后，播放最后一张图
+     * 如果当前时间处在两张图片时刻之间，播放该时间段的图 */
     audio_current_time: function () {
       if (this.audio_current_time === 0) {
         this.now_picture_index = 0
@@ -160,6 +186,15 @@ export default {
       }
     }
   },
+  /**
+   * 获取课程资源
+   * 向后端发送课程id
+   * 如发送成功，后端返回课程资源数据
+   * 如发送失败，后端返回失败信息
+   * 同时获取课程详情
+   * 向后端发送勘测和才能够id
+   * 如发送成功，后端返回点赞状态和点赞数
+   * 如发送失败，后端返回失败信息 */
   created: function () {
     let that = this
     that.query_course_id = parseInt(that.$route.query.course_id)
@@ -202,10 +237,19 @@ export default {
         }
       })
   },
+  /**
+   * 渲染
+   * 赋值当前音频时刻
+   * 并注册监听播放器 */
   mounted () {
     this.audio_current_time = this.$refs.player.currentTime
     this.addEventListeners()
   },
+  /** 保留学习记录
+   * 向后端发送课程id，以及课程进度
+   * 如数据发送成功，将成功记录用户学习进度
+   * 如发送失败，后端将返回失败信息
+   * 同时取消监听播放器 */
   beforeDestroy () {
     let that = this
     axios.get('http://localhost/api/v1/courses/forestage/play/' +
@@ -225,6 +269,10 @@ export default {
     that.removeEventListeners()
   },
   methods: {
+    /** 给课程点赞
+     * 向后端发送点赞课程请求
+     * 如请求成功，返回点赞数量和点赞状态
+     * 如请求失败，返回失败信息 */
     up_vote_course () {
       let that = this
       axios.get('http://localhost/api/v1/courses/forestage/course/' +
@@ -245,23 +293,36 @@ export default {
           }
         })
     },
+    /* 改变课程简介折叠状态 */
     changeFoldState () {
       this.introduction_brandFold = !this.introduction_brandFold
     },
+    /**
+     * 切换图片
+     * 将当前图片切换为图片类表中当前索引值所对应的图片 */
     change_picture: function () {
       let that = this
       that.now_picture =
         that.course.images[this.now_picture_index].image_path
           ? that.course.images[that.now_picture_index].image_path : ''
     },
+    /**
+     * 监听播放器
+     * 播放器的timeupdate属性改变时
+     * 调用_currentTime */
     addEventListeners: function () {
       const self = this
       self.$refs.player.addEventListener('timeupdate', self._currentTime)
     },
+    /**
+     * 解除监听播放器
+     * 播放器的timeupdate属性改变时
+     * 不再调用_currentTime */
     removeEventListeners: function () {
       const self = this
       self.$refs.player.removeEventListener('timeupdate', self._currentTime)
     },
+    /* 将播放器当前时间赋值给audio的当前时间属性 */
     _currentTime: function () {
       const self = this
       self.audio_current_time =
