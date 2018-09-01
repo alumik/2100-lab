@@ -115,7 +115,7 @@ def get_order_detail(request):
 
     **返回值**
 
-    HTTP404: 订单未找到
+    HTTP404：订单未找到
 
     .. code-block:: javascript
 
@@ -183,7 +183,7 @@ def order_refund(request):
 
     **返回值**
 
-    HTTP404: 订单未找到
+    HTTP404：订单未找到
 
     .. code-block:: javascript
 
@@ -330,7 +330,7 @@ def get_customer_detail(request):
 
     **返回值**
 
-    HTTP404: 用户未找到
+    HTTP404：用户未找到
 
     .. code-block:: javascript
 
@@ -441,7 +441,7 @@ def get_customer_order_list(request):
 
     **返回值**
 
-    HTTP404: 用户未找到
+    HTTP404：用户未找到
 
     .. code-block:: javascript
 
@@ -502,7 +502,7 @@ def get_customer_learning_log_list(request):
 
     **返回值**
 
-    HTTP404: 用户未找到
+    HTTP404：用户未找到
 
     .. code-block:: javascript
 
@@ -565,7 +565,7 @@ def toggle_vip(request):
 
     **返回值**
 
-    HTTP404: 用户未找到
+    HTTP404：用户未找到
 
     .. code-block:: javascript
 
@@ -628,7 +628,7 @@ def toggle_banned(request):
 
     **返回值**
 
-    HTTP404: 用户未找到
+    HTTP404：用户未找到
 
     .. code-block:: javascript
 
@@ -691,7 +691,7 @@ def delete_customer(request):
 
     **返回值**
 
-    HTTP404: 用户未找到
+    HTTP404：用户未找到
 
     .. code-block:: javascript
 
