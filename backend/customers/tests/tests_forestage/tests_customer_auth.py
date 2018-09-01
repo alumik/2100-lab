@@ -11,10 +11,6 @@ class CustomerAuthTests(TestCase):
         get_user_model().objects.create_user(phone_number='13312345678')
 
     def test_get_verification_code(self):
-        response = self.client.get(reverse('api:customers:forestage:get-generate-time'))
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content)['generate_time'], '')
-
         response = self.client.post(
             reverse('api:customers:forestage:get-verification-code'),
             {'phone_number': '13312345678'}
@@ -26,11 +22,6 @@ class CustomerAuthTests(TestCase):
             )
         )
         self.assertFalse(json.loads(response.content)['is_new_customer'])
-
-        generate_time = self.client.session['generate_time']
-        response = self.client.get(reverse('api:customers:forestage:get-generate-time'))
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content)['generate_time'], generate_time)
 
     def test_get_verification_code_invalid_phone_number(self):
         response = self.client.post(

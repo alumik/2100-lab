@@ -22,15 +22,17 @@ def get_overall_data(request):
 
         http://localhost/api/v1/data/data-management/get-overall-data/
 
-    **传入参数/方法**
+    **传入参数**
 
-    ::
-
-        {GET} days // 查询距今多少天内的数据
+    ==== ==== =====================
+    参数 方法 说明
+    ==== ==== =====================
+    days GET  查询距今多少天内的数据
+    ==== ==== =====================
 
     **返回值**
 
-    *错误：用户没有管理员权限* HTTP403
+    HTTP403：用户没有管理员权限
 
     .. code-block:: javascript
 
@@ -38,7 +40,7 @@ def get_overall_data(request):
             message: 'Access denied.'
         }
 
-    *成功：* HTTP200
+    HTTP200
 
     .. code-block:: javascript
 
@@ -102,17 +104,19 @@ def get_data_by_time(request):
 
         http://localhost/api/v1/data/data-management/get-data-by-time/
 
-    **传入参数/方法**
+    **传入参数**
 
-    ::
-
-        {GET} start_timestamp // 查询开始时间戳
-        {GET} end_timestamp   // 查询结束时间戳
-        {GET} time_step       // 查询步长
+    =============== ==== ==============
+    参数            方法  说明
+    =============== ==== ==============
+    start_timestamp GET  查询开始时间戳
+    end_timestamp   GET  查询结束时间戳
+    time_step       GET  查询步长
+    =============== ==== ==============
 
     **返回值**
 
-    *错误：用户没有管理员权限* HTTP403
+    HTTP403：用户没有管理员权限
 
     .. code-block:: javascript
 
@@ -120,7 +124,7 @@ def get_data_by_time(request):
             message: 'Access denied.'
         }
 
-    *成功：* HTTP200
+    HTTP200
 
     .. code-block:: javascript
 

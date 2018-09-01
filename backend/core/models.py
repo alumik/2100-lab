@@ -141,7 +141,7 @@ class CustomUser(SoftDeletionModel, AbstractUser):
         return self.username
 
     def as_dict(self):
-        """获取普通字典"""
+        """获取字典"""
 
         return {
             'user_id': self.id,

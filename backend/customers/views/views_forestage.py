@@ -9,66 +9,136 @@ from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
-# Comment out the following line to prevent sms being sent by CI server.
+# Comment out the following lines to prevent sms being sent by CI server.
+#
 # from qcloudsms_py.httpclient import HTTPError
+# from customers.utils import tencent_cloud_message
 
 from core.constants import ERROR, INFO
 from core.utils import get_page
 from customers.models import LearningLog, OrderLog
 
-# Comment out the following line to prevent sms being sent by CI server.
-# from customers.utils import tencent_cloud_message
-
 
 def get_verification_code(request):
     """获取短信验证码
 
-    注：发送短信部分在测试时会被注释掉以防止测试时发送错误短信。
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/customers/forestage/auth/get-verification-code/
+
+    **传入参数**
+
+    ============ ==== ============
+    参数         方法 说明
+    ============ ==== ============
+    phone_number POST 用户手机号码
+    ============ ==== ============
+
+    **返回值**
+
+    HTTP400：手机号码无效
+
+    .. code-block:: javascript
+
+        {
+            message: 'Not a valid phone number.'
+        }
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            is_new_customer: true // 是否是新用户
+        }
+
     """
 
     phone_number = request.POST.get('phone_number')
+
     match = re.search(r'^1\d{10}$', phone_number)
-    if match:
-        verification_code = str(random.randint(0, 999999)).zfill(6)
+    if not match:
+        return JsonResponse({'message': ERROR['invalid_phone_number']}, status=400)
 
-        # Comment out the following lines to prevent sms being sent by CI server.
-        # try:
-        #     tencent_cloud_message(phone_number, verification_code)
-        # except (HTTPError, Exception):
-        #     return JsonResponse(
-        #         {'message': ERROR['message_send_failed']},
-        #         status=500
-        #     )
+    verification_code = str(random.randint(0, 999999)).zfill(6)
 
-        request.session['prev_phone_number'] = phone_number
-        request.session['verification_code'] = verification_code
-        request.session['generate_time'] = round(time.time())
-        try:
-            get_user_model().objects.get(phone_number=phone_number)
-            new_customer = False
-        except get_user_model().DoesNotExist:
-            new_customer = True
-        return JsonResponse(
-            {
-                # debug only
-                'verification_code': verification_code,
-                'is_new_customer': new_customer
-            }
-        )
-    return JsonResponse({'message': ERROR['invalid_phone_number']}, status=400)
+    # Comment out the following lines to prevent sms being sent by CI server.
+    #
+    # try:
+    #     tencent_cloud_message(phone_number, verification_code)
+    # except (HTTPError, Exception):
+    #     return JsonResponse(
+    #         {'message': ERROR['message_send_failed']},
+    #         status=500
+    #     )
 
-
-def get_generate_time(request):
-    """获取上一个短信验证码生成时间"""
-
-    json_data = {'generate_time': ''}
-    if 'generate_time' in request.session:
-        json_data['generate_time'] = request.session['generate_time']
-    return JsonResponse(json_data)
+    request.session['prev_phone_number'] = phone_number
+    request.session['verification_code'] = verification_code
+    try:
+        get_user_model().objects.get(phone_number=phone_number)
+        new_customer = False
+    except get_user_model().DoesNotExist:
+        new_customer = True
+    return JsonResponse(
+        {
+            # Comment out the following line to send real sms.
+            'verification_code': verification_code,
+            'is_new_customer': new_customer
+        }
+    )
 
 
 def authenticate_customer(request):
-    """认证用户"""
+    """认证用户
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/customers/forestage/auth/authenticate-customer/
+
+    **传入参数**
+
+    ================= ==== ============
+    参数              方法 说明
+    ================= ==== ============
+    phone_number      POST 用户手机号码
+    verification_code POST 短信验证码
+    ================= ==== ============
+
+    **返回值**
+
+    HTTP400：手机号码与之前不同
+
+    .. code-block:: javascript
+
+        {
+            message: 'Different phone number.'
+        }
+
+    HTTP400：验证码不正确
+
+    .. code-block:: javascript
+
+        {
+            message: 'Wrong verification code.'
+        }
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            is_new_customer: true,   // 是否是新用户
+            customer.id,             // 用户ID
+            username: 'John',        // 用户名
+            avatar: 'uploads/1.png', // 用户头像路径
+            is_staff: false          // 是否是管理员
+        }
+
+    """
 
     phone_number = request.POST.get('phone_number')
     verification_code = request.POST.get('verification_code')
@@ -106,17 +176,82 @@ def authenticate_customer(request):
 
 
 def get_eula(request):
-    """获取用户许可协议"""
+    """获取最终用户许可协议
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/customers/forestage/auth/get-eula/
+
+    **传入参数**
+
+    无
+
+    **返回值**
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            content: 'Test EULA.' // 协议内容
+        }
+
+    """
 
     return JsonResponse({'content': 'Test EULA.'})
 
 
 @login_required
 def change_username(request):
-    """修改用户名"""
+    """修改用户名
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/customers/forestage/personal-center/change-username/
+
+    **传入参数**
+
+    ======== ==== ========
+    参数     方法 说明
+    ======== ==== ========
+    username POST 新用户名
+    ======== ==== ========
+
+    **返回值**
+
+    HTTP400：用户名重复
+
+    .. code-block:: javascript
+
+        {
+            message: 'This username is already taken.'
+        }
+
+    HTTP400：用户名无效
+
+    .. code-block:: javascript
+
+        {
+            message: 'Invalid username.'
+        }
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            new_username: 'John' // 新用户名
+        }
+
+    """
+
+    username = request.POST.get('username')
 
     user = request.user
-    username = request.POST.get('username')
     try:
         get_user_model().objects.get(username=username)
         return JsonResponse(
@@ -136,7 +271,33 @@ def change_username(request):
 
 @login_required
 def change_avatar(request):
-    """修改头像"""
+    """修改头像
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/customers/forestage/personal-center/change-avatar/
+
+    **传入参数**
+
+    ========== ==== ======
+    参数       方法 说明
+    ========== ==== ======
+    new_avatar POST 新头像
+    ========== ==== ======
+
+    **返回值**
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            new_avatar: 'uploads/1.png' // 新头像
+        }
+
+    """
 
     new_avatar = request.FILES.get('new_avatar')
 
@@ -153,21 +314,112 @@ def change_avatar(request):
 
 @login_required
 def get_customer_detail(request):
-    """获取用户详情"""
+    """获取用户详情
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/customers/forestage/personal-center/get-customer-detail/
+
+    **传入参数**
+
+    无
+
+    **返回值**
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            user_id: 1,                                      // 用户ID
+            username: 'John',                                // 用户名
+            phone_number: '12345678901',                     // 电话号码
+            avatar: 'uploads/1.png',                         // 头像
+            reward_coin: '100.00',                           // 奖励金余额
+            is_vip: false,                                   // 是否是VIP
+            is_banned: false,                                // 是否被禁言
+            date_joined: '2018-08-31 16:46:44.794596+00:00', // 用户注册时间
+            updated_at: '2018-08-31 16:46:44.794596+00:00'   // 最后修改时间
+        }
+
+    """
 
     return JsonResponse(request.user.as_dict())
 
 
 @login_required
 def get_reward_coin(request):
-    """获取奖励金余额"""
+    """获取奖励金余额
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/customers/personal-center/get-reward-coin/
+
+    **传入参数**
+
+    无
+
+    **返回值**
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            reward_coin: '100.00' // 奖励金余额
+        }
+
+    """
 
     return JsonResponse({'reward_coin': request.user.reward_coin})
 
 
 @login_required
 def get_learning_logs(request):
-    """获取用户学习记录列表"""
+    """获取用户学习记录列表
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/customers/forestage/personal-center/get-learning-logs/
+
+    **传入参数**
+
+    ========== ==== ================
+    参数       方法 说明
+    ========== ==== ================
+    page       GET  当前页码
+    page_limit GET  每页最大显示数量
+    ========== ==== ================
+
+    **返回值**
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            count: 2,                                                 // 总条数
+            page: 2,                                                  // 当前页码
+            num_pages: 1,                                             // 总页数
+            content: [
+                {
+                    course_codename: 'SOFT001',                       // 课程代码
+                    course_title: 'Data Structure',                   // 课程名
+                    customer_username: 'John',                        // 用户名
+                    latest_learn: '2018-08-31 16:46:44.794596+00:00', // 最后学习时间
+                    expire_time: '2018-09-01 16:46:44.794596+00:00'   // 课程失效时间
+                },
+                ...
+            ]
+        }
+
+    """
 
     learning_logs = LearningLog.objects.filter(
         customer=request.user
@@ -177,7 +429,48 @@ def get_learning_logs(request):
 
 @login_required
 def get_order_logs(request):
-    """获取用户订单记录列表"""
+    """获取用户订单记录列表
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/customers/forestage/personal-center/get-order-logs/
+
+    **传入参数**
+
+    ========== ==== ================
+    参数       方法 说明
+    ========== ==== ================
+    page       GET  当前页码
+    page_limit GET  每页最大显示数量
+    ========== ==== ================
+
+    **返回值**
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            count: 2,                                                 // 总条数
+            page: 2,                                                  // 当前页码
+            num_pages: 1,                                             // 总页数
+            content: [
+                {
+                    order_no: '8acf2530-ad40-11e8-83f6-7c11cb55a985', // 订单号
+                    course_codename: 'SOFT001',                       // 课程代码
+                    course_title: 'Data Structure',                   // 课程名
+                    customer_username: 'John',                        // 用户名
+                    created_at: '2018-08-31 16:46:44.794596+00:00',   // 创建时间
+                    money: '100.00',                                  // 成交金额
+                    is_refunded: false                                // 是否已退款
+                },
+                ...
+            ]
+        }
+
+    """
 
     order_logs = OrderLog.objects.filter(
         customer=request.user
@@ -187,7 +480,29 @@ def get_order_logs(request):
 
 @login_required
 def delete_customer(request):
-    """用户删除自己"""
+    """用户删除自己
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/customers/forestage/personal-center/delete-customer/
+
+    **传入参数**
+
+    无
+
+    **返回值**
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            message: 'Object deleted.'
+        }
+
+    """
 
     user = request.user
     logout(request)

@@ -21,7 +21,7 @@ def is_authenticated(request):
 
     **返回值**
 
-    *成功：* HTTP200
+    HTTP200
 
     .. code-block:: javascript
 
@@ -67,7 +67,7 @@ def logout(request):
 
     **返回值**
 
-    *成功：* HTTP200
+    HTTP200
 
     .. code-block:: javascript
 

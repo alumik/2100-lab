@@ -92,7 +92,7 @@ class OrderLog(models.Model):
         }
 
     def as_brief_dict(self):
-        """获取建议字典"""
+        """获取简略字典"""
 
         return {
             'order_no': self.order_no,

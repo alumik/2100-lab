@@ -21,67 +21,68 @@ def authenticate_admin(request):
 
     **示例URL**
 
-    ::
+    .. code-block:: html
 
-        localhost/api/v1/admin/backstage/auth/authenticate-admin/
+        http://localhost/api/v1/admin/backstage/auth/authenticate-admin/
 
     **传入参数/方法**
 
-    ::
-
-        POST phone_number 电话号码
-        POST password 密码
+    ============ ==== ========
+    参数         方法 说明
+    ============ ==== ========
+    phone_number POST 电话号码
+    password     POST 密码
+    ============ ==== ========
 
     **返回值**
 
-    *错误：用户已登录* HTTP400
+    HTTP400：用户已登录
 
-    .. code:: javascript
+    .. code-block:: javascript
 
         {
             message: 'User is already authenticated.'
         }
 
-    *错误：电话号码或密码错误* HTTP400
+    HTTP400：电话号码或密码错误
 
-    .. code:: javascript
+    .. code-block:: javascript
 
         {
             message: 'Invalid phone number or password.'
         }
 
-    *错误：用户没有管理员权限* HTTP403
+    HTTP403：用户没有管理员权限
 
-    .. code:: javascript
+    .. code-block:: javascript
 
         {
             message: 'Access denied.'
         }
 
-    *成功：* HTTP200
+    HTTP200
 
-    .. code:: javascript
+    .. code-block:: javascript
 
         {
             admin_id: 1,          // 管理员ID
             username: 'John',     // 管理员名称
-            admin_groups: [
+            admin_groups: [       // 管理员权限组
                 'customer_admin',
-                'order_admin'
                 ...
-            ]                     // 管理员权限组
+            ]
         }
 
     """
+
+    phone_number = request.POST.get('phone_number')
+    password = request.POST.get('password')
 
     if request.user.is_authenticated:
         return JsonResponse(
             {'message': ERROR['user_is_already_authenticated']},
             status=400
         )
-
-    phone_number = request.POST.get('phone_number')
-    password = request.POST.get('password')
 
     admin = authenticate(request, phone_number=phone_number, password=password)
 
@@ -114,56 +115,58 @@ def get_admin_list(request):
 
     **示例URL**
 
-    ::
+    .. code-block:: html
 
-        localhost/api/v1/admin/backstage/admin-management/get-admin-list/
+        http://localhost/api/v1/admin/backstage/admin-management/get-admin-list/
 
     **传入参数/方法**
 
-    ::
-
-        GET phone_number 管理员电话号码筛选字段
-        GET username 管理员名称筛选字段
-        GET page 当前页码
-        GET page_limit 一页数量
+    ============ ==== ==================
+    参数         方法 说明
+    ============ ==== ==================
+    phone_number GET  筛选参数：电话号码
+    username     GET  筛选参数：用户名
+    page         GET  当前页码
+    page_limit   GET  每页最大显示数量
+    ============ ==== ==================
 
     **返回值**
 
-    *错误：管理员权限不足* HTTP403
+    HTTP403：管理员权限不足
 
-    .. code:: javascript
+    .. code-block:: javascript
 
         {
             message: 'Access denied.'
         }
 
-    *成功：* HTTP200
+    HTTP200
 
-    .. code:: javascript
+    .. code-block:: javascript
 
         {
-            phone_number: '123',                  // 管理员电话号码筛选字段
-            username: 'John',                     // 管理员名称筛选字段
-            count: 8,                             // 总条目数
-            page: 1,                              // 当前页码
-            num_pages: 12,                        // 总页码数
+            phone_number: '123',                // 筛选参数：电话号码
+            username: 'John',                   // 筛选参数：用户名
+            count: 8,                           // 总条目数
+            page: 1,                            // 当前页码
+            num_pages: 12,                      // 总页码数
             content: [
                 {
-                    'admin_id': 12, // 管理员ID
-                    'username': 'John Smith'      // 管理员名称
-                    'phone_number': '12345678901' // 管理员电话号码
-                }
+                    admin_id: 12,               // 管理员ID
+                    username: 'John Smith',     // 管理员名称
+                    phone_number: '12345678901' // 管理员电话号码
+                },
                 ...
-            ]                                     // 该页内容
+            ]
         }
 
     """
 
-    if not request.user.is_superuser:
-        return JsonResponse({'message': ERROR['access_denied']}, status=403)
-
     username = request.GET.get('username', '')
     phone_number = request.GET.get('phone_number', '')
+
+    if not request.user.is_superuser:
+        return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
     admins = get_user_model().objects.filter(
         is_staff=True,
@@ -178,12 +181,62 @@ def get_admin_list(request):
 
 @login_required
 def get_admin_detail(request):
-    """获取管理员详情"""
+    """获取管理员详情
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/admin/backstage/admin-management/get-admin-detail/
+
+    **传入参数/方法**
+
+    ======== ==== ================
+    参数     方法 说明
+    ======== ==== ================
+    admin_id GET  要查询的管理员ID
+    ======== ==== ================
+
+    **返回值**
+
+    HTTP403：管理员权限不足
+
+    .. code-block:: javascript
+
+        {
+            message: 'Access denied.'
+        }
+
+    HTTP404：管理员未找到
+
+    .. code-block:: javascript
+
+        {
+            message: 'Object not found.'
+        }
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            admin_id: 1,                                     // 管理员ID
+            username: 'John',                                // 管理员名称
+            phone_number: '12345678901',                     // 电话号码
+            date_joined: '2018-08-31 16:46:44.794596+00:00', // 注册时间
+            updated_at: '2018-08-31 16:46:44.794596+00:00',  // 修改时间
+            admin_groups: [                                  // 管理员权限组
+                'customer_admin',
+                ...
+            ]
+        }
+
+    """
+
+    admin_id = request.GET.get('admin_id')
 
     if not request.user.is_superuser:
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
-
-    admin_id = request.GET.get('admin_id')
 
     try:
         admin = get_user_model().objects.get(id=admin_id, is_staff=True)
@@ -208,13 +261,72 @@ def get_admin_detail(request):
 
 @login_required
 def change_admin_username(request):
-    """修改管理员用户名"""
+    """修改管理员用户名
 
-    if not request.user.is_superuser:
-        return JsonResponse({'message': ERROR['access_denied']}, status=403)
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/admin/backstage/admin-management/change-admin-username/
+
+    **传入参数/方法**
+
+    ============ ==== ========
+    参数         方法 说明
+    ============ ==== ========
+    admin_id     POST 管理员ID
+    new_username POST 新用户名
+    ============ ==== ========
+
+    **返回值**
+
+    HTTP403：管理员权限不足
+
+    .. code-block:: javascript
+
+        {
+            message: 'Access denied.'
+        }
+
+    HTTP404：管理员未找到
+
+    .. code-block:: javascript
+
+        {
+            message: 'Object not found.'
+        }
+
+    HTTP400：用户名重复
+
+    .. code-block:: javascript
+
+        {
+            message: 'This username is already taken.'
+        }
+
+    HTTP400：用户名无效
+
+    .. code-block:: javascript
+
+        {
+            message: 'Invalid username.'
+        }
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            new_username: 'John' // 新用户名
+        }
+
+    """
 
     admin_id = request.POST.get('admin_id')
     new_username = request.POST.get('new_username')
+
+    if not request.user.is_superuser:
+        return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
     try:
         admin = get_user_model().objects.get(id=admin_id, is_staff=True)
@@ -249,13 +361,56 @@ def change_admin_username(request):
 
 @login_required
 def change_admin_password(request):
-    """修改管理员密码"""
+    """修改管理员密码
 
-    if not request.user.is_superuser:
-        return JsonResponse({'message': ERROR['access_denied']}, status=403)
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/admin/backstage/admin-management/change-admin-password/
+
+    **传入参数/方法**
+
+    ============ ==== ========
+    参数         方法 说明
+    ============ ==== ========
+    admin_id     POST 管理员ID
+    new_password POST 新密码
+    ============ ==== ========
+
+    **返回值**
+
+    HTTP403：管理员权限不足
+
+    .. code-block:: javascript
+
+        {
+            message: 'Access denied.'
+        }
+
+    HTTP404：管理员未找到
+
+    .. code-block:: javascript
+
+        {
+            message: 'Object not found.'
+        }
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            message: 'Success.'
+        }
+
+    """
 
     admin_id = request.POST.get('admin_id')
     new_password = request.POST.get('new_password')
+
+    if not request.user.is_superuser:
+        return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
     try:
         admin = get_user_model().objects.get(id=admin_id, is_staff=True)
@@ -274,12 +429,54 @@ def change_admin_password(request):
 
 @login_required
 def delete_admin(request):
-    """删除管理员"""
+    """删除管理员
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/admin/backstage/admin-management/delete-admin/
+
+    **传入参数/方法**
+
+    ======== ==== ========
+    参数     方法 说明
+    ======== ==== ========
+    admin_id POST 管理员ID
+    ======== ==== ========
+
+    **返回值**
+
+    HTTP403：管理员权限不足
+
+    .. code-block:: javascript
+
+        {
+            message: 'Access denied.'
+        }
+
+    HTTP404：管理员未找到
+
+    .. code-block:: javascript
+
+        {
+            message: 'Object not found.'
+        }
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            message: 'Object deleted.'
+        }
+
+    """
+
+    admin_id = request.POST.get('admin_id')
 
     if not request.user.is_superuser:
         return JsonResponse({'message': ERROR['access_denied']}, status=403)
-
-    admin_id = request.POST.get('admin_id')
 
     try:
         admin = get_user_model().objects.get(id=admin_id, is_staff=True)
@@ -301,13 +498,72 @@ def delete_admin(request):
 
 @login_required
 def add_admin(request):
-    """添加管理员"""
+    """添加管理员
 
-    if not request.user.is_superuser:
-        return JsonResponse({'message': ERROR['access_denied']}, status=403)
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/admin/backstage/admin-management/add-admin/
+
+    **传入参数/方法**
+
+    ============ ==== ========
+    参数         方法 说明
+    ============ ==== ========
+    phone_number POST 电话号码
+    password     POST 密码
+    ============ ==== ========
+
+    **返回值**
+
+    HTTP403：管理员权限不足
+
+    .. code-block:: javascript
+
+        {
+            message: 'Access denied.'
+        }
+
+    HTTP400：手机号码无效
+
+    .. code-block:: javascript
+
+        {
+            message: 'Not a valid phone number.'
+        }
+
+    HTTP400：密码无效
+
+    .. code-block:: javascript
+
+        {
+            message: 'Invalid password.'
+        }
+
+    HTTP400：管理员已存在
+
+    .. code-block:: javascript
+
+        {
+            message: 'Admin is already registered.'
+        }
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            new_admin_id: 2 // 新管理员ID
+        }
+
+    """
 
     phone_number = request.POST.get('phone_number')
     password = request.POST.get('password')
+
+    if not request.user.is_superuser:
+        return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
     if not re.search(r'^1\d{10}$', phone_number):
         return JsonResponse(
@@ -342,13 +598,56 @@ def add_admin(request):
 
 @login_required
 def change_admin_groups(request):
-    """修改管理员权限组"""
+    """修改管理员权限组
 
-    if not request.user.is_superuser:
-        return JsonResponse({'message': ERROR['access_denied']}, status=403)
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/admin/backstage/admin-management/change-admin-groups/
+
+    **传入参数/方法**
+
+    ================ ==== ==============
+    参数             方法 说明
+    ================ ==== ==============
+    admin_id         POST 管理员ID
+    new_admin_groups POST 新管理员权限组
+    ================ ==== ==============
+
+    **返回值**
+
+    HTTP403：管理员权限不足
+
+    .. code-block:: javascript
+
+        {
+            message: 'Access denied.'
+        }
+
+    HTTP404：管理员未找到
+
+    .. code-block:: javascript
+
+        {
+            message: 'Object not found.'
+        }
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            message: 'Success.'
+        }
+
+    """
 
     new_admin_groups = request.POST.getlist('new_admin_groups', [])
     admin_id = request.POST.get('admin_id')
+
+    if not request.user.is_superuser:
+        return JsonResponse({'message': ERROR['access_denied']}, status=403)
 
     try:
         admin = get_user_model().objects.get(id=admin_id, is_staff=True)
@@ -385,7 +684,47 @@ def change_admin_groups(request):
 
 @permission_required('admins.view_adminlog')
 def get_admin_log(request):
-    """获取管理员操作日志"""
+    """获取管理员操作日志
+
+    **示例URL**
+
+    .. code-block:: html
+
+        http://localhost/api/v1/admin/backstage/log-management/get-admin-log/
+
+    **传入参数/方法**
+
+    ============== ==== ====================
+    参数           方法 说明
+    ============== ==== ====================
+    admin_username GET  筛选参数：管理员名称
+    filters        GET  筛选参数：查询项
+    page           GET  当前页码
+    page_limit     GET  每页最大显示数量
+    ============== ==== ====================
+
+    **返回值**
+
+    HTTP200
+
+    .. code-block:: javascript
+
+        {
+            count: 2,                                               // 总条目数
+            page: 1,                                                // 当前页码
+            num_pages: 2,                                           // 总页码数
+            content: [
+                {
+                    admin_log_id: 1,                                // 日志ID
+                    created_at: '2018-08-31 16:46:44.794596+00:00', // 创建日期
+                    admin_username: 'John',                        // 管理员名称
+                    message: '...'                                  // 日志内容
+                },
+                ...
+            ]
+        }
+
+    """
 
     admin_username = request.GET.get('admin_username', '')
     start_timestamp = request.GET.get('start_timestamp', round(time.time()))
