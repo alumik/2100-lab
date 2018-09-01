@@ -94,6 +94,17 @@ export default {
     UserNavbar,
     RecommendList
   },
+  /**
+   * @returns {
+   *  carousellist: object,轮播图数组
+   *  carouselnum: number,轮播图图片数量
+   *  freecourselist: array,免费课程推荐列表
+   *  paidcourselist: array,付费课程推荐列表
+   *  created_test: boolean，首页推荐列表数据获取测试
+   *  created_error_msg: string,推荐列表数据获取失败信息返回
+   *  carousel_test: boolean,轮播图数据获取测试
+   *  carousel_error_msg: string，轮播图数据获取失败信息返回
+   * } */
   data () {
     return {
       test: false,
@@ -108,6 +119,11 @@ export default {
       carousel_error_msg: ''
     }
   },
+  /**
+   * 数据初化
+   * 获取最新课程列表
+   * 如果发送请求成功，将返回免费和付费推荐课程
+   * 如果发送请求失败，将返回错误信息 */
   created: function () {
     let that = this
     axios
