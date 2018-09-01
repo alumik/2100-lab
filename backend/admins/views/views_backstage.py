@@ -120,6 +120,7 @@ def get_admin_list(request):
         http://localhost/api/v1/admin/backstage/admin-management/get-admin-list/
 
     **传入参数/方法**
+
     ============ ==== =====================
     参数         方法 说明
     ============ ==== =====================

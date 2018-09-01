@@ -386,15 +386,15 @@ def get_learning_logs(request):
 
     .. code-block:: html
 
-        http://localhost/api/v1/customers/personal-center/get-learning-logs/
+        http://localhost/api/v1/customers/forestage/personal-center/get-learning-logs/
 
     **传入参数**
 
     ========== ==== ================
     参数       方法 说明
     ========== ==== ================
-    page       POST 当前页码
-    page_limit POST 每页最大显示数量
+    page       GET  当前页码
+    page_limit GET  每页最大显示数量
     ========== ==== ================
 
     **返回值**
@@ -404,10 +404,10 @@ def get_learning_logs(request):
     .. code-block:: javascript
 
         {
-            'count': 2,
-            'page': 2,
-            'num_pages': 1,
-            'content': [
+            count: 2,                                                 // 总条数
+            page: 2,                                                  // 当前页码
+            num_pages: 1,                                             // 总页数
+            content: [
                 {
                     course_codename: 'SOFT001',                       // 课程代码
                     course_title: 'Data Structure',                   // 课程名
@@ -435,15 +435,15 @@ def get_order_logs(request):
 
     .. code-block:: html
 
-        http://localhost/api/v1/customers/personal-center/get-order-logs/
+        http://localhost/api/v1/customers/forestage/personal-center/get-order-logs/
 
     **传入参数**
 
     ========== ==== ================
     参数       方法 说明
     ========== ==== ================
-    page       POST 当前页码
-    page_limit POST 每页最大显示数量
+    page       GET  当前页码
+    page_limit GET  每页最大显示数量
     ========== ==== ================
 
     **返回值**
@@ -453,10 +453,10 @@ def get_order_logs(request):
     .. code-block:: javascript
 
         {
-            'count': 2,
-            'page': 2,
-            'num_pages': 1,
-            'content': [
+            count: 2,                                                 // 总条数
+            page: 2,                                                  // 当前页码
+            num_pages: 1,                                             // 总页数
+            content: [
                 {
                     order_no: '8acf2530-ad40-11e8-83f6-7c11cb55a985', // 订单号
                     course_codename: 'SOFT001',                       // 课程代码
@@ -486,7 +486,7 @@ def delete_customer(request):
 
     .. code-block:: html
 
-        http://localhost/api/v1/customers/personal-center/delete-customer/
+        http://localhost/api/v1/customers/forestage/personal-center/delete-customer/
 
     **传入参数**
 
