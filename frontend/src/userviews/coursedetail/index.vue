@@ -258,7 +258,7 @@
 import Basic from '../components/basic'
 import axios from 'axios'
 import qs from 'qs'
-import SocialShare from '../components/socialShare'
+import SocialShare from '../components/social_share'
 
 const shareQrcodeHost = 'http://localhost:8080/coursedetail'
 var mygenerator = null

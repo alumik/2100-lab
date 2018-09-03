@@ -4,7 +4,7 @@ import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import CourseDetail from '@/userviews/coursedetail/index'
 import Basic from '@/userviews/components/basic'
-import SocialShare from '@/userviews/components/socialShare'
+import SocialShare from '@/userviews/components/social_share'
 import {shallowMount} from '@vue/test-utils'
 import Vuex from 'vuex'
 Vue.use(Vuex)
