@@ -135,7 +135,7 @@ export default {
   },
   methods: {
     /**
-     * send函数，代表发送验证码事件
+     * 处理点击“获取验证码”按钮后的事件
      */
     send () {
       let that = this
@@ -172,9 +172,8 @@ export default {
         })
     },
     /**
-     * handleOk，代表发送处理新用户同意协议后的事件
-     * @constructor
-     * @param {Event} evt - 发生的事件.
+     * 处理新用户同意协议后的事件
+     * @param {Event} evt - 发生的事件
      */
     handleOk (evt) {
       axios
@@ -213,11 +212,18 @@ export default {
           }
         })
     },
+    /**
+     * 处理新用户不同意协议后的事件
+     * @param {Event} evt - 发生的事件
+     */
     handleCancel (evt) {
       axios.post('http://localhost/api/v1/core/auth/logout/', {
         withCredentials: true
       })
     },
+    /**
+     * 处理用户点击“登录”按钮后的事件
+     */
     login () {
       let that = this
       if (that.new_customer) {
@@ -268,6 +274,12 @@ export default {
       }
     }
   },
+  /**
+   * 执行能否进入该登录页面的判断
+   * @param {Router} to - 目标路由
+   * @param {Router} from - 源路由
+   * @param {Router} next - 实际定向路由
+   */
   async beforeRouteEnter (to, from, next) {
     let response = await axios.post(
       'http://localhost/api/v1/core/auth/is-authenticated/',

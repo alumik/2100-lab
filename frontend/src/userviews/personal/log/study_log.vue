@@ -101,10 +101,14 @@ export default {
         .toString()
         .substring(0, 19)
         .replace('T', ' ')
-      data.expire_time = data.expire_time
-        .toString()
-        .substring(0, 19)
-        .replace('T', ' ')
+      if (data.expire_time) {
+        data.expire_time = data.expire_time
+          .toString()
+          .substring(0, 19)
+          .replace('T', ' ')
+      } else {
+        data.expire_time = '永久开放'
+      }
       that.items.push(data)
     }
     for (let i = 2; i <= that.page_nums; i++) {
@@ -126,10 +130,14 @@ export default {
                 .toString()
                 .substring(0, 19)
                 .replace('T', ' ')
-              data.expire_time = data.expire_time
-                .toString()
-                .substring(0, 19)
-                .replace('T', ' ')
+              if (data.expire_time) {
+                data.expire_time = data.expire_time
+                  .toString()
+                  .substring(0, 19)
+                  .replace('T', ' ')
+              } else {
+                data.expire_time = '永久开放'
+              }
               that.items.push(data)
             }
           }
@@ -137,6 +145,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * 进行左侧菜单栏的显示或隐藏
+     */
     hide: function () {
       this.hidden = !this.hidden
     }

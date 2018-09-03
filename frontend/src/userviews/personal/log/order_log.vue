@@ -8,7 +8,7 @@
         :list="list"
         :hidden="hidden"
         class="menu"/>
-      <div id="info">
+      <div id="info">`
         <BreadCrumb
           id="breadcrumb"
           :items="crumbs"/>
@@ -84,7 +84,7 @@ export default {
       current_page: 1,
       per_page: 10,
       page_nums: 1,
-      pageOptions: [5, 10, 15]
+      page_options: [5, 10, 15]
     }
   },
   async mounted () {
@@ -133,6 +133,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * 进行左侧菜单栏的显示或隐藏
+     */
     hide: function () {
       this.hidden = !this.hidden
     }

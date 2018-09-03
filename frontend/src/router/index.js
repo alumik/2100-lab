@@ -49,7 +49,7 @@ export default new Router({
     {
       path: '/personal',
       name: 'PersonalCenter',
-      component: () => import('@/userviews/personal/personalCenter'),
+      component: () => import('@/userviews/personal/personal_center'),
       meta: {title: '个人中心' + forestage_suffix}
     },
     {
