@@ -162,7 +162,7 @@ export default {
     }
   },
   watch: {
-    value (n) {
+    value () {
       this.status = '保存'
       this.name_state = true
     }
@@ -193,9 +193,16 @@ export default {
       })
   },
   methods: {
+    /**
+     * 进行左侧菜单栏的显示或隐藏
+     */
     hide: function () {
       this.hidden = !this.hidden
     },
+    /**
+     * 进行改变头像的操作
+     * @param event {vent} 事件
+     */
     change: function (event) {
       let that = this
       let data = new FormData()
@@ -214,6 +221,9 @@ export default {
           this.$router.push({ path: '/personal' })
         })
     },
+    /**
+     * 进行修改昵称的操作
+     */
     editable: function () {
       let that = this
       if (this.status === '修改') {
@@ -236,6 +246,9 @@ export default {
           })
       }
     },
+    /**
+     * 进行删除自己账号的操作
+     */
     Delete () {
       let that = this
       if (that.$store.state.user.phone_number === that.input_phone) {
