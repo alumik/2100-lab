@@ -1,26 +1,18 @@
 #!/bin/bash
 
-# change sources list
-rm /etc/apt/sources.list && touch /etc/apt/sources.list
-echo 'deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic main restricted universe multiverse' >> /etc/apt/sources.list
-echo 'deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse' >> /etc/apt/sources.list
-echo 'deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse' >> /etc/apt/sources.list
-echo 'deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-security main restricted universe multiverse' >> /etc/apt/sources.list
-
 # upgrade system
 apt update
 apt dist-upgrade -y
 apt autoremove -y
 
-# install apache2 and mysql
+# install apache2 and mariadb
 apt install apache2 -y
 apt install mariadb-server mariadb-client -y
 
 # install nodejs and webpack-dev-server
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 apt install nodejs -y
-npm install -g webpack-dev-server --registry=https://registry.npm.taobao.org
-npm config set registry https://registry.npm.taobao.org
+npm install -g webpack-dev-server
 
 # install necessary dependencies
 apt install git g++ make -y
@@ -31,7 +23,7 @@ apt install libgdbm-dev liblzma-dev uuid-dev -y
 apt install zlib1g-dev libmysqlclient-dev -y
 
 # install pyenv
-git clone https://se.jisuanke.com/AlumiK/pyenv_mirror.git ~/.pyenv
+git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
 echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
 echo 'eval "$(pyenv init -)"' >> ~/.bashrc
@@ -40,7 +32,6 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
 # install python 3.7.0
-wget https://txy.ret.red/Python-3.7.0.tar.xz -P ~/.pyenv/cache
 pyenv install 3.7.0 -v
 pyenv rehash
 pyenv global 3.7.0
@@ -48,16 +39,11 @@ pyenv global 3.7.0
 # setup python virtual environment
 python -m venv ~/venv
 source ~/venv/bin/activate
-rm -f ~/.pip/pip.conf
-mkdir ~/.pip
-touch ~/.pip/pip.conf
-echo '[global]' >> ~/.pip/pip.conf
-echo 'index-url = https://pypi.tuna.tsinghua.edu.cn/simple' >> ~/.pip/pip.conf
 python -m pip install --upgrade pip
 python -m pip install --upgrade setuptools
 
 # link project files
-ln -s /mnt/d/Group1 ~/project
+ln -s /mnt/d/2100_lab_website ~/project
 
 # install project dependencies
 cd ~/project/backend
