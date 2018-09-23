@@ -5,8 +5,7 @@ apt update
 apt dist-upgrade -y
 apt autoremove -y
 
-# install apache2 and mariadb
-apt install apache2 -y
+# install mariadb
 apt install mariadb-server mariadb-client -y
 
 # install nodejs and webpack-dev-server
